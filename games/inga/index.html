@@ -1,53 +1,150 @@
 <!doctype html>
 <html lang="ja">
-
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>日本史因果クロニクル | RandaWorks</title>
-    <meta name="description" content="史実に沿ったコンボで戦う、日本史×デッキ構築ローグライク。" />
-    <link rel="stylesheet" href="/randaworks-site/styles.css">
+    <title>日本史因果クロニクル — Inga Chronicle | RandaWorks</title>
+    <meta name="description" content="A Japanese history roguelike deckbuilder. 遊ぶほど「共通テスト日本史」の重要語句と因果が身につく、知育ローグライクカードゲーム。" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Shippori+Mincho:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../assets/css/style.css">
 </head>
-
 <body>
     <div class="container">
         <div class="nav">
-            <div class="brand"><a href="/randaworks-site/">RandaWorks</a></div>
+            <div class="brand"><a href="../../">RandaWorks</a></div>
             <div class="links">
-                <a href="/randaworks-site/games/inga/privacy/">Privacy</a>
-                <a href="/randaworks-site/games/inga/support/">Support</a>
+                <a href="./privacy/">Privacy</a>
+                <a href="./support/">Support</a>
             </div>
         </div>
 
-        <div class="card">
-            <h1>日本史因果クロニクル</h1>
-            <p><strong>史実に沿ったコンボで戦う、日本史×デッキ構築ローグライク。</strong></p>
-            <p class="muted">勝つほど因果がつながり、遊ぶほど日本史が身につく。</p>
-            <div class="badges">
-                <span class="badge">Deckbuilding</span>
-                <span class="badge">Roguelike</span>
-                <span class="badge">Strategy</span>
-                <span class="badge">Education</span>
+        <!-- Hero -->
+        <div class="game-hero">
+            <div class="game-hero-content">
+                <img src="../../assets/img/games/inga/title_logo.png" alt="日本史因果クロニクル" class="game-logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='block'">
+                <h1 style="display:none; font-family: 'Shippori Mincho', serif; font-size: 3.5rem; color: #fff; text-shadow: 0 0 20px #bd3131;">日本史因果クロニクル</h1>
+
+                <p style="color: var(--accent-gold); letter-spacing: 3px; font-size: 0.95rem; margin-bottom: 12px;">INGA CHRONICLE</p>
+                <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 24px;">A Japanese history roguelike deckbuilder.</p>
+
+                <div class="badges" style="justify-content: center; margin-bottom: 30px;">
+                    <span class="badge">Deckbuilding</span>
+                    <span class="badge">Roguelike</span>
+                    <span class="badge">Strategy</span>
+                    <span class="badge">Education</span>
+                </div>
+
+                <div>
+                    <button class="cta" disabled>Steam Coming Soon</button>
+                    <p class="muted" style="margin-top: 10px; font-size: 0.8rem;">ウィッシュリスト追加準備中</p>
+                </div>
             </div>
-            <p style="margin-top:14px" class="muted">
-                Steam（Coming Soon）：公開後にURLを追記します。
-            </p>
         </div>
 
+        <!-- Enemy Characters -->
+        <div class="char-section">
+            <div class="char-card">
+                <img src="../../assets/img/games/inga/enemy1.png" alt="Enemy 1" class="char-img" style="max-height: 300px; opacity: 0.8;" onerror="this.parentElement.style.display='none'">
+            </div>
+            <div class="char-card">
+                <img src="../../assets/img/games/inga/enemy2.png" alt="Enemy 2" class="char-img" style="max-height: 300px; opacity: 0.8;" onerror="this.parentElement.style.display='none'">
+            </div>
+        </div>
+
+        <!-- Short Description -->
         <div class="card">
-            <h2>特徴</h2>
-            <ul>
-                <li><strong>因果コンボ</strong>：歴史的に正しい流れでカードを出すと強力なコンボが発動。</li>
-                <li><strong>戦略性</strong>：カード選択・ルート選択・判断の積み重ねが勝敗を分ける。</li>
-                <li><strong>知識が強さになる</strong>：歴史の前後関係を理解するほど有利になる設計。</li>
+            <h2>「気づいたら日本史に詳しくなってた」</h2>
+            <p>史実通りのデッキを組むと強い——勝つために歴史を覚え、遊ぶほど知識が身につく。<br>
+            <strong>デッキ構築型ローグライク × 日本史 × 因果コンボ。</strong></p>
+        </div>
+
+        <!-- Screenshots -->
+        <div class="card">
+            <h2>Screenshots</h2>
+            <div class="screenshot-grid">
+                <div class="screenshot-placeholder">
+                    <img src="../../assets/img/games/inga/ss_01.jpg" alt="Battle Scene" onerror="this.style.display='none'">
+                    <span style="position:absolute">Battle Scene</span>
+                </div>
+                <div class="screenshot-placeholder">
+                    <img src="../../assets/img/games/inga/ss_02.jpg" alt="Deck Management" onerror="this.style.display='none'">
+                    <span style="position:absolute">Deck Management</span>
+                </div>
+                <div class="screenshot-placeholder">
+                    <img src="../../assets/img/games/inga/ss_03.jpg" alt="Historical Event" onerror="this.style.display='none'">
+                    <span style="position:absolute">Historical Event</span>
+                </div>
+            </div>
+            <p class="muted" style="text-align: center;">※画面は開発中のものです。</p>
+        </div>
+
+        <!-- About: Inga Combo -->
+        <div class="card">
+            <h2>因果コンボ——史実通りだと強い</h2>
+            <p>歴史的に正しい組み合わせでカードを使うと、コンボが発動。<br>
+            時代や人物の関係性を理解するほど、デッキは強くなる。</p>
+
+            <ul style="list-style: none; padding: 0; margin: 20px 0;">
+                <li style="margin-bottom: 12px;">🏯「桶狭間の戦い」→「長篠の戦い」→「本能寺の変」<span class="muted">（織田天下布武コンボ）</span></li>
+                <li style="margin-bottom: 12px;">⚔️「刀狩令」→「検地」→「石高制」<span class="muted">（秀吉中央集権コンボ）</span></li>
+                <li style="margin-bottom: 12px;">📜「大化の改新」→「班田収授法」→「墾田永年私財法」→「荘園制の発達」<span class="muted">（公地公民から荘園制コンボ）</span></li>
+                <li style="margin-bottom: 12px;">📖「蘭学」→「国学」→「水戸学」<span class="muted">（尊王攘夷思想コンボ）</span></li>
             </ul>
+
+            <p><strong>知っているほど有利。遊ぶほど詳しくなる。</strong></p>
         </div>
 
+        <!-- Features -->
+        <div class="card">
+            <h2>ゲームの特徴</h2>
+            <div class="feature-list">
+                <div class="feature-item">
+                    <h3>デッキ構築型ローグライク</h3>
+                    <p>毎回異なるカードとルートで挑む、繰り返し遊べる戦略性。マップ選択、ショップ、イベント——判断の連続が勝敗を分ける。</p>
+                </div>
+                <div class="feature-item">
+                    <h3>歴史上の英雄たち</h3>
+                    <p>織田信長、紫式部、徳川吉宗——時代も戦い方も異なる英雄たちが、あなたを待っている。それぞれ異なる初期デッキと戦略。クリアするたびに新たな英雄が解放され、何度でも新鮮に遊べる。</p>
+                </div>
+                <div class="feature-item">
+                    <h3>飛鳥から幕末まで</h3>
+                    <p>200枚以上のカード、100種以上のコンボ——歴史の流れがデッキで体感できる。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Target Audience -->
+        <div class="card">
+            <h2>こんな人に</h2>
+            <ul>
+                <li>デッキ構築ローグライクが好き</li>
+                <li>歴史モノのゲームが好き</li>
+                <li>遊びながら何か身につけたい</li>
+                <li>ゲームする時間に罪悪感がある</li>
+            </ul>
+            <p style="margin-top: 20px; font-size: 1.1rem;"><strong>気づいたら詳しくなってる。だから、遊んでいい。</strong></p>
+        </div>
+
+        <!-- System Requirements -->
+        <div class="card">
+            <h2>System Requirements（予定）</h2>
+            <table class="specs-table">
+                <tr><th>OS</th><td>Windows 10 / 11 (64-bit)</td></tr>
+                <tr><th>Processor</th><td>Intel Core i3 / AMD Ryzen 3 以上</td></tr>
+                <tr><th>Memory</th><td>4 GB RAM</td></tr>
+                <tr><th>Graphics</th><td>DirectX 11 互換グラフィックカード</td></tr>
+                <tr><th>Storage</th><td>1 GB 利用可能</td></tr>
+            </table>
+        </div>
+
+        <!-- Links -->
         <div class="card">
             <h2>リンク</h2>
             <ul>
-                <li><a href="/randaworks-site/games/inga/privacy/">プライバシーポリシー</a></li>
-                <li><a href="/randaworks-site/games/inga/support/">サポート</a></li>
+                <li><a href="./privacy/">プライバシーポリシー</a></li>
+                <li><a href="./support/">サポート</a></li>
             </ul>
         </div>
 
@@ -56,5 +153,4 @@
         </div>
     </div>
 </body>
-
 </html>
