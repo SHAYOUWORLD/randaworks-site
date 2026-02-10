@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>お問い合わせ | RandaWorks</title>
+  <meta name="description" content="RandaWorksへのお問い合わせフォーム。" />
+  <link rel="stylesheet" href="../styles.css" />
+</head>
+<body>
+  <div class="container">
+    <div class="nav">
+      <div class="brand"><a href="../">RandaWorks</a></div>
+      <div class="links">
+        <a href="../games/inga/">日本史因果クロニクル</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <h1>お問い合わせ</h1>
+      <p class="muted">
+        返信先メールアドレスは正確に入力してください。<br />
+        直接メールする場合は <a href="mailto:contact@randaworks.com">contact@randaworks.com</a> へお願いします。
+      </p>
+
+      <div class="alert alert-error" id="formError" hidden>
+        送信に失敗しました。時間をおいて再度お試しください。<br />
+        うまくいかない場合は <a href="mailto:contact@randaworks.com">contact@randaworks.com</a> までご連絡ください。
+      </div>
+
+      <form
+        class="form"
+        id="contactForm"
+        method="POST"
+        action="https://formspree.io/f/REPLACE_WITH_YOUR_ID"
+        accept-charset="UTF-8"
+      >
+        <!--
+          TODO: Formspreeでフォームを作成し、上の action を発行されたURLに差し替えてください。
+          例: https://formspree.io/f/xxxxxxx
+        -->
+
+        <div class="field">
+          <label for="name">お名前</label>
+          <input id="name" name="name" type="text" autocomplete="name" maxlength="80" />
+        </div>
+
+        <div class="field">
+          <label for="email">メールアドレス <span class="muted">(必須)</span></label>
+          <input id="email" name="email" type="email" autocomplete="email" required maxlength="254" />
+        </div>
+
+        <div class="field">
+          <label for="message">お問い合わせ内容 <span class="muted">(必須)</span></label>
+          <textarea id="message" name="message" required rows="7" maxlength="5000"></textarea>
+        </div>
+
+        <!-- Honeypot: ボット対策。人間は触らないでください -->
+        <div class="hp" aria-hidden="true">
+          <label for="hp">この欄は空のままにしてください</label>
+          <input id="hp" name="_gotcha" type="text" tabindex="-1" autocomplete="off" />
+        </div>
+
+        <input type="hidden" name="_subject" value="[RandaWorks] Contact Form" />
+
+        <p class="muted">
+          送信により、<a href="../games/inga/privacy/">プライバシーポリシー</a>に同意したものとみなします。
+        </p>
+
+        <div class="form-actions">
+          <button class="cta" id="submitBtn" type="submit">送信する</button>
+          <span class="muted" id="sendingNote" hidden>送信中...</span>
+        </div>
+
+        <noscript>
+          <p class="muted">
+            ※JavaScriptが無効な場合、送信後の画面は外部サービス側の完了画面になることがあります。
+          </p>
+        </noscript>
+      </form>
+    </div>
+
+    <div class="footer">
+      <div>© 2026 RandaWorks</div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var form = document.getElementById('contactForm');
+      var btn = document.getElementById('submitBtn');
+      var note = document.getElementById('sendingNote');
+      var err = document.getElementById('formError');
+
+      if (!form) return;
+
+      form.addEventListener('submit', async function (e) {
+        // JSあり: Formspreeへ非同期送信して、成功時は自前のthanksページへ。
+        e.preventDefault();
+
+        err.hidden = true;
+        btn.disabled = true;
+        note.hidden = false;
+
+        try {
+          var resp = await fetch(form.action, {
+            method: 'POST',
+            body: new FormData(form),
+            headers: { 'Accept': 'application/json' }
+          });
+
+          if (!resp.ok) throw new Error('bad_status');
+
+          window.location.href = './thanks.html';
+        } catch (ex) {
+          err.hidden = false;
+          btn.disabled = false;
+          note.hidden = true;
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
+

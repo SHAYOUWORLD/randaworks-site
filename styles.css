@@ -20,3 +20,31 @@ small,.muted{color:var(--muted)}
 .footer{margin-top:26px;border-top:1px solid var(--line);padding-top:14px;color:var(--muted);font-size:12px}
 ul{margin:8px 0 8px 18px}
 code{background:#0f1320;border:1px solid var(--line);padding:2px 6px;border-radius:8px}
+
+/* Forms (contact) */
+.form{margin-top:14px}
+.field{margin:12px 0}
+label{display:block;font-weight:700;margin:0 0 6px}
+input[type="text"],input[type="email"],textarea{
+  width:100%;
+  color:var(--text);
+  background:#0f1320;
+  border:1px solid var(--line);
+  border-radius:12px;
+  padding:10px 12px;
+  font:inherit;
+}
+textarea{resize:vertical}
+input::placeholder,textarea::placeholder{color:var(--muted)}
+input:focus,textarea:focus{outline:2px solid rgba(122,162,255,.35);outline-offset:2px}
+.form-actions{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:10px}
+button.cta{border:0;cursor:pointer}
+button.cta[disabled]{opacity:.55;cursor:not-allowed}
+.alert{
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:12px 14px;
+  margin:12px 0;
+}
+.alert-error{border-color:rgba(255,110,110,.45);background:rgba(255,110,110,.08)}
+.hp{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden}
