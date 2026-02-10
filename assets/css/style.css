@@ -332,6 +332,69 @@ textarea:focus {
   font-size: 1.5rem;
 }
 
-.section-header a {
+
+/* Game Detail Specifics */
+.game-hero {
+  text-align: center;
+  padding: 80px 20px;
+  background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), #2a1b1b; /* Fallback/Placeholder color */
+  border-radius: 20px;
+  margin-bottom: 40px;
+  border: 1px solid var(--border-color);
+  background-size: cover;
+  background-position: center;
+}
+
+.game-hero h1 {
+  font-size: 3rem;
+  text-shadow: 0 4px 12px rgba(0,0,0,0.8);
+}
+
+.screenshot-grid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  margin: 20px 0;
+}
+
+.screenshot-placeholder {
+  aspect-ratio: 16/9;
+  background: #1e1e1e;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
   font-size: 0.9rem;
 }
+
+.specs-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.specs-table th, .specs-table td {
+  padding: 12px;
+  border-bottom: 1px solid var(--border-color);
+  text-align: left;
+}
+
+.specs-table th {
+  width: 30%;
+  color: var(--text-muted);
+  font-weight: normal;
+}
+
+.feature-list {
+  display: grid;
+  gap: 24px;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+
+.feature-item h3 {
+  font-size: 1.2rem;
+  color: var(--accent-color);
+}
+
