@@ -268,3 +268,70 @@ textarea:focus {
   height: 1px;
   overflow: hidden;
 }
+
+/* Hero Section */
+.hero {
+  text-align: center;
+  padding: 60px 20px;
+  background: radial-gradient(circle at center, #1b2030 0%, #0b0d12 100%);
+  border-radius: 20px;
+  margin-bottom: 40px;
+  border: 1px solid var(--border-color);
+}
+
+.hero h1 {
+  font-size: 2.5rem;
+  margin-bottom: 16px;
+  background: linear-gradient(135deg, #fff 0%, #a7adbf 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.hero p {
+  font-size: 1.1rem;
+  color: var(--text-muted);
+  max-width: 600px;
+  margin: 0 auto 24px;
+}
+
+/* Grid Layout */
+.grid {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+
+.grid .card {
+  margin-bottom: 0; /* Override default card margin */
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.grid .card h2 {
+  font-size: 1.25rem;
+}
+
+.grid .card .cta {
+  margin-top: auto;
+  align-self: flex-start;
+}
+
+/* Section Header */
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.section-header h2 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.section-header a {
+  font-size: 0.9rem;
+}
