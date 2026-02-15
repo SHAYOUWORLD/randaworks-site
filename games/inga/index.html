@@ -27,14 +27,13 @@
                 <img src="../../assets/img/games/inga/title_logo.png" alt="日本史因果クロニクル" class="game-logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='block'">
                 <h1 style="display:none; font-family: 'Shippori Mincho', serif; font-size: 3.5rem; color: #fff; text-shadow: 0 0 20px #bd3131;">日本史因果クロニクル</h1>
 
-                <p style="color: var(--accent-gold); letter-spacing: 3px; font-size: 0.95rem; margin-bottom: 12px;">INGA CHRONICLE</p>
-                <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 24px;">A Japanese history roguelike deckbuilder.</p>
+                <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 24px;">日本史を遊びながら学べる、デッキ構築型ローグライクカードゲーム。</p>
 
                 <div class="badges" style="justify-content: center; margin-bottom: 30px;">
-                    <span class="badge">Deckbuilding</span>
-                    <span class="badge">Roguelike</span>
-                    <span class="badge">Strategy</span>
-                    <span class="badge">Education</span>
+                    <span class="badge">デッキ構築</span>
+                    <span class="badge">ローグライク</span>
+                    <span class="badge">戦略</span>
+                    <span class="badge">学習</span>
                 </div>
 
                 <div>
@@ -54,19 +53,30 @@
         <!-- Screenshots -->
         <div class="card">
             <h2>Screenshots</h2>
-            <div class="screenshot-grid">
-                <div class="screenshot-placeholder">
-                    <img src="../../assets/img/games/inga/ss_01.png" alt="Battle Scene" onerror="this.style.display='none'">
-                    <span style="position:absolute">Battle Scene</span>
+            <div class="screenshot-slider" data-slider>
+                <button class="screenshot-nav prev" type="button" aria-label="前の画像">‹</button>
+                <div class="screenshot-track" aria-label="スクリーンショットスライダー">
+                    <figure class="screenshot-slide">
+                        <img src="../../assets/img/games/inga/ss_01.png" alt="バトル画面" onerror="this.style.display='none'">
+                    </figure>
+                    <figure class="screenshot-slide">
+                        <img src="../../assets/img/games/inga/ss_02.png" alt="デッキ管理画面" onerror="this.style.display='none'">
+                    </figure>
+                    <figure class="screenshot-slide">
+                        <img src="../../assets/img/games/inga/ss_03.png" alt="歴史イベント画面" onerror="this.style.display='none'">
+                    </figure>
+                    <figure class="screenshot-slide">
+                        <img src="../../assets/img/games/inga/ss_04.png" alt="コンボ演出画面1" onerror="this.style.display='none'">
+                    </figure>
+                    <figure class="screenshot-slide">
+                        <img src="../../assets/img/games/inga/ss_05.png" alt="コンボ演出画面2" onerror="this.style.display='none'">
+                    </figure>
+                    <figure class="screenshot-slide">
+                        <img src="../../assets/img/games/inga/ss_06.png" alt="イベント画面" onerror="this.style.display='none'">
+                    </figure>
                 </div>
-                <div class="screenshot-placeholder">
-                    <img src="../../assets/img/games/inga/ss_02.png" alt="Deck Management" onerror="this.style.display='none'">
-                    <span style="position:absolute">Deck Management</span>
-                </div>
-                <div class="screenshot-placeholder">
-                    <img src="../../assets/img/games/inga/ss_03.png" alt="Historical Event" onerror="this.style.display='none'">
-                    <span style="position:absolute">Historical Event</span>
-                </div>
+                <button class="screenshot-nav next" type="button" aria-label="次の画像">›</button>
+                <div class="screenshot-dots" aria-hidden="true"></div>
             </div>
             <p class="muted" style="text-align: center;">※画面は開発中のものです。</p>
         </div>
@@ -143,5 +153,58 @@
             <div>© 2026 RandaWorks</div>
         </div>
     </div>
+    <script>
+    (() => {
+        const sliders = document.querySelectorAll("[data-slider]");
+        sliders.forEach((slider) => {
+            const track = slider.querySelector(".screenshot-track");
+            const slides = Array.from(track.querySelectorAll(".screenshot-slide"));
+            const dotsRoot = slider.querySelector(".screenshot-dots");
+            let current = 0;
+
+            const goTo = (index) => {
+                if (!slides.length) return;
+                current = (index + slides.length) % slides.length;
+                const left = slides[current].offsetLeft;
+                track.scrollTo({ left, behavior: "smooth" });
+                dotsRoot.querySelectorAll(".screenshot-dot").forEach((dot, i) => {
+                    dot.classList.toggle("active", i === current);
+                });
+            };
+
+            slides.forEach((_, i) => {
+                const dot = document.createElement("button");
+                dot.type = "button";
+                dot.className = "screenshot-dot";
+                dot.setAttribute("aria-label", `画像 ${i + 1}`);
+                dot.addEventListener("click", () => goTo(i));
+                dotsRoot.appendChild(dot);
+            });
+
+            slider.querySelector(".screenshot-nav.prev").addEventListener("click", () => goTo(current - 1));
+            slider.querySelector(".screenshot-nav.next").addEventListener("click", () => goTo(current + 1));
+
+            track.addEventListener("scroll", () => {
+                const center = track.scrollLeft + track.clientWidth / 2;
+                let nearest = 0;
+                let distance = Number.POSITIVE_INFINITY;
+                slides.forEach((slide, i) => {
+                    const slideCenter = slide.offsetLeft + slide.clientWidth / 2;
+                    const diff = Math.abs(slideCenter - center);
+                    if (diff < distance) {
+                        distance = diff;
+                        nearest = i;
+                    }
+                });
+                current = nearest;
+                dotsRoot.querySelectorAll(".screenshot-dot").forEach((dot, i) => {
+                    dot.classList.toggle("active", i === current);
+                });
+            });
+
+            goTo(0);
+        });
+    })();
+    </script>
 </body>
 </html>
