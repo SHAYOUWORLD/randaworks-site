@@ -495,6 +495,10 @@ button.cta[disabled] {
 
 /* Mobile */
 @media (max-width: 480px) {
+  .home-page .nav .brand {
+    display: none;
+  }
+
   .container {
     padding: 0 12px;
   }
