@@ -1,0 +1,19 @@
+name: Verify Mobile Logo Rule
+
+on:
+  pull_request:
+  push:
+    branches-ignore:
+      - main
+  workflow_dispatch:
+
+jobs:
+  verify-mobile-logo:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Verify home mobile logo rule
+        shell: pwsh
+        run: ./scripts/verify-mobile-logo.ps1
