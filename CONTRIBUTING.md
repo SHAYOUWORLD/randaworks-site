@@ -32,8 +32,8 @@ python -m http.server 4173
 
 キャッシュ切り分けが必要な場合:
 
-- `https://www.randaworks.com/?v=20260215`
-- `https://www.randaworks.com/assets/css/style.css?v=20260215`
+![1771149476803](image/CONTRIBUTING/1771149476803.png)- `https://www.randaworks.com/?v=<timestamp>`
+- `https://www.randaworks.com/assets/css/style.css?v=<timestamp>`
 
 ## 自動チェック
 
