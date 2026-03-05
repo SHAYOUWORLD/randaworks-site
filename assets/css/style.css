@@ -336,6 +336,25 @@ button.cta[disabled] {
   cursor: not-allowed;
 }
 
+/* Steam CTA variant */
+.cta-steam {
+  background: linear-gradient(135deg, #1b2838, #2a475e) !important;
+  color: #fff !important;
+  border: 1px solid rgba(102, 192, 244, 0.3);
+  box-shadow: 0 4px 15px rgba(27, 40, 56, 0.4);
+  text-transform: none;
+  font-size: 0.9rem;
+}
+
+.cta-steam:hover {
+  background: linear-gradient(135deg, #2a475e, #3d6b8e) !important;
+  color: #fff !important;
+  border-color: rgba(102, 192, 244, 0.6);
+  box-shadow: 0 8px 25px rgba(102, 192, 244, 0.3);
+  filter: brightness(1.1);
+  text-shadow: none;
+}
+
 /* Badges */
 .badges {
   display: flex;
