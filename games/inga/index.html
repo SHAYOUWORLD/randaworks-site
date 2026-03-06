@@ -4,207 +4,500 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <link rel="icon" href="../../assets/img/games/inga/icon.png" type="image/png">
-    <title>日本史因果クロニクル — Inga Chronicle | RandaWorks</title>
-    <meta name="description" content="A Japanese history roguelike deckbuilder. 遊ぶほど「共通テスト日本史」の重要語句と因果が身につく、知育ローグライクカードゲーム。" />
+    <title>日本史因果クロニクル | 勝つために歴史がつながるデッキ構築ローグライク | RandaWorks</title>
+    <meta name="description" content="史実に沿ってカードをつなぐほど強くなる。遊ぶほど日本史の因果が頭に入る、知育デッキ構築型ローグライクカードゲーム『日本史因果クロニクル』の公式ページです。" />
+    <link rel="canonical" href="https://www.randaworks.com/games/inga/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="日本史因果クロニクル | RandaWorks" />
+    <meta property="og:description" content="勝つために歴史を覚える。遊ぶほど因果がつながる、日本史デッキ構築ローグライク。" />
+    <meta property="og:url" content="https://www.randaworks.com/games/inga/" />
+    <meta property="og:image" content="https://www.randaworks.com/assets/img/games/inga/ss_01.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="日本史因果クロニクル | RandaWorks" />
+    <meta name="twitter:description" content="史実通りにカードをつなぐほど強くなる、日本史デッキ構築ローグライク。" />
+    <meta name="twitter:image" content="https://www.randaworks.com/assets/img/games/inga/ss_01.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Shippori+Mincho:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Shippori+Mincho:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../assets/css/style.css">
 </head>
 <body>
     <div class="container">
-        <div class="nav">
+        <header class="nav">
             <div class="brand"><a href="../../"><img src="../../assets/img/randaworks_logo_text.png" alt="RandaWorks" style="height: 28px; vertical-align: middle;"></a></div>
             <div class="links">
-                <a href="./privacy/">Privacy</a>
+                <a href="#overview">概要</a>
+                <a href="#gameplay">ゲームの流れ</a>
+                <a href="#clips">映像</a>
+                <a href="#combos">カード/コンボ</a>
+                <a href="#screenshots">画面写真</a>
+                <a href="#faq">FAQ</a>
                 <a href="./support/">Support</a>
             </div>
-        </div>
+        </header>
 
-        <!-- Hero -->
-        <div class="game-hero">
-            <div class="game-hero-content">
-                <img src="../../assets/img/games/inga/title_logo.png" alt="日本史因果クロニクル" class="game-logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='block'">
-                <h1 style="display:none; font-family: 'Shippori Mincho', serif; font-size: 3.5rem; color: #fff; text-shadow: 0 0 20px #bd3131;">日本史因果クロニクル</h1>
+        <main>
+            <section class="game-hero" aria-labelledby="hero-title">
+                <div class="game-hero-content">
+                    <p class="hero-kicker">Steam Coming Soon / 日本史デッキ構築ローグライク</p>
+                    <img
+                        src="../../assets/img/games/inga/title_logo.png"
+                        alt="日本史因果クロニクル"
+                        class="game-logo"
+                        loading="eager"
+                        onerror="this.style.display='none'; this.nextElementSibling.style.display='block'"
+                    >
+                    <h1 id="hero-title" style="display:none; font-family: 'Shippori Mincho', serif; font-size: 3.5rem; color: #fff; text-shadow: 0 0 20px #bd3131;">日本史因果クロニクル</h1>
 
-                <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 24px;">日本史を遊びながら学べる、デッキ構築型ローグライクカードゲーム。</p>
+                    <p class="hero-subtitle">勝つために歴史を覚える。<br>遊ぶほど、因果がつながる。</p>
+                    <p class="hero-description">
+                        史実に沿った順番と組み合わせでカードが連鎖し、強力なコンボが発動。
+                        日本史の流れを、暗記ではなくプレイ体験として身につける知育ローグライクカードゲームです。
+                    </p>
 
-                <div class="badges" style="justify-content: center; margin-bottom: 30px;">
-                    <span class="badge">デッキ構築</span>
-                    <span class="badge">ローグライク</span>
-                    <span class="badge">戦略</span>
-                    <span class="badge">学習</span>
+                    <div class="badges hero-badges" style="justify-content: center;">
+                        <span class="badge">デッキ構築</span>
+                        <span class="badge">ローグライク</span>
+                        <span class="badge">歴史学習</span>
+                        <span class="badge">Steam</span>
+                    </div>
+
+                    <div class="game-hero-actions">
+                        <a class="cta cta-steam cta-large" href="https://store.steampowered.com/app/4403470" target="_blank" rel="noopener noreferrer" id="wishlist-cta">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 259" width="20" height="20" style="vertical-align: middle; margin-right: 8px; fill: currentColor;"><path d="M127.779 0C57.895 0 1.307 55.39.052 124.908l68.961 28.5a36.077 36.077 0 0 1 20.378-6.27l30.462-44.145v-.617c0-26.513 21.569-48.084 48.083-48.084 26.516 0 48.085 21.572 48.085 48.084 0 26.515-21.569 48.085-48.085 48.085h-1.104l-43.474 31.02c0 .403.022.8.022 1.197 0 19.882-16.163 36.046-36.048 36.046-17.806 0-32.595-12.953-35.476-29.932L2.472 166.516C18.233 218.149 67.215 256 127.779 256c70.716 0 128.043-57.326 128.043-128.001C255.822 57.326 198.495 0 127.779 0z"/></svg>
+                            Steamでウィッシュリストに追加
+                        </a>
+                        <a class="cta cta-ghost" href="#screenshots">画面を見る</a>
+                    </div>
+                    <p class="hero-note">発売時期は未定です。最新情報は Steam ストアページと本サイトでお知らせします。</p>
+
+                    <div class="hero-stats" aria-label="ゲーム概要">
+                        <div class="hero-stat">
+                            <strong class="hero-stat-value">200+</strong>
+                            <span class="hero-stat-label">カード</span>
+                        </div>
+                        <div class="hero-stat">
+                            <strong class="hero-stat-value">100+</strong>
+                            <span class="hero-stat-label">コンボ</span>
+                        </div>
+                        <div class="hero-stat">
+                            <strong class="hero-stat-value">飛鳥-幕末</strong>
+                            <span class="hero-stat-label">時代を横断</span>
+                        </div>
+                        <div class="hero-stat">
+                            <strong class="hero-stat-value">Windows / Steam</strong>
+                            <span class="hero-stat-label">PC向け予定</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="card" id="overview">
+                <div class="intro-grid">
+                    <div>
+                        <p class="section-kicker">Core Hook</p>
+                        <h2>「気づいたら日本史に詳しくなってた」を、ちゃんとゲームにする</h2>
+                        <p>
+                            このゲームの主役は、単なる暗記ではなく「歴史のつながり」です。
+                            何が原因で、何が起きて、次に何が続くのか。
+                            その流れを理解するほど、デッキは自然に強くなっていきます。
+                        </p>
+                        <p>
+                            つまり、勝ち筋を追うこと自体が学習になる設計です。
+                            勉強のためのゲームではなく、面白さの中に学びが埋め込まれたローグライクを目指しています。
+                        </p>
+                    </div>
+                    <aside class="surface-panel quote-panel" aria-label="要点">
+                        <strong>歴史が分かると、コンボが見える。</strong>
+                        <p>コンボは丸暗記ではなく、史実の前後関係と因果から自然に発見できるよう設計されています。</p>
+                        <ul class="point-list">
+                            <li>史実通りに近い流れほどシナジーが生まれる</li>
+                            <li>毎回違うカードプールとルート選択で何度も遊べる</li>
+                            <li>学習ゲームらしさより、まずカードゲームとして面白い</li>
+                        </ul>
+                    </aside>
+                </div>
+            </section>
+
+            <section class="card">
+                <p class="section-kicker">Why It Works</p>
+                <h2>面白さと学びが分離しない、3つの柱</h2>
+                <div class="pillar-grid">
+                    <article class="surface-panel pillar-card">
+                        <h3>史実がそのままシナジーになる</h3>
+                        <p>人物、制度、事件の前後関係がカード同士のつながりに直結。知識が増えるほど、手札の意味が変わります。</p>
+                    </article>
+                    <article class="surface-panel pillar-card">
+                        <h3>ローグライクとして繰り返し遊べる</h3>
+                        <p>ルート分岐、ショップ、イベント、取捨選択。毎回違う局面の中で、限られた資源から最適な歴史ルートを組み立てます。</p>
+                    </article>
+                    <article class="surface-panel pillar-card">
+                        <h3>知識が「使える形」で残る</h3>
+                        <p>単語ではなく因果のまとまりとして覚えるため、テスト対策だけでなく、流れの理解そのものが深まります。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="card" id="screenshots">
+                <p class="section-kicker">Screenshots</p>
+                <h2>開発中のゲーム画面</h2>
+                <p>バトル、デッキ管理、イベント、コンボ演出まで。ゲームの手触りが伝わる画面をまとめています。</p>
+                <div class="screenshot-slider" data-slider>
+                    <button class="screenshot-nav prev" type="button" aria-label="前の画像">‹</button>
+                    <div class="screenshot-track" aria-label="スクリーンショットスライダー">
+                        <figure class="screenshot-slide">
+                            <img src="../../assets/img/games/inga/ss_01.png" alt="バトル画面" loading="lazy" onerror="this.style.display='none'">
+                        </figure>
+                        <figure class="screenshot-slide">
+                            <img src="../../assets/img/games/inga/ss_02.png" alt="デッキ管理画面" loading="lazy" onerror="this.style.display='none'">
+                        </figure>
+                        <figure class="screenshot-slide">
+                            <img src="../../assets/img/games/inga/ss_03.png" alt="歴史イベント画面" loading="lazy" onerror="this.style.display='none'">
+                        </figure>
+                        <figure class="screenshot-slide">
+                            <img src="../../assets/img/games/inga/ss_04.png" alt="コンボ演出画面1" loading="lazy" onerror="this.style.display='none'">
+                        </figure>
+                        <figure class="screenshot-slide">
+                            <img src="../../assets/img/games/inga/ss_05.png" alt="コンボ演出画面2" loading="lazy" onerror="this.style.display='none'">
+                        </figure>
+                        <figure class="screenshot-slide">
+                            <img src="../../assets/img/games/inga/ss_06.png" alt="イベント画面" loading="lazy" onerror="this.style.display='none'">
+                        </figure>
+                    </div>
+                    <button class="screenshot-nav next" type="button" aria-label="次の画像">›</button>
+                    <div class="screenshot-dots" aria-hidden="true"></div>
+                </div>
+                <p class="muted" style="text-align: center;">※画面は開発中のものです。UI・数値・演出は変更される場合があります。</p>
+            </section>
+
+            <section class="card" id="clips">
+                <p class="section-kicker">Demo Clips</p>
+                <h2>体験版プレイ映像</h2>
+                <p>Steam向けPV本編を掲載しています。</p>
+                <figure class="video-card video-feature">
+                    <video
+                        src="../../assets/video/games/inga/SteamStorePV_v1.1.mp4"
+                        poster="../../assets/img/games/inga/demo-cards/poster_steam_store_pv_v1_1.jpg"
+                        playsinline
+                        controls
+                        preload="none"
+                    ></video>
+                    <figcaption class="video-caption">
+                        <strong>Steam Store PV v1.1</strong>
+                        <span>ゲーム全体の雰囲気、戦闘、イベント、コンボ演出をまとめて確認できる58秒のPVです。</span>
+                    </figcaption>
+                </figure>
+            </section>
+
+            <section class="card" id="gameplay">
+                <p class="section-kicker">Game Loop</p>
+                <h2>1プレイの流れ</h2>
+                <div class="gameplay-flow">
+                    <article class="surface-panel flow-step">
+                        <span class="flow-number">01</span>
+                        <h3>英雄を選ぶ</h3>
+                        <p>現在公開中の英雄は、織田信長と紫式部。それぞれ初期デッキと戦い方が異なり、同じ日本史でも違う攻略感が生まれます。</p>
+                    </article>
+                    <article class="surface-panel flow-step">
+                        <span class="flow-number">02</span>
+                        <h3>ルートを進む</h3>
+                        <p>戦闘、イベント、ショップ、回復。次の一手でどの歴史軸を伸ばすかが、後半の強さを左右します。</p>
+                    </article>
+                    <article class="surface-panel flow-step">
+                        <span class="flow-number">03</span>
+                        <h3>因果コンボを組む</h3>
+                        <p>カード単体の強さだけでなく、史実のつながりまで含めてデッキを構成。知識がそのまま勝率に反映されます。</p>
+                    </article>
+                    <article class="surface-panel flow-step">
+                        <span class="flow-number">04</span>
+                        <h3>新しい英雄を解放する</h3>
+                        <p>クリアを重ねるほど、別時代・別戦略の英雄が解放。毎回違う角度から日本史を遊べます。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="card" id="combos">
+                <p class="section-kicker">Inga Combo</p>
+                <h2>史実がそのまま強いルートになる</h2>
+                <p>代表的な因果の流れを、そのままコンボとして実装。覚えた順番ではなく、つながりとして歴史が残ります。</p>
+                <div class="combo-showcase">
+                    <div class="surface-panel combo-rail-panel">
+                        <div class="combo-rail-header">
+                            <strong>実カードで見る連鎖例</strong>
+                            <span>4枚のカードが、そのまま古代史の流れになります。</span>
+                        </div>
+                        <p class="combo-rail-chain" aria-label="公地公民から荘園制へ: 大化の改新、班田収授法、墾田永年私財法、荘園制の発達">
+                            <span>1. 大化の改新</span>
+                            <span class="combo-arrow" aria-hidden="true">→</span>
+                            <span>2. 班田収授法</span>
+                            <span class="combo-arrow" aria-hidden="true">→</span>
+                            <span>3. 墾田永年私財法</span>
+                            <span class="combo-arrow" aria-hidden="true">→</span>
+                            <span>4. 荘園制の発達</span>
+                        </p>
+                        <ol class="combo-card-rail" aria-label="公地公民から荘園制コンボのカード例">
+                            <li class="combo-step">
+                                <span class="combo-step-index">1</span>
+                                <figure class="demo-card">
+                                    <img src="../../assets/img/games/inga/demo-cards/card_taika.png" alt="大化の改新のカードアート" loading="lazy">
+                                    <figcaption>
+                                        <strong>大化の改新</strong>
+                                        <span>公地公民制の出発点</span>
+                                    </figcaption>
+                                </figure>
+                            </li>
+                            <li class="combo-step">
+                                <span class="combo-step-index">2</span>
+                                <figure class="demo-card">
+                                    <img src="../../assets/img/games/inga/demo-cards/card_handen.png" alt="班田収授法のカードアート" loading="lazy">
+                                    <figcaption>
+                                        <strong>班田収授法</strong>
+                                        <span>土地と人を制度で結びつける</span>
+                                    </figcaption>
+                                </figure>
+                            </li>
+                            <li class="combo-step">
+                                <span class="combo-step-index">3</span>
+                                <figure class="demo-card">
+                                    <img src="../../assets/img/games/inga/demo-cards/card_konden.png" alt="墾田永年私財法のカードアート" loading="lazy">
+                                    <figcaption>
+                                        <strong>墾田永年私財法</strong>
+                                        <span>私有の広がりで流れが変わる</span>
+                                    </figcaption>
+                                </figure>
+                            </li>
+                            <li class="combo-step">
+                                <span class="combo-step-index">4</span>
+                                <figure class="demo-card">
+                                    <img src="../../assets/img/games/inga/demo-cards/card_shoen.jpg" alt="荘園制の発達のカードアート" loading="lazy">
+                                    <figcaption>
+                                        <strong>荘園制の発達</strong>
+                                        <span>支配構造の転換点に着地する</span>
+                                    </figcaption>
+                                </figure>
+                            </li>
+                        </ol>
+                    </div>
+                    <div class="combo-visual-grid">
+                        <figure class="combo-visual">
+                            <img src="../../assets/img/games/inga/demo-cards/combo_land_system.jpg" alt="公地公民から荘園制コンボのイメージビジュアル" loading="lazy">
+                            <figcaption>
+                                <strong>公地公民から荘園制コンボ</strong>
+                                <span>律令国家の理想が崩れていく流れを、1本の勝ち筋として体験できます。</span>
+                            </figcaption>
+                        </figure>
+                        <figure class="combo-visual">
+                            <img src="../../assets/img/games/inga/demo-cards/combo_nobunaga.jpg" alt="織田天下布武コンボのイメージビジュアル" loading="lazy">
+                            <figcaption>
+                                <strong>織田天下布武コンボ</strong>
+                                <span>戦国の勢いと転換点を、強い連鎖としてまとめて味わえる代表例です。</span>
+                            </figcaption>
+                        </figure>
+                    </div>
+                </div>
+                <div class="combo-grid">
+                    <article class="surface-panel combo-card">
+                        <h3>織田天下布武</h3>
+                        <p class="combo-chain">桶狭間の戦い → 長篠の戦い → 本能寺の変</p>
+                        <p class="combo-note">戦国の流れが一直線につながる、象徴的な連鎖。</p>
+                    </article>
+                    <article class="surface-panel combo-card">
+                        <h3>秀吉中央集権</h3>
+                        <p class="combo-chain">刀狩令 → 検地 → 石高制</p>
+                        <p class="combo-note">政策の積み重ねが見えやすい、制度史ルートの代表例。</p>
+                    </article>
+                    <article class="surface-panel combo-card">
+                        <h3>公地公民から荘園制へ</h3>
+                        <p class="combo-chain">大化の改新 → 班田収授法 → 墾田永年私財法 → 荘園制の発達</p>
+                        <p class="combo-note">古代史の変化を、1本の流れとして体感できる長連鎖。</p>
+                    </article>
+                    <article class="surface-panel combo-card">
+                        <h3>尊王攘夷思想の形成</h3>
+                        <p class="combo-chain">蘭学 → 国学 → 水戸学</p>
+                        <p class="combo-note">思想史の流れが、そのままデッキの軸になる知的コンボ。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="card">
+                <p class="section-kicker">Heroes</p>
+                <h2>現在公開している英雄</h2>
+                <div class="roster-grid">
+                    <article class="surface-panel roster-item">
+                        <div class="roster-portrait">
+                            <img src="../../assets/img/games/inga/demo-cards/hero_nobunaga.jpg" alt="織田信長のカードアート" loading="lazy">
+                        </div>
+                        <span class="roster-tag">戦国</span>
+                        <h3>織田信長</h3>
+                        <p>大きな転換点が連続する時代を駆け抜ける、攻勢のイメージが強い英雄。</p>
+                    </article>
+                    <article class="surface-panel roster-item">
+                        <div class="roster-portrait">
+                            <img src="../../assets/img/games/inga/demo-cards/hero_murasaki.jpg" alt="紫式部のカードアート" loading="lazy">
+                        </div>
+                        <span class="roster-tag">平安</span>
+                        <h3>紫式部</h3>
+                        <p>文化と人物関係が濃い時代を扱う、知の積み重ねが映える英雄。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="card">
+                <p class="section-kicker">Who It's For</p>
+                <h2>こんな人に刺さります</h2>
+                <div class="audience-grid">
+                    <div class="surface-panel audience-panel">
+                        <h3>ローグライク好き</h3>
+                        <ul class="clean-list">
+                            <li>デッキ構築の試行錯誤が好き</li>
+                            <li>強いルートを自分で発見したい</li>
+                            <li>毎回違う展開で繰り返し遊びたい</li>
+                        </ul>
+                    </div>
+                    <div class="surface-panel audience-panel">
+                        <h3>歴史好き・学び直したい人</h3>
+                        <ul class="clean-list">
+                            <li>日本史を流れで理解したい</li>
+                            <li>遊ぶ時間に少し意味がほしい</li>
+                            <li>テスト勉強の手前で歴史に親しみたい</li>
+                        </ul>
+                    </div>
+                </div>
+                <p style="margin-top: 20px; font-size: 1.1rem;"><strong>気づいたら詳しくなってる。だから、遊んでいい。</strong></p>
+            </section>
+
+            <section class="grid">
+                <div class="card">
+                    <p class="section-kicker">Specs</p>
+                    <h2>System Requirements（予定）</h2>
+                    <table class="specs-table">
+                        <tr><th>OS</th><td>Windows 10 / 11 (64-bit)</td></tr>
+                        <tr><th>Processor</th><td>Intel Core i3 / AMD Ryzen 3 以上</td></tr>
+                        <tr><th>Memory</th><td>4 GB RAM</td></tr>
+                        <tr><th>Graphics</th><td>DirectX 11 互換グラフィックカード</td></tr>
+                        <tr><th>Storage</th><td>1 GB 利用可能</td></tr>
+                    </table>
                 </div>
 
-                <div>
-                    <a class="cta" href="https://store.steampowered.com/app/4403470" target="_blank" rel="noopener noreferrer" id="wishlist-cta">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 259" width="20" height="20" style="vertical-align: middle; margin-right: 8px; fill: currentColor;"><path d="M127.779 0C57.895 0 1.307 55.39.052 124.908l68.961 28.5a36.077 36.077 0 0 1 20.378-6.27l30.462-44.145v-.617c0-26.513 21.569-48.084 48.083-48.084 26.516 0 48.085 21.572 48.085 48.084 0 26.515-21.569 48.085-48.085 48.085h-1.104l-43.474 31.02c0 .403.022.8.022 1.197 0 19.882-16.163 36.046-36.048 36.046-17.806 0-32.595-12.953-35.476-29.932L2.472 166.516C18.233 218.149 67.215 256 127.779 256c70.716 0 128.043-57.326 128.043-128.001C255.822 57.326 198.495 0 127.779 0z"/></svg>
+                <div class="card" id="faq">
+                    <p class="section-kicker">FAQ</p>
+                    <h2>よくある質問</h2>
+                    <div class="faq-list">
+                        <details class="faq-item" open>
+                            <summary>発売日はいつですか？</summary>
+                            <p>発売時期は未定です。決まり次第、Steamストアページと本サイトで案内します。</p>
+                        </details>
+                        <details class="faq-item">
+                            <summary>どんな人向けのゲームですか？</summary>
+                            <p>デッキ構築ローグライクが好きな人、日本史を流れで理解したい人、遊ぶ時間にも学びがほしい人に向いています。</p>
+                        </details>
+                        <details class="faq-item">
+                            <summary>不具合報告や問い合わせ先はありますか？</summary>
+                            <p><a href="./support/">サポートページ</a>、または <a href="mailto:contact@randaworks.com">contact@randaworks.com</a> までご連絡ください。</p>
+                        </details>
+                    </div>
+                </div>
+            </section>
+
+            <section class="card cta-band" aria-labelledby="cta-title">
+                <p class="section-kicker">Stay Updated</p>
+                <h2 id="cta-title">リリース情報を見逃さない</h2>
+                <p>気になったら、まずは Steam のウィッシュリストに追加してください。</p>
+                <div class="cta-band-actions">
+                    <a class="cta cta-steam" href="https://store.steampowered.com/app/4403470" target="_blank" rel="noopener noreferrer">
                         Steamでウィッシュリストに追加
                     </a>
-                    <p class="muted" style="margin-top: 10px; font-size: 0.8rem;">ウィッシュリストに追加して、リリース通知を受け取ろう</p>
+                    <a class="cta cta-ghost" href="./support/">問い合わせ・サポート</a>
                 </div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <div class="footer-links">
+                <a href="./privacy/">プライバシーポリシー</a>
+                <a href="./support/">サポート</a>
+                <a href="../../games/">ゲーム一覧</a>
             </div>
-        </div>
-
-        <!-- Short Description -->
-        <div class="card">
-            <h2>「気づいたら日本史に詳しくなってた」</h2>
-            <p>史実通りのデッキを組むと強い——勝つために歴史を覚え、遊ぶほど知識が身につく。<br>
-            <strong>デッキ構築型ローグライク × 日本史 × 因果コンボ。</strong></p>
-        </div>
-
-        <!-- Screenshots -->
-        <div class="card">
-            <h2>Screenshots</h2>
-            <div class="screenshot-slider" data-slider>
-                <button class="screenshot-nav prev" type="button" aria-label="前の画像">‹</button>
-                <div class="screenshot-track" aria-label="スクリーンショットスライダー">
-                    <figure class="screenshot-slide">
-                        <img src="../../assets/img/games/inga/ss_01.png" alt="バトル画面" onerror="this.style.display='none'">
-                    </figure>
-                    <figure class="screenshot-slide">
-                        <img src="../../assets/img/games/inga/ss_02.png" alt="デッキ管理画面" onerror="this.style.display='none'">
-                    </figure>
-                    <figure class="screenshot-slide">
-                        <img src="../../assets/img/games/inga/ss_03.png" alt="歴史イベント画面" onerror="this.style.display='none'">
-                    </figure>
-                    <figure class="screenshot-slide">
-                        <img src="../../assets/img/games/inga/ss_04.png" alt="コンボ演出画面1" onerror="this.style.display='none'">
-                    </figure>
-                    <figure class="screenshot-slide">
-                        <img src="../../assets/img/games/inga/ss_05.png" alt="コンボ演出画面2" onerror="this.style.display='none'">
-                    </figure>
-                    <figure class="screenshot-slide">
-                        <img src="../../assets/img/games/inga/ss_06.png" alt="イベント画面" onerror="this.style.display='none'">
-                    </figure>
-                </div>
-                <button class="screenshot-nav next" type="button" aria-label="次の画像">›</button>
-                <div class="screenshot-dots" aria-hidden="true"></div>
-            </div>
-            <p class="muted" style="text-align: center;">※画面は開発中のものです。</p>
-        </div>
-
-        <!-- About: Inga Combo -->
-        <div class="card">
-            <h2>因果コンボ——史実通りだと強い</h2>
-            <p>歴史的に正しい組み合わせでカードを使うと、コンボが発動。<br>
-            時代や人物の関係性を理解するほど、デッキは強くなる。</p>
-
-            <ul style="list-style: none; padding: 0; margin: 20px 0;">
-                <li style="margin-bottom: 12px;">🏯「桶狭間の戦い」→「長篠の戦い」→「本能寺の変」<span class="muted">（織田天下布武コンボ）</span></li>
-                <li style="margin-bottom: 12px;">⚔️「刀狩令」→「検地」→「石高制」<span class="muted">（秀吉中央集権コンボ）</span></li>
-                <li style="margin-bottom: 12px;">📜「大化の改新」→「班田収授法」→「墾田永年私財法」→「荘園制の発達」<span class="muted">（公地公民から荘園制コンボ）</span></li>
-                <li style="margin-bottom: 12px;">📖「蘭学」→「国学」→「水戸学」<span class="muted">（尊王攘夷思想コンボ）</span></li>
-            </ul>
-
-            <p><strong>知っているほど有利。遊ぶほど詳しくなる。</strong></p>
-        </div>
-
-        <!-- Features -->
-        <div class="card">
-            <h2>ゲームの特徴</h2>
-            <div class="feature-list">
-                <div class="feature-item">
-                    <h3>デッキ構築型ローグライク</h3>
-                    <p>毎回異なるカードとルートで挑む、繰り返し遊べる戦略性。マップ選択、ショップ、イベント——判断の連続が勝敗を分ける。</p>
-                </div>
-                <div class="feature-item">
-                    <h3>歴史上の英雄たち</h3>
-                    <p>織田信長、紫式部、徳川吉宗——時代も戦い方も異なる英雄たちが、あなたを待っている。それぞれ異なる初期デッキと戦略。クリアするたびに新たな英雄が解放され、何度でも新鮮に遊べる。</p>
-                </div>
-                <div class="feature-item">
-                    <h3>飛鳥から幕末まで</h3>
-                    <p>200枚以上のカード、100種以上のコンボ——歴史の流れがデッキで体感できる。</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Target Audience -->
-        <div class="card">
-            <h2>こんな人に</h2>
-            <ul>
-                <li>デッキ構築ローグライクが好き</li>
-                <li>歴史モノのゲームが好き</li>
-                <li>遊びながら何か身につけたい</li>
-                <li>ゲームする時間に罪悪感がある</li>
-            </ul>
-            <p style="margin-top: 20px; font-size: 1.1rem;"><strong>気づいたら詳しくなってる。だから、遊んでいい。</strong></p>
-        </div>
-
-        <!-- System Requirements -->
-        <div class="card">
-            <h2>System Requirements（予定）</h2>
-            <table class="specs-table">
-                <tr><th>OS</th><td>Windows 10 / 11 (64-bit)</td></tr>
-                <tr><th>Processor</th><td>Intel Core i3 / AMD Ryzen 3 以上</td></tr>
-                <tr><th>Memory</th><td>4 GB RAM</td></tr>
-                <tr><th>Graphics</th><td>DirectX 11 互換グラフィックカード</td></tr>
-                <tr><th>Storage</th><td>1 GB 利用可能</td></tr>
-            </table>
-        </div>
-
-        <!-- Links -->
-        <div class="card">
-            <h2>リンク</h2>
-            <ul>
-                <li><a href="./privacy/">プライバシーポリシー</a></li>
-                <li><a href="./support/">サポート</a></li>
-            </ul>
-        </div>
-
-        <div class="footer">
             <div>© 2026 RandaWorks</div>
-        </div>
+        </footer>
     </div>
     <script>
     (() => {
         const sliders = document.querySelectorAll("[data-slider]");
+        const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
         sliders.forEach((slider) => {
             const track = slider.querySelector(".screenshot-track");
             const slides = Array.from(track.querySelectorAll(".screenshot-slide"));
             const dotsRoot = slider.querySelector(".screenshot-dots");
-            let current = 0;
+            const prevButton = slider.querySelector(".screenshot-nav.prev");
+            const nextButton = slider.querySelector(".screenshot-nav.next");
 
-            const goTo = (index) => {
-                if (!slides.length) return;
-                current = (index + slides.length) % slides.length;
-                const left = slides[current].offsetLeft;
-                track.scrollTo({ left, behavior: "smooth" });
+            let current = 0;
+            let scrollFrame = null;
+
+            if (slides.length <= 1) {
+                prevButton.hidden = true;
+                nextButton.hidden = true;
+                dotsRoot.hidden = true;
+                return;
+            }
+
+            const syncDots = () => {
                 dotsRoot.querySelectorAll(".screenshot-dot").forEach((dot, i) => {
-                    dot.classList.toggle("active", i === current);
+                    const isActive = i === current;
+                    dot.classList.toggle("active", isActive);
+                    dot.setAttribute("aria-pressed", String(isActive));
                 });
             };
 
+            const goTo = (index) => {
+                current = (index + slides.length) % slides.length;
+                const left = slides[current].offsetLeft;
+                track.scrollTo({ left, behavior: prefersReducedMotion ? "auto" : "smooth" });
+                syncDots();
+            };
+
+            dotsRoot.innerHTML = "";
             slides.forEach((_, i) => {
                 const dot = document.createElement("button");
                 dot.type = "button";
                 dot.className = "screenshot-dot";
                 dot.setAttribute("aria-label", `画像 ${i + 1}`);
+                dot.setAttribute("aria-pressed", "false");
                 dot.addEventListener("click", () => goTo(i));
                 dotsRoot.appendChild(dot);
             });
 
-            slider.querySelector(".screenshot-nav.prev").addEventListener("click", () => goTo(current - 1));
-            slider.querySelector(".screenshot-nav.next").addEventListener("click", () => goTo(current + 1));
+            prevButton.addEventListener("click", () => goTo(current - 1));
+            nextButton.addEventListener("click", () => goTo(current + 1));
 
             track.addEventListener("scroll", () => {
-                const center = track.scrollLeft + track.clientWidth / 2;
-                let nearest = 0;
-                let distance = Number.POSITIVE_INFINITY;
-                slides.forEach((slide, i) => {
-                    const slideCenter = slide.offsetLeft + slide.clientWidth / 2;
-                    const diff = Math.abs(slideCenter - center);
-                    if (diff < distance) {
-                        distance = diff;
-                        nearest = i;
-                    }
-                });
-                current = nearest;
-                dotsRoot.querySelectorAll(".screenshot-dot").forEach((dot, i) => {
-                    dot.classList.toggle("active", i === current);
-                });
-            });
+                if (scrollFrame) {
+                    window.cancelAnimationFrame(scrollFrame);
+                }
 
+                scrollFrame = window.requestAnimationFrame(() => {
+                    const center = track.scrollLeft + track.clientWidth / 2;
+                    let nearest = 0;
+                    let distance = Number.POSITIVE_INFINITY;
+
+                    slides.forEach((slide, i) => {
+                        const slideCenter = slide.offsetLeft + slide.clientWidth / 2;
+                        const diff = Math.abs(slideCenter - center);
+                        if (diff < distance) {
+                            distance = diff;
+                            nearest = i;
+                        }
+                    });
+
+                    current = nearest;
+                    syncDots();
+                    scrollFrame = null;
+                });
+            }, { passive: true });
+
+            window.addEventListener("resize", () => goTo(current));
             goTo(0);
         });
     })();
