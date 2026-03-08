@@ -3,15 +3,36 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <link rel="icon" href="../assets/img/randaworks_icon.png" type="image/png">
+  <link rel="icon" href="../assets/img/randaworks_icon.png" type="image/png">
   <title>お問い合わせ | RandaWorks</title>
-  <meta name="description" content="RandaWorksへのお問い合わせフォーム。" />
+  <meta name="description" content="RandaWorksへのお問い合わせフォームです。不具合報告、ご意見、ご要望、取材依頼などを受け付けています。" />
+  <link rel="canonical" href="https://www.randaworks.com/contact/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="お問い合わせ | RandaWorks" />
+  <meta property="og:description" content="不具合報告、ご意見、ご要望、取材依頼などを受け付けています。" />
+  <meta property="og:url" content="https://www.randaworks.com/contact/" />
+  <meta property="og:image" content="https://www.randaworks.com/assets/img/randaworks_logo_full.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="お問い合わせ | RandaWorks" />
+  <meta name="twitter:description" content="RandaWorksへのお問い合わせフォームです。" />
+  <meta name="twitter:image" content="https://www.randaworks.com/assets/img/randaworks_logo_full.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Shippori+Mincho:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../assets/css/style.css" />
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "ContactPage",
+      "name": "お問い合わせ | RandaWorks",
+      "url": "https://www.randaworks.com/contact/",
+      "description": "RandaWorksへのお問い合わせフォーム。",
+      "inLanguage": "ja"
+    }
+  </script>
 </head>
 <body>
+  <a class="skip-link" href="#main-content">メインコンテンツへ移動</a>
   <div class="container">
     <div class="nav">
       <div class="brand"><a href="../"><img src="../assets/img/randaworks_logo_text.png" alt="RandaWorks" style="height: 28px; vertical-align: middle;"></a></div>
@@ -21,14 +42,14 @@
       </div>
     </div>
 
-    <div class="card">
+    <main id="main-content" class="card">
       <h1>お問い合わせ</h1>
       <p class="muted">
         返信先メールアドレスは正確に入力してください。<br />
         直接メールする場合は <a href="mailto:contact@randaworks.com">contact@randaworks.com</a> へお願いします。
       </p>
 
-      <div class="alert alert-error" id="formError" hidden>
+      <div class="alert alert-error" id="formError" role="alert" hidden>
         送信に失敗しました。時間をおいて再度お試しください。<br />
         うまくいかない場合は <a href="mailto:contact@randaworks.com">contact@randaworks.com</a> までご連絡ください。
       </div>
@@ -88,7 +109,7 @@
 
         <div class="form-actions">
           <button class="cta" id="submitBtn" type="submit">送信する</button>
-          <span class="muted" id="sendingNote" hidden>送信中...</span>
+          <span class="muted" id="sendingNote" aria-live="polite" hidden>送信中...</span>
         </div>
 
         <noscript>
@@ -97,7 +118,7 @@
           </p>
         </noscript>
       </form>
-    </div>
+    </main>
 
     <div class="footer">
       <div>© 2026 RandaWorks</div>
