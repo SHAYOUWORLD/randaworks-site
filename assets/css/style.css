@@ -121,6 +121,10 @@ textarea:focus-visible {
   border: 0;
 }
 
+[hidden] {
+  display: none !important;
+}
+
 /* Layout */
 .container {
   max-width: 1100px;
