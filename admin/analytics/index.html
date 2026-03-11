@@ -21,32 +21,49 @@
       </div>
     </header>
 
-    <main id="main-content" class="card play-shell">
-      <div>
-        <p class="section-kicker">分析管理</p>
-        <h1>体験版の流れを見る</h1>
-        <p>イベント数ではなく、1回の体験がいつ始まり、どう終わったかを追う管理画面です。</p>
-      </div>
-
-      <div class="form">
-        <div class="field">
-          <label for="adminToken">管理トークン</label>
-          <input id="adminToken" type="text" autocomplete="off" placeholder="randa-local-admin" />
+    <main id="main-content">
+      <section class="card play-shell" id="adminLoginPanel">
+        <div>
+          <p class="section-kicker">分析管理</p>
+          <h1>ログイン</h1>
+          <p>管理用トークンを入力して、体験版の分析画面を開きます。</p>
         </div>
+
+        <div class="form">
+          <div class="field">
+            <label for="adminToken">管理トークン</label>
+            <input id="adminToken" type="password" autocomplete="current-password" placeholder="管理トークンを入力" />
+          </div>
+          <div class="form-actions">
+            <button class="cta" id="loginButton" type="button">ログイン</button>
+            <span class="muted" id="adminStatus" aria-live="polite">未認証</span>
+          </div>
+        </div>
+
+        <div class="alert alert-error" id="adminError" role="alert" hidden></div>
+        <p class="muted">この画面は管理用です。認証前は分析内容を表示しません。</p>
+      </section>
+
+      <section class="card play-shell" id="adminDashboard" hidden>
+        <div>
+          <p class="section-kicker">分析管理</p>
+          <h1>体験版の流れを見る</h1>
+          <p>イベント数ではなく、1回の体験がいつ始まり、どう終わったかを追う管理画面です。</p>
+        </div>
+
         <div class="form-actions">
-          <button class="cta" id="loadAnalyticsButton" type="button">読み込む</button>
+          <button class="cta" id="loadAnalyticsButton" type="button">更新する</button>
           <button class="cta cta-ghost" id="downloadCsvButton" type="button">全CSV</button>
           <button class="cta cta-ghost" id="downloadGameCsvButton" type="button">ゲームCSV</button>
           <button class="cta cta-ghost" id="downloadJsonlButton" type="button">JSONL</button>
           <button class="cta cta-ghost" id="downloadJsonButton" type="button">JSON</button>
           <button class="cta cta-ghost" id="clearAnalyticsButton" type="button">消去</button>
-          <span class="muted" id="adminStatus" aria-live="polite">未接続</span>
+          <button class="cta cta-ghost" id="logoutButton" type="button">ログアウト</button>
         </div>
-      </div>
 
-      <div class="alert alert-error" id="adminError" role="alert" hidden></div>
+        <div class="alert alert-error" id="dashboardError" role="alert" hidden></div>
 
-      <section class="compat-grid" id="overviewCards">
+        <section class="compat-grid" id="overviewCards">
         <article class="surface-panel compat-card">
           <strong>体験数</strong>
           <p id="playSessionCountValue">-</p>
@@ -63,9 +80,9 @@
           <strong>ラン完了</strong>
           <p id="completedRunCountValue">-</p>
         </article>
-      </section>
+        </section>
 
-      <section class="card">
+        <section class="card">
         <p class="section-kicker">体験一覧</p>
         <h2>直近の体験</h2>
         <div class="surface-panel" style="overflow:auto;">
@@ -85,9 +102,9 @@
             <tbody id="playSessionsRoot"></tbody>
           </table>
         </div>
-      </section>
+        </section>
 
-      <section class="card">
+        <section class="card">
         <p class="section-kicker">ラン一覧</p>
         <h2>直近のラン</h2>
         <div class="surface-panel" style="overflow:auto;">
@@ -107,9 +124,9 @@
             <tbody id="runsRoot"></tbody>
           </table>
         </div>
-      </section>
+        </section>
 
-      <section class="grid">
+        <section class="grid">
         <div class="card">
           <p class="section-kicker">体験詳細</p>
           <h2>選択中の体験</h2>
@@ -173,6 +190,7 @@
             </table>
           </div>
         </div>
+        </section>
       </section>
     </main>
 
@@ -183,22 +201,28 @@
 
   <script>
     (function () {
+      var loginPanel = document.getElementById("adminLoginPanel");
+      var dashboard = document.getElementById("adminDashboard");
       var tokenInput = document.getElementById("adminToken");
+      var loginButton = document.getElementById("loginButton");
       var loadButton = document.getElementById("loadAnalyticsButton");
       var downloadCsvButton = document.getElementById("downloadCsvButton");
       var downloadGameCsvButton = document.getElementById("downloadGameCsvButton");
       var downloadJsonlButton = document.getElementById("downloadJsonlButton");
       var downloadJsonButton = document.getElementById("downloadJsonButton");
       var clearButton = document.getElementById("clearAnalyticsButton");
+      var logoutButton = document.getElementById("logoutButton");
       var copySessionTextButton = document.getElementById("copySessionTextButton");
       var copySessionJsonButton = document.getElementById("copySessionJsonButton");
       var copyRunTextButton = document.getElementById("copyRunTextButton");
       var copyRunJsonButton = document.getElementById("copyRunJsonButton");
       var adminStatus = document.getElementById("adminStatus");
       var adminError = document.getElementById("adminError");
+      var dashboardError = document.getElementById("dashboardError");
       var playSessionsRoot = document.getElementById("playSessionsRoot");
       var runsRoot = document.getElementById("runsRoot");
       var storageKey = "randa_admin_token";
+      var authStateKey = "randa_admin_authenticated";
       var latestEvents = [];
       var latestSummary = null;
       var selectedSession = null;
@@ -219,13 +243,38 @@
       }
 
       function showError(text) {
-        adminError.hidden = false;
-        adminError.textContent = text;
+        var target = dashboard.hidden ? adminError : dashboardError;
+        target.hidden = false;
+        target.textContent = text;
       }
 
       function clearError() {
         adminError.hidden = true;
         adminError.textContent = "";
+        dashboardError.hidden = true;
+        dashboardError.textContent = "";
+      }
+
+      function isAuthenticated() {
+        return sessionStorage.getItem(authStateKey) === "true" && !!sessionStorage.getItem(storageKey);
+      }
+
+      function showLogin() {
+        loginPanel.hidden = false;
+        dashboard.hidden = true;
+        setStatus("未認証");
+      }
+
+      function showDashboard() {
+        loginPanel.hidden = true;
+        dashboard.hidden = false;
+        setStatus("認証済み");
+      }
+
+      function clearAuth() {
+        sessionStorage.removeItem(authStateKey);
+        sessionStorage.removeItem(storageKey);
+        tokenInput.value = "";
       }
 
       function setText(id, value) {
@@ -235,6 +284,10 @@
 
       function saveToken() {
         sessionStorage.setItem(storageKey, getToken());
+      }
+
+      function markAuthenticated() {
+        sessionStorage.setItem(authStateKey, "true");
       }
 
       function formatTime(value) {
@@ -501,6 +554,55 @@
         }
       }
 
+      async function login() {
+        clearError();
+        if (!getToken()) {
+          showError("管理トークンを入力してください。");
+          setStatus("未認証");
+          return;
+        }
+
+        setStatus("認証中...");
+        try {
+          latestSummary = await fetchJson("/__analytics/summary", {
+            headers: getHeaders(),
+            cache: "no-store"
+          });
+          markAuthenticated();
+          showDashboard();
+          renderPlaySessions(latestSummary.play_sessions || []);
+          renderRuns(latestSummary.runs || []);
+          updateOverview(latestSummary.overview || {});
+          latestEvents = [];
+          selectedSession = (latestSummary.play_sessions || [])[0] || null;
+          selectedRun = (latestSummary.runs || [])[0] || null;
+          updateSessionDetail();
+          updateRunDetail();
+          setStatus("認証済み");
+          await loadSummary();
+        } catch (error) {
+          clearAuth();
+          showLogin();
+          showError(error.message || "認証に失敗しました。");
+          setStatus("未認証");
+        }
+      }
+
+      function logout() {
+        clearError();
+        clearAuth();
+        latestEvents = [];
+        latestSummary = null;
+        selectedSession = null;
+        selectedRun = null;
+        updateOverview({});
+        renderPlaySessions([]);
+        renderRuns([]);
+        updateSessionDetail();
+        updateRunDetail();
+        showLogin();
+      }
+
       async function clearEvents() {
         clearError();
         saveToken();
@@ -594,13 +696,25 @@
         }
       }
 
-      tokenInput.value = sessionStorage.getItem(storageKey) || "randa-local-admin";
+      tokenInput.value = "";
+      showLogin();
+      if (isAuthenticated()) {
+        tokenInput.value = sessionStorage.getItem(storageKey) || "";
+      }
+      loginButton.addEventListener("click", login);
+      tokenInput.addEventListener("keydown", function (event) {
+        if (event.key === "Enter") {
+          event.preventDefault();
+          login();
+        }
+      });
       loadButton.addEventListener("click", loadSummary);
       downloadCsvButton.addEventListener("click", downloadCsv);
       downloadGameCsvButton.addEventListener("click", downloadGameCsv);
       downloadJsonlButton.addEventListener("click", downloadJsonl);
       downloadJsonButton.addEventListener("click", downloadJson);
       clearButton.addEventListener("click", clearEvents);
+      logoutButton.addEventListener("click", logout);
       copySessionTextButton.addEventListener("click", function () {
         copyText(selectedSession && selectedSession.text_summary);
       });
@@ -613,7 +727,6 @@
       copyRunJsonButton.addEventListener("click", function () {
         copyText(selectedRun ? JSON.stringify(selectedRun, null, 2) : "");
       });
-      loadSummary();
     })();
   </script>
 </body>
