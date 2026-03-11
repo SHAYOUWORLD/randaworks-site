@@ -1,6 +1,6 @@
 (function () {
   const PCK_NAME = 'index.pck';
-  const PCK_PARTS = [{"name":"index.pck.part000","size":199229440},{"name":"index.pck.part001","size":199229440},{"name":"index.pck.part002","size":11092660}];
+  const PCK_PARTS = [{"name":"index.pck.part000","size":99614720},{"name":"index.pck.part001","size":99614720},{"name":"index.pck.part002","size":99614720},{"name":"index.pck.part003","size":99614720},{"name":"index.pck.part004","size":11092660}];
   const PCK_TOTAL_SIZE = 409551540;
   if (typeof window === 'undefined' || typeof window.fetch !== 'function') {
     return;
