@@ -4,17 +4,17 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <link rel="icon" href="../../assets/img/games/inga/icon.png" type="image/png">
-    <title>日本史因果クロニクル | 勝つために歴史がつながるデッキ構築ローグライク | RandaWorks</title>
-    <meta name="description" content="『日本史因果クロニクル』は、史実の前後関係と因果をコンボとしてつなぐ日本史デッキ構築ローグライクです。ゲーム概要、PV、スクリーンショット、FAQ、Steamウィッシュリスト導線を掲載しています。" />
+    <title>日本史因果クロニクル | ブラウザ体験版公開中の日本史デッキ構築ローグライク | RandaWorks</title>
+    <meta name="description" content="『日本史因果クロニクル』は、史実の因果でコンボを組んで戦う日本史デッキ構築ローグライクです。ブラウザ体験版、因果コンボ、ゲームの流れ、FAQ、Steamウィッシュリスト導線を掲載しています。" />
     <link rel="canonical" href="https://www.randaworks.com/games/inga/" />
     <meta property="og:type" content="website" />
     <meta property="og:title" content="日本史因果クロニクル | RandaWorks" />
-    <meta property="og:description" content="勝つために歴史を覚える。遊ぶほど因果がつながる、日本史デッキ構築ローグライク。" />
+    <meta property="og:description" content="史実の因果でコンボを組んで戦う、日本史デッキ構築ローグライク。ブラウザ体験版を今すぐ遊べます。" />
     <meta property="og:url" content="https://www.randaworks.com/games/inga/" />
     <meta property="og:image" content="https://www.randaworks.com/assets/img/games/inga/ss_01.png" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="日本史因果クロニクル | RandaWorks" />
-    <meta name="twitter:description" content="史実通りにカードをつなぐほど強くなる、日本史デッキ構築ローグライク。" />
+    <meta name="twitter:description" content="史実の因果でコンボを組んで戦う、日本史デッキ構築ローグライク。ブラウザ体験版を今すぐ遊べます。" />
     <meta name="twitter:image" content="https://www.randaworks.com/assets/img/games/inga/ss_01.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -29,9 +29,9 @@
             "@id": "https://www.randaworks.com/games/inga/#game",
             "name": "日本史因果クロニクル",
             "url": "https://www.randaworks.com/games/inga/",
-            "description": "史実の前後関係と因果をコンボとしてつなぐ日本史デッキ構築ローグライク。",
-            "genre": ["Deckbuilding game", "Roguelike", "Educational game", "Strategy game"],
-            "gamePlatform": ["Windows", "Steam"],
+            "description": "史実の因果でコンボを組んで戦う、日本史デッキ構築ローグライク。",
+            "genre": ["Deckbuilding game", "Roguelike", "Strategy game"],
+            "gamePlatform": ["Web browser", "Windows", "Steam"],
             "inLanguage": "ja",
             "image": [
               "https://www.randaworks.com/assets/img/games/inga/ss_01.png",
@@ -49,26 +49,34 @@
             "mainEntity": [
               {
                 "@type": "Question",
-                "name": "発売日はいつですか？",
+                "name": "日本史に詳しくなくても遊べますか？",
                 "acceptedAnswer": {
                   "@type": "Answer",
-                  "text": "発売時期は未定です。決まり次第、Steamストアページと本サイトで案内します。"
+                  "text": "遊べます。まずはカード同士のつながりを試すだけでも進められます。知っているほど、強い連鎖を見つけやすくなります。"
                 }
               },
               {
                 "@type": "Question",
-                "name": "どんな人向けのゲームですか？",
+                "name": "体験版はどれくらいで遊べますか？",
                 "acceptedAnswer": {
                   "@type": "Answer",
-                  "text": "デッキ構築ローグライクが好きな人、日本史を流れで理解したい人、遊ぶ時間にも学びがほしい人に向いています。"
+                  "text": "約30分です。"
                 }
               },
               {
                 "@type": "Question",
-                "name": "不具合報告や問い合わせ先はありますか？",
+                "name": "スマホでも遊べますか？",
                 "acceptedAnswer": {
                   "@type": "Answer",
-                  "text": "サポートページ、または contact@randaworks.com までご連絡ください。"
+                  "text": "現在はPCブラウザ推奨です。"
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "正式版はいつですか？",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "発売時期は未定です。続報はSteamストアページと本サイトで案内します。"
                 }
               }
             ]
@@ -87,128 +95,204 @@
       }
     </script>
 </head>
-<body>
+<body data-page-type="inga_overview">
     <a class="skip-link" href="#main-content">メインコンテンツへ移動</a>
     <div class="container">
         <header class="nav">
             <div class="brand"><a href="../../"><img src="../../assets/img/randaworks_logo_text.png" alt="RandaWorks" style="height: 28px; vertical-align: middle;"></a></div>
             <div class="links">
+                <a href="#play">プレイ</a>
                 <a href="#overview">概要</a>
-                <a href="#gameplay">ゲームの流れ</a>
-                <a href="#clips">映像</a>
-                <a href="#combos">カード/コンボ</a>
+                <a href="#combo">因果コンボ</a>
+                <a href="#loop">ゲームの流れ</a>
                 <a href="#screenshots">画面写真</a>
                 <a href="#faq">FAQ</a>
-                <a href="./support/">Support</a>
+                <a href="#feedback">感想・不具合</a>
             </div>
         </header>
 
         <main id="main-content">
             <section class="game-hero" aria-labelledby="hero-title">
                 <div class="game-hero-content">
-                    <p class="hero-kicker">Steam Coming Soon / 日本史デッキ構築ローグライク</p>
-                    <img
-                        src="../../assets/img/games/inga/title_logo.png"
-                        alt="日本史因果クロニクル"
-                        class="game-logo"
-                        loading="eager"
-                        onerror="this.style.display='none'; this.nextElementSibling.style.display='block'"
-                    >
-                    <h1 id="hero-title" style="display:none; font-family: 'Shippori Mincho', serif; font-size: 3.5rem; color: #fff; text-shadow: 0 0 20px #bd3131;">日本史因果クロニクル</h1>
-
-                    <p class="hero-subtitle">勝つために歴史を覚える。<br>遊ぶほど、因果がつながる。</p>
+                    <p class="hero-kicker">ブラウザ体験版公開中 / Steam近日登場</p>
+                    <h1 id="hero-title" class="game-hero-title">日本史因果クロニクル</h1>
+                    <p class="hero-subtitle">史実の因果でコンボを組んで戦う、日本史デッキ構築ローグライク。</p>
                     <p class="hero-description">
-                        史実に沿った順番と組み合わせでカードが連鎖し、強力なコンボが発動。
-                        日本史の流れを、暗記ではなくプレイ体験として身につける知育ローグライクカードゲームです。
+                        日本史の出来事や人物をカードにし、史実の流れでつないで戦います。
+                        前後関係や因果がかみ合うほど、強力な連鎖が発動します。
                     </p>
-
-                    <div class="badges hero-badges" style="justify-content: center;">
-                        <span class="badge">デッキ構築</span>
-                        <span class="badge">ローグライク</span>
-                        <span class="badge">歴史学習</span>
-                        <span class="badge">Steam</span>
-                    </div>
-
                     <div class="game-hero-actions">
-                        <a class="cta cta-steam cta-large" href="https://store.steampowered.com/app/4403470" target="_blank" rel="noopener noreferrer" id="wishlist-cta">
+                        <a class="cta cta-large" href="#play" data-analytics="inga_hero_cta_play" data-track-event="play_cta_click" data-track-placement="inga_hero_play" data-track-label="inga hero play">ブラウザで今すぐ遊ぶ</a>
+                        <a class="cta cta-steam" href="https://store.steampowered.com/app/4403470" target="_blank" rel="noopener noreferrer" id="wishlist-cta" data-analytics="inga_hero_cta_wishlist" data-track-event="wishlist_click" data-track-placement="inga_hero_steam" data-track-label="inga hero wishlist">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 259" width="20" height="20" style="vertical-align: middle; margin-right: 8px; fill: currentColor;"><path d="M127.779 0C57.895 0 1.307 55.39.052 124.908l68.961 28.5a36.077 36.077 0 0 1 20.378-6.27l30.462-44.145v-.617c0-26.513 21.569-48.084 48.083-48.084 26.516 0 48.085 21.572 48.085 48.084 0 26.515-21.569 48.085-48.085 48.085h-1.104l-43.474 31.02c0 .403.022.8.022 1.197 0 19.882-16.163 36.046-36.048 36.046-17.806 0-32.595-12.953-35.476-29.932L2.472 166.516C18.233 218.149 67.215 256 127.779 256c70.716 0 128.043-57.326 128.043-128.001C255.822 57.326 198.495 0 127.779 0z"/></svg>
                             Steamでウィッシュリストに追加
                         </a>
-                        <a class="cta cta-ghost" href="#clips">PVを見る</a>
+                        <a class="cta cta-ghost" href="#clips" data-analytics="inga_hero_cta_pv" data-track-event="cta_click" data-track-placement="inga_hero_video" data-track-label="inga hero pv">58秒PVを見る</a>
                     </div>
-                    <p class="hero-note">発売時期は未定です。最新情報は Steam ストアページと本サイトでお知らせします。画面写真やPVから、開発中の雰囲気や方向性を確認できます。</p>
+                    <p class="hero-note">PCブラウザ推奨 / 1プレイ約30分 / 体験版 3ステージ・2英雄</p>
+                </div>
+            </section>
 
-                    <div class="hero-stats" aria-label="ゲーム概要">
-                        <div class="hero-stat">
-                            <strong class="hero-stat-value">200+</strong>
-                            <span class="hero-stat-label">カード</span>
-                        </div>
-                        <div class="hero-stat">
-                            <strong class="hero-stat-value">100+</strong>
-                            <span class="hero-stat-label">コンボ</span>
-                        </div>
-                        <div class="hero-stat">
-                            <strong class="hero-stat-value">飛鳥-幕末</strong>
-                            <span class="hero-stat-label">時代を横断</span>
-                        </div>
-                        <div class="hero-stat">
-                            <strong class="hero-stat-value">Windows / Steam</strong>
-                            <span class="hero-stat-label">PC向け予定</span>
-                        </div>
+            <section class="card" id="play" data-analytics="inga_play_section">
+                <p class="section-kicker">ブラウザ体験版</p>
+                <h2>まずはブラウザで試す</h2>
+                <p>最初の数分で、「史実の因果がコンボになる」感触が分かります。</p>
+                <p class="muted">PCブラウザ推奨です。</p>
+                <p>史実の因果でコンボを組んで戦う、日本史デッキ構築ローグライクです。PCブラウザ推奨、1プレイ約30分。</p>
+                <div class="cta-band-actions" style="justify-content: flex-start; margin: 0 0 18px;">
+                    <button class="cta" id="embeddedFullscreenButton" type="button" data-analytics="inga_play_cta_fullscreen" data-track-event="cta_click" data-track-placement="inga_play_fullscreen" data-track-label="inga play fullscreen">全画面で遊ぶ</button>
+                    <button class="cta cta-ghost" id="embeddedMuteButton" type="button" data-analytics="inga_play_cta_audio" data-track-event="cta_click" data-track-placement="inga_play_audio" data-track-label="inga play audio">音声をミュート</button>
+                    <a class="cta cta-ghost" href="./play/?src=inga_play_section" data-analytics="inga_play_cta_player" data-track-event="cta_click" data-track-placement="inga_play_player" data-track-label="inga play dedicated player">専用プレイヤーで開く</a>
+                </div>
+                <p class="muted">全画面がうまく動かない場合は、専用プレイヤーで開くと安定しやすいです。</p>
+                <div class="demo-frame-shell" id="embeddedDemoFrameShell" data-analytics="inga_play_embed">
+                    <iframe
+                        id="embeddedDemoFrame"
+                        class="demo-frame"
+                        src="./play/build/index.html?src=inga_play_embed"
+                        title="日本史因果クロニクル ブラウザ体験版"
+                        allow="fullscreen"
+                        allowfullscreen
+                    ></iframe>
+                </div>
+                <div class="surface-panel">
+                    <h3>気に入ったら次はこちら</h3>
+                    <p>続報を追いたい方はSteamでウィッシュリスト。感想や不具合はフォームから送れます。</p>
+                    <div class="cta-band-actions" style="justify-content: flex-start;">
+                        <a class="cta cta-steam" href="https://store.steampowered.com/app/4403470" target="_blank" rel="noopener noreferrer" data-analytics="inga_postplay_cta_wishlist" data-track-event="wishlist_click" data-track-placement="inga_postplay_steam" data-track-label="inga postplay wishlist">Steamでウィッシュリスト</a>
+                        <a class="cta cta-ghost" href="./support/?src=inga_postplay" data-analytics="inga_postplay_cta_feedback" data-track-event="cta_click" data-track-placement="inga_postplay_feedback" data-track-label="inga postplay feedback">感想・不具合を送る</a>
                     </div>
+                </div>
+            </section>
+
+            <section class="card">
+                <p class="section-kicker">特徴</p>
+                <h2>この体験版で分かること</h2>
+                <div class="pillar-grid">
+                    <article class="surface-panel pillar-card">
+                        <h3>史実の前後関係が強い連鎖になる</h3>
+                    </article>
+                    <article class="surface-panel pillar-card">
+                        <h3>毎回違うカードとルートで攻略が変わる</h3>
+                    </article>
+                    <article class="surface-panel pillar-card">
+                        <h3>2人の英雄で戦い方が変わる</h3>
+                    </article>
+                </div>
+            </section>
+
+            <section class="card" id="combo" data-analytics="inga_combo_anchor">
+                <p class="section-kicker">因果コンボ</p>
+                <h2>因果コンボの一例</h2>
+                <div class="intro-grid">
+                    <div>
+                        <p class="combo-chain">桶狭間の戦い → 長篠の戦い → 本能寺の変</p>
+                        <p>史実の流れが一直線につながると、戦国ルートの強い連鎖になります。</p>
+                    </div>
+                    <figure class="combo-visual">
+                        <img src="../../assets/img/games/inga/demo-cards/combo_nobunaga.jpg" alt="桶狭間の戦いから本能寺の変までつながる戦国ルートのコンボビジュアル" loading="lazy">
+                        <figcaption>
+                            <strong>戦国ルートの連鎖</strong>
+                            <span>史実の流れがかみ合うほど、強いコンボとして機能します。</span>
+                        </figcaption>
+                    </figure>
                 </div>
             </section>
 
             <section class="card" id="overview">
                 <div class="intro-grid">
                     <div>
-                        <p class="section-kicker">Core Hook</p>
-                        <h2>遊んでいるうちに、日本史の流れが頭に入るゲームへ</h2>
-                        <p>
-                            このゲームの主役は、単なる暗記ではなく「歴史のつながり」です。
-                            何が原因で、何が起きて、次に何が続くのか。
-                            その流れを理解するほど、デッキは自然に強くなっていきます。
-                        </p>
-                        <p>
-                            つまり、勝ち筋を追うこと自体が学習になる設計です。
-                            勉強のためのゲームではなく、面白さの中に学びが埋め込まれたローグライクを目指しています。
-                        </p>
+                        <p class="section-kicker">概要</p>
+                        <h2>このゲームの核</h2>
+                        <p>史実の因果でコンボを組んで戦う、日本史デッキ構築ローグライク。</p>
+                        <p>日本史の出来事や人物をカードにし、史実の流れでつないで戦います。前後関係や因果がかみ合うほど、強力な連鎖が発動します。</p>
+                        <p>勝つために流れを読むうちに、日本史が単語ではなく“つながり”で残ります。</p>
                     </div>
                     <aside class="surface-panel quote-panel" aria-label="要点">
-                        <strong>歴史が分かると、コンボが見える。</strong>
-                        <p>コンボは丸暗記ではなく、史実の前後関係と因果から自然に発見できるよう設計されています。</p>
+                        <strong>史実の流れが、そのまま勝ち筋になります。</strong>
+                        <p>出来事の前後関係や因果を読むほど、どのカードを残し、どのルートを伸ばすかの判断が強くなります。</p>
                         <ul class="point-list">
-                            <li>史実通りに近い流れほどシナジーが生まれる</li>
-                            <li>毎回違うカードプールとルート選択で何度も遊べる</li>
-                            <li>学習ゲームらしさより、まずカードゲームとして面白い</li>
+                            <li>史実の前後関係が強い連鎖になる</li>
+                            <li>毎回違うカードとルートで攻略が変わる</li>
+                            <li>2人の英雄で時代と戦い方が変わる</li>
                         </ul>
                     </aside>
                 </div>
             </section>
 
             <section class="card">
-                <p class="section-kicker">Why It Works</p>
-                <h2>面白さと学びが分離しない、3つの柱</h2>
+                <p class="section-kicker">面白さ</p>
+                <h2>このゲームが面白い3つの理由</h2>
                 <div class="pillar-grid">
                     <article class="surface-panel pillar-card">
                         <h3>史実がそのままシナジーになる</h3>
-                        <p>人物、制度、事件の前後関係がカード同士のつながりに直結。知識が増えるほど、手札の意味が変わります。</p>
+                        <p>人物、制度、事件の前後関係がカード同士のつながりに直結します。史実の流れを読めるほど、強い連鎖を作りやすくなります。</p>
                     </article>
                     <article class="surface-panel pillar-card">
-                        <h3>ローグライクとして繰り返し遊べる</h3>
-                        <p>ルート分岐、ショップ、イベント、取捨選択。毎回違う局面の中で、限られた資源から最適な歴史ルートを組み立てます。</p>
+                        <h3>ローグライクとして何度も試せる</h3>
+                        <p>ルート分岐、イベント、ショップ、カード取得の選択で毎回展開が変わります。限られた資源でどの歴史ルートを伸ばすかが攻略の中心です。</p>
                     </article>
                     <article class="surface-panel pillar-card">
-                        <h3>知識が「使える形」で残る</h3>
-                        <p>単語ではなく因果のまとまりとして覚えるため、テスト対策だけでなく、流れの理解そのものが深まります。</p>
+                        <h3>理解がそのまま勝率に直結する</h3>
+                        <p>単語を覚えるより、どの出来事が何につながるかを読むことが重要です。知識が“使える形”で残るように設計しています。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="card" id="loop">
+                <p class="section-kicker">ゲームの流れ</p>
+                <h2>1プレイの流れ</h2>
+                <div class="gameplay-flow">
+                    <article class="surface-panel flow-step">
+                        <span class="flow-number">01</span>
+                        <h3>英雄を選ぶ</h3>
+                        <p>体験版では織田信長と紫式部を選べます。初期デッキも得意な連鎖も異なるため、同じ日本史でも別の攻略感になります。</p>
+                    </article>
+                    <article class="surface-panel flow-step">
+                        <span class="flow-number">02</span>
+                        <h3>ルートを進む</h3>
+                        <p>戦闘、イベント、ショップを進みながら、どの時代や因果を伸ばすかを選びます。途中の判断が後半の強さを左右します。</p>
+                    </article>
+                    <article class="surface-panel flow-step">
+                        <span class="flow-number">03</span>
+                        <h3>因果コンボを組む</h3>
+                        <p>カード単体の強さだけでなく、史実の流れまで含めてデッキを組みます。つながりを読めるほど、強い連鎖が発動します。</p>
+                    </article>
+                    <article class="surface-panel flow-step">
+                        <span class="flow-number">04</span>
+                        <h3>次の勝ち筋を試す</h3>
+                        <p>カードの引きやルート分岐で毎回違う展開になります。敗北しても別の歴史ルートや英雄で再挑戦できます。</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="card">
+                <p class="section-kicker">英雄</p>
+                <h2>体験版で使える2人の英雄</h2>
+                <div class="roster-grid">
+                    <article class="surface-panel roster-item">
+                        <div class="roster-portrait">
+                            <img src="../../assets/img/games/inga/demo-cards/hero_nobunaga.jpg" alt="織田信長のカードアート" loading="lazy">
+                        </div>
+                        <span class="roster-tag">戦国</span>
+                        <h3>織田信長</h3>
+                        <p>大きな転換点が連続する時代を進み、攻めの展開で戦いやすい英雄です。戦国ルートの強い連鎖を狙いやすくなります。</p>
+                    </article>
+                    <article class="surface-panel roster-item">
+                        <div class="roster-portrait">
+                            <img src="../../assets/img/games/inga/demo-cards/hero_murasaki.jpg" alt="紫式部のカードアート" loading="lazy">
+                        </div>
+                        <span class="roster-tag">平安</span>
+                        <h3>紫式部</h3>
+                        <p>文化と人物のつながりを軸に戦いやすい英雄です。関係性を積み上げるルートで違う勝ち筋を作れます。</p>
                     </article>
                 </div>
             </section>
 
             <section class="card" id="screenshots">
-                <p class="section-kicker">Screenshots</p>
-                <h2>開発中のゲーム画面</h2>
-                <p>バトル、デッキ管理、イベント、コンボ演出まで。ゲームの手触りが伝わる画面をまとめています。</p>
+                <p class="section-kicker">画面写真</p>
+                <h2>画面写真</h2>
+                <p>バトル、デッキ管理、イベント、コンボ演出まで。プレイ前にゲームの手触りを確認できます。</p>
                 <div class="screenshot-slider" data-slider>
                     <button class="screenshot-nav prev" type="button" aria-label="前の画像">‹</button>
                     <div class="screenshot-track" aria-label="スクリーンショットスライダー">
@@ -238,9 +322,9 @@
             </section>
 
             <section class="card" id="clips">
-                <p class="section-kicker">Demo Clips</p>
-                <h2>開発中PV</h2>
-                <p>Steam ストア向けに制作したプロモーション映像です。</p>
+                <p class="section-kicker">映像</p>
+                <h2>58秒PV</h2>
+                <p>戦闘、イベント、コンボ演出、英雄ごとの違いを短く確認できます。</p>
                 <figure class="video-card video-feature">
                     <video
                         src="../../assets/video/games/inga/SteamStorePV_v1.1.mp4"
@@ -248,10 +332,12 @@
                         playsinline
                         controls
                         preload="none"
+                        data-track-video="true"
+                        data-track-placement="inga_overview_video"
                     ></video>
                     <figcaption class="video-caption">
                         <strong>Steam Store PV v1.1</strong>
-                        <span>ゲーム全体の雰囲気、戦闘、イベント、コンボ演出をまとめた58秒のPVです。</span>
+                        <span>ゲーム全体の雰囲気と、史実の流れが連鎖になる手触りをまとめた58秒のPVです。</span>
                     </figcaption>
                 </figure>
                 <details class="surface-panel" style="margin-top: 18px;">
@@ -260,37 +346,10 @@
                 </details>
             </section>
 
-            <section class="card" id="gameplay">
-                <p class="section-kicker">Game Loop</p>
-                <h2>1プレイの流れ</h2>
-                <div class="gameplay-flow">
-                    <article class="surface-panel flow-step">
-                        <span class="flow-number">01</span>
-                        <h3>英雄を選ぶ</h3>
-                        <p>現在公開中の英雄は、織田信長と紫式部。それぞれ初期デッキと戦い方が異なり、同じ日本史でも違う攻略感が生まれます。</p>
-                    </article>
-                    <article class="surface-panel flow-step">
-                        <span class="flow-number">02</span>
-                        <h3>ルートを進む</h3>
-                        <p>戦闘、イベント、ショップ、回復。次の一手でどの歴史軸を伸ばすかが、後半の強さを左右します。</p>
-                    </article>
-                    <article class="surface-panel flow-step">
-                        <span class="flow-number">03</span>
-                        <h3>因果コンボを組む</h3>
-                        <p>カード単体の強さだけでなく、史実のつながりまで含めてデッキを構成。知識がそのまま勝率に反映されます。</p>
-                    </article>
-                    <article class="surface-panel flow-step">
-                        <span class="flow-number">04</span>
-                        <h3>新しい英雄を解放する</h3>
-                        <p>クリアを重ねるほど、別時代・別戦略の英雄が解放。毎回違う角度から日本史を遊べます。</p>
-                    </article>
-                </div>
-            </section>
-
-            <section class="card" id="combos">
-                <p class="section-kicker">Inga Combo</p>
-                <h2>史実がそのまま強いルートになる</h2>
-                <p>代表的な因果の流れを、そのままコンボとして実装。覚えた順番ではなく、つながりとして歴史が残ります。</p>
+            <section class="card">
+                <p class="section-kicker">因果コンボ</p>
+                <h2>ほかの因果コンボ例</h2>
+                <p>代表的な因果の流れを、そのままコンボとして実装しています。ほかの歴史ルートも、つながりで読むほど強くなります。</p>
                 <div class="combo-showcase">
                     <div class="surface-panel combo-rail-panel">
                         <div class="combo-rail-header">
@@ -390,96 +449,55 @@
                 </div>
             </section>
 
-            <section class="card">
-                <p class="section-kicker">Heroes</p>
-                <h2>現在紹介している英雄</h2>
-                <div class="roster-grid">
-                    <article class="surface-panel roster-item">
-                        <div class="roster-portrait">
-                            <img src="../../assets/img/games/inga/demo-cards/hero_nobunaga.jpg" alt="織田信長のカードアート" loading="lazy">
-                        </div>
-                        <span class="roster-tag">戦国</span>
-                        <h3>織田信長</h3>
-                        <p>大きな転換点が連続する時代を駆け抜ける、攻めの展開が得意な英雄です。</p>
-                    </article>
-                    <article class="surface-panel roster-item">
-                        <div class="roster-portrait">
-                            <img src="../../assets/img/games/inga/demo-cards/hero_murasaki.jpg" alt="紫式部のカードアート" loading="lazy">
-                        </div>
-                        <span class="roster-tag">平安</span>
-                        <h3>紫式部</h3>
-                        <p>文化と人物関係が濃い時代を扱う、知の積み重ねが映える英雄。</p>
-                    </article>
-                </div>
-            </section>
-
-            <section class="card">
-                <p class="section-kicker">Who It's For</p>
-                <h2>こんな人におすすめです</h2>
-                <div class="audience-grid">
-                    <div class="surface-panel audience-panel">
-                        <h3>ローグライク好き</h3>
-                        <ul class="clean-list">
-                            <li>デッキ構築の試行錯誤が好き</li>
-                            <li>自分なりのルートを見つけたい</li>
-                            <li>毎回違う展開で繰り返し遊びたい</li>
-                        </ul>
-                    </div>
-                    <div class="surface-panel audience-panel">
-                        <h3>歴史好き・学び直したい人</h3>
-                        <ul class="clean-list">
-                            <li>日本史を流れで理解したい</li>
-                            <li>遊ぶ時間に少し意味がほしい</li>
-                            <li>テスト勉強の手前で歴史に親しみたい</li>
-                        </ul>
-                    </div>
-                </div>
-                <p style="margin-top: 20px; font-size: 1.1rem;"><strong>遊んでいるうちに、日本史の流れが自然と頭に入る。そんな体験を目指しています。</strong></p>
-            </section>
-
             <section class="grid">
-                <div class="card">
-                    <p class="section-kicker">Specs</p>
-                    <h2>System Requirements（予定）</h2>
-                    <table class="specs-table">
-                        <caption class="visually-hidden">日本史因果クロニクルの予定システム要件</caption>
-                        <tr><th>OS</th><td>Windows 10 / 11 (64-bit)</td></tr>
-                        <tr><th>Processor</th><td>Intel Core i3 / AMD Ryzen 3 以上</td></tr>
-                        <tr><th>Memory</th><td>4 GB RAM</td></tr>
-                        <tr><th>Graphics</th><td>DirectX 11 互換グラフィックカード</td></tr>
-                        <tr><th>Storage</th><td>1 GB 利用可能</td></tr>
-                    </table>
-                </div>
-
                 <div class="card" id="faq">
                     <p class="section-kicker">FAQ</p>
                     <h2>よくある質問</h2>
                     <div class="faq-list">
                         <details class="faq-item" open>
-                            <summary>発売日はいつですか？</summary>
-                            <p>発売時期は未定です。決まり次第、Steamストアページと本サイトで案内します。</p>
+                            <summary>日本史に詳しくなくても遊べますか？</summary>
+                            <p>遊べます。まずはカード同士のつながりを試すだけでも進められます。知っているほど、強い連鎖を見つけやすくなります。</p>
                         </details>
                         <details class="faq-item">
-                            <summary>どんな人向けのゲームですか？</summary>
-                            <p>デッキ構築ローグライクが好きな人、日本史を流れで理解したい人、遊ぶ時間にも学びがほしい人に向いています。</p>
+                            <summary>体験版はどれくらいで遊べますか？</summary>
+                            <p>約30分です。</p>
                         </details>
                         <details class="faq-item">
-                            <summary>不具合報告や問い合わせ先はありますか？</summary>
-                            <p><a href="./support/">サポートページ</a>、または <a href="mailto:contact@randaworks.com">contact@randaworks.com</a> までご連絡ください。</p>
+                            <summary>スマホでも遊べますか？</summary>
+                            <p>現在はPCブラウザ推奨です。</p>
+                        </details>
+                        <details class="faq-item">
+                            <summary>正式版はいつですか？</summary>
+                            <p>発売時期は未定です。続報はSteamストアページと本サイトで案内します。</p>
+                        </details>
+                        <details class="faq-item">
+                            <summary>感想や不具合はどこから送れますか？</summary>
+                            <p><a href="./support/?src=inga_faq">感想・不具合フォーム</a>、または <a href="mailto:contact@randaworks.com">contact@randaworks.com</a> から送れます。</p>
                         </details>
                     </div>
                 </div>
+
+                <div class="card">
+                    <p class="section-kicker">正式版予定</p>
+                    <h2>正式版で予定している内容</h2>
+                    <p>飛鳥から幕末までをまたぐ 200+カード / 100+コンボ を予定しています。</p>
+                    <p>Windows / Steam向けに開発中です。発売時期は未定です。</p>
+                    <p class="muted">※内容・数値は開発中のため変更される場合があります。</p>
+                </div>
             </section>
 
-            <section class="card cta-band" aria-labelledby="cta-title">
-                <p class="section-kicker">Stay Updated</p>
-                <h2 id="cta-title">気になったら、まずはウィッシュリストへ</h2>
-                <p>続報は Steam ストアページと本サイトでお知らせします。</p>
-                <div class="cta-band-actions">
-                    <a class="cta cta-steam" href="https://store.steampowered.com/app/4403470" target="_blank" rel="noopener noreferrer">
-                        Steamでウィッシュリストに追加
-                    </a>
-                    <a class="cta cta-ghost" href="./support/">問い合わせ・サポート</a>
+            <section class="card" id="feedback">
+                <p class="section-kicker">感想・不具合</p>
+                <h2>感想・不具合を送る</h2>
+                <p>不具合報告だけでなく、遊びづらかった点や迷った箇所も歓迎しています。「どこで止まったか」が分かると改善しやすいです。</p>
+                <p>特に次の3つが分かると助かります。</p>
+                <ul class="clean-list">
+                    <li>最初に分かりにくかった点</li>
+                    <li>途中でやめた理由</li>
+                    <li>気持ちよかったコンボ</li>
+                </ul>
+                <div class="cta-band-actions" style="justify-content: flex-start; margin-top: 20px;">
+                    <a class="cta" href="./support/?src=inga_feedback" data-analytics="inga_feedback_cta_form" data-track-event="cta_click" data-track-placement="inga_feedback_form" data-track-label="inga feedback form">感想・不具合を送る</a>
                 </div>
             </section>
         </main>
@@ -487,16 +505,20 @@
         <footer class="footer">
             <div class="footer-links">
                 <a href="./privacy/">プライバシーポリシー</a>
-                <a href="./support/">サポート</a>
+                <a href="#play">ブラウザ体験版</a>
+                <a href="./support/?src=inga_footer">感想・不具合</a>
                 <a href="../../games/">ゲーム一覧</a>
             </div>
             <div>© 2026 RandaWorks</div>
         </footer>
     </div>
+    <script src="../../assets/js/analytics-config.js"></script>
+    <script src="../../assets/js/analytics.js"></script>
     <script>
     (() => {
         const sliders = document.querySelectorAll("[data-slider]");
         const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        const overviewVideo = document.querySelector("[data-track-video]");
 
         sliders.forEach((slider) => {
             const track = slider.querySelector(".screenshot-track");
@@ -571,6 +593,105 @@
 
             window.addEventListener("resize", () => goTo(current));
             goTo(0);
+        });
+
+        if (overviewVideo && window.RandaAnalytics && typeof window.RandaAnalytics.track === "function") {
+            let tracked = false;
+            overviewVideo.addEventListener("play", () => {
+                if (tracked) return;
+                tracked = true;
+                window.RandaAnalytics.track("pv_play", {
+                    placement: overviewVideo.dataset.trackPlacement || "inga_overview_video"
+                });
+            });
+        }
+
+        const embeddedFrame = document.getElementById("embeddedDemoFrame");
+        const embeddedFrameShell = document.getElementById("embeddedDemoFrameShell");
+        const embeddedFullscreenButton = document.getElementById("embeddedFullscreenButton");
+        const embeddedMuteButton = document.getElementById("embeddedMuteButton");
+        let embeddedMuted = false;
+
+        const updateEmbeddedFullscreenButton = () => {
+            if (!embeddedFullscreenButton || !embeddedFrameShell) return;
+            embeddedFullscreenButton.textContent = document.fullscreenElement === embeddedFrameShell
+                ? "全画面を閉じる"
+                : "全画面で遊ぶ";
+        };
+
+        const updateEmbeddedMuteButton = () => {
+            if (!embeddedMuteButton) return;
+            embeddedMuteButton.textContent = embeddedMuted ? "ミュート解除" : "音声をミュート";
+        };
+
+        const sendEmbeddedControl = (command, value) => {
+            if (!embeddedFrame || !embeddedFrame.contentWindow) return;
+            embeddedFrame.contentWindow.postMessage({
+                type: "randa-control",
+                command,
+                value
+            }, window.location.origin);
+        };
+
+        if (embeddedFullscreenButton && embeddedFrameShell && document.fullscreenEnabled) {
+            embeddedFullscreenButton.addEventListener("click", async () => {
+                if (document.fullscreenElement === embeddedFrameShell) {
+                    await document.exitFullscreen().catch(() => {});
+                    return;
+                }
+
+                await embeddedFrameShell.requestFullscreen().catch(() => {
+                    if (window.RandaAnalytics && typeof window.RandaAnalytics.track === "function") {
+                        window.RandaAnalytics.track("fullscreen_error", {
+                            placement: "inga_play_fullscreen"
+                        });
+                    }
+                });
+            });
+
+            document.addEventListener("fullscreenchange", updateEmbeddedFullscreenButton);
+            updateEmbeddedFullscreenButton();
+        } else if (embeddedFullscreenButton) {
+            embeddedFullscreenButton.hidden = true;
+        }
+
+        if (embeddedMuteButton) {
+            embeddedMuteButton.addEventListener("click", () => {
+                embeddedMuted = !embeddedMuted;
+                updateEmbeddedMuteButton();
+                sendEmbeddedControl("setMuted", embeddedMuted);
+                if (window.RandaAnalytics && typeof window.RandaAnalytics.track === "function") {
+                    window.RandaAnalytics.track("audio_toggle", {
+                        placement: "inga_play_audio",
+                        muted: embeddedMuted
+                    });
+                }
+            });
+            updateEmbeddedMuteButton();
+        }
+
+        if (embeddedFrame) {
+            embeddedFrame.addEventListener("load", () => {
+                if (!embeddedMuted) return;
+                sendEmbeddedControl("setMuted", true);
+            });
+        }
+
+        window.addEventListener("message", (event) => {
+            if (event.origin !== window.location.origin) return;
+            if (!embeddedFrame || event.source !== embeddedFrame.contentWindow) return;
+            if (!event.data) return;
+
+            if (event.data.type === "randa-control-ack" && event.data.command === "setMuted") {
+                embeddedMuted = Boolean(event.data.value);
+                updateEmbeddedMuteButton();
+                return;
+            }
+
+            if (event.data.type === "randa-control-notify" && event.data.command === "mutedChanged") {
+                embeddedMuted = Boolean(event.data.value);
+                updateEmbeddedMuteButton();
+            }
         });
     })();
     </script>

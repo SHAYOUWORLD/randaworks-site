@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="ja">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <link rel="icon" href="../../../assets/img/games/inga/icon.png" type="image/png">
+    <title>日本史因果クロニクル 体験版プレイヤー | RandaWorks</title>
+    <meta name="description" content="日本史因果クロニクルのPCブラウザ体験版プレイヤーです。" />
+    <meta name="robots" content="noindex, nofollow" />
+    <link rel="canonical" href="https://www.randaworks.com/games/inga/play/" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Shippori+Mincho:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../../assets/css/style.css">
+</head>
+<body class="demo-play-page" data-page-type="demo_play" data-build-id="inga-demo-html5-0.1.4" data-build-path="./build/index.html">
+    <a class="skip-link" href="#main-content">メインコンテンツへ移動</a>
+    <div class="container">
+        <header class="nav">
+            <div class="brand"><a href="../../../"><img src="../../../assets/img/randaworks_logo_text.png" alt="RandaWorks" style="height: 28px; vertical-align: middle;"></a></div>
+            <div class="links">
+                <a href="../demo/">体験版LP</a>
+                <a href="../">作品ページ</a>
+                <a href="../support/">Support</a>
+            </div>
+        </header>
+
+        <main id="main-content" class="card play-shell">
+            <div>
+                <p class="section-kicker">Demo Player</p>
+                <h1>日本史因果クロニクル 体験版プレイヤー</h1>
+                <p>HTML5ビルドをこのページへ読み込みます。推奨表示は 1920×1080、16:9 です。初回起動時は数秒かかる場合があります。</p>
+            </div>
+
+            <div class="play-status" aria-live="polite">
+                <span class="status-chip">Boot Status</span>
+                <strong id="playStatusText">体験版ビルドを確認しています...</strong>
+            </div>
+
+            <div class="notice-banner">
+                <strong>PCブラウザ向けです。</strong>
+                <p>スマートフォンは未最適化です。起動に失敗した場合は、再試行のうえ <a href="../support/">サポートページ</a> をご確認ください。</p>
+            </div>
+
+            <div class="cta-band-actions" style="justify-content: flex-start;">
+                <button class="cta" id="retryBootButton" type="button">再試行する</button>
+                <button class="cta cta-ghost" id="fullscreenPlayButton" type="button">外側フルスクリーン</button>
+                <button class="cta cta-ghost" id="mutePlayButton" type="button" data-analytics="play_shell_cta_audio">音声をミュート</button>
+                <a class="cta cta-ghost" href="../demo/" data-track-event="return_to_lp" data-track-placement="play_shell_back" data-track-label="play shell back">体験版LPへ戻る</a>
+                <a class="cta cta-steam" href="https://store.steampowered.com/app/4403470" target="_blank" rel="noopener noreferrer" data-track-event="wishlist_click" data-track-placement="play_shell_steam" data-track-label="play shell wishlist">Steamでウィッシュリスト</a>
+            </div>
+
+            <div class="alert alert-error" id="playError" role="alert" hidden></div>
+            <p class="muted play-ready-note" id="playReadyNote" hidden>読み込み完了後、ゲーム画面がこのエリアに表示されます。</p>
+            <p class="muted">画面内のフルスクリーンとは別に、このページのプレイヤー枠全体をフルスクリーン表示できます。</p>
+
+            <div class="demo-frame-shell" id="demoFrameShell">
+                <iframe
+                    id="demoFrame"
+                    class="demo-frame"
+                    title="日本史因果クロニクル 体験版"
+                    allow="fullscreen"
+                    allowfullscreen
+                ></iframe>
+            </div>
+
+            <p class="muted">ビルドID: <code>inga-demo-html5-0.1.4</code></p>
+        </main>
+
+        <footer class="footer">
+            <div class="footer-links">
+                <a href="../privacy/">プライバシーポリシー</a>
+                <a href="../support/">サポート</a>
+                <a href="../demo/">体験版LP</a>
+            </div>
+            <div>© 2026 RandaWorks</div>
+        </footer>
+    </div>
+
+    <script src="../../../assets/js/analytics-config.js"></script>
+    <script src="../../../assets/js/analytics.js"></script>
+    <script src="../../../assets/js/play-page.js"></script>
+</body>
+</html>

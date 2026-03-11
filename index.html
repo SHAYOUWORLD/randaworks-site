@@ -4,20 +4,20 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <link rel="icon" href="./assets/img/randaworks_icon.png" type="image/png">
-    <title>RandaWorks | 歴史とゲームをつなぐインディーゲームスタジオ</title>
+    <title>RandaWorks | 歴史と戦略がつながるインディーゲームスタジオ</title>
     <meta
       name="description"
-      content="RandaWorksは、歴史と学びを戦略ゲームとして再構成するインディーゲームスタジオです。日本史因果クロニクルを中心に、作品情報、Steam導線、お問い合わせ先を掲載しています。"
+      content="RandaWorksは、歴史や知識のつながりがそのまま戦略になるゲーム体験をつくるインディーゲームスタジオです。『日本史因果クロニクル』のブラウザ体験版と作品情報を掲載しています。"
     />
     <link rel="canonical" href="https://www.randaworks.com/" />
     <meta property="og:type" content="website" />
-    <meta property="og:title" content="RandaWorks | 歴史とゲームをつなぐインディーゲームスタジオ" />
-    <meta property="og:description" content="歴史と学びを戦略ゲームとして再構成するインディーゲームスタジオ。日本史因果クロニクルの作品情報とSteam導線を掲載しています。" />
+    <meta property="og:title" content="RandaWorks | 歴史と戦略がつながるインディーゲームスタジオ" />
+    <meta property="og:description" content="歴史や知識のつながりがそのまま戦略になるゲーム体験をつくるインディーゲームスタジオ。" />
     <meta property="og:url" content="https://www.randaworks.com/" />
     <meta property="og:image" content="https://www.randaworks.com/assets/img/games/inga/demo-cards/poster_steam_store_pv_v1_1.jpg" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="RandaWorks | 歴史とゲームをつなぐインディーゲームスタジオ" />
-    <meta name="twitter:description" content="歴史と学びを戦略ゲームとして再構成するインディーゲームスタジオ。" />
+    <meta name="twitter:title" content="RandaWorks | 歴史と戦略がつながるインディーゲームスタジオ" />
+    <meta name="twitter:description" content="歴史や知識のつながりがそのまま戦略になるゲーム体験をつくるインディーゲームスタジオ。" />
     <meta name="twitter:image" content="https://www.randaworks.com/assets/img/games/inga/demo-cards/poster_steam_store_pv_v1_1.jpg" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -48,76 +48,83 @@
       }
     </script>
   </head>
-  <body class="home-page">
+  <body class="home-page" data-page-type="home">
     <a class="skip-link" href="#main-content">メインコンテンツへ移動</a>
     <div class="container">
       <div class="nav">
         <div class="brand"><a href="./"><img src="./assets/img/randaworks_logo_text.png" alt="RandaWorks" style="height: 28px; vertical-align: middle;"></a></div>
         <div class="links">
-          <a href="./games/">Games</a>
+          <a href="./games/">ゲーム一覧</a>
           <a href="./games/inga/">日本史因果クロニクル</a>
-          <a href="./contact/">Contact</a>
+          <a href="./contact/">お問い合わせ</a>
         </div>
       </div>
       <main id="main-content">
       <section class="card home-hero-card">
         <div class="home-hero-copy">
-          <p class="section-kicker">Indie Game Studio</p>
+          <p class="section-kicker">インディーゲームスタジオ</p>
           <img class="home-hero-logo" src="./assets/img/randaworks_logo_full.png" alt="RandaWorks">
           <h1 class="home-hero-title">歴史とゲームの接点を、もっと面白く。</h1>
-          <p class="home-hero-lead">RandaWorksは、知識と戦略と遊び心がひとつにつながるゲーム体験をつくるインディーゲームスタジオです。</p>
+          <p class="home-hero-lead">RandaWorksは、歴史や知識のつながりがそのまま戦略になるゲーム体験をつくるインディーゲームスタジオです。</p>
           <div class="badges home-hero-badges">
-            <span class="badge">ゲーミフィケーション</span>
+            <span class="badge">歴史</span>
             <span class="badge">戦略</span>
-            <span class="badge">教育</span>
+            <span class="badge">デッキ構築</span>
             <span class="badge">インディー</span>
           </div>
           <div class="home-hero-actions">
-            <a class="cta cta-large" href="./games/inga/">日本史因果クロニクルを見る</a>
-            <a class="cta cta-steam" href="https://store.steampowered.com/app/4403470" target="_blank" rel="noopener noreferrer" id="home-wishlist-cta">
+            <a class="cta cta-large" href="./games/inga/?src=home_hero#play" data-analytics="home_cta_play" data-track-event="play_cta_click" data-track-placement="home_hero_primary" data-track-label="home hero play">
+              体験版を遊ぶ
+            </a>
+            <a class="cta cta-ghost" href="./games/inga/?src=home_hero" data-analytics="home_cta_gamepage" data-track-event="cta_click" data-track-placement="home_hero_secondary" data-track-label="home hero product page">作品ページを見る</a>
+            <a class="cta cta-steam" href="https://store.steampowered.com/app/4403470" target="_blank" rel="noopener noreferrer" id="home-wishlist-cta" data-analytics="home_cta_wishlist" data-track-event="wishlist_click" data-track-placement="home_hero_steam" data-track-label="home hero wishlist">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 259" width="16" height="16" style="vertical-align: middle; margin-right: 6px; fill: currentColor;"><path d="M127.779 0C57.895 0 1.307 55.39.052 124.908l68.961 28.5a36.077 36.077 0 0 1 20.378-6.27l30.462-44.145v-.617c0-26.513 21.569-48.084 48.083-48.084 26.516 0 48.085 21.572 48.085 48.084 0 26.515-21.569 48.085-48.085 48.085h-1.104l-43.474 31.02c0 .403.022.8.022 1.197 0 19.882-16.163 36.046-36.048 36.046-17.806 0-32.595-12.953-35.476-29.932L2.472 166.516C18.233 218.149 67.215 256 127.779 256c70.716 0 128.043-57.326 128.043-128.001C255.822 57.326 198.495 0 127.779 0z"/></svg>
               Steamでウィッシュリスト
             </a>
-            <a class="cta cta-ghost" href="./games/">ゲーム一覧</a>
           </div>
         </div>
         <aside class="surface-panel home-spotlight">
-          <p class="section-kicker">Featured Title</p>
+          <p class="section-kicker">注目タイトル</p>
           <div class="home-spotlight-media">
             <img src="./assets/img/games/inga/demo-cards/poster_steam_store_pv_v1_1.jpg" alt="日本史因果クロニクルのPVポスター" loading="eager">
           </div>
-          <span class="roster-tag">Strategy / Education</span>
+          <span class="roster-tag">ブラウザ体験版公開中</span>
           <h2 class="home-panel-title">日本史因果クロニクル</h2>
-          <p>史実のつながりが、そのまま強いコンボになる日本史ローグライクカードゲームです。</p>
+          <p>史実の因果でコンボを組んで戦う、日本史デッキ構築ローグライク。</p>
           <ul class="point-list">
-            <li>カードをつなげるほど、歴史の因果がそのまま理解に変わる</li>
-            <li>織田信長と紫式部を中心に、異なる攻略感で遊べる</li>
-            <li>作品ページとSteamストアから現在の情報をすぐ確認できる</li>
+            <li>史実の前後関係が、そのまま強い連鎖になる</li>
+            <li>英雄ごとに異なる時代と戦い方で攻略できる</li>
+            <li>ブラウザ体験版からすぐ試せる</li>
           </ul>
+          <div class="cta-band-actions home-feature-actions">
+            <a class="cta" href="./games/inga/?src=home_featured#play" data-analytics="home_featured_cta_play" data-track-event="play_cta_click" data-track-placement="home_featured_primary" data-track-label="home featured play">体験版を遊ぶ</a>
+            <a class="cta cta-ghost" href="./games/inga/?src=home_featured" data-analytics="home_featured_cta_gamepage" data-track-event="cta_click" data-track-placement="home_featured_secondary" data-track-label="home featured product">作品ページを見る</a>
+            <a class="cta cta-steam" href="https://store.steampowered.com/app/4403470" target="_blank" rel="noopener noreferrer" data-analytics="home_featured_cta_wishlist" data-track-event="wishlist_click" data-track-placement="home_featured_steam" data-track-label="home featured wishlist">Steamでウィッシュリスト</a>
+          </div>
         </aside>
       </section>
 
       <section class="card">
-        <p class="section-kicker">What We Make</p>
+        <p class="section-kicker">スタジオについて</p>
         <h2>RandaWorksがつくる体験</h2>
         <div class="pillar-grid">
           <article class="surface-panel pillar-card home-pillar">
-            <h3>知識が残るゲーム性</h3>
-            <p>単語暗記ではなく、因果や判断として理解が残る設計を重視しています。</p>
+            <h3>歴史のつながりが戦略になる</h3>
+            <p>史実の前後関係や因果を、そのままプレイ中の判断に変える設計を重視しています。</p>
           </article>
           <article class="surface-panel pillar-card home-pillar">
-            <h3>戦略として学べる構造</h3>
-            <p>学ぶ内容をそのまま勝ち筋に変えることで、遊びと学習を分断しません。</p>
+            <h3>理解がそのまま勝ち筋になる</h3>
+            <p>出来事を並べるだけでなく、どの流れを伸ばすかを考えるデッキ構築として磨いています。</p>
           </article>
           <article class="surface-panel pillar-card home-pillar">
             <h3>小さく作って鋭く磨く</h3>
-            <p>インディーならではの速度で試し、反応を見ながら体験を研ぎ澄ませています。</p>
+            <p>インディーならではの速度で試作と改善を繰り返し、最初の数分で面白さが伝わる体験を追っています。</p>
           </article>
         </div>
       </section>
 
       <section class="card">
-        <p class="section-kicker">Now Featured</p>
+        <p class="section-kicker">公開中の作品</p>
         <h2>現在公開している作品</h2>
         <div class="home-feature-grid">
           <article class="surface-panel home-feature-main">
@@ -125,24 +132,24 @@
               <img src="./assets/img/games/inga/demo-cards/combo_nobunaga.jpg" alt="日本史因果クロニクルのコンボビジュアル" loading="lazy">
             </div>
             <div class="home-feature-copy">
-              <span class="roster-tag">Japanese History Roguelike Deckbuilder</span>
+              <span class="roster-tag">日本史デッキ構築ローグライク</span>
               <h3>日本史因果クロニクル</h3>
-              <p>遊ぶほど「共通テスト日本史」の重要語句と因果が身につく、知育ローグライクカードゲームです。</p>
+              <p>日本史の出来事や人物をカードにし、史実の流れでつないで戦うローグライク。前後関係や因果がかみ合うほど、強力なコンボが発動します。</p>
               <div class="cta-band-actions home-feature-actions">
-                <a class="cta" href="./games/inga/">作品ページへ</a>
-                <a class="cta cta-ghost" href="./contact/">お問い合わせ</a>
+                <a class="cta" href="./games/inga/?src=home_nowfeatured#play" data-analytics="home_nowfeatured_cta_play" data-track-event="play_cta_click" data-track-placement="home_feature_card" data-track-label="home feature play">体験版を遊ぶ</a>
+                <a class="cta cta-ghost" href="./games/inga/?src=home_nowfeatured" data-analytics="home_nowfeatured_cta_gamepage" data-track-event="cta_click" data-track-placement="home_feature_product" data-track-label="home feature product">作品ページへ</a>
               </div>
             </div>
           </article>
           <div class="home-side-stack">
             <article class="surface-panel home-side-card">
-              <h3>Games</h3>
-              <p>公開中の作品一覧と今後の掲載先です。</p>
+              <h3>ゲーム一覧</h3>
+              <p>公開中の作品と今後の掲載先を確認できます。</p>
               <a href="./games/">ゲーム一覧を見る</a>
             </article>
             <article class="surface-panel home-side-card">
-              <h3>Contact</h3>
-              <p>事業に関するお問い合わせ、取材依頼などはこちらから。</p>
+              <h3>お問い合わせ</h3>
+              <p>事業に関するお問い合わせや取材依頼はこちらから。</p>
               <a href="./contact/">お問い合わせフォームへ</a>
             </article>
           </div>
@@ -150,13 +157,13 @@
       </section>
 
       <section class="card cta-band" aria-labelledby="home-cta-title">
-        <p class="section-kicker">Explore</p>
-        <h2 id="home-cta-title">まずは日本史因果クロニクルから</h2>
-        <p>RandaWorksの現在地を知るなら、作品ページとSteamストアページが最短です。</p>
+        <p class="section-kicker">プレイ導線</p>
+        <h2 id="home-cta-title">まずは日本史因果クロニクルを遊ぶ</h2>
+        <p>このゲームの独自性は、史実の因果がそのまま勝ち筋になることです。まずは作品ページのブラウザ体験版から触ってください。</p>
         <div class="cta-band-actions">
-          <a class="cta cta-steam" href="https://store.steampowered.com/app/4403470" target="_blank" rel="noopener noreferrer">Steamで見る</a>
-          <a class="cta cta-ghost" href="./games/inga/">作品ページへ</a>
-          <a class="cta cta-ghost" href="./games/">ゲーム一覧へ</a>
+          <a class="cta" href="./games/inga/?src=home_explore#play" data-analytics="home_explore_cta_play" data-track-event="play_cta_click" data-track-placement="home_footer_cta" data-track-label="home footer play">体験版を遊ぶ</a>
+          <a class="cta cta-ghost" href="./games/inga/?src=home_explore" data-analytics="home_explore_cta_gamepage" data-track-event="cta_click" data-track-placement="home_footer_product" data-track-label="home footer product">作品ページへ</a>
+          <a class="cta cta-steam" href="https://store.steampowered.com/app/4403470" target="_blank" rel="noopener noreferrer" data-analytics="home_explore_cta_wishlist" data-track-event="wishlist_click" data-track-placement="home_footer_steam" data-track-label="home footer wishlist">Steamでウィッシュリスト</a>
         </div>
       </section>
       </main>
@@ -164,5 +171,7 @@
         <div>© 2026 RandaWorks</div>
       </div>
     </div>
+    <script src="./assets/js/analytics-config.js"></script>
+    <script src="./assets/js/analytics.js"></script>
   </body>
 </html>
