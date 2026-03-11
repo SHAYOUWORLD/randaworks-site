@@ -95,7 +95,7 @@
       }
     </script>
 </head>
-<body data-page-type="inga_overview">
+<body data-page-type="inga_overview" data-play-session-scope="true">
     <a class="skip-link" href="#main-content">メインコンテンツへ移動</a>
     <div class="container">
         <header class="nav">
@@ -114,37 +114,69 @@
         <main id="main-content">
             <section class="game-hero" aria-labelledby="hero-title">
                 <div class="game-hero-content">
-                    <p class="hero-kicker">ブラウザ体験版公開中 / Steam近日登場</p>
-                    <h1 id="hero-title" class="game-hero-title">日本史因果クロニクル</h1>
-                    <p class="hero-subtitle">史実の因果でコンボを組んで戦う、日本史デッキ構築ローグライク。</p>
+                    <p class="hero-kicker">Steam Coming Soon / 日本史デッキ構築ローグライク</p>
+                    <img
+                        src="../../assets/img/games/inga/title_logo.png"
+                        alt="日本史因果クロニクル"
+                        class="game-logo"
+                        loading="eager"
+                        onerror="this.style.display='none'; this.nextElementSibling.style.display='block'"
+                    >
+                    <h1 id="hero-title" style="display:none; font-family: 'Shippori Mincho', serif; font-size: 3.5rem; color: #fff; text-shadow: 0 0 20px #bd3131;">日本史因果クロニクル</h1>
+
+                    <p class="hero-subtitle">勝つために歴史を覚える。<br>遊ぶほど、因果がつながる。</p>
                     <p class="hero-description">
-                        日本史の出来事や人物をカードにし、史実の流れでつないで戦います。
-                        前後関係や因果がかみ合うほど、強力な連鎖が発動します。
+                        史実に沿った順番と組み合わせでカードが連鎖し、強力なコンボが発動。
+                        日本史の流れを、暗記ではなくプレイ体験として身につける知育ローグライクカードゲームです。
                     </p>
+
+                    <div class="badges hero-badges" style="justify-content: center;">
+                        <span class="badge">デッキ構築</span>
+                        <span class="badge">ローグライク</span>
+                        <span class="badge">歴史学習</span>
+                        <span class="badge">Steam</span>
+                    </div>
+
                     <div class="game-hero-actions">
-                        <a class="cta cta-large" href="#play" data-analytics="inga_hero_cta_play" data-track-event="play_cta_click" data-track-placement="inga_hero_play" data-track-label="inga hero play">ブラウザで今すぐ遊ぶ</a>
-                        <a class="cta cta-steam" href="https://store.steampowered.com/app/4403470" target="_blank" rel="noopener noreferrer" id="wishlist-cta" data-analytics="inga_hero_cta_wishlist" data-track-event="wishlist_click" data-track-placement="inga_hero_steam" data-track-label="inga hero wishlist">
+                        <a class="cta cta-steam cta-large" href="https://store.steampowered.com/app/4403470" target="_blank" rel="noopener noreferrer" id="wishlist-cta" data-track-event="wishlist_click" data-track-placement="inga_hero_steam" data-track-label="inga hero wishlist">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 259" width="20" height="20" style="vertical-align: middle; margin-right: 8px; fill: currentColor;"><path d="M127.779 0C57.895 0 1.307 55.39.052 124.908l68.961 28.5a36.077 36.077 0 0 1 20.378-6.27l30.462-44.145v-.617c0-26.513 21.569-48.084 48.083-48.084 26.516 0 48.085 21.572 48.085 48.084 0 26.515-21.569 48.085-48.085 48.085h-1.104l-43.474 31.02c0 .403.022.8.022 1.197 0 19.882-16.163 36.046-36.048 36.046-17.806 0-32.595-12.953-35.476-29.932L2.472 166.516C18.233 218.149 67.215 256 127.779 256c70.716 0 128.043-57.326 128.043-128.001C255.822 57.326 198.495 0 127.779 0z"/></svg>
                             Steamでウィッシュリストに追加
                         </a>
-                        <a class="cta cta-ghost" href="#clips" data-analytics="inga_hero_cta_pv" data-track-event="cta_click" data-track-placement="inga_hero_video" data-track-label="inga hero pv">58秒PVを見る</a>
+                        <a class="cta cta-ghost" href="#clips" data-track-event="cta_click" data-track-placement="inga_hero_video" data-track-label="inga hero pv">PVを見る</a>
                     </div>
-                    <p class="hero-note">PCブラウザ推奨 / 1プレイ約30分 / 体験版 3ステージ・2英雄</p>
+                    <p class="hero-note">発売時期は未定です。最新情報は Steam ストアページと本サイトでお知らせします。画面写真やPVから、開発中の雰囲気や方向性を確認できます。</p>
+
+                    <div class="hero-stats" aria-label="ゲーム概要">
+                        <div class="hero-stat">
+                            <strong class="hero-stat-value">200+</strong>
+                            <span class="hero-stat-label">カード</span>
+                        </div>
+                        <div class="hero-stat">
+                            <strong class="hero-stat-value">100+</strong>
+                            <span class="hero-stat-label">コンボ</span>
+                        </div>
+                        <div class="hero-stat">
+                            <strong class="hero-stat-value">飛鳥-幕末</strong>
+                            <span class="hero-stat-label">時代を横断</span>
+                        </div>
+                        <div class="hero-stat">
+                            <strong class="hero-stat-value">Windows / Steam</strong>
+                            <span class="hero-stat-label">PC向け予定</span>
+                        </div>
+                    </div>
                 </div>
             </section>
 
             <section class="card" id="play" data-analytics="inga_play_section">
                 <p class="section-kicker">ブラウザ体験版</p>
-                <h2>まずはブラウザで試す</h2>
-                <p>最初の数分で、「史実の因果がコンボになる」感触が分かります。</p>
-                <p class="muted">PCブラウザ推奨です。</p>
-                <p>史実の因果でコンボを組んで戦う、日本史デッキ構築ローグライクです。PCブラウザ推奨、1プレイ約30分。</p>
+                <h2>まずはブラウザで遊ぶ</h2>
+                <p class="muted">PCブラウザ推奨 / 1プレイ約30分</p>
                 <div class="cta-band-actions" style="justify-content: flex-start; margin: 0 0 18px;">
                     <button class="cta" id="embeddedFullscreenButton" type="button" data-analytics="inga_play_cta_fullscreen" data-track-event="cta_click" data-track-placement="inga_play_fullscreen" data-track-label="inga play fullscreen">全画面で遊ぶ</button>
                     <button class="cta cta-ghost" id="embeddedMuteButton" type="button" data-analytics="inga_play_cta_audio" data-track-event="cta_click" data-track-placement="inga_play_audio" data-track-label="inga play audio">音声をミュート</button>
                     <a class="cta cta-ghost" href="./play/?src=inga_play_section" data-analytics="inga_play_cta_player" data-track-event="cta_click" data-track-placement="inga_play_player" data-track-label="inga play dedicated player">専用プレイヤーで開く</a>
                 </div>
-                <p class="muted">全画面がうまく動かない場合は、専用プレイヤーで開くと安定しやすいです。</p>
+                <p class="muted">全画面がうまく動かない場合は、専用プレイヤーで開いてください。</p>
                 <div class="demo-frame-shell" id="embeddedDemoFrameShell" data-analytics="inga_play_embed">
                     <iframe
                         id="embeddedDemoFrame"
@@ -156,8 +188,8 @@
                     ></iframe>
                 </div>
                 <div class="surface-panel">
-                    <h3>気に入ったら次はこちら</h3>
-                    <p>続報を追いたい方はSteamでウィッシュリスト。感想や不具合はフォームから送れます。</p>
+                    <h3>続けて見る</h3>
+                    <p>続報はSteam、不具合や感想はフォームから送れます。</p>
                     <div class="cta-band-actions" style="justify-content: flex-start;">
                         <a class="cta cta-steam" href="https://store.steampowered.com/app/4403470" target="_blank" rel="noopener noreferrer" data-analytics="inga_postplay_cta_wishlist" data-track-event="wishlist_click" data-track-placement="inga_postplay_steam" data-track-label="inga postplay wishlist">Steamでウィッシュリスト</a>
                         <a class="cta cta-ghost" href="./support/?src=inga_postplay" data-analytics="inga_postplay_cta_feedback" data-track-event="cta_click" data-track-placement="inga_postplay_feedback" data-track-label="inga postplay feedback">感想・不具合を送る</a>

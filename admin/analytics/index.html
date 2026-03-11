@@ -1,0 +1,620 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>分析管理画面 | RandaWorks</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Shippori+Mincho:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../assets/css/style.css" />
+</head>
+<body data-page-type="analytics_admin">
+  <a class="skip-link" href="#main-content">メインコンテンツへ移動</a>
+  <div class="container">
+    <header class="nav">
+      <div class="brand"><a href="../../"><img src="../../assets/img/randaworks_logo_text.png" alt="RandaWorks" style="height: 28px; vertical-align: middle;"></a></div>
+      <div class="links">
+        <a href="../../games/inga/">作品ページ</a>
+        <a href="../../games/inga/play/">専用プレイヤー</a>
+      </div>
+    </header>
+
+    <main id="main-content" class="card play-shell">
+      <div>
+        <p class="section-kicker">分析管理</p>
+        <h1>体験版の流れを見る</h1>
+        <p>イベント数ではなく、1回の体験がいつ始まり、どう終わったかを追う管理画面です。</p>
+      </div>
+
+      <div class="form">
+        <div class="field">
+          <label for="adminToken">管理トークン</label>
+          <input id="adminToken" type="text" autocomplete="off" placeholder="randa-local-admin" />
+        </div>
+        <div class="form-actions">
+          <button class="cta" id="loadAnalyticsButton" type="button">読み込む</button>
+          <button class="cta cta-ghost" id="downloadCsvButton" type="button">全CSV</button>
+          <button class="cta cta-ghost" id="downloadGameCsvButton" type="button">ゲームCSV</button>
+          <button class="cta cta-ghost" id="downloadJsonlButton" type="button">JSONL</button>
+          <button class="cta cta-ghost" id="downloadJsonButton" type="button">JSON</button>
+          <button class="cta cta-ghost" id="clearAnalyticsButton" type="button">消去</button>
+          <span class="muted" id="adminStatus" aria-live="polite">未接続</span>
+        </div>
+      </div>
+
+      <div class="alert alert-error" id="adminError" role="alert" hidden></div>
+
+      <section class="compat-grid" id="overviewCards">
+        <article class="surface-panel compat-card">
+          <strong>体験数</strong>
+          <p id="playSessionCountValue">-</p>
+        </article>
+        <article class="surface-panel compat-card">
+          <strong>起動成功</strong>
+          <p id="bootSuccessSessionCountValue">-</p>
+        </article>
+        <article class="surface-panel compat-card">
+          <strong>タイトル到達</strong>
+          <p id="titleReachedSessionCountValue">-</p>
+        </article>
+        <article class="surface-panel compat-card">
+          <strong>ラン完了</strong>
+          <p id="completedRunCountValue">-</p>
+        </article>
+      </section>
+
+      <section class="card">
+        <p class="section-kicker">体験一覧</p>
+        <h2>直近の体験</h2>
+        <div class="surface-panel" style="overflow:auto;">
+          <table class="specs-table">
+            <thead>
+              <tr>
+                <th>開始</th>
+                <th>時間</th>
+                <th>起動</th>
+                <th>ラン</th>
+                <th>最後の結果</th>
+                <th>端末</th>
+                <th>流入</th>
+                <th>詳細</th>
+              </tr>
+            </thead>
+            <tbody id="playSessionsRoot"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="card">
+        <p class="section-kicker">ラン一覧</p>
+        <h2>直近のラン</h2>
+        <div class="surface-panel" style="overflow:auto;">
+          <table class="specs-table">
+            <thead>
+              <tr>
+                <th>開始</th>
+                <th>時間</th>
+                <th>英雄</th>
+                <th>結果</th>
+                <th>到達</th>
+                <th>最後の敵</th>
+                <th>主なコンボ</th>
+                <th>詳細</th>
+              </tr>
+            </thead>
+            <tbody id="runsRoot"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="grid">
+        <div class="card">
+          <p class="section-kicker">体験詳細</p>
+          <h2>選択中の体験</h2>
+          <div class="compat-grid">
+            <article class="surface-panel compat-card"><strong>開始</strong><p id="sessionDetailOpened">-</p></article>
+            <article class="surface-panel compat-card"><strong>終了</strong><p id="sessionDetailEnded">-</p></article>
+            <article class="surface-panel compat-card"><strong>時間</strong><p id="sessionDetailDuration">-</p></article>
+            <article class="surface-panel compat-card"><strong>端末</strong><p id="sessionDetailDevice">-</p></article>
+            <article class="surface-panel compat-card"><strong>起動</strong><p id="sessionDetailBoot">-</p></article>
+            <article class="surface-panel compat-card"><strong>最後の結果</strong><p id="sessionDetailResult">-</p></article>
+          </div>
+          <div class="cta-band-actions" style="justify-content:flex-start; margin-top: 18px;">
+            <button class="cta cta-ghost" id="copySessionTextButton" type="button">体験テキストをコピー</button>
+            <button class="cta cta-ghost" id="copySessionJsonButton" type="button">体験JSONをコピー</button>
+          </div>
+          <h3 style="margin-top:1.25rem;">体験サマリー</h3>
+          <pre class="surface-panel" id="sessionTextSummary" style="white-space:pre-wrap;">-</pre>
+          <h3 style="margin-top:1.25rem;">体験タイムライン</h3>
+          <div class="surface-panel" style="overflow:auto;">
+            <table class="specs-table">
+              <thead>
+                <tr>
+                  <th>時刻</th>
+                  <th>イベント</th>
+                  <th>内容</th>
+                </tr>
+              </thead>
+              <tbody id="sessionTimelineRoot"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="card">
+          <p class="section-kicker">ラン詳細</p>
+          <h2>選択中のラン</h2>
+          <div class="compat-grid">
+            <article class="surface-panel compat-card"><strong>開始</strong><p id="runDetailOpened">-</p></article>
+            <article class="surface-panel compat-card"><strong>終了</strong><p id="runDetailEnded">-</p></article>
+            <article class="surface-panel compat-card"><strong>時間</strong><p id="runDetailDuration">-</p></article>
+            <article class="surface-panel compat-card"><strong>英雄</strong><p id="runDetailHero">-</p></article>
+            <article class="surface-panel compat-card"><strong>結果</strong><p id="runDetailResult">-</p></article>
+            <article class="surface-panel compat-card"><strong>最後の敵</strong><p id="runDetailEnemy">-</p></article>
+          </div>
+          <div class="cta-band-actions" style="justify-content:flex-start; margin-top: 18px;">
+            <button class="cta cta-ghost" id="copyRunTextButton" type="button">ランテキストをコピー</button>
+            <button class="cta cta-ghost" id="copyRunJsonButton" type="button">ランJSONをコピー</button>
+          </div>
+          <h3 style="margin-top:1.25rem;">ランサマリー</h3>
+          <pre class="surface-panel" id="runTextSummary" style="white-space:pre-wrap;">-</pre>
+          <h3 style="margin-top:1.25rem;">ランタイムライン</h3>
+          <div class="surface-panel" style="overflow:auto;">
+            <table class="specs-table">
+              <thead>
+                <tr>
+                  <th>時刻</th>
+                  <th>イベント</th>
+                  <th>内容</th>
+                </tr>
+              </thead>
+              <tbody id="runTimelineRoot"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div>© 2026 RandaWorks</div>
+    </footer>
+  </div>
+
+  <script>
+    (function () {
+      var tokenInput = document.getElementById("adminToken");
+      var loadButton = document.getElementById("loadAnalyticsButton");
+      var downloadCsvButton = document.getElementById("downloadCsvButton");
+      var downloadGameCsvButton = document.getElementById("downloadGameCsvButton");
+      var downloadJsonlButton = document.getElementById("downloadJsonlButton");
+      var downloadJsonButton = document.getElementById("downloadJsonButton");
+      var clearButton = document.getElementById("clearAnalyticsButton");
+      var copySessionTextButton = document.getElementById("copySessionTextButton");
+      var copySessionJsonButton = document.getElementById("copySessionJsonButton");
+      var copyRunTextButton = document.getElementById("copyRunTextButton");
+      var copyRunJsonButton = document.getElementById("copyRunJsonButton");
+      var adminStatus = document.getElementById("adminStatus");
+      var adminError = document.getElementById("adminError");
+      var playSessionsRoot = document.getElementById("playSessionsRoot");
+      var runsRoot = document.getElementById("runsRoot");
+      var storageKey = "randa_admin_token";
+      var latestEvents = [];
+      var latestSummary = null;
+      var selectedSession = null;
+      var selectedRun = null;
+
+      function getToken() {
+        return tokenInput.value.trim();
+      }
+
+      function getHeaders() {
+        return {
+          "Authorization": "Bearer " + getToken()
+        };
+      }
+
+      function setStatus(text) {
+        adminStatus.textContent = text;
+      }
+
+      function showError(text) {
+        adminError.hidden = false;
+        adminError.textContent = text;
+      }
+
+      function clearError() {
+        adminError.hidden = true;
+        adminError.textContent = "";
+      }
+
+      function setText(id, value) {
+        var el = document.getElementById(id);
+        if (el) el.textContent = value == null || value === "" ? "-" : String(value);
+      }
+
+      function saveToken() {
+        sessionStorage.setItem(storageKey, getToken());
+      }
+
+      function formatTime(value) {
+        if (!value) return "-";
+        var date = new Date(value);
+        if (Number.isNaN(date.getTime())) return value;
+        return date.toLocaleString("ja-JP");
+      }
+
+      function formatDuration(seconds) {
+        if (seconds == null || seconds === "") return "-";
+        var total = Number(seconds);
+        if (!Number.isFinite(total)) return "-";
+        var mins = Math.floor(total / 60);
+        var secs = total % 60;
+        if (mins <= 0) return secs + "秒";
+        return mins + "分 " + secs + "秒";
+      }
+
+      function formatDevice(item) {
+        var parts = [item.device_type, item.browser, item.os, item.viewport_label].filter(Boolean);
+        return parts.length ? parts.join(" / ") : "-";
+      }
+
+      function describeTimeline(item) {
+        var bits = [];
+        if (item.hero) bits.push("英雄: " + item.hero);
+        if (item.enemy_id) bits.push("敵: " + item.enemy_id);
+        if (item.combo_id) bits.push("コンボ: " + item.combo_id);
+        if (item.result) bits.push("結果: " + item.result);
+        if (item.stage_id) bits.push("ステージ: " + item.stage_id);
+        if (item.end_reason) bits.push("終了理由: " + item.end_reason);
+        if (item.label) bits.push("ラベル: " + item.label);
+        return bits.join(" / ") || "-";
+      }
+
+      function topComboLabel(run) {
+        var combos = run.top_combos || [];
+        if (!combos.length) return "-";
+        return combos.slice(0, 2).map(function (combo) {
+          return combo.id + " x" + combo.count;
+        }).join(", ");
+      }
+
+      function renderTimeline(root, timeline) {
+        root.innerHTML = "";
+        (timeline || []).forEach(function (item) {
+          var row = document.createElement("tr");
+
+          [formatTime(item.at), item.event_name || "-", describeTimeline(item)].forEach(function (value) {
+            var cell = document.createElement("td");
+            cell.textContent = value;
+            row.appendChild(cell);
+          });
+
+          root.appendChild(row);
+        });
+      }
+
+      function renderPlaySessions(playSessions) {
+        playSessionsRoot.innerHTML = "";
+
+        if (!playSessions.length) {
+          var empty = document.createElement("tr");
+          empty.innerHTML = "<td colspan='8'>体験データがありません。</td>";
+          playSessionsRoot.appendChild(empty);
+          return;
+        }
+
+        playSessions.forEach(function (item) {
+          var row = document.createElement("tr");
+          var cells = [
+            formatTime(item.opened_at),
+            formatDuration(item.duration_sec),
+            item.boot_status || "-",
+            String(item.run_count || 0),
+            item.final_result || "-",
+            formatDevice(item),
+            item.entry_src || "-"
+          ];
+
+          cells.forEach(function (value) {
+            var cell = document.createElement("td");
+            cell.textContent = value;
+            row.appendChild(cell);
+          });
+
+          var actionCell = document.createElement("td");
+          var button = document.createElement("button");
+          button.type = "button";
+          button.className = "cta cta-ghost";
+          button.textContent = "見る";
+          button.addEventListener("click", function () {
+            selectedSession = item;
+            updateSessionDetail();
+          });
+          actionCell.appendChild(button);
+          row.appendChild(actionCell);
+          playSessionsRoot.appendChild(row);
+        });
+      }
+
+      function renderRuns(runs) {
+        runsRoot.innerHTML = "";
+
+        if (!runs.length) {
+          var empty = document.createElement("tr");
+          empty.innerHTML = "<td colspan='8'>ランデータがありません。</td>";
+          runsRoot.appendChild(empty);
+          return;
+        }
+
+        runs.forEach(function (item) {
+          var row = document.createElement("tr");
+          var cells = [
+            formatTime(item.started_at || item.last_seen_at),
+            formatDuration(item.duration_sec),
+            item.hero || "-",
+            item.result || "-",
+            item.stage_reached || "-",
+            item.last_enemy || "-",
+            topComboLabel(item)
+          ];
+
+          cells.forEach(function (value) {
+            var cell = document.createElement("td");
+            cell.textContent = value;
+            row.appendChild(cell);
+          });
+
+          var actionCell = document.createElement("td");
+          var button = document.createElement("button");
+          button.type = "button";
+          button.className = "cta cta-ghost";
+          button.textContent = "見る";
+          button.addEventListener("click", function () {
+            selectedRun = item;
+            updateRunDetail();
+          });
+          actionCell.appendChild(button);
+          row.appendChild(actionCell);
+          runsRoot.appendChild(row);
+        });
+      }
+
+      function updateOverview(overview) {
+        overview = overview || {};
+        setText("playSessionCountValue", overview.play_sessions || 0);
+        setText("bootSuccessSessionCountValue", overview.boot_success_sessions || 0);
+        setText("titleReachedSessionCountValue", overview.title_reached_sessions || 0);
+        setText("completedRunCountValue", overview.completed_runs || 0);
+      }
+
+      function updateSessionDetail() {
+        var item = selectedSession;
+        if (!item) {
+          setText("sessionDetailOpened", "-");
+          setText("sessionDetailEnded", "-");
+          setText("sessionDetailDuration", "-");
+          setText("sessionDetailDevice", "-");
+          setText("sessionDetailBoot", "-");
+          setText("sessionDetailResult", "-");
+          document.getElementById("sessionTextSummary").textContent = "-";
+          renderTimeline(document.getElementById("sessionTimelineRoot"), []);
+          return;
+        }
+
+        setText("sessionDetailOpened", formatTime(item.opened_at));
+        setText("sessionDetailEnded", formatTime(item.ended_at || item.last_seen_at));
+        setText("sessionDetailDuration", formatDuration(item.duration_sec));
+        setText("sessionDetailDevice", formatDevice(item));
+        setText("sessionDetailBoot", item.boot_status || "-");
+        setText("sessionDetailResult", item.final_result || "-");
+        document.getElementById("sessionTextSummary").textContent = item.text_summary || "-";
+        renderTimeline(document.getElementById("sessionTimelineRoot"), item.timeline || []);
+      }
+
+      function updateRunDetail() {
+        var item = selectedRun;
+        if (!item) {
+          setText("runDetailOpened", "-");
+          setText("runDetailEnded", "-");
+          setText("runDetailDuration", "-");
+          setText("runDetailHero", "-");
+          setText("runDetailResult", "-");
+          setText("runDetailEnemy", "-");
+          document.getElementById("runTextSummary").textContent = "-";
+          renderTimeline(document.getElementById("runTimelineRoot"), []);
+          return;
+        }
+
+        setText("runDetailOpened", formatTime(item.started_at || item.last_seen_at));
+        setText("runDetailEnded", formatTime(item.ended_at || item.last_seen_at));
+        setText("runDetailDuration", formatDuration(item.duration_sec));
+        setText("runDetailHero", item.hero || "-");
+        setText("runDetailResult", item.result || "-");
+        setText("runDetailEnemy", item.last_enemy || "-");
+        document.getElementById("runTextSummary").textContent = item.text_summary || "-";
+        renderTimeline(document.getElementById("runTimelineRoot"), item.timeline || []);
+      }
+
+      async function fetchJson(url, options) {
+        var response = await fetch(url, options);
+        if (!response.ok) {
+          throw new Error(response.status === 401 ? "認証に失敗しました。" : "読み込みに失敗しました。");
+        }
+        return response.json();
+      }
+
+      function downloadBlob(blob, filename) {
+        var url = URL.createObjectURL(blob);
+        var link = document.createElement("a");
+        link.href = url;
+        link.download = filename;
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        URL.revokeObjectURL(url);
+      }
+
+      async function copyText(text) {
+        if (!text) {
+          showError("コピーできる内容がありません。");
+          return;
+        }
+
+        try {
+          await navigator.clipboard.writeText(text);
+          setStatus("コピーしました");
+        } catch (error) {
+          showError("コピーに失敗しました。");
+          setStatus("失敗");
+        }
+      }
+
+      async function loadSummary() {
+        clearError();
+        saveToken();
+        setStatus("読み込み中...");
+
+        try {
+          latestSummary = await fetchJson("/__analytics/summary", {
+            headers: getHeaders(),
+            cache: "no-store"
+          });
+          var eventsPayload = await fetchJson("/__analytics/events", {
+            headers: getHeaders(),
+            cache: "no-store"
+          });
+          latestEvents = eventsPayload.events || [];
+
+          updateOverview(latestSummary.overview || {});
+          renderPlaySessions(latestSummary.play_sessions || []);
+          renderRuns(latestSummary.runs || []);
+
+          selectedSession = (latestSummary.play_sessions || [])[0] || null;
+          selectedRun = (latestSummary.runs || [])[0] || null;
+          updateSessionDetail();
+          updateRunDetail();
+          setStatus("更新済み");
+        } catch (error) {
+          showError(error.message || "読み込みに失敗しました。");
+          setStatus("失敗");
+        }
+      }
+
+      async function clearEvents() {
+        clearError();
+        saveToken();
+        setStatus("削除中...");
+
+        try {
+          var response = await fetch("/__analytics/events", {
+            method: "DELETE",
+            headers: getHeaders()
+          });
+          if (!response.ok) {
+            throw new Error(response.status === 401 ? "認証に失敗しました。" : "削除に失敗しました。");
+          }
+          await loadSummary();
+        } catch (error) {
+          showError(error.message || "削除に失敗しました。");
+          setStatus("失敗");
+        }
+      }
+
+      async function downloadCsv() {
+        clearError();
+        saveToken();
+        try {
+          var response = await fetch("/__analytics/events.csv", {
+            headers: getHeaders(),
+            cache: "no-store"
+          });
+          if (!response.ok) {
+            throw new Error(response.status === 401 ? "認証に失敗しました。" : "CSVの取得に失敗しました。");
+          }
+          downloadBlob(await response.blob(), "analytics-events.csv");
+          setStatus("CSVを保存しました");
+        } catch (error) {
+          showError(error.message || "CSVの取得に失敗しました。");
+          setStatus("失敗");
+        }
+      }
+
+      function downloadJson() {
+        clearError();
+        saveToken();
+        if (!latestEvents.length) {
+          showError("先に読み込みを実行してください。");
+          setStatus("失敗");
+          return;
+        }
+
+        downloadBlob(
+          new Blob([JSON.stringify(latestEvents, null, 2)], { type: "application/json" }),
+          "analytics-events.json"
+        );
+        setStatus("JSONを保存しました");
+      }
+
+      async function downloadGameCsv() {
+        clearError();
+        saveToken();
+        try {
+          var response = await fetch("/__analytics/events-game.csv", {
+            headers: getHeaders(),
+            cache: "no-store"
+          });
+          if (!response.ok) {
+            throw new Error(response.status === 401 ? "認証に失敗しました。" : "取得に失敗しました。");
+          }
+          downloadBlob(await response.blob(), "analytics-game-events.csv");
+          setStatus("ゲームCSVを保存しました");
+        } catch (error) {
+          showError(error.message || "取得に失敗しました。");
+          setStatus("失敗");
+        }
+      }
+
+      async function downloadJsonl() {
+        clearError();
+        saveToken();
+        try {
+          var response = await fetch("/__analytics/events.jsonl", {
+            headers: getHeaders(),
+            cache: "no-store"
+          });
+          if (!response.ok) {
+            throw new Error(response.status === 401 ? "認証に失敗しました。" : "取得に失敗しました。");
+          }
+          downloadBlob(await response.blob(), "analytics-events.jsonl");
+          setStatus("JSONLを保存しました");
+        } catch (error) {
+          showError(error.message || "取得に失敗しました。");
+          setStatus("失敗");
+        }
+      }
+
+      tokenInput.value = sessionStorage.getItem(storageKey) || "randa-local-admin";
+      loadButton.addEventListener("click", loadSummary);
+      downloadCsvButton.addEventListener("click", downloadCsv);
+      downloadGameCsvButton.addEventListener("click", downloadGameCsv);
+      downloadJsonlButton.addEventListener("click", downloadJsonl);
+      downloadJsonButton.addEventListener("click", downloadJson);
+      clearButton.addEventListener("click", clearEvents);
+      copySessionTextButton.addEventListener("click", function () {
+        copyText(selectedSession && selectedSession.text_summary);
+      });
+      copySessionJsonButton.addEventListener("click", function () {
+        copyText(selectedSession ? JSON.stringify(selectedSession, null, 2) : "");
+      });
+      copyRunTextButton.addEventListener("click", function () {
+        copyText(selectedRun && selectedRun.text_summary);
+      });
+      copyRunJsonButton.addEventListener("click", function () {
+        copyText(selectedRun ? JSON.stringify(selectedRun, null, 2) : "");
+      });
+      loadSummary();
+    })();
+  </script>
+</body>
+</html>
