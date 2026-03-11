@@ -65,13 +65,13 @@
       bootResolved = true;
       if (bootTimer) window.clearTimeout(bootTimer);
       if (readyNote) readyNote.hidden = false;
-      setStatus(message || "体験版の起動を確認しました。");
+      setStatus(message || "プレイできます。");
     }
 
     function markError(code, message) {
       bootResolved = true;
       if (bootTimer) window.clearTimeout(bootTimer);
-      setStatus("体験版の起動を確認できませんでした。");
+      setStatus("起動できませんでした。");
       setError(message);
       track("demo_boot_error", {
         build_id: buildId,
@@ -84,7 +84,7 @@
         if (bootResolved) return;
         markError(
           "boot_timeout",
-          "読み込み完了を確認できませんでした。時間をおいて再試行するか、サポートページをご確認ください。"
+          "起動に時間がかかっています。時間をおいて再試行するか、サポートページをご確認ください。"
         );
       }, 15000);
     }
@@ -95,7 +95,7 @@
       bootSuccessTracked = false;
       clearError();
       if (readyNote) readyNote.hidden = true;
-      setStatus("体験版ビルドを確認しています...");
+      setStatus("体験版を準備しています...");
 
       track("demo_boot_start", {
         build_id: buildId,
@@ -116,7 +116,7 @@
             "load",
             function () {
               if (bootResolved) return;
-              setStatus("ランタイムは読み込み済みです。ゲーム本体からの起動通知を待っています...");
+              setStatus("まもなく遊べます...");
               if (isMuted) {
                 sendFrameControl("setMuted", true);
               }
@@ -128,7 +128,7 @@
           var code = error && error.message ? error.message : "boot_check_failed";
           markError(
             code,
-            "体験版ビルドがまだ配置されていないか、読み込みに失敗しました。時間をおいて再試行するか、サポートページをご確認ください。"
+            "体験版の読み込みに失敗しました。時間をおいて再試行するか、サポートページをご確認ください。"
           );
         });
     }
@@ -150,7 +150,7 @@
         }
 
         if (event.data.command === "ready") {
-          setStatus("体験版の操作準備ができました。");
+          setStatus("プレイできます。");
           return;
         }
       }
@@ -167,7 +167,7 @@
             load_ms: Date.now() - bootStartedAt
           }));
         }
-        markReady("体験版の読み込みが完了しました。");
+        markReady("プレイできます。");
         return;
       }
 
@@ -203,7 +203,7 @@
             state: "enter"
           });
         }).catch(function () {
-          setStatus("外側フルスクリーンを開始できませんでした。");
+          setStatus("全画面表示を開始できませんでした。");
         });
       });
 
