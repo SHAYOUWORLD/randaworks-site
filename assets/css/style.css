@@ -516,12 +516,6 @@ small,
   text-shadow: none;
 }
 
-.hero-note {
-  margin: 16px 0 0;
-  color: var(--text-muted);
-  font-size: 0.9rem;
-}
-
 .hero-stats {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
