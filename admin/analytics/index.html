@@ -228,6 +228,10 @@
       var selectedSession = null;
       var selectedRun = null;
 
+      var CLOUD_RUN_API = "https://randaworks-analytics-945977546061.asia-northeast1.run.app";
+      var isLocal = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
+      function apiBase() { return isLocal ? "" : CLOUD_RUN_API; }
+
       function getToken() {
         return tokenInput.value.trim();
       }
@@ -529,11 +533,11 @@
         setStatus("読み込み中...");
 
         try {
-          latestSummary = await fetchJson("/__analytics/summary", {
+          latestSummary = await fetchJson(apiBase() + "/__analytics/summary", {
             headers: getHeaders(),
             cache: "no-store"
           });
-          var eventsPayload = await fetchJson("/__analytics/events", {
+          var eventsPayload = await fetchJson(apiBase() + "/__analytics/events", {
             headers: getHeaders(),
             cache: "no-store"
           });
@@ -564,7 +568,7 @@
 
         setStatus("認証中...");
         try {
-          latestSummary = await fetchJson("/__analytics/summary", {
+          latestSummary = await fetchJson(apiBase() + "/__analytics/summary", {
             headers: getHeaders(),
             cache: "no-store"
           });
@@ -609,7 +613,7 @@
         setStatus("削除中...");
 
         try {
-          var response = await fetch("/__analytics/events", {
+          var response = await fetch(apiBase() + "/__analytics/events", {
             method: "DELETE",
             headers: getHeaders()
           });
@@ -627,7 +631,7 @@
         clearError();
         saveToken();
         try {
-          var response = await fetch("/__analytics/events.csv", {
+          var response = await fetch(apiBase() + "/__analytics/events.csv", {
             headers: getHeaders(),
             cache: "no-store"
           });
@@ -662,7 +666,7 @@
         clearError();
         saveToken();
         try {
-          var response = await fetch("/__analytics/events-game.csv", {
+          var response = await fetch(apiBase() + "/__analytics/events-game.csv", {
             headers: getHeaders(),
             cache: "no-store"
           });
@@ -681,7 +685,7 @@
         clearError();
         saveToken();
         try {
-          var response = await fetch("/__analytics/events.jsonl", {
+          var response = await fetch(apiBase() + "/__analytics/events.jsonl", {
             headers: getHeaders(),
             cache: "no-store"
           });
