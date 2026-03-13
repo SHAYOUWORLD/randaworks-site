@@ -18,8 +18,8 @@ $indexContent = Get-Content -Path $indexPath -Raw -Encoding UTF8
 $cssContent = Get-Content -Path $cssPath -Raw -Encoding UTF8
 
 Assert-True `
-  -Condition ([regex]::IsMatch($indexContent, '<body class="home-page">')) `
-  -Message "index.html に <body class=""home-page""> が見つかりません。"
+  -Condition ([regex]::IsMatch($indexContent, '<body\b[^>]*\bclass="home-page"[^>]*>')) `
+  -Message "index.html に class=""home-page"" を含む body タグが見つかりません。"
 
 $mobileRulePattern = '(?s)@media\s*\(max-width:\s*480px\)\s*\{.*?\.home-page\s+\.nav\s+\.brand\s*\{\s*display:\s*none;\s*\}'
 Assert-True `
