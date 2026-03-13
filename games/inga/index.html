@@ -584,7 +584,24 @@
         const embeddedFrameShell = document.getElementById("embeddedDemoFrameShell");
         const embeddedFullscreenButton = document.getElementById("embeddedFullscreenButton");
         const embeddedMuteButton = document.getElementById("embeddedMuteButton");
-        let embeddedMuted = false;
+        const mutePreferenceKey = "randa:inga:audio-muted";
+        let embeddedMuted = readEmbeddedMutePreference();
+
+        function readEmbeddedMutePreference() {
+            try {
+                const stored = window.localStorage.getItem(mutePreferenceKey);
+                if (stored === null) return true;
+                return stored === "true";
+            } catch (error) {
+                return true;
+            }
+        }
+
+        function saveEmbeddedMutePreference(value) {
+            try {
+                window.localStorage.setItem(mutePreferenceKey, String(Boolean(value)));
+            } catch (error) {}
+        }
 
         const updateEmbeddedFullscreenButton = () => {
             if (!embeddedFullscreenButton || !embeddedFrameShell) return;
@@ -632,6 +649,7 @@
         if (embeddedMuteButton) {
             embeddedMuteButton.addEventListener("click", () => {
                 embeddedMuted = !embeddedMuted;
+                saveEmbeddedMutePreference(embeddedMuted);
                 updateEmbeddedMuteButton();
                 sendEmbeddedControl("setMuted", embeddedMuted);
                 if (window.RandaAnalytics && typeof window.RandaAnalytics.track === "function") {
@@ -658,12 +676,14 @@
 
             if (event.data.type === "randa-control-ack" && event.data.command === "setMuted") {
                 embeddedMuted = Boolean(event.data.value);
+                saveEmbeddedMutePreference(embeddedMuted);
                 updateEmbeddedMuteButton();
                 return;
             }
 
             if (event.data.type === "randa-control-notify" && event.data.command === "mutedChanged") {
                 embeddedMuted = Boolean(event.data.value);
+                saveEmbeddedMutePreference(embeddedMuted);
                 updateEmbeddedMuteButton();
             }
         });

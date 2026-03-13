@@ -1,12 +1,14 @@
 (function () {
   const PCK_NAME = 'index.pck';
-  const PCK_PARTS = [{"name":"index.pck.part000","size":99614720},{"name":"index.pck.part001","size":99614720},{"name":"index.pck.part002","size":99614720},{"name":"index.pck.part003","size":99614720},{"name":"index.pck.part004","size":11092660}];
-  const PCK_TOTAL_SIZE = 409551540;
+  const PCK_PARTS = [{"name":"index.pck.part000","size":199229440},{"name":"index.pck.part001","size":199229440},{"name":"index.pck.part002","size":11098468}];
+  const PCK_TOTAL_SIZE = 409557348;
+  const GCS_BASE_URL = 'https://storage.googleapis.com/randaworks-game-builds/inga-demo/0.1.5/';
   if (typeof window === 'undefined' || typeof window.fetch !== 'function') {
     return;
   }
   const originalFetch = window.fetch.bind(window);
   const targetSuffix = '/' + PCK_NAME;
+  const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
 
   function isMainPackRequest(resource) {
     let raw = '';
@@ -37,6 +39,9 @@
   }
 
   function resolvePartUrl(resource, partName) {
+    if (!isLocal && GCS_BASE_URL) {
+      return GCS_BASE_URL + partName;
+    }
     let raw = '';
     if (typeof resource === 'string') {
       raw = resource;

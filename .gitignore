@@ -1,0 +1,11 @@
+# Large game build binaries (hosted on GCS)
+games/inga/play/build/*.pck.part*
+games/inga/play/build/*.wasm
+
+# Local settings
+.claude/
+
+# Temporary files
+.tmp/
+output/
+progress.md
