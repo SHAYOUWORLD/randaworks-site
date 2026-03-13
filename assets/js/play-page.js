@@ -16,11 +16,28 @@
     var readyNote = document.getElementById("playReadyNote");
     var buildPath = body.dataset.buildPath || "./build/index.html";
     var buildId = body.dataset.buildId || "";
+    var mutePreferenceKey = "randa:inga:audio-muted";
     var bootTimer = null;
     var bootResolved = false;
     var bootStartedAt = 0;
     var bootSuccessTracked = false;
-    var isMuted = false;
+    var isMuted = readMutePreference();
+
+    function readMutePreference() {
+      try {
+        var stored = window.localStorage.getItem(mutePreferenceKey);
+        if (stored === null) return true;
+        return stored === "true";
+      } catch (error) {
+        return true;
+      }
+    }
+
+    function saveMutePreference(value) {
+      try {
+        window.localStorage.setItem(mutePreferenceKey, String(Boolean(value)));
+      } catch (error) {}
+    }
 
     function setStatus(message) {
       if (status) status.textContent = message;
@@ -138,6 +155,7 @@
 
       if (event.source === frame.contentWindow && event.data && event.data.type === "randa-control-ack" && event.data.command === "setMuted") {
         isMuted = Boolean(event.data.value);
+        saveMutePreference(isMuted);
         updateMuteButton();
         return;
       }
@@ -145,6 +163,7 @@
       if (event.source === frame.contentWindow && event.data && event.data.type === "randa-control-notify") {
         if (event.data.command === "mutedChanged") {
           isMuted = Boolean(event.data.value);
+          saveMutePreference(isMuted);
           updateMuteButton();
           return;
         }
@@ -216,6 +235,7 @@
     if (muteButton) {
       muteButton.addEventListener("click", function () {
         isMuted = !isMuted;
+        saveMutePreference(isMuted);
         updateMuteButton();
         sendFrameControl("setMuted", isMuted);
         track("audio_toggle", {
