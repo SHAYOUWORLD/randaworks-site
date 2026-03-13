@@ -10,6 +10,28 @@
   const targetSuffix = '/' + PCK_NAME;
   const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
 
+  const GCS_BINARY_FILES = ['index.wasm'];
+
+  function getGcsRedirectUrl(resource) {
+    if (isLocal || !GCS_BASE_URL) return null;
+    let raw = '';
+    if (typeof resource === 'string') {
+      raw = resource;
+    } else if (resource && typeof resource.url === 'string') {
+      raw = resource.url;
+    }
+    if (!raw) return null;
+    try {
+      const pathname = new URL(raw, window.location.href).pathname;
+      for (const name of GCS_BINARY_FILES) {
+        if (pathname.endsWith('/' + name) || pathname.endsWith(name)) {
+          return GCS_BASE_URL + name;
+        }
+      }
+    } catch (_err) {}
+    return null;
+  }
+
   function isMainPackRequest(resource) {
     let raw = '';
     if (typeof resource === 'string') {
@@ -107,6 +129,10 @@
   }
 
   window.fetch = async function (resource, init) {
+    const gcsUrl = getGcsRedirectUrl(resource);
+    if (gcsUrl) {
+      return originalFetch(gcsUrl, init);
+    }
     if (!isMainPackRequest(resource)) {
       return originalFetch(resource, init);
     }
