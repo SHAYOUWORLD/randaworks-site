@@ -965,6 +965,19 @@ small,
   margin-bottom: 12px;
 }
 
+.footer-link-social {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.footer-link-icon {
+  width: 1rem;
+  height: 1rem;
+  flex: 0 0 auto;
+  fill: currentColor;
+}
+
 /* Buttons / CTA */
 .cta,
 button.cta {
