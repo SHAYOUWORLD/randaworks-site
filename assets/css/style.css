@@ -1214,12 +1214,16 @@ button.cta[disabled] {
   overflow: hidden;
 }
 
-.video-character-figure img {
+.video-character-image {
   width: min(100%, 360px);
   max-height: 430px;
   object-fit: contain;
   display: block;
   filter: drop-shadow(0 18px 32px rgba(0, 0, 0, 0.45));
+}
+
+.video-character-image.is-shiori {
+  max-height: 445px;
 }
 
 .video-character-copy {
