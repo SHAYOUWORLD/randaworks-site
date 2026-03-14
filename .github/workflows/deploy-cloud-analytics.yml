@@ -19,6 +19,12 @@ concurrency:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    env:
+      GCP_PROJECT_ID: randaworks-analytics
+      GCP_REGION: asia-northeast1
+      CLOUD_RUN_SERVICE: randaworks-analytics
+      SOURCE_BUCKET: run-sources-randaworks-analytics-asia-northeast1
+      IMAGE_REPOSITORY: asia-northeast1-docker.pkg.dev/randaworks-analytics/cloud-run-source-deploy/randaworks-analytics
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -30,24 +36,143 @@ jobs:
             echo "Missing required secret: GCP_SA_KEY" >&2
             exit 1
           fi
-          if [[ -z "${{ secrets.RANDA_ADMIN_TOKEN }}" ]]; then
-            echo "Missing required secret: RANDA_ADMIN_TOKEN" >&2
-            exit 1
-          fi
 
-      - name: Authenticate to Google Cloud
-        uses: google-github-actions/auth@v2
+      - name: Setup Python
+        uses: actions/setup-python@v5
         with:
-          credentials_json: ${{ secrets.GCP_SA_KEY }}
+          python-version: "3.12"
 
-      - name: Setup gcloud
-        uses: google-github-actions/setup-gcloud@v2
+      - name: Install deploy dependencies
+        shell: bash
+        run: python -m pip install google-auth google-cloud-storage requests
 
       - name: Deploy to Cloud Run
+        env:
+          GCP_ADC_JSON: ${{ secrets.GCP_SA_KEY }}
         shell: bash
         run: |
-          gcloud run deploy randaworks-analytics \
-            --source ./cloud-analytics \
-            --region asia-northeast1 \
-            --allow-unauthenticated \
-            --set-env-vars GCS_BUCKET=randaworks-analytics-events,RANDA_ADMIN_TOKEN=${{ secrets.RANDA_ADMIN_TOKEN }}
+          python - <<'PY'
+          import json
+          import os
+          import tempfile
+          import time
+          import zipfile
+          from datetime import datetime, timezone
+          from pathlib import Path
+
+          import requests
+          from google.auth.transport.requests import Request
+          from google.cloud import storage
+          from google.oauth2.credentials import Credentials
+
+          project = os.environ["GCP_PROJECT_ID"]
+          region = os.environ["GCP_REGION"]
+          service_name = os.environ["CLOUD_RUN_SERVICE"]
+          source_bucket = os.environ["SOURCE_BUCKET"]
+          image_repository = os.environ["IMAGE_REPOSITORY"]
+          creds_info = json.loads(os.environ["GCP_ADC_JSON"])
+          scopes = ["https://www.googleapis.com/auth/cloud-platform"]
+          creds = Credentials.from_authorized_user_info(creds_info, scopes=scopes)
+          creds.refresh(Request())
+
+          root = Path("cloud-analytics")
+          timestamp = datetime.now(timezone.utc).strftime("%Y%m%d-%H%M%S")
+          upload_name = f"services/{service_name}/{int(time.time())}-cloud-analytics-{timestamp}.zip"
+          image_tag = f"{image_repository}:gha-{timestamp}"
+
+          with tempfile.NamedTemporaryFile(suffix=".zip", delete=False) as tmp:
+              zip_path = Path(tmp.name)
+
+          with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED) as zf:
+              for path in root.rglob("*"):
+                  if path.is_file() and "__pycache__" not in path.parts:
+                      zf.write(path, path.relative_to(root).as_posix())
+
+          storage_client = storage.Client(project=project, credentials=creds)
+          bucket = storage_client.bucket(source_bucket)
+          blob = bucket.blob(upload_name)
+          blob.upload_from_filename(str(zip_path), content_type="application/zip")
+
+          token = creds.token
+          headers = {
+              "Authorization": f"Bearer {token}",
+              "Content-Type": "application/json",
+          }
+
+          build_payload = {
+              "source": {
+                  "storageSource": {
+                      "bucket": source_bucket,
+                      "object": upload_name,
+                  }
+              },
+              "steps": [
+                  {
+                      "name": "gcr.io/cloud-builders/docker",
+                      "args": ["build", "-t", image_tag, "."],
+                  }
+              ],
+              "images": [image_tag],
+              "options": {"logging": "CLOUD_LOGGING_ONLY"},
+          }
+          build_resp = requests.post(
+              f"https://cloudbuild.googleapis.com/v1/projects/{project}/builds",
+              headers=headers,
+              data=json.dumps(build_payload),
+              timeout=60,
+          )
+          build_resp.raise_for_status()
+          build_id = build_resp.json()["metadata"]["build"]["id"]
+
+          build_url = f"https://cloudbuild.googleapis.com/v1/projects/{project}/builds/{build_id}"
+          for _ in range(120):
+              poll = requests.get(build_url, headers={"Authorization": f"Bearer {token}"}, timeout=30)
+              poll.raise_for_status()
+              build = poll.json()
+              status = build.get("status", "")
+              if status == "SUCCESS":
+                  digest = build["results"]["images"][0]["digest"]
+                  break
+              if status in {"FAILURE", "INTERNAL_ERROR", "TIMEOUT", "CANCELLED", "EXPIRED"}:
+                  raise RuntimeError(f"Cloud Build failed: {status}")
+              time.sleep(5)
+          else:
+              raise RuntimeError("Cloud Build polling timed out")
+
+          image_ref = f"{image_repository}@{digest}"
+          service_url = f"https://run.googleapis.com/v2/projects/{project}/locations/{region}/services/{service_name}"
+          service_resp = requests.get(service_url, headers={"Authorization": f"Bearer {token}"}, timeout=30)
+          service_resp.raise_for_status()
+          service = service_resp.json()
+
+          patch_payload = {
+              "template": service["template"],
+              "traffic": service.get("traffic", []),
+              "scaling": service.get("scaling", {}),
+          }
+          patch_payload["template"]["containers"][0]["image"] = image_ref
+
+          patch = requests.patch(
+              service_url + "?updateMask=template,traffic,scaling",
+              headers=headers,
+              data=json.dumps(patch_payload),
+              timeout=60,
+          )
+          patch.raise_for_status()
+          operation_name = patch.json()["name"]
+          operation_url = f"https://run.googleapis.com/v2/{operation_name}"
+
+          for _ in range(120):
+              poll = requests.get(operation_url, headers={"Authorization": f"Bearer {token}"}, timeout=30)
+              poll.raise_for_status()
+              operation = poll.json()
+              if operation.get("done"):
+                  if "error" in operation:
+                      raise RuntimeError(json.dumps(operation["error"], ensure_ascii=False))
+                  break
+              time.sleep(5)
+          else:
+              raise RuntimeError("Cloud Run deployment polling timed out")
+
+          print(f"Deployed {image_ref}")
+          PY
