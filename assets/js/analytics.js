@@ -129,7 +129,7 @@
     if (!navigator.sendBeacon) return false;
 
     try {
-      var blob = new Blob([JSON.stringify(payload)], { type: "application/json" });
+      var blob = new Blob([JSON.stringify(payload)], { type: "text/plain" });
       return navigator.sendBeacon(endpoint, blob);
     } catch (error) {
       return false;
@@ -140,7 +140,7 @@
     try {
       return fetch(endpoint, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "text/plain" },
         body: JSON.stringify(payload),
         keepalive: true,
         credentials: "omit"
