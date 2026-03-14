@@ -8,10 +8,13 @@ from __future__ import annotations
 
 import json
 import os
+import random
 from collections import defaultdict
 from datetime import datetime, timezone
+from time import sleep
 
 from flask import Flask, Response, jsonify, request
+from google.api_core.exceptions import NotFound, PreconditionFailed
 from google.cloud import storage
 
 app = Flask(__name__)
@@ -45,12 +48,39 @@ def _cors_headers() -> dict[str, str]:
 # ── Storage helpers ──────────────────────────────────────────────────
 
 def append_event(payload: dict) -> None:
-    blob = bucket().blob(BLOB_NAME)
-    existing = ""
-    if blob.exists():
-        existing = blob.download_as_text(encoding="utf-8")
-    existing += json.dumps(payload, ensure_ascii=False) + "\n"
-    blob.upload_from_string(existing, content_type="text/plain; charset=utf-8")
+    line = json.dumps(payload, ensure_ascii=False) + "\n"
+
+    # GCS objects are immutable per generation. Without a generation check,
+    # simultaneous writes can overwrite each other and drop analytics events.
+    for attempt in range(6):
+        blob = bucket().blob(BLOB_NAME)
+        try:
+            blob.reload()
+            current_generation = blob.generation
+            existing = blob.download_as_text(encoding="utf-8")
+            blob.upload_from_string(
+                existing + line,
+                content_type="text/plain; charset=utf-8",
+                if_generation_match=current_generation,
+            )
+            return
+        except NotFound:
+            try:
+                blob.upload_from_string(
+                    line,
+                    content_type="text/plain; charset=utf-8",
+                    if_generation_match=0,
+                )
+                return
+            except PreconditionFailed:
+                pass
+        except PreconditionFailed:
+            pass
+
+        if attempt < 5:
+            sleep(0.05 * (attempt + 1) + random.random() * 0.05)
+
+    raise RuntimeError("Failed to append analytics event after concurrent-write retries")
 
 
 def read_events(limit: int = 2000) -> list[dict]:
