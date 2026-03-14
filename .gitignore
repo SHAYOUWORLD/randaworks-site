@@ -4,6 +4,7 @@ games/inga/play/build/*.wasm
 
 # Local settings
 .claude/
+.agents/
 
 # Temporary files
 .tmp/
