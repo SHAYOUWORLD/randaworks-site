@@ -51,6 +51,38 @@
       .policy .contact-info { margin-top: 8px; font-size: 0.9rem; }
       .policy .note { font-size: 0.85rem; color: var(--text-muted); opacity: 0.8; }
     </style>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "ホーム",
+            "item": "https://www.randaworks.com/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "ゲーム一覧",
+            "item": "https://www.randaworks.com/games/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 3,
+            "name": "日本史因果クロニクル",
+            "item": "https://www.randaworks.com/games/inga/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 4,
+            "name": "プライバシーポリシー",
+            "item": "https://www.randaworks.com/games/inga/privacy/"
+          }
+        ]
+      }
+    </script>
 </head>
 <body>
     <a class="skip-link" href="#main-content">メインコンテンツへ移動</a>
@@ -64,6 +96,17 @@
         </div>
 
         <main id="main-content" class="policy">
+            <nav aria-label="パンくずリスト">
+              <ol class="breadcrumb">
+                <li><a href="../../../">ホーム</a></li>
+                <li class="breadcrumb-separator" aria-hidden="true">›</li>
+                <li><a href="../../">ゲーム一覧</a></li>
+                <li class="breadcrumb-separator" aria-hidden="true">›</li>
+                <li><a href="../">日本史因果クロニクル</a></li>
+                <li class="breadcrumb-separator" aria-hidden="true">›</li>
+                <li class="breadcrumb-current" aria-current="page">プライバシーポリシー</li>
+              </ol>
+            </nav>
             <h1>プライバシーポリシー</h1>
             <p class="updated">最終更新日：2026年2月11日</p>
 

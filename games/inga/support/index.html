@@ -37,7 +37,39 @@
         "inLanguage": "ja"
       }
     </script>
-</head>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "ホーム",
+            "item": "https://www.randaworks.com/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "ゲーム一覧",
+            "item": "https://www.randaworks.com/games/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 3,
+            "name": "日本史因果クロニクル",
+            "item": "https://www.randaworks.com/games/inga/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 4,
+            "name": "サポート",
+            "item": "https://www.randaworks.com/games/inga/support/"
+          }
+        ]
+      }
+    </script>
+  </head>
 
 <body>
     <a class="skip-link" href="#main-content">メインコンテンツへ移動</a>
@@ -51,6 +83,17 @@
         </div>
 
         <main id="main-content">
+            <nav aria-label="パンくずリスト">
+              <ol class="breadcrumb">
+                <li><a href="../../../">ホーム</a></li>
+                <li class="breadcrumb-separator" aria-hidden="true">›</li>
+                <li><a href="../../">ゲーム一覧</a></li>
+                <li class="breadcrumb-separator" aria-hidden="true">›</li>
+                <li><a href="../">日本史因果クロニクル</a></li>
+                <li class="breadcrumb-separator" aria-hidden="true">›</li>
+                <li class="breadcrumb-current" aria-current="page">サポート</li>
+              </ol>
+            </nav>
         <div class="card">
             <h1>サポート</h1>
             <p class="muted">不具合報告・お問い合わせはこちら。</p>
