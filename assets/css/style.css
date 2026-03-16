@@ -170,6 +170,10 @@ textarea:focus-visible {
 }
 
 .links a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 4px 0;
   font-size: 0.95rem;
   font-weight: 500;
   color: var(--text-muted);
@@ -268,6 +272,17 @@ small,
   display: flex;
   gap: 14px;
   flex-wrap: wrap;
+}
+
+.home-hero-actions .cta,
+.home-feature-actions .cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 56px;
+  padding: 16px 24px;
+  flex: 1 1 220px;
+  text-align: center;
 }
 
 .home-spotlight {
@@ -405,10 +420,10 @@ small,
 .game-hero {
   position: relative;
   text-align: center;
-  padding: 100px 20px;
+  padding: 56px 20px;
   background:
     linear-gradient(to bottom, rgba(5, 5, 5, 0.3), #050505),
-    url("../img/games/inga/page_background_1438x810.png");
+    url("../img/games/inga/page_background_1438x810.webp");
   background-size: cover;
   background-position: center;
   border-radius: 24px;
@@ -443,9 +458,9 @@ small,
 }
 
 .game-logo {
-  max-width: 860px;
+  max-width: 640px;
   width: 95%;
-  margin: 0 auto 30px;
+  margin: 0 auto 14px;
   display: block;
   /* Filter for placeholder text if image missing */
   text-shadow: 0 0 20px rgba(189, 49, 49, 0.6);
@@ -472,22 +487,22 @@ small,
 
 .hero-subtitle {
   max-width: 800px;
-  margin: 0 auto 16px;
+  margin: 0 auto 12px;
   font-family: var(--font-serif);
-  font-size: clamp(2rem, 4vw, 3.5rem);
+  font-size: clamp(1.8rem, 3vw, 2.8rem);
   line-height: 1.2;
   color: #fff;
 }
 
 .hero-description {
   max-width: 760px;
-  margin: 0 auto 24px;
+  margin: 0 auto 18px;
   font-size: 1.05rem;
   color: rgba(240, 242, 245, 0.92);
 }
 
 .hero-badges {
-  margin-bottom: 28px;
+  margin-bottom: 18px;
 }
 
 .game-hero-actions {
@@ -1165,15 +1180,26 @@ button.cta[disabled] {
 }
 
 .screenshot-dot {
-  width: 8px;
-  height: 8px;
+  width: 24px;
+  height: 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   border-radius: 999px;
   border: 0;
-  background: rgba(255, 255, 255, 0.3);
+  background: transparent;
   cursor: pointer;
 }
 
-.screenshot-dot.active {
+.screenshot-dot::before {
+  content: "";
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.screenshot-dot.active::before {
   background: var(--accent-gold);
 }
 
@@ -1815,6 +1841,12 @@ button.cta[disabled] {
     align-items: stretch;
   }
 
+  .home-hero-actions .cta,
+  .home-feature-actions .cta {
+    flex: none;
+    width: 100%;
+  }
+
   .home-hero-badges {
     justify-content: center;
   }
@@ -1954,6 +1986,8 @@ button.cta[disabled] {
   }
 
   .links a {
+    min-height: 44px;
+    padding: 4px 2px;
     font-size: 0.85rem;
   }
 
