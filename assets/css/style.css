@@ -1862,7 +1862,8 @@ button.cta[disabled] {
   }
 
   .cta-large,
-  .cta-ghost {
+  .cta-ghost,
+  .cta-band-actions .cta {
     width: 100%;
     text-align: center;
   }
