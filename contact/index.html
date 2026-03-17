@@ -62,11 +62,6 @@
         直接メールする場合は <a href="mailto:contact@randaworks.com">contact@randaworks.com</a> へお願いします。
       </p>
 
-      <div class="alert alert-error" id="formError" role="alert" hidden>
-        送信に失敗しました。時間をおいて再度お試しください。<br />
-        うまくいかない場合は <a href="mailto:contact@randaworks.com">contact@randaworks.com</a> までご連絡ください。
-      </div>
-
       <form
         class="form"
         id="contactForm"
@@ -151,7 +146,6 @@
       var form = document.getElementById('contactForm');
       var btn = document.getElementById('submitBtn');
       var note = document.getElementById('sendingNote');
-      var err = document.getElementById('formError');
       var cat = document.getElementById('category');
       var bugHint = document.getElementById('bugHint');
 
@@ -163,37 +157,14 @@
 
       if (!form) return;
 
-      form.addEventListener('submit', async function (e) {
-        e.preventDefault();
-
-        err.hidden = true;
+      form.addEventListener('submit', function () {
         btn.disabled = true;
         note.hidden = false;
 
-        try {
-          var resp = await fetch(form.action, {
-            method: 'POST',
-            body: new FormData(form),
-            headers: { 'Accept': 'application/json' }
+        if (window.RandaAnalytics && typeof window.RandaAnalytics.track === 'function') {
+          window.RandaAnalytics.track('contact_submit', {
+            category: cat ? cat.value : ''
           });
-
-          if (!resp.ok) throw new Error('bad_status');
-
-          if (window.RandaAnalytics && typeof window.RandaAnalytics.track === 'function') {
-            window.RandaAnalytics.track('contact_submit_success', {
-              category: cat ? cat.value : ''
-            });
-          }
-          window.location.href = './thanks.html';
-        } catch (ex) {
-          if (window.RandaAnalytics && typeof window.RandaAnalytics.track === 'function') {
-            window.RandaAnalytics.track('contact_submit_error', {
-              category: cat ? cat.value : ''
-            });
-          }
-          err.hidden = false;
-          btn.disabled = false;
-          note.hidden = true;
         }
       });
     })();
