@@ -6,6 +6,12 @@ games/inga/play/downloads/
 # Local settings
 .claude/
 .agents/
+skills-lock.json
+
+# Development scripts & backend (not for public deployment)
+scripts/
+cloud-analytics/
+start-local-analytics.bat
 
 # Temporary files
 .tmp/
