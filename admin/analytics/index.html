@@ -9,6 +9,22 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Shippori+Mincho:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../assets/css/style.css" />
+  <style>
+    tr.is-mine { background: rgba(212, 175, 55, 0.12); }
+    tr.is-mine:hover { background: rgba(212, 175, 55, 0.22); }
+    .ip-badge { font-size: 0.75rem; opacity: 0.6; margin-left: 0.5em; }
+    .filter-active { background: var(--accent-gold, #d4af37) !important; color: #1a1a2e !important; }
+    .funnel-row { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem; font-size: 0.9rem; }
+    .funnel-label { min-width: 7em; text-align: right; flex-shrink: 0; }
+    .funnel-bar-bg { flex: 1; background: rgba(255,255,255,0.06); border-radius: 4px; height: 1.4rem; position: relative; overflow: hidden; }
+    .funnel-bar { height: 100%; background: var(--accent-gold, #d4af37); border-radius: 4px; transition: width 0.3s; min-width: 2px; }
+    .funnel-value { min-width: 6em; font-variant-numeric: tabular-nums; flex-shrink: 0; }
+    .stats-list { display: grid; gap: 0.6rem; }
+    .stats-row { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; font-size: 0.95rem; }
+    .stats-row strong { font-variant-numeric: tabular-nums; }
+    .stats-note { display: block; margin-top: 0.2rem; font-size: 0.8rem; opacity: 0.72; }
+    .stats-empty { opacity: 0.7; }
+  </style>
 </head>
 <body data-page-type="analytics_admin">
   <a class="skip-link" href="#main-content">メインコンテンツへ移動</a>
@@ -53,10 +69,14 @@
 
         <div class="form-actions">
           <button class="cta" id="loadAnalyticsButton" type="button">更新する</button>
+          <button class="cta cta-ghost" id="toggleDormantButton" type="button">未起動も表示</button>
+          <button class="cta cta-ghost" id="toggleMyFilterButton" type="button" style="display:none;">自分のみ</button>
+          <button class="cta cta-ghost" id="toggleOthersFilterButton" type="button" style="display:none;">他人のみ</button>
+          <button class="cta" id="copyTsvButton" type="button">一覧TSVコピー</button>
           <button class="cta cta-ghost" id="downloadCsvButton" type="button">全CSV</button>
           <button class="cta cta-ghost" id="downloadJsonlButton" type="button">JSONL</button>
           <button class="cta cta-ghost" id="downloadJsonButton" type="button">JSON</button>
-          <button class="cta cta-ghost" id="clearAnalyticsButton" type="button">消去</button>
+          <button class="cta cta-ghost" id="clearEventsButton" type="button" style="color:#c0392b;">消去</button>
           <button class="cta cta-ghost" id="logoutButton" type="button">ログアウト</button>
         </div>
 
@@ -64,7 +84,7 @@
 
         <section class="compat-grid" id="overviewCards">
         <article class="surface-panel compat-card">
-          <strong>体験数</strong>
+          <strong>プレイ試行</strong>
           <p id="playSessionCountValue">-</p>
         </article>
         <article class="surface-panel compat-card">
@@ -72,24 +92,80 @@
           <p id="bootSuccessSessionCountValue">-</p>
         </article>
         <article class="surface-panel compat-card">
+          <strong>起動失敗</strong>
+          <p id="bootErrorSessionCountValue">-</p>
+        </article>
+        <article class="surface-panel compat-card">
           <strong>タイトル到達</strong>
           <p id="titleReachedSessionCountValue">-</p>
         </article>
+        <article class="surface-panel compat-card">
+          <strong>ラン開始</strong>
+          <p id="runStartedSessionCountValue">-</p>
+        </article>
+        <article class="surface-panel compat-card">
+          <strong>デモ到達</strong>
+          <p id="demoEndReachedSessionCountValue">-</p>
+        </article>
+        <article class="surface-panel compat-card">
+          <strong>プレイ時間中央値</strong>
+          <p id="medianDurationValue">-</p>
+        </article>
+        <article class="surface-panel compat-card">
+          <strong>未起動ページ滞在</strong>
+          <p id="dormantSessionCountValue">-</p>
+        </article>
+        <article class="surface-panel compat-card" id="mySessionCard" style="display:none;">
+          <strong>自分のプレイ試行</strong>
+          <p id="mySessionCountValue">-</p>
+        </article>
+        </section>
+
+        <section class="card" id="funnelSection">
+          <p class="section-kicker">ファネル</p>
+          <h2>プレイ試行の流れ</h2>
+          <div id="funnelChart" class="surface-panel" style="padding:1rem;"></div>
+        </section>
+
+        <section class="card" id="insightSection">
+          <p class="section-kicker">改善の見どころ</p>
+          <h2>プレイログの要点</h2>
+          <div class="compat-grid">
+            <article class="surface-panel compat-card">
+              <strong>流入別プレイ試行</strong>
+              <div class="stats-list" id="entryBreakdownRoot"></div>
+            </article>
+            <article class="surface-panel compat-card">
+              <strong>離脱ポイント</strong>
+              <div class="stats-list" id="dropoffBreakdownRoot"></div>
+            </article>
+            <article class="surface-panel compat-card">
+              <strong>起動エラー</strong>
+              <div class="stats-list" id="errorBreakdownRoot"></div>
+            </article>
+            <article class="surface-panel compat-card">
+              <strong>結果内訳</strong>
+              <div class="stats-list" id="resultBreakdownRoot"></div>
+            </article>
+          </div>
         </section>
 
         <section class="card">
-        <p class="section-kicker">体験一覧</p>
-        <h2>直近の体験</h2>
+        <p class="section-kicker">プレイ一覧</p>
+        <h2>直近のプレイ試行</h2>
         <div class="surface-panel" style="overflow:auto;">
           <table class="specs-table">
             <thead>
               <tr>
                 <th>開始</th>
+                <th>状況</th>
                 <th>時間</th>
                 <th>起動</th>
                 <th>タイトル到達</th>
-                <th>端末</th>
+                <th>到達</th>
+                <th>結果</th>
                 <th>流入</th>
+                <th>端末</th>
                 <th>詳細</th>
               </tr>
             </thead>
@@ -105,9 +181,20 @@
             <article class="surface-panel compat-card"><strong>開始</strong><p id="sessionDetailOpened">-</p></article>
             <article class="surface-panel compat-card"><strong>終了</strong><p id="sessionDetailEnded">-</p></article>
             <article class="surface-panel compat-card"><strong>時間</strong><p id="sessionDetailDuration">-</p></article>
-            <article class="surface-panel compat-card"><strong>端末</strong><p id="sessionDetailDevice">-</p></article>
+            <article class="surface-panel compat-card"><strong>プレイ状況</strong><p id="sessionDetailStatus">-</p></article>
             <article class="surface-panel compat-card"><strong>起動</strong><p id="sessionDetailBoot">-</p></article>
             <article class="surface-panel compat-card"><strong>タイトル到達</strong><p id="sessionDetailTitleReached">-</p></article>
+            <article class="surface-panel compat-card"><strong>流入</strong><p id="sessionDetailEntry">-</p></article>
+            <article class="surface-panel compat-card"><strong>端末</strong><p id="sessionDetailDevice">-</p></article>
+          </div>
+          <h3 style="margin-top:1.25rem;">ゲーム進行</h3>
+          <div class="compat-grid" id="gameProgressCards">
+            <article class="surface-panel compat-card"><strong>キャラ</strong><p id="sessionDetailHero">-</p></article>
+            <article class="surface-panel compat-card"><strong>到達</strong><p id="sessionDetailStage">-</p></article>
+            <article class="surface-panel compat-card"><strong>結果</strong><p id="sessionDetailResult">-</p></article>
+            <article class="surface-panel compat-card"><strong>バトル</strong><p id="sessionDetailBattles">-</p></article>
+            <article class="surface-panel compat-card"><strong>コンボ</strong><p id="sessionDetailCombos">-</p></article>
+            <article class="surface-panel compat-card"><strong>被ダメ</strong><p id="sessionDetailDamage">-</p></article>
           </div>
           <div class="cta-band-actions" style="justify-content:flex-start; margin-top: 18px;">
             <button class="cta cta-ghost" id="copySessionTextButton" type="button">体験テキストをコピー</button>
@@ -144,22 +231,40 @@
       var tokenInput = document.getElementById("adminToken");
       var loginButton = document.getElementById("loginButton");
       var loadButton = document.getElementById("loadAnalyticsButton");
+      var toggleDormantButton = document.getElementById("toggleDormantButton");
       var downloadCsvButton = document.getElementById("downloadCsvButton");
       var downloadJsonlButton = document.getElementById("downloadJsonlButton");
       var downloadJsonButton = document.getElementById("downloadJsonButton");
-      var clearButton = document.getElementById("clearAnalyticsButton");
+      var clearEventsButton = document.getElementById("clearEventsButton");
       var logoutButton = document.getElementById("logoutButton");
+      var copyTsvButton = document.getElementById("copyTsvButton");
       var copySessionTextButton = document.getElementById("copySessionTextButton");
       var copySessionJsonButton = document.getElementById("copySessionJsonButton");
       var adminStatus = document.getElementById("adminStatus");
       var adminError = document.getElementById("adminError");
       var dashboardError = document.getElementById("dashboardError");
       var playSessionsRoot = document.getElementById("playSessionsRoot");
+      var toggleMyFilterButton = document.getElementById("toggleMyFilterButton");
+      var toggleOthersFilterButton = document.getElementById("toggleOthersFilterButton");
+      var mySessionCard = document.getElementById("mySessionCard");
       var storageKey = "randa_admin_token";
       var authStateKey = "randa_admin_authenticated";
       var latestEvents = [];
       var latestSummary = null;
       var selectedSession = null;
+      var myIpHash = "";
+      var launchEventKeys = {};
+      var bootErrorCounts = {};
+      var filterModeKey = "randa_admin_filter_mode";
+      var sessionModeKey = "randa_admin_session_mode";
+      var filterMode = (function () {
+        try { var v = localStorage.getItem(filterModeKey); if (v === "all" || v === "mine" || v === "others") return v; } catch (e) {}
+        return "others";
+      })();
+      var sessionMode = (function () {
+        try { var v = localStorage.getItem(sessionModeKey); if (v === "all" || v === "launched") return v; } catch (e) {}
+        return "launched";
+      })();
 
       var CLOUD_RUN_API = "https://randaworks-analytics-945977546061.asia-northeast1.run.app";
       var isLocal = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
@@ -249,9 +354,201 @@
         return parts.length ? parts.join(" / ") : "-";
       }
 
+      function getValue(item, key) {
+        if (!item) return "";
+        if (item[key] != null && item[key] !== "") return item[key];
+        if (item.payload && item.payload[key] != null && item.payload[key] !== "") return item.payload[key];
+        return "";
+      }
+
+      function getEventName(item) {
+        return getValue(item, "event_name") || getValue(item, "event") || getValue(item, "name");
+      }
+
+      function getEventTime(item) {
+        return getValue(item, "timestamp") || getValue(item, "at") || getValue(item, "created_at") || getValue(item, "recorded_at");
+      }
+
+      function getSessionIdentity(item) {
+        if (!item) return "";
+        if (item.play_session_id) return "play:" + item.play_session_id;
+        if (item.session_id) return "session:" + item.session_id;
+        return [
+          item.opened_at || item.started_at || "",
+          item.ip_hash || "",
+          item.path || "",
+          item.entry_src || ""
+        ].join("|");
+      }
+
+      function rememberSessionKey(map, item) {
+        var playSessionId = getValue(item, "play_session_id");
+        var sessionId = getValue(item, "session_id");
+        if (playSessionId) map["play:" + playSessionId] = true;
+        if (sessionId) map["session:" + sessionId] = true;
+      }
+
+      function buildEventIndexes(events) {
+        launchEventKeys = {};
+        bootErrorCounts = {};
+
+        (events || []).forEach(function (item) {
+          var eventName = getEventName(item);
+          if (!eventName) return;
+
+          if (
+            eventName === "game_launch" ||
+            eventName === "demo_boot_start" ||
+            eventName === "demo_boot_success" ||
+            eventName === "demo_boot_error"
+          ) {
+            rememberSessionKey(launchEventKeys, item);
+          }
+
+          if (eventName === "demo_boot_error") {
+            var code = getValue(item, "error_code") || "unknown";
+            bootErrorCounts[code] = (bootErrorCounts[code] || 0) + 1;
+          }
+        });
+      }
+
+      function hasLaunchSignal(item) {
+        if (!item) return false;
+        var playSessionId = item.play_session_id ? "play:" + item.play_session_id : "";
+        var sessionId = item.session_id ? "session:" + item.session_id : "";
+        return Boolean(
+          (playSessionId && launchEventKeys[playSessionId]) ||
+          (sessionId && launchEventKeys[sessionId])
+        );
+      }
+
+      function hasMeaningfulTimeline(item) {
+        return (item.timeline || []).some(function (entry) {
+          var name = entry.event_name || "";
+          return /boot|title|run|demo|stage|battle|hero/i.test(name);
+        });
+      }
+
+      function getGameProgress(item) {
+        return item && item.game_progress ? item.game_progress : {};
+      }
+
+      function isLaunchedSession(item) {
+        var gp = getGameProgress(item);
+        if (hasLaunchSignal(item)) return true;
+        if (item.boot_status && item.boot_status !== "not_started") return true;
+        if (item.title_reached) return true;
+        if (gp.run_started || gp.demo_end_reached) return true;
+        if (gp.stage_reached || gp.run_result || gp.hero) return true;
+        return hasMeaningfulTimeline(item);
+      }
+
+      function getSessionStatus(item) {
+        var gp = getGameProgress(item);
+        if (gp.demo_end_reached) return "デモ到達";
+        if (gp.run_result) return "ラン終了";
+        if (gp.run_started) return "ラン進行";
+        if (item.title_reached) return "タイトル到達";
+        if (item.boot_status === "success") return "起動成功";
+        if (item.boot_status === "error") return "起動失敗";
+        if (item.boot_status === "started") return "起動中断";
+        if (hasLaunchSignal(item)) return "起動試行";
+        return "未起動";
+      }
+
+      function getBootLabel(item) {
+        if (!item) return "-";
+        if (item.boot_status) return item.boot_status;
+        if (hasLaunchSignal(item)) return "launch_only";
+        return "not_started";
+      }
+
+      function getResultLabel(item) {
+        var gp = getGameProgress(item);
+        if (gp.run_result) {
+          return gp.end_reason ? gp.run_result + " (" + gp.end_reason + ")" : gp.run_result;
+        }
+        if (gp.demo_end_reached) return "demo_end";
+        return "-";
+      }
+
+      function isMine(item) {
+        return Boolean(myIpHash && item && item.ip_hash === myIpHash);
+      }
+
+      function allSessions() {
+        var sessions = (latestSummary && latestSummary.play_sessions) || [];
+        return sessions.slice().sort(function (a, b) {
+          return new Date(b.opened_at || b.started_at || 0).getTime() - new Date(a.opened_at || a.started_at || 0).getTime();
+        });
+      }
+
+      function ownerFilteredSessions() {
+        return allSessions().filter(function (item) {
+          var mine = isMine(item);
+          if (filterMode === "mine") return mine;
+          if (filterMode === "others") return !mine;
+          return true;
+        });
+      }
+
+      function medianDuration(items) {
+        var values = items
+          .map(function (item) { return Number(item.duration_sec); })
+          .filter(function (value) { return Number.isFinite(value) && value >= 0; })
+          .sort(function (a, b) { return a - b; });
+
+        if (!values.length) return null;
+        var middle = Math.floor(values.length / 2);
+        if (values.length % 2 === 1) return values[middle];
+        return Math.round((values[middle - 1] + values[middle]) / 2);
+      }
+
+      function groupCounts(items, getKeyFn) {
+        var counts = {};
+        (items || []).forEach(function (item) {
+          var key = getKeyFn(item) || "-";
+          counts[key] = (counts[key] || 0) + 1;
+        });
+        return Object.keys(counts)
+          .map(function (key) { return { label: key, count: counts[key] }; })
+          .sort(function (a, b) { return b.count - a.count || a.label.localeCompare(b.label, "ja"); });
+      }
+
+      function summarizeMetrics() {
+        var base = ownerFilteredSessions();
+        var launched = base.filter(isLaunchedSession);
+        var visible = sessionMode === "all" ? base : launched;
+        var bootSuccess = launched.filter(function (item) { return item.boot_status === "success"; }).length;
+        var bootError = launched.filter(function (item) { return item.boot_status === "error"; }).length;
+        var titleReached = launched.filter(function (item) { return item.title_reached; }).length;
+        var runStarted = launched.filter(function (item) { return getGameProgress(item).run_started; }).length;
+        var demoEndReached = launched.filter(function (item) { return getGameProgress(item).demo_end_reached; }).length;
+
+        return {
+          base: base,
+          launched: launched,
+          visible: visible,
+          dormantCount: Math.max(base.length - launched.length, 0),
+          bootSuccess: bootSuccess,
+          bootError: bootError,
+          titleReached: titleReached,
+          runStarted: runStarted,
+          demoEndReached: demoEndReached,
+          medianDurationSec: medianDuration(launched)
+        };
+      }
+
       function describeTimeline(item) {
+        if (item.detail) return item.detail;
+        if (item.error_code) return "error_code: " + item.error_code;
+        if (item.stage_reached) return "stage: " + item.stage_reached;
+        if (item.hero) return "hero: " + item.hero;
         var bits = [];
-        if (item.label) bits.push("ラベル: " + item.label);
+        if (item.placement) bits.push(item.placement);
+        if (item.label) bits.push(item.label);
+        if (item.launch_method) bits.push("launch=" + item.launch_method);
+        if (item.state) bits.push("fullscreen=" + item.state);
         return bits.join(" / ") || "-";
       }
 
@@ -275,20 +572,31 @@
 
         if (!playSessions.length) {
           var empty = document.createElement("tr");
-          empty.innerHTML = "<td colspan='7'>体験データがありません。</td>";
+          empty.innerHTML = "<td colspan='10'>表示できるプレイ試行がありません。</td>";
           playSessionsRoot.appendChild(empty);
           return;
         }
 
         playSessions.forEach(function (item) {
           var row = document.createElement("tr");
+          var mine = isMine(item);
+          if (mine) row.classList.add("is-mine");
+          row.setAttribute("data-ip-hash", item.ip_hash || "");
+
+          var gp = getGameProgress(item);
+          var stageLabel = gp.stage_reached || "-";
+          var resultLabel = getResultLabel(item);
+
           var cells = [
             formatTime(item.opened_at),
+            getSessionStatus(item),
             formatDuration(item.duration_sec),
-            item.boot_status || "-",
+            getBootLabel(item),
             item.title_reached ? "yes" : "no",
-            formatDevice(item),
-            item.entry_src || "-"
+            stageLabel,
+            resultLabel,
+            item.entry_src || "-",
+            formatDevice(item) + (mine ? " (自分)" : "")
           ];
 
           cells.forEach(function (value) {
@@ -312,11 +620,149 @@
         });
       }
 
-      function updateOverview(overview) {
-        overview = overview || {};
-        setText("playSessionCountValue", overview.play_sessions || 0);
-        setText("bootSuccessSessionCountValue", overview.boot_success_sessions || 0);
-        setText("titleReachedSessionCountValue", overview.title_reached_sessions || 0);
+      function renderBreakdown(rootId, rows, emptyText) {
+        var root = document.getElementById(rootId);
+        if (!root) return;
+        root.innerHTML = "";
+
+        if (!rows.length) {
+          var empty = document.createElement("div");
+          empty.className = "stats-empty";
+          empty.textContent = emptyText || "データがありません。";
+          root.appendChild(empty);
+          return;
+        }
+
+        rows.slice(0, 6).forEach(function (rowData) {
+          var row = document.createElement("div");
+          row.className = "stats-row";
+
+          var label = document.createElement("span");
+          label.textContent = rowData.label;
+          if (rowData.note) {
+            var note = document.createElement("span");
+            note.className = "stats-note";
+            note.textContent = rowData.note;
+            label.appendChild(document.createElement("br"));
+            label.appendChild(note);
+          }
+
+          var count = document.createElement("strong");
+          count.textContent = String(rowData.count);
+
+          row.appendChild(label);
+          row.appendChild(count);
+          root.appendChild(row);
+        });
+      }
+
+      function buildDropoffBreakdown(items) {
+        return groupCounts(items, function (item) {
+          var gp = getGameProgress(item);
+          if (gp.demo_end_reached) return "デモ到達";
+          if (gp.run_result) return "ラン終了";
+          if (gp.run_started) return "ラン中離脱";
+          if (item.title_reached) return "タイトル離脱";
+          if (item.boot_status === "error") return "起動失敗";
+          if (item.boot_status === "success") return "起動後離脱";
+          return "起動試行のみ";
+        });
+      }
+
+      function buildResultBreakdown(items) {
+        return groupCounts(items, function (item) {
+          var gp = getGameProgress(item);
+          if (gp.demo_end_reached) return "デモ到達";
+          if (gp.run_result) {
+            return gp.end_reason ? gp.run_result + " (" + gp.end_reason + ")" : gp.run_result;
+          }
+          if (gp.run_started) return "未完了ラン";
+          if (item.boot_status === "error") return "起動失敗";
+          return "未完了";
+        });
+      }
+
+      function buildErrorBreakdown(items) {
+        var rows = Object.keys(bootErrorCounts)
+          .map(function (key) { return { label: key, count: bootErrorCounts[key] }; })
+          .sort(function (a, b) { return b.count - a.count || a.label.localeCompare(b.label, "ja"); });
+
+        if (rows.length) return rows;
+        var fallback = items.filter(function (item) { return item.boot_status === "error"; }).length;
+        return fallback ? [{ label: "error", count: fallback }] : [];
+      }
+
+      function updateOverviewFiltered() {
+        var metrics = summarizeMetrics();
+        var total = metrics.launched.length;
+
+        setText("playSessionCountValue", total);
+        setText("bootSuccessSessionCountValue", metrics.bootSuccess);
+        setText("bootErrorSessionCountValue", metrics.bootError);
+        setText("titleReachedSessionCountValue", metrics.titleReached);
+        setText("runStartedSessionCountValue", metrics.runStarted);
+        setText("demoEndReachedSessionCountValue", metrics.demoEndReached);
+        setText("medianDurationValue", formatDuration(metrics.medianDurationSec));
+        setText("dormantSessionCountValue", metrics.dormantCount);
+
+        if (myIpHash) {
+          var myCount = metrics.launched.filter(function (item) { return isMine(item); }).length;
+          setText("mySessionCountValue", myCount);
+          mySessionCard.style.display = "";
+        } else {
+          mySessionCard.style.display = "none";
+        }
+
+        renderFunnel([
+          { label: "プレイ試行", count: total },
+          { label: "起動成功", count: metrics.bootSuccess },
+          { label: "タイトル到達", count: metrics.titleReached },
+          { label: "ラン開始", count: metrics.runStarted },
+          { label: "デモ到達", count: metrics.demoEndReached }
+        ], total);
+
+        renderBreakdown(
+          "entryBreakdownRoot",
+          groupCounts(metrics.launched, function (item) { return item.entry_src || "-"; }),
+          "流入データがありません。"
+        );
+        renderBreakdown(
+          "dropoffBreakdownRoot",
+          buildDropoffBreakdown(metrics.launched),
+          "離脱データがありません。"
+        );
+        renderBreakdown(
+          "errorBreakdownRoot",
+          buildErrorBreakdown(metrics.launched),
+          "起動エラーはありません。"
+        );
+        renderBreakdown(
+          "resultBreakdownRoot",
+          buildResultBreakdown(metrics.launched),
+          "結果データがありません。"
+        );
+
+        toggleDormantButton.classList.toggle("filter-active", sessionMode === "all");
+        toggleDormantButton.textContent = sessionMode === "all" ? "プレイ試行のみ表示" : "未起動も表示";
+        toggleMyFilterButton.classList.toggle("filter-active", filterMode === "mine");
+        toggleOthersFilterButton.classList.toggle("filter-active", filterMode === "others");
+      }
+
+      function renderFunnel(steps, total) {
+        var root = document.getElementById("funnelChart");
+        if (!root) return;
+        root.innerHTML = "";
+        if (!total) { root.textContent = "データがありません。"; return; }
+        steps.forEach(function (step) {
+          var pct = total > 0 ? Math.round(step.count / total * 100) : 0;
+          var row = document.createElement("div");
+          row.className = "funnel-row";
+          row.innerHTML =
+            '<span class="funnel-label">' + step.label + '</span>' +
+            '<span class="funnel-bar-bg"><span class="funnel-bar" style="width:' + pct + '%"></span></span>' +
+            '<span class="funnel-value">' + step.count + ' (' + pct + '%)</span>';
+          root.appendChild(row);
+        });
       }
 
       function updateSessionDetail() {
@@ -325,9 +771,17 @@
           setText("sessionDetailOpened", "-");
           setText("sessionDetailEnded", "-");
           setText("sessionDetailDuration", "-");
-          setText("sessionDetailDevice", "-");
+          setText("sessionDetailStatus", "-");
           setText("sessionDetailBoot", "-");
           setText("sessionDetailTitleReached", "-");
+          setText("sessionDetailEntry", "-");
+          setText("sessionDetailDevice", "-");
+          setText("sessionDetailHero", "-");
+          setText("sessionDetailStage", "-");
+          setText("sessionDetailResult", "-");
+          setText("sessionDetailBattles", "-");
+          setText("sessionDetailCombos", "-");
+          setText("sessionDetailDamage", "-");
           document.getElementById("sessionTextSummary").textContent = "-";
           renderTimeline(document.getElementById("sessionTimelineRoot"), []);
           return;
@@ -336,11 +790,77 @@
         setText("sessionDetailOpened", formatTime(item.opened_at));
         setText("sessionDetailEnded", formatTime(item.ended_at || item.last_seen_at));
         setText("sessionDetailDuration", formatDuration(item.duration_sec));
-        setText("sessionDetailDevice", formatDevice(item));
-        setText("sessionDetailBoot", item.boot_status || "-");
+        var deviceLabel = formatDevice(item);
+        if (isMine(item)) deviceLabel += " (自分)";
+        setText("sessionDetailStatus", getSessionStatus(item));
+        setText("sessionDetailDevice", deviceLabel);
+        setText("sessionDetailBoot", getBootLabel(item));
         setText("sessionDetailTitleReached", item.title_reached ? "yes" : "no");
-        document.getElementById("sessionTextSummary").textContent = item.text_summary || "-";
-        renderTimeline(document.getElementById("sessionTimelineRoot"), item.timeline || []);
+        setText("sessionDetailEntry", item.entry_src || "-");
+
+        var gp = getGameProgress(item);
+        setText("sessionDetailHero", gp.hero || "-");
+        setText("sessionDetailStage", gp.stage_reached || "-");
+        setText("sessionDetailResult", getResultLabel(item));
+        var battleText = "-";
+        if (gp.battles_won || gp.battles_lost) {
+          battleText = gp.battles_won + "勝" + gp.battles_lost + "敗";
+          if (gp.total_turns) battleText += " (計" + gp.total_turns + "ターン)";
+        }
+        setText("sessionDetailBattles", battleText);
+        setText("sessionDetailCombos", gp.combos_triggered > 0 ? gp.combos_triggered + "回" : "-");
+        setText("sessionDetailDamage", gp.total_damage_taken > 0 ? gp.total_damage_taken : "-");
+
+        var summaryText = item.text_summary || [
+          "プレイ状況: " + getSessionStatus(item),
+          "起動: " + getBootLabel(item),
+          "タイトル到達: " + (item.title_reached ? "yes" : "no"),
+          "流入: " + (item.entry_src || "-"),
+          "到達: " + (gp.stage_reached || "-"),
+          "結果: " + getResultLabel(item),
+          "時間: " + formatDuration(item.duration_sec)
+        ].join("\n");
+        document.getElementById("sessionTextSummary").textContent = summaryText;
+        renderTimeline(document.getElementById("sessionTimelineRoot"), buildSessionTimeline(item));
+      }
+
+      function eventMatchesSession(item, event) {
+        if (!item || !event) return false;
+        var itemPlaySessionId = item.play_session_id || "";
+        var itemSessionId = item.session_id || "";
+        var eventPlaySessionId = getValue(event, "play_session_id");
+        var eventSessionId = getValue(event, "session_id");
+
+        if (itemPlaySessionId && eventPlaySessionId) return itemPlaySessionId === eventPlaySessionId;
+        if (itemSessionId && eventSessionId) return itemSessionId === eventSessionId;
+        return false;
+      }
+
+      function buildSessionTimeline(item) {
+        var summaryTimeline = (item && item.timeline) || [];
+        if (summaryTimeline.length) return summaryTimeline;
+
+        return latestEvents
+          .filter(function (event) { return eventMatchesSession(item, event); })
+          .sort(function (a, b) {
+            return new Date(getEventTime(a) || 0).getTime() - new Date(getEventTime(b) || 0).getTime();
+          })
+          .map(function (event) {
+            return {
+              at: getEventTime(event),
+              event_name: getEventName(event),
+              detail: describeTimeline({
+                detail: "",
+                error_code: getValue(event, "error_code"),
+                placement: getValue(event, "placement"),
+                label: getValue(event, "label"),
+                launch_method: getValue(event, "launch_method"),
+                state: getValue(event, "state"),
+                stage_reached: getValue(event, "stage_reached"),
+                hero: getValue(event, "hero")
+              })
+            };
+          });
       }
 
       async function fetchJson(url, options) {
@@ -377,12 +897,37 @@
         }
       }
 
+      async function fetchMyIp() {
+        try {
+          var data = await fetchJson(apiBase() + "/__analytics/my-ip", {
+            headers: getHeaders(),
+            cache: "no-store"
+          });
+          myIpHash = data.ip_hash || "";
+          toggleMyFilterButton.style.display = "";
+          toggleOthersFilterButton.style.display = "";
+        } catch (e) { /* ignore */ }
+      }
+
+      function refreshView() {
+        var metrics = summarizeMetrics();
+        renderPlaySessions(metrics.visible);
+        updateOverviewFiltered();
+
+        var selectedId = getSessionIdentity(selectedSession);
+        selectedSession = metrics.visible.find(function (item) {
+          return getSessionIdentity(item) === selectedId;
+        }) || metrics.visible[0] || null;
+        updateSessionDetail();
+      }
+
       async function loadSummary() {
         clearError();
         saveToken();
         setStatus("読み込み中...");
 
         try {
+          if (!myIpHash) await fetchMyIp();
           latestSummary = await fetchJson(apiBase() + "/__analytics/summary", {
             headers: getHeaders(),
             cache: "no-store"
@@ -392,12 +937,8 @@
             cache: "no-store"
           });
           latestEvents = eventsPayload.events || [];
-
-          updateOverview(latestSummary.overview || {});
-          renderPlaySessions(latestSummary.play_sessions || []);
-
-          selectedSession = (latestSummary.play_sessions || [])[0] || null;
-          updateSessionDetail();
+          buildEventIndexes(latestEvents);
+          refreshView();
           setStatus("更新済み");
         } catch (error) {
           showError(error.message || "読み込みに失敗しました。");
@@ -421,11 +962,10 @@
           });
           markAuthenticated();
           showDashboard();
-          renderPlaySessions(latestSummary.play_sessions || []);
-          updateOverview(latestSummary.overview || {});
+          await fetchMyIp();
           latestEvents = [];
-          selectedSession = (latestSummary.play_sessions || [])[0] || null;
-          updateSessionDetail();
+          buildEventIndexes([]);
+          refreshView();
           setStatus("認証済み");
           await loadSummary();
         } catch (error) {
@@ -442,30 +982,16 @@
         latestEvents = [];
         latestSummary = null;
         selectedSession = null;
-        updateOverview({});
-        renderPlaySessions([]);
-        updateSessionDetail();
+        myIpHash = "";
+        launchEventKeys = {};
+        bootErrorCounts = {};
+        filterMode = "all";
+        sessionMode = "launched";
+        refreshView();
+        mySessionCard.style.display = "none";
+        toggleMyFilterButton.style.display = "none";
+        toggleOthersFilterButton.style.display = "none";
         showLogin();
-      }
-
-      async function clearEvents() {
-        clearError();
-        saveToken();
-        setStatus("削除中...");
-
-        try {
-          var response = await fetch(apiBase() + "/__analytics/events", {
-            method: "DELETE",
-            headers: getHeaders()
-          });
-          if (!response.ok) {
-            throw new Error(response.status === 401 ? "認証に失敗しました。" : "削除に失敗しました。");
-          }
-          await loadSummary();
-        } catch (error) {
-          showError(error.message || "削除に失敗しました。");
-          setStatus("失敗");
-        }
       }
 
       async function downloadCsv() {
@@ -522,10 +1048,45 @@
         }
       }
 
+      function buildTsv() {
+        var visible = summarizeMetrics().visible;
+        var header = ["開始", "状況", "時間(秒)", "起動", "タイトル到達", "ラン開始", "キャラ", "到達", "結果", "流入", "端末", "OS", "画面", "自分"].join("\t");
+        var rows = visible.map(function (item) {
+          var mine = isMine(item);
+          var gp = getGameProgress(item);
+          return [
+            formatTime(item.opened_at),
+            getSessionStatus(item),
+            item.duration_sec != null ? item.duration_sec : "",
+            getBootLabel(item),
+            item.title_reached ? "yes" : "no",
+            gp.run_started ? "yes" : "no",
+            gp.hero || "",
+            gp.stage_reached || "",
+            getResultLabel(item),
+            item.entry_src || "",
+            (item.device_type || "") + "/" + (item.browser || ""),
+            item.os || "",
+            item.viewport_label || "",
+            mine ? "*" : ""
+          ].join("\t");
+        });
+        return header + "\n" + rows.join("\n");
+      }
+
+      function applyFilter() {
+        try { localStorage.setItem(filterModeKey, filterMode); } catch (e) {}
+        try { localStorage.setItem(sessionModeKey, sessionMode); } catch (e) {}
+        refreshView();
+      }
+
       tokenInput.value = "";
-      showLogin();
       if (isAuthenticated()) {
         tokenInput.value = sessionStorage.getItem(storageKey) || "";
+        showDashboard();
+        loadSummary();
+      } else {
+        showLogin();
       }
       loginButton.addEventListener("click", login);
       tokenInput.addEventListener("keydown", function (event) {
@@ -534,17 +1095,45 @@
           login();
         }
       });
+      copyTsvButton.addEventListener("click", function () { copyText(buildTsv()); });
       loadButton.addEventListener("click", loadSummary);
+      toggleDormantButton.addEventListener("click", function () {
+        sessionMode = sessionMode === "all" ? "launched" : "all";
+        applyFilter();
+      });
       downloadCsvButton.addEventListener("click", downloadCsv);
       downloadJsonlButton.addEventListener("click", downloadJsonl);
       downloadJsonButton.addEventListener("click", downloadJson);
-      clearButton.addEventListener("click", clearEvents);
+      toggleMyFilterButton.addEventListener("click", function () {
+        filterMode = filterMode === "mine" ? "all" : "mine";
+        applyFilter();
+      });
+      toggleOthersFilterButton.addEventListener("click", function () {
+        filterMode = filterMode === "others" ? "all" : "others";
+        applyFilter();
+      });
+      clearEventsButton.addEventListener("click", async function () {
+        if (!confirm("全イベントデータを消去します。この操作は取り消せません。")) return;
+        clearError();
+        saveToken();
+        try {
+          await fetchJson(apiBase() + "/__analytics/events", { method: "DELETE", headers: getHeaders() });
+          setStatus("消去しました");
+          await loadSummary();
+        } catch (error) {
+          showError(error.message || "消去に失敗しました。");
+          setStatus("失敗");
+        }
+      });
       logoutButton.addEventListener("click", logout);
       copySessionTextButton.addEventListener("click", function () {
-        copyText(selectedSession && selectedSession.text_summary);
+        copyText(selectedSession ? document.getElementById("sessionTextSummary").textContent : "");
       });
       copySessionJsonButton.addEventListener("click", function () {
-        copyText(selectedSession ? JSON.stringify(selectedSession, null, 2) : "");
+        copyText(selectedSession ? JSON.stringify({
+          summary: selectedSession,
+          matched_events: buildSessionTimeline(selectedSession)
+        }, null, 2) : "");
       });
     })();
   </script>
