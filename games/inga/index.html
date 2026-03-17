@@ -768,6 +768,8 @@
         const mutePreferenceKey = "randa:inga:audio-muted";
         let embeddedMuted = readEmbeddedMutePreference();
         let gameLaunched = false;
+        let embeddedBootStartedAt = 0;
+        let embeddedBootSuccessTracked = false;
 
         function readEmbeddedMutePreference() {
             try {
@@ -788,6 +790,8 @@
         function launchGame() {
             if (gameLaunched || !embeddedFrame) return;
             gameLaunched = true;
+            embeddedBootStartedAt = Date.now();
+            embeddedBootSuccessTracked = false;
             const gameSrc = embeddedFrame.dataset.gameSrc;
             if (gameSrc) {
                 embeddedFrame.src = gameSrc;
@@ -895,6 +899,25 @@
                 embeddedMuted = Boolean(event.data.value);
                 saveEmbeddedMutePreference(embeddedMuted);
                 updateEmbeddedMuteButton();
+                return;
+            }
+
+            if (event.data.type === "randa-analytics" && event.data.event) {
+                if (!window.RandaAnalytics || typeof window.RandaAnalytics.track !== "function") return;
+
+                const payload = Object.assign({}, event.data.payload || {}, {
+                    surface: "embedded"
+                });
+
+                if (event.data.event === "demo_boot_success") {
+                    if (embeddedBootSuccessTracked) return;
+                    embeddedBootSuccessTracked = true;
+                    if (embeddedBootStartedAt > 0) {
+                        payload.load_ms = Date.now() - embeddedBootStartedAt;
+                    }
+                }
+
+                window.RandaAnalytics.track(event.data.event, payload);
             }
         });
     })();
