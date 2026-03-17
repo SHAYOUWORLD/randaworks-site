@@ -1,7 +1,8 @@
-# Large game build binaries (hosted on GCS)
+# Large binaries (hosted on GCS)
 games/inga/play/build/*.pck.part*
 games/inga/play/build/*.wasm
 games/inga/play/downloads/
+assets/video/games/inga/SteamStorePV_v1.1.mp4
 
 # Local settings
 .claude/
