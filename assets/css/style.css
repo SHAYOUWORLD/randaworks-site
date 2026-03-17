@@ -283,6 +283,7 @@ small,
   padding: 16px 24px;
   flex: 1 1 220px;
   text-align: center;
+  white-space: nowrap;
 }
 
 .home-spotlight {
