@@ -90,31 +90,88 @@
     return headers;
   }
 
+  var RETRY_MAX = 3;
+  var RETRY_BASE_MS = 1000;
+  var FETCH_TIMEOUT_MS = 60000;
+  var STALL_TIMEOUT_MS = 30000;
+
+  function fetchWithTimeout(url) {
+    var controller = new AbortController();
+    var timer = setTimeout(function () { controller.abort(); }, FETCH_TIMEOUT_MS);
+    return originalFetch(url, { signal: controller.signal }).then(
+      function (response) { clearTimeout(timer); return response; },
+      function (err) { clearTimeout(timer); throw err; }
+    );
+  }
+
+  function readBodyWithStallDetection(response, streamController) {
+    return new Promise(function (resolve, reject) {
+      if (!response.body || typeof response.body.getReader !== 'function') {
+        response.arrayBuffer().then(function (buf) {
+          streamController.enqueue(new Uint8Array(buf));
+          resolve();
+        }, reject);
+        return;
+      }
+      var reader = response.body.getReader();
+      var stallTimer = null;
+      var stalled = false;
+      function resetStallTimer() {
+        if (stallTimer) clearTimeout(stallTimer);
+        stallTimer = setTimeout(function () {
+          stalled = true;
+          try { reader.cancel('stall timeout'); } catch (_e) {}
+          reject(new Error('Body stall timeout'));
+        }, STALL_TIMEOUT_MS);
+      }
+      function pump() {
+        reader.read().then(function (result) {
+          if (stalled) return;
+          if (result.done) {
+            clearTimeout(stallTimer);
+            resolve();
+            return;
+          }
+          if (result.value) {
+            streamController.enqueue(result.value);
+          }
+          resetStallTimer();
+          pump();
+        }, function (err) {
+          clearTimeout(stallTimer);
+          if (stalled) return;
+          reject(err);
+        });
+      }
+      resetStallTimer();
+      pump();
+    });
+  }
+
   async function createPackResponse(resource) {
     const stream = new ReadableStream({
       async start(controller) {
         try {
           for (const part of PCK_PARTS) {
             const partUrl = resolvePartUrl(resource, part.name);
-            const response = await originalFetch(partUrl);
-            if (!response.ok) {
-              throw new Error(`Failed loading file '${part.name}'`);
-            }
-            if (!response.body || typeof response.body.getReader !== 'function') {
-              const buf = await response.arrayBuffer();
-              controller.enqueue(new Uint8Array(buf));
-              continue;
-            }
-            const reader = response.body.getReader();
-            while (true) {
-              const { done, value } = await reader.read();
-              if (done) {
+            var lastErr = null;
+            var success = false;
+            for (var attempt = 0; attempt <= RETRY_MAX; attempt++) {
+              try {
+                var response = await fetchWithTimeout(partUrl);
+                if (!response.ok) throw new Error('HTTP ' + response.status);
+                await readBodyWithStallDetection(response, controller);
+                success = true;
                 break;
-              }
-              if (value) {
-                controller.enqueue(value);
+              } catch (err) {
+                lastErr = err;
+                if (attempt < RETRY_MAX) {
+                  var delay = RETRY_BASE_MS * Math.pow(2, attempt);
+                  await new Promise(function (r) { setTimeout(r, delay); });
+                }
               }
             }
+            if (!success) throw lastErr || new Error('Failed loading ' + part.name);
           }
           controller.close();
         } catch (err) {

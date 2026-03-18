@@ -57,6 +57,9 @@
       muteButton.textContent = isMuted ? "ミュート解除" : "音声をミュート";
     }
 
+    var ACK_TIMEOUT_MS = 5000;
+    var pendingAcks = {};
+
     function sendFrameControl(command, value) {
       if (!frame || !frame.contentWindow) return;
       frame.contentWindow.postMessage({
@@ -64,6 +67,18 @@
         command: command,
         value: value
       }, window.location.origin);
+
+      if (pendingAcks[command]) clearTimeout(pendingAcks[command]);
+      pendingAcks[command] = setTimeout(function () {
+        delete pendingAcks[command];
+      }, ACK_TIMEOUT_MS);
+    }
+
+    function clearPendingAck(command) {
+      if (pendingAcks[command]) {
+        clearTimeout(pendingAcks[command]);
+        delete pendingAcks[command];
+      }
     }
 
     function setError(message) {
@@ -154,6 +169,7 @@
       if (event.origin !== window.location.origin) return;
 
       if (event.source === frame.contentWindow && event.data && event.data.type === "randa-control-ack" && event.data.command === "setMuted") {
+        clearPendingAck("setMuted");
         isMuted = Boolean(event.data.value);
         saveMutePreference(isMuted);
         updateMuteButton();
