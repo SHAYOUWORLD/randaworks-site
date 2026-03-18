@@ -128,7 +128,7 @@
                 </div>
             </div>
 
-            <div class="cta-band-actions" style="justify-content: flex-start;">
+            <div class="cta-band-actions play-shell-actions">
                 <button class="cta" id="retryBootButton" type="button">再試行する</button>
                 <a class="cta cta-download" href="https://storage.googleapis.com/randaworks-game-builds/inga-demo/v0.1.5/IngaChronicle_Demo_v0.1.5_win.zip" download data-track-event="demo_download" data-track-placement="play_shell_cta" data-track-label="play shell download">⬇ Windows版DL</a>
                 <button class="cta cta-ghost" id="fullscreenPlayButton" type="button">外側フルスクリーン</button>
@@ -192,7 +192,13 @@
             navigator.clipboard.writeText(url).then(function() {
               copyBtn.textContent = 'コピーしました ✅';
               setTimeout(function() { copyBtn.textContent = 'URLをコピー 📋'; }, 2000);
+            }).catch(function() {
+              copyBtn.textContent = 'コピーできませんでした';
+              setTimeout(function() { copyBtn.textContent = 'URLをコピー 📋'; }, 2000);
             });
+          } else {
+            copyBtn.textContent = 'コピーできませんでした';
+            setTimeout(function() { copyBtn.textContent = 'URLをコピー 📋'; }, 2000);
           }
         });
       }

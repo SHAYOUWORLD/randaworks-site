@@ -90,16 +90,37 @@
     return headers;
   }
 
+  var RETRY_MAX = 3;
+  var RETRY_BASE_MS = 1000;
+  var PART_TIMEOUT_MS = 60000;
+
+  async function fetchWithRetry(url, attempt) {
+    if (typeof attempt === 'undefined') attempt = 0;
+    var controller = new AbortController();
+    var timer = setTimeout(function () { controller.abort(); }, PART_TIMEOUT_MS);
+    try {
+      var response = await originalFetch(url, { signal: controller.signal });
+      clearTimeout(timer);
+      if (!response.ok) throw new Error('HTTP ' + response.status);
+      return response;
+    } catch (err) {
+      clearTimeout(timer);
+      if (attempt < RETRY_MAX) {
+        var delay = RETRY_BASE_MS * Math.pow(2, attempt);
+        await new Promise(function (r) { setTimeout(r, delay); });
+        return fetchWithRetry(url, attempt + 1);
+      }
+      throw err;
+    }
+  }
+
   async function createPackResponse(resource) {
     const stream = new ReadableStream({
       async start(controller) {
         try {
           for (const part of PCK_PARTS) {
             const partUrl = resolvePartUrl(resource, part.name);
-            const response = await originalFetch(partUrl);
-            if (!response.ok) {
-              throw new Error(`Failed loading file '${part.name}'`);
-            }
+            const response = await fetchWithRetry(partUrl);
             if (!response.body || typeof response.body.getReader !== 'function') {
               const buf = await response.arrayBuffer();
               controller.enqueue(new Uint8Array(buf));

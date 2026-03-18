@@ -24,6 +24,20 @@
   /* Typography */
   --font-base: "Noto Sans JP", sans-serif;
   --font-serif: "Shippori Mincho", serif;
+
+  /* Border Radius */
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-lg: 18px;
+  --radius-xl: 24px;
+  --radius-pill: 999px;
+
+  /* Font Sizes */
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.85rem;
+  --font-size-base: 1rem;
+  --font-size-lg: 1.15rem;
+  --font-size-xl: 1.4rem;
 }
 
 /* Reset & Base */
@@ -474,6 +488,14 @@ small,
   line-height: 1.08;
   text-shadow: 0 0 24px rgba(189, 49, 49, 0.36);
   animation: float 6s ease-in-out infinite;
+}
+
+.game-hero-title-fallback {
+  display: none;
+  font-family: var(--font-serif);
+  font-size: 3.5rem;
+  color: #fff;
+  text-shadow: 0 0 20px var(--accent-red);
 }
 
 @keyframes float {
@@ -1031,18 +1053,18 @@ button.cta[disabled] {
 }
 
 /* Steam CTA variant */
-.cta-steam {
-  background: linear-gradient(135deg, #1b2838, #2a475e) !important;
-  color: #fff !important;
+.cta.cta-steam {
+  background: linear-gradient(135deg, #1b2838, #2a475e);
+  color: #fff;
   border: 1px solid rgba(102, 192, 244, 0.3);
   box-shadow: 0 4px 15px rgba(27, 40, 56, 0.4);
   text-transform: none;
   font-size: inherit;
 }
 
-.cta-steam:hover {
-  background: linear-gradient(135deg, #2a475e, #3d6b8e) !important;
-  color: #fff !important;
+.cta.cta-steam:hover {
+  background: linear-gradient(135deg, #2a475e, #3d6b8e);
+  color: #fff;
   border-color: rgba(102, 192, 244, 0.6);
   box-shadow: 0 8px 25px rgba(102, 192, 244, 0.3);
   filter: brightness(1.1);
@@ -1050,18 +1072,18 @@ button.cta[disabled] {
 }
 
 /* Download CTA variant */
-.cta-download {
-  background: linear-gradient(135deg, #2d7d46, #1a5c30) !important;
-  color: #fff !important;
+.cta.cta-download {
+  background: linear-gradient(135deg, #2d7d46, #1a5c30);
+  color: #fff;
   border: 1px solid rgba(45, 125, 70, 0.5);
   box-shadow: 0 4px 15px rgba(45, 125, 70, 0.35);
   text-transform: none;
   font-size: inherit;
 }
 
-.cta-download:hover {
-  background: linear-gradient(135deg, #3a9957, #2d7d46) !important;
-  color: #fff !important;
+.cta.cta-download:hover {
+  background: linear-gradient(135deg, #3a9957, #2d7d46);
+  color: #fff;
   border-color: rgba(58, 153, 87, 0.7);
   box-shadow: 0 8px 25px rgba(45, 125, 70, 0.45);
   filter: brightness(1.1);
@@ -1565,6 +1587,10 @@ button.cta[disabled] {
   text-transform: uppercase;
 }
 
+.play-shell-actions {
+  justify-content: flex-start;
+}
+
 .demo-frame-shell {
   position: relative;
   width: min(100%, calc((100vh - 240px) * 16 / 9), 1920px);
@@ -1629,9 +1655,9 @@ button.cta[disabled] {
   letter-spacing: 0.05em;
 }
 
-.demo-launch-btn {
-  font-size: 1.15rem !important;
-  padding: 18px 48px !important;
+.cta.demo-launch-btn {
+  font-size: 1.15rem;
+  padding: 18px 48px;
   animation: launch-pulse 2s ease-in-out infinite;
 }
 
@@ -1956,9 +1982,9 @@ button.cta[disabled] {
     padding: 36px 24px;
   }
 
-  /* Mobile: force center alignment for all CTA groups (override inline flex-start) */
+  /* Mobile: center alignment for all CTA groups */
   .cta-band-actions {
-    justify-content: center !important;
+    justify-content: center;
     text-align: center;
   }
 }
@@ -2175,6 +2201,22 @@ button.cta[disabled] {
     font-size: 0.8rem;
   }
 }
+
+/* Admin Analytics */
+tr.is-mine { background: rgba(212, 175, 55, 0.12); }
+tr.is-mine:hover { background: rgba(212, 175, 55, 0.22); }
+.ip-badge { font-size: var(--font-size-xs); opacity: 0.6; margin-left: 0.5em; }
+.cta.filter-active { background: var(--accent-gold); color: #1a1a2e; }
+.funnel-row { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem; font-size: 0.9rem; }
+.funnel-label { min-width: 7em; text-align: right; flex-shrink: 0; }
+.funnel-bar-bg { flex: 1; background: rgba(255,255,255,0.06); border-radius: 4px; height: 1.4rem; position: relative; overflow: hidden; }
+.funnel-bar { height: 100%; background: var(--accent-gold); border-radius: 4px; transition: width 0.3s; min-width: 2px; }
+.funnel-value { min-width: 6em; font-variant-numeric: tabular-nums; flex-shrink: 0; }
+.stats-list { display: grid; gap: 0.6rem; }
+.stats-row { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; font-size: 0.95rem; }
+.stats-row strong { font-variant-numeric: tabular-nums; }
+.stats-note { display: block; margin-top: 0.2rem; font-size: 0.8rem; opacity: 0.72; }
+.stats-empty { opacity: 0.7; }
 
 @media (prefers-reduced-motion: reduce) {
   html {

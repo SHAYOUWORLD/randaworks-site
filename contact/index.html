@@ -160,6 +160,7 @@
       form.addEventListener('submit', function () {
         btn.disabled = true;
         note.hidden = false;
+        form.setAttribute('aria-busy', 'true');
 
         if (window.RandaAnalytics && typeof window.RandaAnalytics.track === 'function') {
           window.RandaAnalytics.track('contact_submit', {
