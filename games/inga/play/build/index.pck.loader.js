@@ -92,56 +92,60 @@
 
   var RETRY_MAX = 3;
   var RETRY_BASE_MS = 1000;
-  var PART_TIMEOUT_MS = 60000;
+  var FETCH_TIMEOUT_MS = 60000;
   var STALL_TIMEOUT_MS = 30000;
 
-  async function fetchWithRetry(url, attempt) {
-    if (typeof attempt === 'undefined') attempt = 0;
+  function fetchWithTimeout(url) {
     var controller = new AbortController();
-    var timer = setTimeout(function () { controller.abort(); }, PART_TIMEOUT_MS);
-    try {
-      var response = await originalFetch(url, { signal: controller.signal });
-      clearTimeout(timer);
-      if (!response.ok) throw new Error('HTTP ' + response.status);
-      return response;
-    } catch (err) {
-      clearTimeout(timer);
-      if (attempt < RETRY_MAX) {
-        var delay = RETRY_BASE_MS * Math.pow(2, attempt);
-        await new Promise(function (r) { setTimeout(r, delay); });
-        return fetchWithRetry(url, attempt + 1);
-      }
-      throw err;
-    }
+    var timer = setTimeout(function () { controller.abort(); }, FETCH_TIMEOUT_MS);
+    return originalFetch(url, { signal: controller.signal }).then(
+      function (response) { clearTimeout(timer); return response; },
+      function (err) { clearTimeout(timer); throw err; }
+    );
   }
 
-  async function readBodyWithStallDetection(response, controller) {
-    if (!response.body || typeof response.body.getReader !== 'function') {
-      var buf = await response.arrayBuffer();
-      controller.enqueue(new Uint8Array(buf));
-      return;
-    }
-    var reader = response.body.getReader();
-    var stallTimer = null;
-    function resetStallTimer() {
-      if (stallTimer) clearTimeout(stallTimer);
-      stallTimer = setTimeout(function () {
-        try { reader.cancel('stall timeout'); } catch (_e) {}
-      }, STALL_TIMEOUT_MS);
-    }
-    try {
-      resetStallTimer();
-      while (true) {
-        var result = await reader.read();
-        if (result.done) break;
-        if (result.value) {
-          controller.enqueue(result.value);
-          resetStallTimer();
-        }
+  function readBodyWithStallDetection(response, streamController) {
+    return new Promise(function (resolve, reject) {
+      if (!response.body || typeof response.body.getReader !== 'function') {
+        response.arrayBuffer().then(function (buf) {
+          streamController.enqueue(new Uint8Array(buf));
+          resolve();
+        }, reject);
+        return;
       }
-    } finally {
-      if (stallTimer) clearTimeout(stallTimer);
-    }
+      var reader = response.body.getReader();
+      var stallTimer = null;
+      var stalled = false;
+      function resetStallTimer() {
+        if (stallTimer) clearTimeout(stallTimer);
+        stallTimer = setTimeout(function () {
+          stalled = true;
+          try { reader.cancel('stall timeout'); } catch (_e) {}
+          reject(new Error('Body stall timeout'));
+        }, STALL_TIMEOUT_MS);
+      }
+      function pump() {
+        reader.read().then(function (result) {
+          if (stalled) return;
+          if (result.done) {
+            clearTimeout(stallTimer);
+            resolve();
+            return;
+          }
+          if (result.value) {
+            streamController.enqueue(result.value);
+          }
+          resetStallTimer();
+          pump();
+        }, function (err) {
+          clearTimeout(stallTimer);
+          if (stalled) return;
+          reject(err);
+        });
+      }
+      resetStallTimer();
+      pump();
+    });
   }
 
   async function createPackResponse(resource) {
@@ -154,7 +158,8 @@
             var success = false;
             for (var attempt = 0; attempt <= RETRY_MAX; attempt++) {
               try {
-                var response = await fetchWithRetry(partUrl);
+                var response = await fetchWithTimeout(partUrl);
+                if (!response.ok) throw new Error('HTTP ' + response.status);
                 await readBodyWithStallDetection(response, controller);
                 success = true;
                 break;
