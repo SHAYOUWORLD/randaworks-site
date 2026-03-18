@@ -158,9 +158,10 @@
     if (eventQueue.length === 0) return;
     var batch = eventQueue.splice(0);
     if (!config.endpoint) return;
-    var payload = batch.length === 1 ? batch[0] : batch;
-    if (!sendWithBeacon(config.endpoint, payload)) {
-      sendWithFetch(config.endpoint, payload);
+    for (var i = 0; i < batch.length; i++) {
+      if (!sendWithBeacon(config.endpoint, batch[i])) {
+        sendWithFetch(config.endpoint, batch[i]);
+      }
     }
   }
 

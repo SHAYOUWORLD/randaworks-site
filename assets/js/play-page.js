@@ -71,9 +71,6 @@
       if (pendingAcks[command]) clearTimeout(pendingAcks[command]);
       pendingAcks[command] = setTimeout(function () {
         delete pendingAcks[command];
-        if (config.debug || false) {
-          try { console.warn("[PlayPage] ACK timeout for command:", command); } catch (e) {}
-        }
       }, ACK_TIMEOUT_MS);
     }
 
