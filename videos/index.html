@@ -29,29 +29,11 @@
   <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@graph": [
-        {
-          "@type": "CollectionPage",
-          "name": "動画 | RandaWorks",
-          "url": "https://www.randaworks.com/videos/",
-          "description": "RandaWorksのYouTube動画、因果 暦と時乃しおりのキャラクター紹介、配信アーカイブをまとめるページ。",
-          "inLanguage": "ja"
-        },
-        {
-          "@type": "VideoObject",
-          "name": "【漫才】彼氏のスペックがおかしい",
-          "description": "RandaWorksのYouTubeチャンネルで公開している漫才動画です。",
-          "thumbnailUrl": "https://i.ytimg.com/vi/NqhL_B7ZkOI/hqdefault.jpg",
-          "embedUrl": "https://www.youtube.com/embed/NqhL_B7ZkOI",
-          "url": "https://www.youtube.com/watch?v=NqhL_B7ZkOI",
-          "uploadDate": "2026-03-15",
-          "publisher": {
-            "@type": "Organization",
-            "name": "RandaWorks",
-            "url": "https://www.randaworks.com/"
-          }
-        }
-      ]
+      "@type": "CollectionPage",
+      "name": "動画 | RandaWorks",
+      "url": "https://www.randaworks.com/videos/",
+      "description": "RandaWorksのYouTube動画、因果 暦と時乃しおりのキャラクター紹介、配信アーカイブをまとめるページ。",
+      "inLanguage": "ja"
     }
   </script>
 </head>
@@ -127,24 +109,8 @@
       <section class="card">
         <p class="section-kicker">公開中</p>
         <h2>公開中の動画</h2>
-        <figure class="video-card video-feature">
-          <div class="video-embed-shell">
-            <iframe
-              src="https://www.youtube.com/embed/NqhL_B7ZkOI"
-              title="【漫才】彼氏のスペックがおかしい"
-              loading="lazy"
-              referrerpolicy="strict-origin-when-cross-origin"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              allowfullscreen
-            ></iframe>
-          </div>
-          <figcaption class="video-caption">
-            <strong>【漫才】彼氏のスペックがおかしい</strong>
-            <span>RandaWorksのYouTubeチャンネルで公開中の漫才動画です。</span>
-          </figcaption>
-        </figure>
-        <div class="cta-band-actions" style="justify-content: flex-start;">
-          <a class="cta" href="https://www.youtube.com/watch?v=NqhL_B7ZkOI" target="_blank" rel="noopener noreferrer">YouTubeで見る</a>
+        <div id="js-video-list" class="video-grid"></div>
+        <div class="cta-band-actions" style="justify-content: flex-start; margin-top: 22px;">
           <a class="cta cta-ghost" href="https://www.youtube.com/@RandaWorks" target="_blank" rel="noopener noreferrer">チャンネルを見る</a>
         </div>
       </section>
@@ -152,15 +118,23 @@
     </main>
 
     <div class="footer">
+      <nav class="footer-nav" aria-label="フッターナビゲーション">
+        <a href="../about/">About</a>
+        <a href="../privacy/">プライバシーポリシー</a>
+        <a href="../terms/">利用規約</a>
+        <a href="../contact/">お問い合わせ</a>
+      </nav>
       <div class="footer-links">
         <a class="footer-link-social" href="https://x.com/RandaWorksJP" target="_blank" rel="me noopener noreferrer" aria-label="RandaWorks公式Xを新しいタブで開く" data-track-event="social_click" data-track-placement="site_footer_x" data-track-label="site footer x">
           <svg class="footer-link-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1227" aria-hidden="true" focusable="false"><path d="M714.163 519.284 1160.89 0h-105.83L667.137 450.887 357.328 0H0l468.492 681.821L0 1226.37h105.866l409.588-476.152 327.218 476.152H1200L714.137 519.284h.026ZM569.165 687.828l-47.468-67.909L144.011 79.694h162.604l304.22 434.658 47.468 67.909 396.807 566.942H892.505L569.165 687.828Z"/></svg>
           <span>RandaWorks公式X</span>
         </a>
       </div>
-      <div>© 2026 RandaWorks</div>
+      <div>&copy; 2026 RandaWorks</div>
     </div>
   </div>
+  <script src="videos-data.js"></script>
+  <script src="videos-renderer.js"></script>
   <script src="../assets/js/analytics-config.js"></script>
   <script src="../assets/js/analytics.js"></script>
 </body>

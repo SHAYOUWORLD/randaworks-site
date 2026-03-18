@@ -1226,6 +1226,17 @@ button.cta[disabled] {
   background: var(--accent-gold);
 }
 
+.video-grid {
+  display: grid;
+  gap: 20px;
+}
+
+@media (min-width: 720px) {
+  .video-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
 .video-feature {
   margin-bottom: 22px;
 }
@@ -1757,6 +1768,25 @@ button.cta[disabled] {
   font-size: 0.85rem;
   text-align: center;
   font-family: var(--font-base);
+}
+
+.footer-nav {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  margin-bottom: 16px;
+  font-size: 0.82rem;
+}
+
+.footer-nav a {
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+
+.footer-nav a:hover {
+  color: var(--accent-gold);
 }
 
 /* Utilities */
