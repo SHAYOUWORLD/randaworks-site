@@ -12,97 +12,219 @@
   </script>
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <link rel="icon" href="../assets/img/randaworks_logo_icon.webp" type="image/webp">
-  <title>About | RandaWorks</title>
-  <meta name="description" content="RandaWorksは、歴史とゲームの接点を追求するインディーゲームスタジオです。スタジオの概要、方針、連絡先をご案内します。" />
+  <title>About | RandaWorks — 理解や発見がそのまま面白さになるゲームをつくるスタジオ</title>
+  <meta name="description" content="RandaWorksは、理解や発見がそのまま面白さになるゲームをつくるインディーゲームスタジオです。スタジオの思想、つくっているもの、今後の発信についてご紹介します。" />
   <link rel="canonical" href="https://www.randaworks.com/about/" />
   <meta property="og:type" content="website" />
   <meta property="og:title" content="About | RandaWorks" />
-  <meta property="og:description" content="RandaWorksは、歴史とゲームの接点を追求するインディーゲームスタジオです。" />
+  <meta property="og:description" content="RandaWorksは、理解や発見がそのまま面白さになるゲームをつくるインディーゲームスタジオです。" />
   <meta property="og:url" content="https://www.randaworks.com/about/" />
   <meta property="og:image" content="https://www.randaworks.com/assets/img/randaworks_logo_full.png" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:site" content="@RandaWorksJP" />
   <meta name="twitter:title" content="About | RandaWorks" />
-  <meta name="twitter:description" content="RandaWorksは、歴史とゲームの接点を追求するインディーゲームスタジオです。" />
+  <meta name="twitter:description" content="RandaWorksは、理解や発見がそのまま面白さになるゲームをつくるインディーゲームスタジオです。" />
   <meta name="twitter:image" content="https://www.randaworks.com/assets/img/randaworks_logo_full.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap">
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
-  <noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet"></noscript>
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Shippori+Mincho:wght@400;700&display=swap">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Shippori+Mincho:wght@400;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Shippori+Mincho:wght@400;700&display=swap" rel="stylesheet"></noscript>
   <link rel="stylesheet" href="../assets/css/style.css">
   <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "AboutPage",
-      "name": "About | RandaWorks",
-      "url": "https://www.randaworks.com/about/",
-      "description": "RandaWorksのスタジオ概要・方針。",
-      "inLanguage": "ja",
-      "mainEntity": {
-        "@type": "Organization",
-        "@id": "https://www.randaworks.com/#organization",
-        "name": "RandaWorks",
-        "url": "https://www.randaworks.com/"
-      }
+      "@graph": [
+        {
+          "@type": "AboutPage",
+          "name": "About | RandaWorks",
+          "url": "https://www.randaworks.com/about/",
+          "description": "RandaWorksは、理解や発見がそのまま面白さになるゲームをつくるインディーゲームスタジオです。",
+          "inLanguage": "ja",
+          "mainEntity": {
+            "@id": "https://www.randaworks.com/#organization"
+          }
+        },
+        {
+          "@type": "Organization",
+          "@id": "https://www.randaworks.com/#organization",
+          "name": "RandaWorks",
+          "url": "https://www.randaworks.com/",
+          "logo": "https://www.randaworks.com/assets/img/randaworks_logo_full.png",
+          "sameAs": [
+            "https://x.com/RandaWorksJP"
+          ]
+        },
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "ホーム",
+              "item": "https://www.randaworks.com/"
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "name": "About"
+            }
+          ]
+        }
+      ]
     }
   </script>
   <style>
-    .about { max-width: 800px; margin: 0 auto; padding: 60px 0; }
-    .about h1 { font-family: 'Noto Sans JP', sans-serif; font-size: 1.6rem; font-weight: 700; border-bottom: none; display: block; margin-bottom: 32px; }
-    .about h2 { font-family: 'Noto Sans JP', sans-serif; font-size: 1.1rem; font-weight: 700; border-bottom: none; display: block; margin: 40px 0 12px; }
-    .about p, .about li { font-size: 0.95rem; line-height: 1.9; color: var(--text-muted); }
-    .about ul { padding-left: 1.5em; margin: 8px 0 16px; }
-    .about li { margin-bottom: 4px; }
-    .about a { color: var(--accent-gold); }
-    .about .contact-info { margin-top: 8px; font-size: 0.9rem; }
+    .about-hero { text-align: center; padding: 48px 20px 36px; }
+    .about-hero h1 { font-family: var(--font-serif); font-size: 1.7rem; font-weight: 700; line-height: 1.6; margin-bottom: 20px; }
+    .about-lead { font-size: 1.0rem; line-height: 1.9; color: var(--text-muted); max-width: 640px; margin: 0 auto; }
+    .about-body { font-size: 0.95rem; line-height: 1.9; color: var(--text-muted); }
+    .about-body + .about-body { margin-top: 16px; }
+    .about-grid .pillar-card h3 { font-size: 0.95rem; margin-bottom: 8px; }
+    .about-grid .pillar-card p { font-size: 0.88rem; line-height: 1.8; color: var(--text-muted); margin: 0; }
+    .about-grid .pillar-card a { color: var(--accent-gold); font-size: 0.85rem; display: inline-block; margin-top: 8px; }
+    .about-share-list { margin: 24px 0 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+    .about-share-list li { position: relative; padding-left: 18px; font-size: 0.9rem; color: var(--text-muted); line-height: 1.7; }
+    .about-share-list li::before { content: ""; position: absolute; left: 0; top: 0.65em; width: 7px; height: 7px; border-radius: 999px; background: var(--accent-gold); box-shadow: 0 0 12px rgba(199, 166, 102, 0.45); }
+    .about-share-list strong { color: var(--text-main); font-weight: 700; }
+    @media (max-width: 768px) {
+      .about-hero h1 { font-size: 1.4rem; }
+      .about-share-list { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 480px) {
+      .about-hero { padding: 32px 12px 24px; }
+      .about-hero h1 { font-size: 1.25rem; }
+    }
   </style>
 </head>
 <body>
   <a class="skip-link" href="#main-content">メインコンテンツへ移動</a>
   <div class="container">
     <div class="nav">
-      <div class="brand"><a href="../"><img src="../assets/img/randaworks_logo_text.png" alt="RandaWorks" style="height: 28px; vertical-align: middle;"></a></div>
+      <div class="brand"><a href="../"><picture>
+        <source srcset="../assets/img/randaworks_logo_text.webp" type="image/webp">
+        <img src="../assets/img/randaworks_logo_text.png" alt="RandaWorks" style="height: 28px; vertical-align: middle;">
+      </picture></a></div>
       <div class="links">
         <a href="../games/">ゲーム一覧</a>
         <a href="../videos/">動画</a>
         <a href="../news/">お知らせ</a>
+        <a href="../journal/">制作ノート</a>
         <a href="../contact/">お問い合わせ</a>
       </div>
     </div>
 
-    <main id="main-content" class="about">
-      <h1>About RandaWorks</h1>
+    <main id="main-content">
 
-      <h2>スタジオ概要</h2>
-      <p>RandaWorks は、歴史とゲームの接点を追求する個人運営のインディーゲームスタジオです。「知ることが面白さになる」をコンセプトに、史実の因果関係や出来事のつながりをゲームメカニクスに落とし込んだ作品を制作しています。</p>
-
-      <h2>主な活動</h2>
-      <ul>
-        <li>歴史をテーマにしたゲームの企画・開発・運営</li>
-        <li>ブラウザ体験版の公開（本サイト上で無料プレイ可能）</li>
-        <li>Steam での PC 向けタイトルの配信</li>
+      <ul class="breadcrumb">
+        <li><a href="../">ホーム</a></li>
+        <li class="breadcrumb-separator" aria-hidden="true">›</li>
+        <li class="breadcrumb-current" aria-current="page">About</li>
       </ul>
 
-      <h2>公開中のタイトル</h2>
-      <p><a href="../games/inga/">日本史因果クロニクル</a> — 史実の前後関係でコンボを組んで戦う、日本史デッキ構築ローグライク。ブラウザ体験版を公開中で、正式版は Steam にて配信予定です。</p>
+      <!-- Hero -->
+      <section class="card about-hero">
+        <p class="section-kicker">About</p>
+        <h1>遊んでいる間に、気づいたら賢くなってた。</h1>
+        <p class="about-lead">RandaWorks は、理解や発見がそのまま面白さになるゲームをつくるインディーゲームスタジオです。<br>学びを押しつけるのではなく、遊んだ結果として何かが残る——そんな体験を設計しています。</p>
+      </section>
 
-      <h2>運営方針</h2>
-      <ul>
-        <li>個人開発の強みを生かし、小規模でも遊びの核を磨くことを優先します</li>
-        <li>ユーザーからのフィードバックを重視し、体験版の段階から改善を繰り返します</li>
-        <li>プライバシーと利用者の権利を尊重した運営を行います</li>
-      </ul>
+      <!-- つくっているもの -->
+      <section class="card">
+        <p class="section-kicker">What We Make</p>
+        <h2>つくっているもの</h2>
+        <div class="pillar-grid about-grid">
+          <article class="surface-panel pillar-card">
+            <h3>ゲーム作品</h3>
+            <p>理解や発見を面白さに変えるゲームを開発しています。現在の主力タイトルは「日本史因果クロニクル」。</p>
+            <a href="../games/">ゲーム一覧を見る</a>
+          </article>
+          <article class="surface-panel pillar-card">
+            <h3>ブラウザ体験版</h3>
+            <p>インストール不要で、ブラウザからすぐに試せる体験版を公開しています。</p>
+            <a href="../games/inga/?src=about#play">体験版を遊ぶ</a>
+          </article>
+          <article class="surface-panel pillar-card">
+            <h3>動画</h3>
+            <p>ゲームのPVやキャラクター紹介動画を公開しています。</p>
+            <a href="../videos/">動画を見る</a>
+          </article>
+          <article class="surface-panel pillar-card">
+            <h3>カジュアルゲーム</h3>
+            <p>知的な面白さを小さなフォーマットで届けるカジュアルゲームも構想しています。</p>
+          </article>
+          <article class="surface-panel pillar-card">
+            <h3>記事</h3>
+            <p>開発ログ、ゲーム設計の考察、AI活用メモなどを発信していきます。</p>
+            <a href="../journal/">制作ノートを見る</a>
+          </article>
+        </div>
+      </section>
 
-      <h2>お問い合わせ</h2>
-      <p>ご意見・ご感想・取材等のお問い合わせは、以下よりお気軽にどうぞ。</p>
-      <p class="contact-info">メール：<a href="mailto:contact@randaworks.com">contact@randaworks.com</a></p>
-      <p class="contact-info"><a href="../contact/">お問い合わせフォーム</a></p>
+      <!-- なぜつくるのか -->
+      <section class="card">
+        <p class="section-kicker">Why We Make</p>
+        <h2>なぜ、こういうゲームをつくるのか</h2>
+        <p class="about-body">「勉強になるゲーム」をつくりたいわけではありません。RandaWorks が目指しているのは、面白く遊んだ結果として、理解や発見が自然に残る体験です。</p>
+        <p class="about-body">「これはこういう仕組みだったのか」「この流れにはこんな意味があったのか」——プレイの中で起きるそうした気づきを、ゲームならではの面白さに変えること。それが出発点です。</p>
+        <p class="about-body">歴史は最初の題材ですが、目指す方向は歴史だけに限りません。構造を理解することが戦略になる、発見すること自体が楽しい——そういう体験を、さまざまなテーマで追求していきます。</p>
+      </section>
+
+      <!-- 考え方 -->
+      <section class="card">
+        <p class="section-kicker">How We Think</p>
+        <h2>RandaWorksの考え方</h2>
+        <div class="combo-grid about-grid">
+          <article class="surface-panel pillar-card">
+            <h3>理解がそのまま気持ちよさになる</h3>
+            <p>仕組みや構造を知ることが、プレイの手応えにつながる設計を目指します。</p>
+          </article>
+          <article class="surface-panel pillar-card">
+            <h3>気づきが次の一手を変える</h3>
+            <p>新しい発見がプレイヤーの判断を変え、攻略の幅を広げる体験をつくります。</p>
+          </article>
+          <article class="surface-panel pillar-card">
+            <h3>学びを押しつけず、遊びに溶かす</h3>
+            <p>教えるのではなく、遊んでいるうちに自然と理解が深まる仕組みを重視します。</p>
+          </article>
+          <article class="surface-panel pillar-card">
+            <h3>小さく作って鋭く磨く</h3>
+            <p>インディーの機動力を活かし、体験の核を磨くことに集中します。</p>
+          </article>
+        </div>
+      </section>
+
+      <!-- 公開していくもの -->
+      <section class="card">
+        <p class="section-kicker">What We Share</p>
+        <h2>ゲームだけでなく、考えていることも公開する</h2>
+        <p class="about-body">RandaWorks は、ゲーム作品だけでなく、その背景にある考え方やプロセスも発信していきます。つくる側の視点を開くことで、遊ぶ側にも新しい面白さが伝わると考えています。</p>
+        <ul class="about-share-list">
+          <li><strong>開発ログ</strong> — 制作過程の記録と振り返り</li>
+          <li><strong>ゲーム設計</strong> — メカニクスやレベルデザインの考察</li>
+          <li><strong>AI活用メモ</strong> — 開発におけるAI活用の実践記録</li>
+          <li><strong>ゲーム研究・レビュー</strong> — 他作品の分析や知見の共有</li>
+        </ul>
+      </section>
+
+      <!-- CTA -->
+      <section class="card cta-band" aria-labelledby="about-cta-title">
+        <p class="section-kicker">Explore</p>
+        <h2 id="about-cta-title">RandaWorksを体験する</h2>
+        <p>作品を見る、体験版を遊ぶ、動画を観る——気になったところからどうぞ。</p>
+        <div class="cta-band-actions">
+          <a class="cta" href="../games/" data-track-event="cta_click" data-track-placement="about_cta_games" data-track-label="about cta games">ゲームを見る</a>
+          <a class="cta" href="../games/inga/?src=about#play" data-track-event="play_cta_click" data-track-placement="about_cta_play" data-track-label="about cta play">体験版を遊ぶ</a>
+          <a class="cta cta-ghost" href="../videos/" data-track-event="cta_click" data-track-placement="about_cta_videos" data-track-label="about cta videos">動画を見る</a>
+          <a class="cta cta-ghost" href="../contact/" data-track-event="cta_click" data-track-placement="about_cta_contact" data-track-label="about cta contact">お問い合わせ</a>
+        </div>
+      </section>
+
     </main>
 
     <div class="footer">
       <nav class="footer-nav" aria-label="フッターナビゲーション">
-        <a href="../about/">About</a>
+        <a href="../about/" aria-current="page">About</a>
         <a href="../privacy/">プライバシーポリシー</a>
         <a href="../terms/">利用規約</a>
         <a href="../contact/">お問い合わせ</a>

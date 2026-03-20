@@ -18,3 +18,8 @@ start-local-analytics.bat
 .tmp/
 output/
 progress.md
+
+# Astro journal build artifacts (source in journal-src/, output committed in journal/)
+journal-src/node_modules/
+journal-src/.astro/
+journal-src/dist/
