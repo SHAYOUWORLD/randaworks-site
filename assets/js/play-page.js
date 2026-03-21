@@ -10,10 +10,13 @@
     var frameShell = document.getElementById("demoFrameShell");
     var status = document.getElementById("playStatusText");
     var errorBox = document.getElementById("playError");
+    var launchButton = document.getElementById("launchPlayButton");
     var retryButton = document.getElementById("retryBootButton");
     var fullscreenButton = document.getElementById("fullscreenPlayButton");
     var muteButton = document.getElementById("mutePlayButton");
     var readyNote = document.getElementById("playReadyNote");
+    var demoLaunchOverlay = document.getElementById("demoLaunchOverlay");
+    var demoLaunchButton = document.getElementById("demoLaunchButton");
     var buildPath = body.dataset.buildPath || "./build/index.html";
     var buildId = body.dataset.buildId || "";
     var mutePreferenceKey = "randa:inga:audio-muted";
@@ -22,14 +25,15 @@
     var bootStartedAt = 0;
     var bootSuccessTracked = false;
     var isMuted = readMutePreference();
+    var hasLaunched = false;
 
     function readMutePreference() {
       try {
         var stored = window.localStorage.getItem(mutePreferenceKey);
-        if (stored === null) return true;
+        if (stored === null) return false;
         return stored === "true";
       } catch (error) {
-        return true;
+        return false;
       }
     }
 
@@ -55,6 +59,27 @@
     function updateMuteButton() {
       if (!muteButton) return;
       muteButton.textContent = isMuted ? "ミュート解除" : "音声をミュート";
+    }
+
+    function updateLaunchButtons() {
+      if (launchButton) launchButton.hidden = hasLaunched;
+      if (retryButton) retryButton.hidden = !bootResolved || !errorBox || errorBox.hidden;
+    }
+
+    function showLaunchOverlay() {
+      if (!demoLaunchOverlay) return;
+      demoLaunchOverlay.hidden = false;
+      demoLaunchOverlay.classList.remove("demo-launch-hiding");
+    }
+
+    function hideLaunchOverlay() {
+      if (!demoLaunchOverlay || demoLaunchOverlay.hidden) return;
+      demoLaunchOverlay.classList.add("demo-launch-hiding");
+      window.setTimeout(function () {
+        if (demoLaunchOverlay.classList.contains("demo-launch-hiding")) {
+          demoLaunchOverlay.hidden = true;
+        }
+      }, 400);
     }
 
     var ACK_TIMEOUT_MS = 5000;
@@ -91,6 +116,7 @@
       if (!errorBox) return;
       errorBox.hidden = true;
       errorBox.textContent = "";
+      updateLaunchButtons();
     }
 
     function markReady(message) {
@@ -98,6 +124,7 @@
       if (bootTimer) window.clearTimeout(bootTimer);
       if (readyNote) readyNote.hidden = false;
       setStatus(message || "プレイできます。");
+      updateLaunchButtons();
     }
 
     function markError(code, message) {
@@ -105,6 +132,7 @@
       if (bootTimer) window.clearTimeout(bootTimer);
       setStatus("起動できませんでした。");
       setError(message);
+      updateLaunchButtons();
       track("demo_boot_error", {
         build_id: buildId,
         error_code: code
@@ -122,10 +150,13 @@
     }
 
     function loadFrame(launchMethod) {
+      hasLaunched = true;
       bootStartedAt = Date.now();
       bootResolved = false;
       bootSuccessTracked = false;
       clearError();
+      updateLaunchButtons();
+      hideLaunchOverlay();
       if (readyNote) readyNote.hidden = true;
       setStatus("体験版を準備しています...");
 
@@ -163,6 +194,15 @@
             "体験版の読み込みに失敗しました。時間をおいて再試行するか、サポートページをご確認ください。"
           );
         });
+    }
+
+    function launchGame(launchMethod) {
+      if (hasLaunched) return;
+      loadFrame(launchMethod || "play_button");
+      track("game_launch", {
+        build_id: buildId,
+        placement: "play_shell_launch"
+      });
     }
 
     window.addEventListener("message", function (event) {
@@ -216,8 +256,21 @@
 
     if (retryButton) {
       retryButton.addEventListener("click", function () {
-        if (frame) frame.removeAttribute("src");
+        if (frame) frame.src = "about:blank";
+        hasLaunched = false;
         loadFrame("retry");
+      });
+    }
+
+    if (launchButton) {
+      launchButton.addEventListener("click", function () {
+        launchGame("play_button");
+      });
+    }
+
+    if (demoLaunchButton) {
+      demoLaunchButton.addEventListener("click", function () {
+        launchGame("play_overlay");
       });
     }
 
@@ -253,7 +306,9 @@
         isMuted = !isMuted;
         saveMutePreference(isMuted);
         updateMuteButton();
-        sendFrameControl("setMuted", isMuted);
+        if (hasLaunched) {
+          sendFrameControl("setMuted", isMuted);
+        }
         track("audio_toggle", {
           build_id: buildId,
           placement: "play_shell_audio",
@@ -269,7 +324,8 @@
       });
     }, 180000);
 
-    loadFrame("page_load");
+    updateLaunchButtons();
+    showLaunchOverlay();
   }
 
   if (document.readyState === "loading") {
