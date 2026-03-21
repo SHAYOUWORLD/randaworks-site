@@ -1,8 +1,8 @@
 (function () {
   const PCK_NAME = 'index.pck';
-  const PCK_PARTS = [{"name":"index.pck.part000","size":199229440},{"name":"index.pck.part001","size":175682056}];
-  const PCK_TOTAL_SIZE = 374911496;
-  const GCS_BASE_URL = 'https://storage.googleapis.com/randaworks-game-builds/inga-demo/0.1.7/';
+  const PCK_PARTS = [{"name":"index.pck.part000","size":199229440},{"name":"index.pck.part001","size":175707368}];
+  const PCK_TOTAL_SIZE = 374936808;
+  const GCS_BASE_URL = 'https://storage.googleapis.com/randaworks-game-builds/inga-demo/0.1.8/';
   if (typeof window === 'undefined' || typeof window.fetch !== 'function') {
     return;
   }
