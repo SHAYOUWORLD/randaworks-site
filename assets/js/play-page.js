@@ -83,6 +83,7 @@
     }
 
     var ACK_TIMEOUT_MS = 5000;
+    var BOOT_TIMEOUT_MS = 90000;
     var pendingAcks = {};
 
     function sendFrameControl(command, value) {
@@ -122,6 +123,7 @@
     function markReady(message) {
       bootResolved = true;
       if (bootTimer) window.clearTimeout(bootTimer);
+      clearError();
       if (readyNote) readyNote.hidden = false;
       setStatus(message || "プレイできます。");
       updateLaunchButtons();
@@ -146,7 +148,7 @@
           "boot_timeout",
           "起動に時間がかかっています。時間をおいて再試行するか、サポートページをご確認ください。"
         );
-      }, 15000);
+      }, BOOT_TIMEOUT_MS);
     }
 
     function loadFrame(launchMethod) {
