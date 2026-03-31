@@ -1,0 +1,181 @@
+---
+title: "体験版の分析基盤を作って、プレイの流れを見える化した話"
+description: "PVだけでは見えなかった体験版の離脱ポイント。起動・タイトル・ラン開始・クリアという流れを独自イベントとGA4で計測し、管理画面で1セッションの軌跡を追えるようにした過程を記録します。"
+date: 2026-03-19
+category: devlog
+tags: [analytics, godot, cloud-run, gcs]
+draft: true
+related:
+  - /games/inga/?src=journal_demo_analytics#play
+  - /journal/ai/iterating-with-ai-code-review-without-trusting-it-blindly/
+---
+
+<section class="journal-summary" aria-labelledby="article-summary-title">
+  <p id="article-summary-title" class="journal-summary-title">この記事で書くこと</p>
+  <p class="journal-summary-lead">PVだけでは、体験版で本当に何が起きているか分からなかった。この記事では、起動から離脱までを追うために何を計測し、GA4と独自基盤をどう使い分け、管理画面でどの流れを見えるようにしたかを整理する。</p>
+  <div class="journal-summary-grid">
+    <div class="journal-summary-item">
+      <strong>背景</strong>
+      <span>ページビューだけでは、遊ばれたのか、途中で止まったのかが見えなかった。</span>
+    </div>
+    <div class="journal-summary-item">
+      <strong>やったこと</strong>
+      <span>イベント定義、Beacon送信、Cloud Run集約、管理画面までを繋いで観測の流れを作った。</span>
+    </div>
+    <div class="journal-summary-item">
+      <strong>要点</strong>
+      <span>小規模でも、体験の流れを観測できると改善の優先順位が大きく変わる。</span>
+    </div>
+  </div>
+</section>
+
+<article class="card">
+<p class="section-kicker">導入</p>
+
+## 「誰かが来ている」と「誰かが遊んでいる」は、別のことだ
+
+体験版を公開して最初にやったことは、Google AnalyticsのPV確認だった。ページを開いた人数は分かる。でも、それだけでは何も改善できないことにすぐ気づいた。
+
+ゲームを Web ブラウザで動かす体験版は、PV を踏んだあとに多くの工程がある。**起動ボタンを押す、ゲームが読み込まれる、タイトル画面が出る、キャラを選んでランを始める、そして最後まで遊ぶ——あるいは途中でやめる。**どこまで到達したのかが分からなければ、「何を直せばいいか」が分からない。
+
+このログは、そのギャップを埋めるために分析基盤を整えた過程の記録だ。大規模なサービスの話ではない。ひとりで作っているゲームの体験版に、どうやって「観測の目」を持たせたか、という話。
+</article>
+
+<article class="card">
+<p class="section-kicker">問題の整理</p>
+
+## なぜPVは「足りない」のか
+
+ページビューが教えてくれるのは「訪れた」という事実だけだ。体験版ページのPVが増えても、それがゲームを実際に起動した人なのか、ページを開いて閉じた人なのかは分からない。
+
+ブラウザゲームには、他のウェブコンテンツとは違う構造上の問題がある。ゲーム本体は iframe の中で動く別ドメインのコンテンツだ。Google Analyticsはiframeの内側を直接見ることができないし、「ラン開始」や「バトル終了」などのゲーム内イベントは、外側のサイトには自動では伝わらない。
+
+つまり「ページを開いた」と「ゲームを遊んだ」の間には、見えない暗闇がある。その暗闇に何があるかを計測できなければ、プレイ体験の改善に手が出せない。
+
+- ゲームが起動しているのか、タイムアウトしているのか
+- タイトル画面まで到達しているのか
+- ランを始めているのか、タイトルで離脱しているのか
+- どのくらいの時間、プレイページに留まっているのか
+
+これらを知るために、独自の計測基盤を構築する必要があった。
+</article>
+
+<article class="card">
+<p class="section-kicker">設計</p>
+
+## 何を、いつ、どう計測するか
+
+最初に考えたのは「計測したいのはページではなく、セッションの流れだ」ということだった。1回の体験がどう始まって、どこで何が起き、どう終わったか——その**時系列の軌跡**を追いたい。
+
+### イベントの定義
+
+計測するイベントを、プレイヤーが体験するフェーズに沿って定義した。
+
+<table class="specs-table">
+  <thead>
+    <tr><th>イベント名</th><th>意味</th><th>発火元</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><code>play_session_start</code></td><td>プレイページを開いた</td><td>外側ページ（analytics.js）</td></tr>
+    <tr><td><code>demo_boot_start</code></td><td>起動処理を開始した</td><td>外側ページ（play-page.js）</td></tr>
+    <tr><td><code>demo_boot_success</code></td><td>ゲームが起動できた</td><td>iframe → postMessage 経由</td></tr>
+    <tr><td><code>demo_boot_error</code></td><td>起動に失敗した（エラーコード付き）</td><td>iframe / タイムアウト検知</td></tr>
+    <tr><td><code>title_reached</code></td><td>タイトル画面に到達した</td><td>iframe → postMessage 経由</td></tr>
+    <tr><td><code>run_started</code></td><td>ランを開始した</td><td>iframe → postMessage 経由</td></tr>
+    <tr><td><code>demo_end_reached</code></td><td>体験版の終端に到達した</td><td>iframe → postMessage 経由</td></tr>
+    <tr><td><code>play_session_end</code></td><td>ページを離れた</td><td>外側ページ（pagehide イベント）</td></tr>
+  </tbody>
+</table>
+
+ゲーム内のイベントは `postMessage` で iframe から外側のページへ送り、外側の `play-page.js` が受け取って計測系に渡す、という構造にした。iframe 内のゲームと、サイトの分析基盤を完全に分離できる。
+
+### GA4 と独自分析の使い分け
+
+全イベントを GA4 に送りつつ、同時に自前のバックエンド（Cloud Run + GCS）にも送る二重構成にした。
+
+**GA4が得意なこと：**サイト全体のPV、流入元（utm_source）、デバイス傾向、ファネルのざっくりした把握。
+
+**独自分析が必要だった理由：**GA4 は「1セッションの中でどのイベントが何秒後に起きたか」という時系列の流れを再構成するのが苦手だ。独自バックエンドにはすべてのイベントを JSONL 形式で書き込み、セッション単位で集計・管理できるようにした。
+</article>
+
+<article class="card">
+<p class="section-kicker">管理画面</p>
+
+## 数字より、流れを見たかった
+
+管理画面（`/admin/analytics/`）を設計するとき、「合計数を出すダッシュボード」ではなく、**「1回の体験を時系列で追えるビュー」**を最初のゴールに置いた。
+
+管理画面の上部にはファネルを置いた。プレイ試行 → 起動成功 → タイトル到達 → ラン開始 → デモ到達、という5段階で、どこで人が減っているかを視覚的に確認できる。
+
+その下には直近のプレイ試行の一覧テーブルがある。1行が1セッション。そこから「見る」ボタンで1セッションの詳細に入ると、タイムライン形式でイベントが時刻付きで並ぶ。
+
+**「この人は08:23にゲームを起動して、08:25にラン開始して、08:31に終了した」**という流れが、1画面で分かる。
+</article>
+
+<article class="card">
+<p class="section-kicker">実装</p>
+
+## イベントロスとの戦い
+
+### pagehide と Beacon API
+
+`play_session_end` は、ページを離れるタイミングで送る必要がある。しかし `beforeunload` や `unload` は、ブラウザがページを閉じる寸前に fetch が完了する保証がない。
+
+`navigator.sendBeacon` はこの問題に対応した API で、ページが終了するタイミングでも確実に送れる設計になっている。`sendBeacon` が使えない環境では `fetch`（`keepalive: true`）でフォールバックする構成にしている。
+
+### GCS への同時書き込みでイベントが消える問題
+
+イベントのバックエンドは、Google Cloud Storage のファイルに JSONL を追記していく設計だ。ところがブラウザからイベントが同時多発的に送られると、「読み出し → 追記 → 書き戻し」の間に別リクエストが先に書き戻してしまい、イベントが上書きで消える問題が起きた（`b81710c`）。
+
+解決策は GCS の **世代ロック（generation match）**を使うことだった。
+
+```python
+# 書き込み前に現在の世代を取得
+blob.reload()
+current_generation = blob.generation
+
+# 世代が一致する場合のみ書き込む
+blob.upload_from_string(
+    existing + line,
+    if_generation_match=current_generation,
+)
+```
+
+リトライは最大6回、ジッター付きのバックオフで実装した。
+</article>
+
+<article class="card">
+<p class="section-kicker">収穫</p>
+
+## 観測できるようになって、変わったこと
+
+分析基盤を動かして最初に分かったのは、思ったより「起動どまり」のケースが存在する、ということだった。
+
+ファネルで「プレイ試行 → 起動成功」の変換率が見えた。これは報告書のための数字ではなく、「今すぐリトライUIを改善すべきか」という判断に直結する情報だ。
+
+観測ができるようになると、「何を直すか」の議論が変わる。感覚ではなくデータに基づいて、どこに時間を投資すべきかを考えられる。リソースが限られているほど、的外れな改善に費やすコストが痛い。
+</article>
+
+<section class="journal-takeaways" aria-labelledby="takeaways-title">
+  <h2 id="takeaways-title">今回の学び</h2>
+  <ul>
+    <li>体験版では「ページが開かれた」より「どこまで遊べたか」を見ないと改善点が分からない。</li>
+    <li>GA4だけで完結させず、セッション単位の独自ログを持つと判断材料が一気に増える。</li>
+    <li>観測基盤はレポートのためではなく、次にどこを直すかを決めるために作るべきだった。</li>
+  </ul>
+</section>
+
+<article class="card">
+<p class="section-kicker">参照情報</p>
+
+## この記事で参照したコミットとファイル
+
+<table class="specs-table">
+  <thead><tr><th>コミット</th><th>内容</th></tr></thead>
+  <tbody>
+    <tr><td><code>e94e954</code></td><td>全13ページにGA4タグを追加（2026-03-15）</td></tr>
+    <tr><td><code>b81710c</code></td><td>GCS同時書き込みによるイベントロスを修正：世代ロック + リトライ実装（2026-03-14）</td></tr>
+    <tr><td><code>7c1d93d</code></td><td>分析管理画面をリデザイン：ファネル・セッション詳細・タイムラインを追加（2026-03-18）</td></tr>
+  </tbody>
+</table>
+</article>

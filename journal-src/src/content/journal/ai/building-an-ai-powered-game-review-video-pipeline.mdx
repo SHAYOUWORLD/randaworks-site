@@ -1,0 +1,41 @@
+---
+title: "生プレイ記録をAIで配信動画風に再構成するパイプラインを作った話"
+description: "ゲームプレイの録画データをAIで分析し、ハイライト抽出・ナレーション生成・動画構成まで自動化するパイプラインの設計と実装記録。"
+date: 2026-03-19
+category: ai
+tags: [ai, video, pipeline, automation]
+draft: true
+related:
+  - /journal/ai/iterating-with-ai-code-review-without-trusting-it-blindly/
+---
+
+<article class="card">
+<p class="section-kicker">背景</p>
+
+## なぜ配信動画をAIで作ろうとしたのか
+
+（この記事は再構成中です。元の内容はgit管理前のファイルに存在しましたが、ブランチ作業中に失われました。内容を再度記録する予定です。）
+
+生プレイの記録をそのまま公開するのではなく、配信動画として見やすく再構成したかった。しかしひとりで開発しながら動画編集まで行うのはコストが高い。AIを使って、録画からハイライト抽出・構成・ナレーションを自動化できないか、という問いから始まった。
+
+</article>
+
+<article class="card">
+<p class="section-kicker">構成</p>
+
+## パイプラインの概要
+
+- 生プレイ録画 → フレーム分析 → イベント抽出
+- AIによるハイライト選定とシーン構成
+- ナレーション生成と音声同期
+- 人間によるディレクションと最終調整
+
+</article>
+
+<section class="journal-takeaways" aria-labelledby="takeaways-title">
+  <h2 id="takeaways-title">今回の学び</h2>
+  <ul>
+    <li>全自動より「AIが草案を出して人間が判断する」ループのほうが結果が良い。</li>
+    <li>音声同期は自動化で最も難しいポイントのひとつ。</li>
+  </ul>
+</section>

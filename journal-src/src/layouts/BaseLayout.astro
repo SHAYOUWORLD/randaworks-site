@@ -1,0 +1,100 @@
+---
+interface Props {
+  title: string;
+  description: string;
+  canonicalPath?: string;
+  ogType?: string;
+  ogImage?: string;
+  bodyClass?: string;
+  ldJson?: object;
+}
+
+const {
+  title,
+  description,
+  canonicalPath,
+  ogType = 'website',
+  ogImage = '/assets/img/randaworks_logo_full.png',
+  bodyClass = '',
+  ldJson,
+} = Astro.props;
+
+const siteUrl = 'https://www.randaworks.com';
+const canonical = canonicalPath ? `${siteUrl}${canonicalPath}` : siteUrl;
+const ogImageFull = `${siteUrl}${ogImage}`;
+---
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <!-- Google tag (gtag.js) -->
+  <script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-WNL49Q0CTT"></script>
+  <script is:inline>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-WNL49Q0CTT');
+  </script>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="icon" href="/assets/img/randaworks_logo_icon.webp" type="image/webp">
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <link rel="canonical" href={canonical} />
+  <meta property="og:type" content={ogType} />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:url" content={canonical} />
+  <meta property="og:image" content={ogImageFull} />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@RandaWorksJP" />
+  <meta name="twitter:title" content={title} />
+  <meta name="twitter:description" content={description} />
+  <meta name="twitter:image" content={ogImageFull} />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Shippori+Mincho:wght@400;700&display=swap">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Shippori+Mincho:wght@400;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Shippori+Mincho:wght@400;700&display=swap" rel="stylesheet"></noscript>
+  <link rel="stylesheet" href="/assets/css/style.css" />
+  {ldJson && <script type="application/ld+json" set:html={JSON.stringify(ldJson)} />}
+  <slot name="head" />
+</head>
+<body class={bodyClass}>
+  <a class="skip-link" href="#main-content">メインコンテンツへ移動</a>
+  <div class="container">
+    <div class="nav">
+      <div class="brand"><a href="/"><picture>
+        <source srcset="/assets/img/randaworks_logo_text.webp" type="image/webp">
+        <img src="/assets/img/randaworks_logo_text.png" alt="RandaWorks" style="height: 28px; vertical-align: middle;">
+      </picture></a></div>
+      <div class="links">
+        <a href="/games/">ゲーム一覧</a>
+        <a href="/videos/">動画</a>
+        <a href="/news/">お知らせ</a>
+        <a href="/journal/" aria-current="page">制作ノート</a>
+        <a href="/contact/">お問い合わせ</a>
+      </div>
+    </div>
+    <main id="main-content">
+      <slot />
+    </main>
+    <div class="footer">
+      <nav class="footer-nav" aria-label="フッターナビゲーション">
+        <a href="/about/">About</a>
+        <a href="/privacy/">プライバシーポリシー</a>
+        <a href="/terms/">利用規約</a>
+        <a href="/contact/">お問い合わせ</a>
+      </nav>
+      <div class="footer-links">
+        <a class="footer-link-social" href="https://x.com/RandaWorksJP" target="_blank" rel="me noopener noreferrer" aria-label="RandaWorks公式Xを新しいタブで開く" data-track-event="social_click" data-track-placement="site_footer_x" data-track-label="site footer x">
+          <svg class="footer-link-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1227" aria-hidden="true" focusable="false"><path d="M714.163 519.284 1160.89 0h-105.83L667.137 450.887 357.328 0H0l468.492 681.821L0 1226.37h105.866l409.588-476.152 327.218 476.152H1200L714.137 519.284h.026ZM569.165 687.828l-47.468-67.909L144.011 79.694h162.604l304.22 434.658 47.468 67.909 396.807 566.942H892.505L569.165 687.828Z"/></svg>
+          <span>RandaWorks公式X</span>
+        </a>
+      </div>
+      <div>&copy; 2026 RandaWorks</div>
+    </div>
+  </div>
+  <script is:inline src="/assets/js/analytics-config.js"></script>
+  <script is:inline src="/assets/js/analytics.js"></script>
+</body>
+</html>

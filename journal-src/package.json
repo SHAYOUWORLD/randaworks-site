@@ -1,0 +1,15 @@
+{
+  "name": "randaworks-journal",
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "clean:output": "node scripts/cleanup-journal-output.mjs",
+    "prebuild": "npm run clean:output",
+    "build": "astro build",
+    "preview": "astro preview"
+  },
+  "dependencies": {
+    "@astrojs/mdx": "^4.0.0",
+    "astro": "^5.0.0"
+  }
+}

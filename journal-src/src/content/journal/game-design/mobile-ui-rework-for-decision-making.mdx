@@ -1,0 +1,42 @@
+---
+title: "モバイルUIを単純縮小せず、判断しやすさを中心に再設計した話"
+description: "PCゲームのUIをモバイル対応させる際、単純縮小ではなく「判断しやすさ」を基準に再設計。DeviceProfile・セーフエリア・ExploreMapレイアウトの実装記録。"
+date: 2026-03-19
+category: game-design
+tags: [mobile, ui, godot, ux]
+draft: true
+related:
+  - /journal/game-design/what-it-means-to-design-for-incidental-learning/
+---
+
+<article class="card">
+<p class="section-kicker">問題の認識</p>
+
+## 縮小は解決策ではなかった
+
+（この記事は再構成中です。元の内容はgit管理前のファイルに存在しましたが、ブランチ作業中に失われました。内容を再度記録する予定です。）
+
+PC向けに設計したUIをモバイルで動かすと、まず「見えない」「押せない」という問題が起きる。要素を縮小すれば画面に収まるが、それはUIとしての問題を解決していない。デッキ構築ゲームのUIは情報量が多く、「今どの選択肢があるか」を瞬時に判断できることが本質的な要件だ。
+
+</article>
+
+<article class="card">
+<p class="section-kicker">再設計のポイント</p>
+
+## 判断しやすさを軸に置く
+
+- `DeviceProfile` でスクリーンサイズ・タッチ有無を判定し、レイアウト自体を切り替える
+- セーフエリア（ノッチ・ホームバー）を考慮したマージン設定
+- `ExploreMapレイアウト`：スクロール可能なカード一覧から選択する形式に変更
+- 遅延ロード：最初から全情報を見せず、必要に応じて展開する
+
+</article>
+
+<section class="journal-takeaways" aria-labelledby="takeaways-title">
+  <h2 id="takeaways-title">今回の学び</h2>
+  <ul>
+    <li>モバイル対応は「縮小」ではなく「再設計」。前提となる操作モデルが違う。</li>
+    <li>判断しやすさを担保するには、情報の密度よりも情報の順序が重要。</li>
+    <li>セーフエリア対応は早めにやっておく。後から直すと影響範囲が広い。</li>
+  </ul>
+</section>

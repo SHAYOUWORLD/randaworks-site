@@ -1,0 +1,31 @@
+---
+import ArticleLayout from '../../layouts/ArticleLayout.astro';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('journal', ({ data }) => !data.draft);
+  return entries.map((entry) => {
+    const parts = entry.id.split('/');
+    const category = parts[0];
+    const slug = parts.slice(1).join('/').replace(/\.(md|mdx)$/, '');
+    return { params: { category, slug }, props: { entry } };
+  });
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+
+const parts = entry.id.split('/');
+const category = parts[0];
+const slug = parts.slice(1).join('/').replace(/\.(md|mdx)$/, '');
+---
+<ArticleLayout
+  title={entry.data.title}
+  description={entry.data.description}
+  date={entry.data.date}
+  category={category}
+  slug={slug}
+  related={entry.data.related}
+>
+  <Content />
+</ArticleLayout>

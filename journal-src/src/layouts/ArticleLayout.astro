@@ -1,0 +1,96 @@
+---
+import BaseLayout from './BaseLayout.astro';
+
+export const CATEGORY_NAMES: Record<string, string> = {
+  devlog: '開発ログ',
+  'game-design': 'ゲーム設計',
+  ai: 'AI活用メモ',
+  'game-study': 'ゲーム研究・レビュー',
+  research: 'リサーチノート',
+};
+
+interface Props {
+  title: string;
+  description: string;
+  date: Date;
+  category: string;
+  slug: string;
+  related?: string[];
+}
+
+const { title, description, date, category, slug, related = [] } = Astro.props;
+const categoryName = CATEGORY_NAMES[category] ?? category;
+const canonicalPath = `/journal/${category}/${slug}/`;
+const articleTitle = `${title} | ${categoryName} | RandaWorks`;
+const dateLabel = date.toLocaleDateString('ja-JP', { year: 'numeric', month: 'long' });
+const publishedDate = date.toISOString().split('T')[0];
+
+const ldJson = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Article",
+      "headline": title,
+      "description": description,
+      "url": `https://www.randaworks.com${canonicalPath}`,
+      "datePublished": publishedDate,
+      "inLanguage": "ja",
+      "author": { "@type": "Organization", "name": "RandaWorks" },
+      "publisher": { "@type": "Organization", "name": "RandaWorks", "url": "https://www.randaworks.com/" }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "ホーム", "item": "https://www.randaworks.com/" },
+        { "@type": "ListItem", "position": 2, "name": "制作ノート", "item": "https://www.randaworks.com/journal/" },
+        { "@type": "ListItem", "position": 3, "name": categoryName, "item": `https://www.randaworks.com/journal/${category}/` },
+        { "@type": "ListItem", "position": 4, "name": title }
+      ]
+    }
+  ]
+};
+---
+<BaseLayout
+  title={articleTitle}
+  description={description}
+  canonicalPath={canonicalPath}
+  ogType="article"
+  bodyClass="journal-page"
+  ldJson={ldJson}
+>
+  <ul class="breadcrumb">
+    <li><a href="/">ホーム</a></li>
+    <li class="breadcrumb-separator" aria-hidden="true">›</li>
+    <li><a href="/journal/">制作ノート</a></li>
+    <li class="breadcrumb-separator" aria-hidden="true">›</li>
+    <li><a href={`/journal/${category}/`}>{categoryName}</a></li>
+    <li class="breadcrumb-separator" aria-hidden="true">›</li>
+    <li class="breadcrumb-current" aria-current="page">{title.slice(0, 24)}…</li>
+  </ul>
+
+  <article class="journal-article">
+    <header class="journal-article-header">
+      <div class="journal-article-meta-row">
+        <span class="journal-article-category">{categoryName}</span>
+        <span class="journal-article-meta-separator" aria-hidden="true">•</span>
+        <time class="journal-article-meta" datetime={publishedDate}>{dateLabel}</time>
+      </div>
+      <h1>{title}</h1>
+      <p class="journal-article-lead">{description}</p>
+    </header>
+
+    <div class="journal-article-body">
+      <slot />
+    </div>
+
+    {related.length > 0 && (
+      <section class="journal-related" aria-labelledby="related-title">
+        <h2 id="related-title">関連ページ</h2>
+        <ul>
+          <li><a href={`/journal/${category}/`}>← {categoryName}一覧へ戻る</a></li>
+          {related.map((url) => <li><a href={url}>{url}</a></li>)}
+        </ul>
+      </section>
+    )}
+  </article>
+</BaseLayout>

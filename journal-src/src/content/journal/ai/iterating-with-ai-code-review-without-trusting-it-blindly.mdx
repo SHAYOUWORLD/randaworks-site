@@ -1,0 +1,46 @@
+---
+title: "AIレビューをそのまま信じず、レビュー往復で実装精度を上げた話"
+description: "AIによるコードレビューを「判定者」ではなく「壁打ち相手」として使い、PCKローダー・分析基盤・ACKタイムアウト処理を改善した実践記録。"
+date: 2026-03-19
+category: ai
+tags: [ai, code-review, godot, refactoring]
+draft: true
+related:
+  - /journal/devlog/building-demo-analytics-pipeline/
+  - /journal/ai/building-an-ai-powered-game-review-video-pipeline/
+---
+
+<article class="card">
+<p class="section-kicker">前提</p>
+
+## AIレビューを「信頼しすぎる」問題
+
+（この記事は再構成中です。元の内容はgit管理前のファイルに存在しましたが、ブランチ作業中に失われました。内容を再度記録する予定です。）
+
+AIにコードレビューを依頼すると、もっともらしい指摘が大量に返ってくる。しかしそれをそのまま全部適用すると、実際には問題が増えることがある。AIは「このコードの文脈」を持っていない。
+
+この記事では、PCKローダー、分析基盤、ACKタイムアウト処理という3つの実装を例に、AIレビューをどう活用したかを整理する。
+
+</article>
+
+<article class="card">
+<p class="section-kicker">実践</p>
+
+## 壁打ち相手としての使い方
+
+AIに「このコードの問題点を全部指摘して」と聞くのではなく、「この実装でXという問題が起きている。原因として考えられることを挙げて」という形で使う。
+
+- 前提を自分で整理してから渡す
+- AIの回答を仮説のひとつとして扱う
+- 実装後に「この変更で問題が解決するか確認して」と往復する
+
+</article>
+
+<section class="journal-takeaways" aria-labelledby="takeaways-title">
+  <h2 id="takeaways-title">今回の学び</h2>
+  <ul>
+    <li>AIは「判定者」ではなく「壁打ち相手」。最終判断は自分がする。</li>
+    <li>前提情報を渡す質を上げると、AIの回答の質も上がる。</li>
+    <li>往復回数を増やすより、1回の問いを精度よくする方が効率的。</li>
+  </ul>
+</section>

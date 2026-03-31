@@ -1,0 +1,119 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const allEntries = await getCollection('journal', ({ data }) => !data.draft);
+allEntries.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+
+const categories = [
+  { id: 'devlog',      label: '開発ログ',         desc: '何を作り、どう動かし、何に詰まったか。制作の過程と解決の記録。' },
+  { id: 'game-design', label: 'ゲーム設計',        desc: 'メカニクス、レベルデザイン、体験設計の考察。なぜそう設計したか、試してみてどうだったか。' },
+  { id: 'ai',          label: 'AI活用メモ',        desc: '開発でAIをどう使うか。効いた使い方、落とし穴——ツールではなく実践単位の記録。' },
+  { id: 'game-study',  label: 'ゲーム研究・レビュー', desc: '本気でプレイして得た知見と分析。メカニクスを読み解き、設計を学ぶ記録。' },
+  { id: 'research',    label: 'リサーチノート',      desc: '制作に関連するテーマの調査と考察。歴史、認知、学習、設計論など。' },
+];
+
+const ldJson = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "CollectionPage",
+      "name": "制作ノート | RandaWorks",
+      "url": "https://www.randaworks.com/journal/",
+      "description": "RandaWorksの制作ノートです。開発ログ、ゲーム設計の考察、AI活用メモ、ゲーム研究・レビュー、リサーチノートを掲載します。",
+      "inLanguage": "ja",
+      "publisher": { "@id": "https://www.randaworks.com/#organization" }
+    },
+    { "@type": "Organization", "@id": "https://www.randaworks.com/#organization", "name": "RandaWorks", "url": "https://www.randaworks.com/" },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "ホーム", "item": "https://www.randaworks.com/" },
+        { "@type": "ListItem", "position": 2, "name": "制作ノート" }
+      ]
+    }
+  ]
+};
+---
+<BaseLayout
+  title="制作ノート | RandaWorks — 開発・設計・研究の記録"
+  description="RandaWorksの制作ノートです。開発ログ、ゲーム設計の考察、AI活用メモ、ゲーム研究・レビュー、リサーチノートを掲載します。つくる側の視点を外に開く記録の場所です。"
+  canonicalPath="/journal/"
+  bodyClass="journal-page"
+  ldJson={ldJson}
+>
+  <ul class="breadcrumb">
+    <li><a href="/">ホーム</a></li>
+    <li class="breadcrumb-separator" aria-hidden="true">›</li>
+    <li class="breadcrumb-current" aria-current="page">制作ノート</li>
+  </ul>
+
+  <div class="journal-shell">
+    <header class="journal-page-header">
+      <p class="section-kicker">制作ノート</p>
+      <h1>制作・設計・研究の記録</h1>
+      <p class="journal-page-lead">ゲームをつくる過程で得た発見や気づきを記録する場所です。開発ログ、設計の考察、AI活用の実験、本気のゲーム研究まで、つくる側の視点を外に開きます。</p>
+      <p class="journal-page-note">サイト更新や公開告知は <a href="/news/">お知らせ</a> にまとめています。</p>
+    </header>
+
+    <section class="journal-section-panel">
+      <div class="journal-panel-heading">
+        <p class="section-kicker">カテゴリ</p>
+        <h2>記録のテーマ</h2>
+      </div>
+      <div class="journal-topic-grid">
+      {categories.map((cat) => {
+        const count = allEntries.filter(e => e.data.category === cat.id).length;
+        return (
+          <article class="journal-topic-card">
+            <div class="journal-topic-head">
+              <h3>{cat.label}</h3>
+              <span class="journal-topic-count">{count > 0 ? `${count}件` : '準備中'}</span>
+            </div>
+            <p>{cat.desc}</p>
+            {count > 0
+              ? <a class="journal-entry-link" href={`/journal/${cat.id}/`}>{cat.label}を見る</a>
+              : <span class="muted">公開準備中</span>
+            }
+          </article>
+        );
+      })}
+      </div>
+    </section>
+
+    {allEntries.length > 0 && (
+      <section class="journal-section-panel">
+        <div class="journal-panel-heading">
+          <p class="section-kicker">最新の記録</p>
+          <h2>新着</h2>
+        </div>
+        <div class="journal-entry-list">
+          {allEntries.slice(0, 5).map((entry) => {
+            const [cat, ...slugParts] = entry.id.split('/');
+            const slug = slugParts.join('/').replace(/\.(md|mdx)$/, '');
+            const categoryLabel = categories.find((item) => item.id === entry.data.category)?.label ?? entry.data.category;
+            return (
+              <article class="journal-entry-card">
+                <p class="journal-entry-meta">{categoryLabel} ・ {entry.data.date.toLocaleDateString('ja-JP', { year: 'numeric', month: 'long' })}</p>
+                <h3 class="journal-entry-title"><a href={`/journal/${cat}/${slug}/`}>{entry.data.title}</a></h3>
+                <p>{entry.data.description}</p>
+                <a class="journal-entry-link" href={`/journal/${cat}/${slug}/`}>記事を読む</a>
+              </article>
+            );
+          })}
+        </div>
+      </section>
+    )}
+
+    <section class="card cta-band" aria-labelledby="journal-cta-title">
+      <p class="section-kicker">Explore</p>
+      <h2 id="journal-cta-title">作品と思想を、両方から知る</h2>
+      <p>制作ノートと合わせて、ゲームそのものや体験版もぜひ。</p>
+      <div class="cta-band-actions">
+        <a class="cta" href="/games/" data-track-event="cta_click" data-track-placement="journal_cta_games">ゲームを見る</a>
+        <a class="cta" href="/games/inga/?src=journal#play" data-track-event="play_cta_click" data-track-placement="journal_cta_play">体験版を遊ぶ</a>
+        <a class="cta cta-ghost" href="/about/" data-track-event="cta_click" data-track-placement="journal_cta_about">RandaWorksについて</a>
+      </div>
+    </section>
+  </div>
+</BaseLayout>

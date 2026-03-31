@@ -7,7 +7,10 @@ assets/video/games/inga/SteamStorePV_v1.1.mp4
 # Local settings
 .claude/
 .agents/
+AGENTS.md
 skills-lock.json
+.wrangler/
+nul
 
 # Development scripts & backend (not for public deployment)
 scripts/
@@ -23,3 +26,13 @@ progress.md
 journal-src/node_modules/
 journal-src/.astro/
 journal-src/dist/
+
+# Journal category pages (not yet ready for publication)
+journal/ai/
+journal/devlog/
+journal/game-design/
+journal/game-study/
+journal/research/
+journal/collections/
+journal/content-assets.mjs
+journal/content-modules.mjs
