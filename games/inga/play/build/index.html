@@ -119,6 +119,7 @@ const REMOTE_ASSET_HOSTS = new Set(['www.randaworks.com', 'randaworks.com']);
 const REMOTE_ASSET_BASE = REMOTE_ASSET_HOSTS.has(CURRENT_HOST)
 	? 'https://storage.googleapis.com/randaworks-game-builds/inga-demo/0.1.9/'
 	: '';
+const SHELL_ASSET_BASE = new URL('./', window.location.href).href;
 if (IS_LOCAL_DEV_HOST && window.location.protocol !== 'https:' && !window.__RANDA_LOCAL_AUDIO_WORKLET_PATCHED) {
 	const wrapAudioContext = function (Ctor) {
 		if (typeof Ctor !== 'function') {
@@ -180,6 +181,12 @@ if (REMOTE_ASSET_BASE) {
 		const config = originalGetModuleConfig(loadPath, response);
 		const originalLocateFile = config.locateFile;
 		config.locateFile = function (path) {
+			if (path.endsWith('.audio.worklet.js')) {
+				return `${SHELL_ASSET_BASE}${loadPath}.audio.worklet.js`;
+			}
+			if (path.endsWith('.audio.position.worklet.js')) {
+				return `${SHELL_ASSET_BASE}${loadPath}.audio.position.worklet.js`;
+			}
 			if (path.endsWith('.side.wasm')) {
 				return `${REMOTE_ASSET_BASE}${loadPath}.side.wasm`;
 			}
