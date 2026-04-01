@@ -7,8 +7,8 @@
 - `gcloud` が使えること
 - `gcloud auth list` で有効なアカウントがあること
 - ゲーム成果物が次にあること
-  - `C:\dev\chie-game-go\build\release\official_web_demo\stage`
-  - `C:\dev\chie-game-go\build\release\official_win`
+  - `<game-project-root>\build\release\official_web_demo\stage`
+  - `<game-project-root>\build\release\official_win`
 
 ## 配置ルール
 
@@ -24,6 +24,12 @@
 
 ```powershell
 pwsh .\admin\release\upload-inga-demo-release.ps1 -Version 0.1.9
+```
+
+ゲーム側リポジトリが隣接配置でない場合は、明示指定します。
+
+```powershell
+pwsh .\admin\release\upload-inga-demo-release.ps1 -Version 0.1.9 -GameProjectRoot 'D:\work\chie-game-go'
 ```
 
 必要に応じて片側だけアップロードできます。
