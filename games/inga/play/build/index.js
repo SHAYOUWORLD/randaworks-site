@@ -87,7 +87,13 @@ const Features = {
 	 * @function Engine.isAudioWorkletAvailable
 	 */
 	isAudioWorkletAvailable: function () {
-		return 'AudioContext' in window && 'audioWorklet' in AudioContext.prototype;
+		if (!('AudioContext' in window)) {
+			return false;
+		}
+		if (LOCAL_DEV_HOSTS.has(window.location.hostname) && window.location.protocol !== 'https:') {
+			return false;
+		}
+		return 'audioWorklet' in AudioContext.prototype;
 	},
 
 	/**
