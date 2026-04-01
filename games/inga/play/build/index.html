@@ -112,21 +112,9 @@ body {
 		<script src="index.pck.loader.js"></script>
 		<script src="index.js"></script>
 		<script>
-const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"index","experimentalVK":false,"fileSizes":{"index.pck":367985232,"index.wasm":38034280},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4};
+const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"index","experimentalVK":false,"fileSizes":{"index.pck":367987536,"index.wasm":38034280},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4};
 const GODOT_THREADS_ENABLED = false;
 const engine = new Engine(GODOT_CONFIG);
-
-function reportToParent(eventName, payload) {
-	if (!window.parent || window.parent === window) {
-		return;
-	}
-
-	window.parent.postMessage({
-		type: 'randa-analytics',
-		event: eventName,
-		payload: payload || {},
-	}, window.location.origin);
-}
 
 (function () {
 	const statusOverlay = document.getElementById('status');
@@ -164,9 +152,6 @@ function reportToParent(eventName, payload) {
 
 	function displayFailureNotice(err) {
 		console.error(err);
-		reportToParent('demo_boot_error', {
-			error_code: err instanceof Error ? err.name || 'engine_error' : 'engine_error',
-		});
 		if (err instanceof Error) {
 			setStatusNotice(err.message);
 		} else if (typeof err === 'string') {
@@ -226,7 +211,6 @@ function reportToParent(eventName, payload) {
 				}
 			},
 		}).then(() => {
-			reportToParent('demo_boot_success');
 			setStatusMode('hidden');
 		}, displayFailureNotice);
 	}

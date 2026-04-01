@@ -1,36 +1,12 @@
 (function () {
   const PCK_NAME = 'index.pck';
-  const PCK_PARTS = [{"name":"index.pck.part000","size":199229440},{"name":"index.pck.part001","size":168755792}];
-  const PCK_TOTAL_SIZE = 367985232;
-  const GCS_BASE_URL = 'https://storage.googleapis.com/randaworks-game-builds/inga-demo/0.1.8/';
+  const PCK_PARTS = [{"name":"index.pck.part000","size":199229440},{"name":"index.pck.part001","size":168758096}];
+  const PCK_TOTAL_SIZE = 367987536;
   if (typeof window === 'undefined' || typeof window.fetch !== 'function') {
     return;
   }
   const originalFetch = window.fetch.bind(window);
   const targetSuffix = '/' + PCK_NAME;
-  const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-
-  const GCS_BINARY_FILES = ['index.wasm'];
-
-  function getGcsRedirectUrl(resource) {
-    if (isLocal || !GCS_BASE_URL) return null;
-    let raw = '';
-    if (typeof resource === 'string') {
-      raw = resource;
-    } else if (resource && typeof resource.url === 'string') {
-      raw = resource.url;
-    }
-    if (!raw) return null;
-    try {
-      const pathname = new URL(raw, window.location.href).pathname;
-      for (const name of GCS_BINARY_FILES) {
-        if (pathname.endsWith('/' + name) || pathname.endsWith(name)) {
-          return GCS_BASE_URL + name;
-        }
-      }
-    } catch (_err) {}
-    return null;
-  }
 
   function isMainPackRequest(resource) {
     let raw = '';
@@ -61,9 +37,6 @@
   }
 
   function resolvePartUrl(resource, partName) {
-    if (!isLocal && GCS_BASE_URL) {
-      return GCS_BASE_URL + partName;
-    }
     let raw = '';
     if (typeof resource === 'string') {
       raw = resource;
@@ -90,88 +63,31 @@
     return headers;
   }
 
-  var RETRY_MAX = 3;
-  var RETRY_BASE_MS = 1000;
-  var FETCH_TIMEOUT_MS = 60000;
-  var STALL_TIMEOUT_MS = 30000;
-
-  function fetchWithTimeout(url) {
-    var controller = new AbortController();
-    var timer = setTimeout(function () { controller.abort(); }, FETCH_TIMEOUT_MS);
-    return originalFetch(url, { signal: controller.signal }).then(
-      function (response) { clearTimeout(timer); return response; },
-      function (err) { clearTimeout(timer); throw err; }
-    );
-  }
-
-  function readBodyWithStallDetection(response, streamController) {
-    return new Promise(function (resolve, reject) {
-      if (!response.body || typeof response.body.getReader !== 'function') {
-        response.arrayBuffer().then(function (buf) {
-          streamController.enqueue(new Uint8Array(buf));
-          resolve();
-        }, reject);
-        return;
-      }
-      var reader = response.body.getReader();
-      var stallTimer = null;
-      var stalled = false;
-      function resetStallTimer() {
-        if (stallTimer) clearTimeout(stallTimer);
-        stallTimer = setTimeout(function () {
-          stalled = true;
-          try { reader.cancel('stall timeout'); } catch (_e) {}
-          reject(new Error('Body stall timeout'));
-        }, STALL_TIMEOUT_MS);
-      }
-      function pump() {
-        reader.read().then(function (result) {
-          if (stalled) return;
-          if (result.done) {
-            clearTimeout(stallTimer);
-            resolve();
-            return;
-          }
-          if (result.value) {
-            streamController.enqueue(result.value);
-          }
-          resetStallTimer();
-          pump();
-        }, function (err) {
-          clearTimeout(stallTimer);
-          if (stalled) return;
-          reject(err);
-        });
-      }
-      resetStallTimer();
-      pump();
-    });
-  }
-
   async function createPackResponse(resource) {
     const stream = new ReadableStream({
       async start(controller) {
         try {
           for (const part of PCK_PARTS) {
             const partUrl = resolvePartUrl(resource, part.name);
-            var lastErr = null;
-            var success = false;
-            for (var attempt = 0; attempt <= RETRY_MAX; attempt++) {
-              try {
-                var response = await fetchWithTimeout(partUrl);
-                if (!response.ok) throw new Error('HTTP ' + response.status);
-                await readBodyWithStallDetection(response, controller);
-                success = true;
+            const response = await originalFetch(partUrl);
+            if (!response.ok) {
+              throw new Error(`Failed loading file '${part.name}'`);
+            }
+            if (!response.body || typeof response.body.getReader !== 'function') {
+              const buf = await response.arrayBuffer();
+              controller.enqueue(new Uint8Array(buf));
+              continue;
+            }
+            const reader = response.body.getReader();
+            while (true) {
+              const { done, value } = await reader.read();
+              if (done) {
                 break;
-              } catch (err) {
-                lastErr = err;
-                if (attempt < RETRY_MAX) {
-                  var delay = RETRY_BASE_MS * Math.pow(2, attempt);
-                  await new Promise(function (r) { setTimeout(r, delay); });
-                }
+              }
+              if (value) {
+                controller.enqueue(value);
               }
             }
-            if (!success) throw lastErr || new Error('Failed loading ' + part.name);
           }
           controller.close();
         } catch (err) {
@@ -186,10 +102,6 @@
   }
 
   window.fetch = async function (resource, init) {
-    const gcsUrl = getGcsRedirectUrl(resource);
-    if (gcsUrl) {
-      return originalFetch(gcsUrl, init);
-    }
     if (!isMainPackRequest(resource)) {
       return originalFetch(resource, init);
     }
