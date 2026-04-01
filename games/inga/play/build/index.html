@@ -112,9 +112,9 @@ body {
 		<script src="index.pck.loader.js?v=20260402-localdevfix"></script>
 		<script src="index.js?v=20260402-localdevfix"></script>
 		<script>
-const LOCAL_DEV_HOSTS = new Set(['dev.randa', 'localhost', '127.0.0.1']);
+const LOCAL_DEV_SHELL_HOSTS = new Set(['dev.randa', 'localhost', '127.0.0.1']);
 const CURRENT_HOST = window.location.hostname;
-const IS_LOCAL_DEV_HOST = LOCAL_DEV_HOSTS.has(CURRENT_HOST);
+const IS_LOCAL_DEV_HOST = LOCAL_DEV_SHELL_HOSTS.has(CURRENT_HOST);
 const REMOTE_ASSET_HOSTS = new Set(['www.randaworks.com', 'randaworks.com']);
 const REMOTE_ASSET_BASE = REMOTE_ASSET_HOSTS.has(CURRENT_HOST)
 	? 'https://storage.googleapis.com/randaworks-game-builds/inga-demo/0.1.9/'
