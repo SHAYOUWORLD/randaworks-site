@@ -37,8 +37,8 @@ python -m http.server 4173
 
 ## 自動チェック
 
-PR時に `scripts/verify-mobile-logo.ps1` を実行し、以下を検証します。
+PR時に `.github/scripts/verify-mobile-logo.ps1` を実行し、以下を検証します。
 
-- `index.html` に `<body class="home-page">` がある
+- `index.html` と `en/index.html` に `<body class="home-page">` がある
 - `assets/css/style.css` の `@media (max-width: 480px)` 内に `.home-page .nav .brand { display: none; }` がある
-- `home-page` クラスが `index.html` 以外に入っていない
+- `home-page` クラスが `index.html` と `en/index.html` 以外に入っていない

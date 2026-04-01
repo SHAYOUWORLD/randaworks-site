@@ -16,4 +16,4 @@ jobs:
 
       - name: Verify home mobile logo rule
         shell: pwsh
-        run: ./scripts/verify-mobile-logo.ps1
+        run: ./.github/scripts/verify-mobile-logo.ps1

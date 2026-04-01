@@ -5,6 +5,25 @@
   var pageViewTracked = false;
   var playSessionId = "";
   var playSessionEndTracked = false;
+  var localeSwitchInitialized = false;
+  var localizedPaths = {
+    "/": true,
+    "/about/": true,
+    "/games/": true,
+    "/games/inga/": true,
+    "/games/inga/support/": true,
+    "/games/inga/privacy/": true,
+    "/games/inga/play/": true,
+    "/news/": true,
+    "/news/video-page-launch/": true,
+    "/news/site-renewal/": true,
+    "/videos/": true,
+    "/contact/": true,
+    "/contact/thanks.html": true,
+    "/support/": true,
+    "/privacy/": true,
+    "/terms/": true
+  };
 
   function nowIso() {
     return new Date().toISOString();
@@ -48,6 +67,76 @@
     } catch (error) {
       return "";
     }
+  }
+
+  function normalizePath(path) {
+    if (!path) return "/";
+    if (path.length > 1 && path.slice(-1) !== "/" && !/\.html$/i.test(path)) {
+      return path + "/";
+    }
+    return path;
+  }
+
+  function getPageLocale() {
+    var html = document.documentElement;
+    if (html && html.lang) return html.lang.toLowerCase();
+    var body = document.body || {};
+    if (body.dataset && body.dataset.pageLocale) return String(body.dataset.pageLocale).toLowerCase();
+    return "";
+  }
+
+  function getAlternateLocalePath(pathname, currentLocale) {
+    var normalized = normalizePath(pathname);
+    if (currentLocale === "en") {
+      var jaPath = normalized === "/en/" ? "/" : normalized.replace(/^\/en/, "");
+      if (!localizedPaths[jaPath]) return "";
+      return jaPath;
+    }
+
+    if (!localizedPaths[normalized]) return "";
+    return normalized === "/" ? "/en/" : "/en" + normalized;
+  }
+
+  function injectLocaleSwitch() {
+    if (localeSwitchInitialized) return;
+    localeSwitchInitialized = true;
+
+    var links = document.querySelector(".nav .links");
+    if (!links) return;
+
+    var locale = getPageLocale();
+    if (locale !== "ja" && locale !== "en") return;
+
+    var altPath = getAlternateLocalePath(globalObject.location.pathname, locale);
+    if (!altPath) return;
+
+    var switcher = document.createElement("span");
+    switcher.className = "locale-switch";
+    switcher.setAttribute("aria-label", locale === "ja" ? "言語切替" : "Language switcher");
+
+    var jaLink = document.createElement("a");
+    jaLink.className = "locale-switch-link";
+    jaLink.href = locale === "ja" ? globalObject.location.pathname + globalObject.location.search + globalObject.location.hash : altPath;
+    jaLink.textContent = "JP";
+    jaLink.lang = "ja";
+    if (locale === "ja") jaLink.setAttribute("aria-current", "true");
+
+    var divider = document.createElement("span");
+    divider.className = "locale-switch-divider";
+    divider.setAttribute("aria-hidden", "true");
+    divider.textContent = "/";
+
+    var enLink = document.createElement("a");
+    enLink.className = "locale-switch-link";
+    enLink.href = locale === "en" ? globalObject.location.pathname + globalObject.location.search + globalObject.location.hash : altPath;
+    enLink.textContent = "EN";
+    enLink.lang = "en";
+    if (locale === "en") enLink.setAttribute("aria-current", "true");
+
+    switcher.appendChild(jaLink);
+    switcher.appendChild(divider);
+    switcher.appendChild(enLink);
+    links.appendChild(switcher);
   }
 
   function getDeviceType() {
@@ -100,6 +189,7 @@
       path: globalObject.location.pathname,
       page_type: body.dataset && body.dataset.pageType ? body.dataset.pageType : "",
       build_id: body.dataset && body.dataset.buildId ? body.dataset.buildId : "",
+      page_locale: getPageLocale(),
       session_id: getSessionId(),
       play_session_id: isPlaySessionScoped() ? playSessionId : "",
       referrer: sanitizeUrl(document.referrer),
@@ -109,6 +199,7 @@
       browser: getBrowserName(),
       os: getOsName(),
       lang: navigator.language || "",
+      browser_lang: navigator.language || "",
       entry_src: getSearchValue("src"),
       utm_source: getSearchValue("utm_source"),
       utm_medium: getSearchValue("utm_medium"),
@@ -255,12 +346,14 @@
 
     if (document.readyState === "loading") {
       document.addEventListener("DOMContentLoaded", function () {
+        injectLocaleSwitch();
         trackPlaySessionStart();
         trackPageView();
       }, { once: true });
       return;
     }
 
+    injectLocaleSwitch();
     trackPlaySessionStart();
     trackPageView();
   }

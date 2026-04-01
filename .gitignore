@@ -11,6 +11,8 @@ skills-lock.json
 
 # Development scripts & backend (not for public deployment)
 scripts/
+!.github/scripts/
+!.github/scripts/verify-mobile-logo.ps1
 cloud-analytics/
 start-local-analytics.bat
 

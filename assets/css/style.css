@@ -183,6 +183,35 @@ textarea:focus-visible {
   gap: 24px;
 }
 
+.locale-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: 8px;
+  padding-left: 16px;
+  border-left: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.locale-switch-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 36px;
+  color: var(--text-muted);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.locale-switch-link[aria-current="true"] {
+  color: var(--accent-gold);
+}
+
+.locale-switch-divider {
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 0.75rem;
+}
+
 .links a {
   display: inline-flex;
   align-items: center;
@@ -2061,6 +2090,12 @@ button.cta[disabled] {
     justify-content: center;
   }
 
+  .locale-switch {
+    margin-left: 0;
+    padding-left: 0;
+    border-left: 0;
+  }
+
   h1 {
     font-size: 2rem;
   }
@@ -2257,6 +2292,14 @@ button.cta[disabled] {
     min-height: 44px;
     padding: 4px 2px;
     font-size: 0.85rem;
+  }
+
+  .locale-switch {
+    gap: 6px;
+  }
+
+  .locale-switch-link {
+    font-size: 0.75rem;
   }
 
   h1 {
