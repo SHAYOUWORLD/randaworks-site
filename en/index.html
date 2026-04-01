@@ -16,6 +16,7 @@
     <link rel="canonical" href="https://www.randaworks.com/en/" />
     <link rel="alternate" hreflang="ja" href="https://www.randaworks.com/" />
     <link rel="alternate" hreflang="en" href="https://www.randaworks.com/en/" />
+    <link rel="alternate" hreflang="x-default" href="https://www.randaworks.com/" />
     <meta property="og:type" content="website" />
     <meta property="og:title" content="RandaWorks | Games Where Discovery Becomes Fun" />
     <meta property="og:description" content="An indie studio building games where understanding and discovery are part of the fun." />
@@ -36,7 +37,7 @@
   <body class="home-page" data-page-type="home">
     <a class="skip-link" href="#main-content">Skip to main content</a>
     <div class="container">
-      <div class="nav">
+      <nav class="nav">
         <div class="brand"><a href="./"><picture>
           <source srcset="../assets/img/randaworks_logo_text.webp" type="image/webp">
           <img src="../assets/img/randaworks_logo_text.png" alt="RandaWorks" style="height: 28px; vertical-align: middle;">
@@ -47,7 +48,7 @@
           <a href="./news/">News</a>
           <a href="./contact/">Contact</a>
         </div>
-      </div>
+      </nav>
       <main id="main-content">
         <section class="card home-hero-card">
           <div class="home-hero-copy">
@@ -86,11 +87,7 @@
               <li>Different heroes approach different eras in different ways</li>
               <li>You can try the browser demo right away on PC</li>
             </ul>
-            <div class="cta-band-actions home-feature-actions">
-              <a class="cta cta-steam" href="https://store.steampowered.com/app/4403470" target="_blank" rel="noopener noreferrer" data-track-event="wishlist_click" data-track-placement="home_featured_steam" data-track-label="home featured wishlist en">Wishlist on Steam</a>
-              <a class="cta" href="./games/inga/?src=en_home_featured#play" data-track-event="play_cta_click" data-track-placement="home_featured_primary" data-track-label="home featured play en">Play the demo</a>
-              <a class="cta cta-ghost" href="./games/inga/?src=en_home_featured" data-track-event="cta_click" data-track-placement="home_featured_secondary" data-track-label="home featured product en">View the game page</a>
-            </div>
+            <a class="cta cta-ghost" href="./games/inga/?src=en_home_featured" data-track-event="cta_click" data-track-placement="home_featured_secondary" data-track-label="home featured product en" style="margin-top: 8px;">View the game page →</a>
           </aside>
         </section>
         <section class="card">
@@ -111,6 +108,47 @@
             </article>
           </div>
         </section>
+        <section class="card">
+          <p class="section-kicker">Now Available</p>
+          <h2>Featured Game</h2>
+          <div class="home-feature-grid">
+            <article class="surface-panel home-feature-main">
+              <div class="home-feature-media">
+                <picture>
+                  <source srcset="../assets/img/games/inga/demo-cards/combo_nobunaga.webp" type="image/webp">
+                  <img src="../assets/img/games/inga/demo-cards/combo_nobunaga.jpg" alt="Inga Chronicle combo visual" loading="lazy">
+                </picture>
+              </div>
+              <div class="home-feature-copy">
+                <span class="roster-tag">Japanese History Deckbuilding Roguelike</span>
+                <h3>Inga Chronicle</h3>
+                <p>A roguelike where historical events and figures become cards. Chain them by real cause-and-effect to trigger powerful combos.</p>
+                <div class="cta-band-actions home-feature-actions">
+                  <a class="cta cta-steam" href="https://store.steampowered.com/app/4403470" target="_blank" rel="noopener noreferrer" data-track-event="wishlist_click" data-track-placement="home_feature_wishlist" data-track-label="home feature wishlist en">Wishlist on Steam</a>
+                  <a class="cta" href="./games/inga/?src=en_home_feature#play" data-track-event="play_cta_click" data-track-placement="home_feature_card" data-track-label="home feature play en">Play the demo</a>
+                  <a class="cta cta-ghost" href="./games/inga/?src=en_home_feature" data-track-event="cta_click" data-track-placement="home_feature_product" data-track-label="home feature product en">View the game page</a>
+                </div>
+              </div>
+            </article>
+            <div class="home-side-stack">
+              <article class="surface-panel home-side-card">
+                <h3>All Games</h3>
+                <p>Browse published titles and upcoming releases.</p>
+                <a href="./games/">View all games</a>
+              </article>
+              <article class="surface-panel home-side-card">
+                <h3>Videos</h3>
+                <p>Character introductions, trailers, and archived streams.</p>
+                <a href="./videos/">Watch videos</a>
+              </article>
+              <article class="surface-panel home-side-card">
+                <h3>News</h3>
+                <p>Site updates and release announcements in chronological order.</p>
+                <a href="./news/">Read the news</a>
+              </article>
+            </div>
+          </div>
+        </section>
         <section class="card cta-band" aria-labelledby="home-cta-title">
           <p class="section-kicker">Next Step</p>
           <h2 id="home-cta-title">Start with Steam or the demo</h2>
@@ -122,7 +160,7 @@
           </div>
         </section>
       </main>
-      <div class="footer">
+      <footer class="footer">
         <nav class="footer-nav" aria-label="Footer navigation">
           <a href="./about/">About</a>
           <a href="./privacy/">Privacy Policy</a>
@@ -136,7 +174,7 @@
           </a>
         </div>
         <div>&copy; 2026 RandaWorks</div>
-      </div>
+      </footer>
     </div>
     <script src="../assets/js/analytics-config.js"></script>
     <script src="../assets/js/analytics.js"></script>
