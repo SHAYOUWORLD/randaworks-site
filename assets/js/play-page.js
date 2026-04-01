@@ -19,7 +19,7 @@
     var demoLaunchButton = document.getElementById("demoLaunchButton");
     var buildPath = body.dataset.buildPath || "./build/index.html";
     var buildId = body.dataset.buildId || "";
-    var mutePreferenceKey = "randa:inga:audio-muted:v2";
+    var mutePreferenceKey = "randa:inga:audio-muted:v3";
     var bootTimer = null;
     var bootResolved = false;
     var bootStartedAt = 0;
