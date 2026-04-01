@@ -19,7 +19,7 @@ if (typeof exports === 'object' && typeof module === 'object') {
 } else if (typeof define === 'function' && define['amd'])
   define([], () => Godot);
 
-const LOCAL_DEV_HOSTS = new Set(['dev.randa', 'localhost', '127.0.0.1']);
+var LOCAL_DEV_HOSTS = window.__RANDA_LOCAL_DEV_HOSTS || (window.__RANDA_LOCAL_DEV_HOSTS = new Set(['dev.randa', 'localhost', '127.0.0.1']));
 
 const Features = {
 	/**
