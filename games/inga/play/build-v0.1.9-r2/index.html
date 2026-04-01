@@ -109,14 +109,61 @@ body {
 			<div id="status-notice"></div>
 		</div>
 
-		<script src="index.pck.loader.js"></script>
-		<script src="index.js"></script>
+		<script src="index.pck.loader.js?v=20260402-localdevfix6"></script>
+		<script src="index.js?v=20260402-localdevfix6"></script>
 		<script>
+const LOCAL_DEV_SHELL_HOSTS = new Set(['dev.randa', 'localhost', '127.0.0.1']);
+const CURRENT_HOST = window.location.hostname;
+const IS_LOCAL_DEV_HOST = LOCAL_DEV_SHELL_HOSTS.has(CURRENT_HOST);
 const REMOTE_ASSET_HOSTS = new Set(['www.randaworks.com', 'randaworks.com']);
-const REMOTE_ASSET_BASE = REMOTE_ASSET_HOSTS.has(window.location.hostname)
+const REMOTE_ASSET_BASE = REMOTE_ASSET_HOSTS.has(CURRENT_HOST)
 	? 'https://storage.googleapis.com/randaworks-game-builds/inga-demo/0.1.9/'
 	: '';
-const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":REMOTE_ASSET_BASE ? `${REMOTE_ASSET_BASE}index` : "index","experimentalVK":false,"fileSizes":{"index.pck":367987536,"index.wasm":38034280},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4};
+if (IS_LOCAL_DEV_HOST && window.location.protocol !== 'https:' && !window.__RANDA_LOCAL_AUDIO_WORKLET_PATCHED) {
+	const wrapAudioContext = function (Ctor) {
+		if (typeof Ctor !== 'function') {
+			return Ctor;
+		}
+		const PatchedAudioContext = function (...args) {
+			const ctx = new Ctor(...args);
+			if (!ctx.audioWorklet || typeof ctx.audioWorklet.addModule !== 'function') {
+				Object.defineProperty(ctx, 'audioWorklet', {
+					configurable: true,
+					value: {
+						addModule: () => {
+							delete ctx.audioWorklet;
+							return Promise.resolve();
+						},
+					},
+				});
+			}
+			return ctx;
+		};
+		PatchedAudioContext.prototype = Ctor.prototype;
+		return PatchedAudioContext;
+	};
+	window.AudioContext = wrapAudioContext(window.AudioContext);
+	if (typeof window.webkitAudioContext === 'function') {
+		window.webkitAudioContext = wrapAudioContext(window.webkitAudioContext);
+	}
+	if (typeof window.AudioWorkletNode === 'undefined') {
+		window.AudioWorkletNode = class LocalAudioWorkletNodeShim {
+			constructor(context) {
+				const node = context.createGain();
+				node.port = {
+					onmessage: null,
+					postMessage() {},
+				};
+				node.parameters = new Map([
+					['reset', { setValueAtTime() {} }],
+				]);
+				return node;
+			}
+		};
+	}
+	window.__RANDA_LOCAL_AUDIO_WORKLET_PATCHED = true;
+}
+const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":!IS_LOCAL_DEV_HOST,"executable":REMOTE_ASSET_BASE ? `${REMOTE_ASSET_BASE}index` : "index","experimentalVK":false,"fileSizes":{"index.pck":367987536,"index.wasm":38034280},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4};
 if (REMOTE_ASSET_BASE) {
 	GODOT_CONFIG.mainPack = `${REMOTE_ASSET_BASE}index.pck`;
 }
