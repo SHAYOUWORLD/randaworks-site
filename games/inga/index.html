@@ -246,7 +246,7 @@
                 <div id="desktopPlayContent">
                     <div class="cta-band-actions" style="justify-content: flex-start; margin: 0 0 18px;">
                         <button class="cta" id="embeddedFullscreenButton" type="button" data-analytics="inga_play_cta_fullscreen" data-track-event="cta_click" data-track-placement="inga_play_fullscreen" data-track-label="inga play fullscreen">全画面で遊ぶ</button>
-                        <button class="cta cta-ghost" id="embeddedMuteButton" type="button" data-analytics="inga_play_cta_audio" data-track-event="cta_click" data-track-placement="inga_play_audio" data-track-label="inga play audio">ミュート解除</button>
+                        <button class="cta cta-ghost" id="embeddedMuteButton" type="button" data-analytics="inga_play_cta_audio" data-track-event="cta_click" data-track-placement="inga_play_audio" data-track-label="inga play audio">音声をミュート</button>
                         <a class="cta cta-ghost" href="./play/?src=inga_play_section" data-analytics="inga_play_cta_player" data-track-event="cta_click" data-track-placement="inga_play_player" data-track-label="inga play dedicated player">専用プレイヤーで開く</a>
                     </div>
 
@@ -819,10 +819,10 @@
         function readEmbeddedMutePreference() {
             try {
                 const stored = window.localStorage.getItem(mutePreferenceKey);
-                if (stored === null) return true;
+                if (stored === null) return false;
                 return stored === "true";
             } catch (error) {
-                return true;
+                return false;
             }
         }
 
