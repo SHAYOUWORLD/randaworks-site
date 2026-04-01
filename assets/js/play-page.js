@@ -27,6 +27,11 @@
     var isMuted = readMutePreference();
     var hasLaunched = false;
 
+    function text(key, fallback) {
+      if (body && body.dataset && body.dataset[key]) return body.dataset[key];
+      return fallback;
+    }
+
     function readMutePreference() {
       try {
         var stored = window.localStorage.getItem(mutePreferenceKey);
@@ -53,12 +58,16 @@
 
     function updateFullscreenButton() {
       if (!fullscreenButton) return;
-      fullscreenButton.textContent = isFullscreenActive() ? "外側フルスクリーン解除" : "外側フルスクリーン";
+      fullscreenButton.textContent = isFullscreenActive()
+        ? text("fullscreenExitLabel", "外側フルスクリーン解除")
+        : text("fullscreenEnterLabel", "外側フルスクリーン");
     }
 
     function updateMuteButton() {
       if (!muteButton) return;
-      muteButton.textContent = isMuted ? "ミュート解除" : "音声をミュート";
+      muteButton.textContent = isMuted
+        ? text("muteOffLabel", "ミュート解除")
+        : text("muteOnLabel", "音声をミュート");
     }
 
     function updateLaunchButtons() {
@@ -123,14 +132,14 @@
       bootResolved = true;
       if (bootTimer) window.clearTimeout(bootTimer);
       if (readyNote) readyNote.hidden = false;
-      setStatus(message || "プレイできます。");
+      setStatus(message || text("statusReady", "プレイできます。"));
       updateLaunchButtons();
     }
 
     function markError(code, message) {
       bootResolved = true;
       if (bootTimer) window.clearTimeout(bootTimer);
-      setStatus("起動できませんでした。");
+      setStatus(text("statusFailed", "起動できませんでした。"));
       setError(message);
       updateLaunchButtons();
       track("demo_boot_error", {
@@ -144,7 +153,7 @@
         if (bootResolved) return;
         markError(
           "boot_timeout",
-          "起動に時間がかかっています。時間をおいて再試行するか、サポートページをご確認ください。"
+          text("errorBootTimeout", "起動に時間がかかっています。時間をおいて再試行するか、サポートページをご確認ください。")
         );
       }, 15000);
     }
@@ -158,7 +167,7 @@
       updateLaunchButtons();
       hideLaunchOverlay();
       if (readyNote) readyNote.hidden = true;
-      setStatus("体験版を準備しています...");
+      setStatus(text("statusPreparing", "体験版を準備しています..."));
 
       track("demo_boot_start", {
         build_id: buildId,
@@ -171,7 +180,7 @@
             throw new Error("build_missing");
           }
 
-          setStatus("体験版を読み込んでいます...");
+          setStatus(text("statusLoading", "体験版を読み込んでいます..."));
           frame.src = buildPath;
           beginTimeoutWatch();
 
@@ -179,7 +188,7 @@
             "load",
             function () {
               if (bootResolved) return;
-              setStatus("まもなく遊べます...");
+              setStatus(text("statusAlmostReady", "まもなく遊べます..."));
               if (isMuted) {
                 sendFrameControl("setMuted", true);
               }
@@ -191,7 +200,7 @@
           var code = error && error.message ? error.message : "boot_check_failed";
           markError(
             code,
-            "体験版の読み込みに失敗しました。時間をおいて再試行するか、サポートページをご確認ください。"
+            text("errorLoadFailed", "体験版の読み込みに失敗しました。時間をおいて再試行するか、サポートページをご確認ください。")
           );
         });
     }
@@ -225,7 +234,7 @@
         }
 
         if (event.data.command === "ready") {
-          setStatus("プレイできます。");
+          setStatus(text("statusReady", "プレイできます。"));
           return;
         }
       }
@@ -242,12 +251,12 @@
             load_ms: Date.now() - bootStartedAt
           }));
         }
-        markReady("プレイできます。");
+        markReady(text("statusReady", "プレイできます。"));
         return;
       }
 
       if (event.data.event === "demo_boot_error") {
-        markError(payload.error_code || "runtime_error", "ゲーム本体が起動エラーを返しました。");
+        markError(payload.error_code || "runtime_error", text("errorRuntime", "ゲーム本体が起動エラーを返しました。"));
         return;
       }
 
@@ -291,7 +300,7 @@
             state: "enter"
           });
         }).catch(function () {
-          setStatus("全画面表示を開始できませんでした。");
+          setStatus(text("errorFullscreenUnavailable", "全画面表示を開始できませんでした。"));
         });
       });
 
