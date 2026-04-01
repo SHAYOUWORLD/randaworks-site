@@ -112,11 +112,14 @@ body {
 		<script src="index.pck.loader.js"></script>
 		<script src="index.js"></script>
 		<script>
+const LOCAL_DEV_HOSTS = new Set(['dev.randa', 'localhost', '127.0.0.1']);
+const CURRENT_HOST = window.location.hostname;
+const IS_LOCAL_DEV_HOST = LOCAL_DEV_HOSTS.has(CURRENT_HOST);
 const REMOTE_ASSET_HOSTS = new Set(['www.randaworks.com', 'randaworks.com']);
-const REMOTE_ASSET_BASE = REMOTE_ASSET_HOSTS.has(window.location.hostname)
+const REMOTE_ASSET_BASE = REMOTE_ASSET_HOSTS.has(CURRENT_HOST)
 	? 'https://storage.googleapis.com/randaworks-game-builds/inga-demo/0.1.9/'
 	: '';
-const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":REMOTE_ASSET_BASE ? `${REMOTE_ASSET_BASE}index` : "index","experimentalVK":false,"fileSizes":{"index.pck":367987536,"index.wasm":38034280},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4};
+const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":!IS_LOCAL_DEV_HOST,"executable":REMOTE_ASSET_BASE ? `${REMOTE_ASSET_BASE}index` : "index","experimentalVK":false,"fileSizes":{"index.pck":367987536,"index.wasm":38034280},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4};
 if (REMOTE_ASSET_BASE) {
 	GODOT_CONFIG.mainPack = `${REMOTE_ASSET_BASE}index.pck`;
 }

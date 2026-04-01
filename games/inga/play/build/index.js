@@ -19,6 +19,8 @@ if (typeof exports === 'object' && typeof module === 'object') {
 } else if (typeof define === 'function' && define['amd'])
   define([], () => Godot);
 
+const LOCAL_DEV_HOSTS = new Set(['dev.randa', 'localhost', '127.0.0.1']);
+
 const Features = {
 	/**
 	 * Check whether WebGL is available. Optionally, specify a particular version of WebGL to check for.
@@ -51,7 +53,7 @@ const Features = {
 	 * @function Engine.isSecureContext
 	 */
 	isSecureContext: function () {
-		return window['isSecureContext'] === true;
+		return LOCAL_DEV_HOSTS.has(window.location.hostname) || window['isSecureContext'] === true;
 	},
 
 	/**
