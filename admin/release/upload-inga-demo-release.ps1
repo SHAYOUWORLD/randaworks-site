@@ -1,7 +1,7 @@
 param(
     [Parameter(Mandatory = $true)]
     [string]$Version,
-    [string]$GameProjectRoot = "C:\dev\chie-game-go",
+    [string]$GameProjectRoot = "",
     [string]$Bucket = "randaworks-game-builds",
     [switch]$SkipWeb,
     [switch]$SkipWin
@@ -24,7 +24,29 @@ function Require-File {
     }
 }
 
+function Resolve-GameProjectRoot {
+    param([string]$ConfiguredRoot)
+
+    if (-not [string]::IsNullOrWhiteSpace($ConfiguredRoot)) {
+        return $ConfiguredRoot
+    }
+
+    if (-not [string]::IsNullOrWhiteSpace($env:RANDA_INGA_PROJECT_ROOT)) {
+        return $env:RANDA_INGA_PROJECT_ROOT
+    }
+
+    $repoRoot = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
+    $siblingRoot = Join-Path (Split-Path -Parent $repoRoot) "chie-game-go"
+    if (Test-Path -LiteralPath $siblingRoot -PathType Container) {
+        return $siblingRoot
+    }
+
+    throw "GameProjectRoot not found. Pass -GameProjectRoot or set RANDA_INGA_PROJECT_ROOT."
+}
+
 Require-Command "gcloud"
+
+$GameProjectRoot = Resolve-GameProjectRoot -ConfiguredRoot $GameProjectRoot
 
 $activeAccount = (& gcloud auth list --filter=status:ACTIVE --format="value(account)").Trim()
 if ([string]::IsNullOrWhiteSpace($activeAccount)) {
