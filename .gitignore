@@ -8,6 +8,8 @@ assets/video/games/inga/SteamStorePV_v1.1.mp4
 .claude/
 .agents/
 skills-lock.json
+AGENTS.md
+.wrangler/
 
 # Development scripts & backend (not for public deployment)
 scripts/
@@ -18,8 +20,21 @@ start-local-analytics.bat
 .tmp/
 output/
 progress.md
+nul
+admin/release/randaworks-game-builds-cors.json
 
 # Astro journal build artifacts (source in journal-src/, output committed in journal/)
 journal-src/node_modules/
 journal-src/.astro/
 journal-src/dist/
+
+# Unpublished journal work-in-progress
+# Remove these ignore rules when journal content becomes publishable.
+journal/ai/
+journal/collections/
+journal/content-assets.mjs
+journal/content-modules.mjs
+journal/devlog/
+journal/game-design/
+journal/game-study/
+journal/research/
