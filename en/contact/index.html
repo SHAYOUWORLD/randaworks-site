@@ -16,6 +16,7 @@
   <link rel="canonical" href="https://www.randaworks.com/en/contact/" />
   <link rel="alternate" hreflang="ja" href="https://www.randaworks.com/contact/" />
   <link rel="alternate" hreflang="en" href="https://www.randaworks.com/en/contact/" />
+  <link rel="alternate" hreflang="x-default" href="https://www.randaworks.com/contact/" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Shippori+Mincho:wght@400;700&display=swap">
@@ -26,15 +27,15 @@
 <body>
   <a class="skip-link" href="#main-content">Skip to main content</a>
   <div class="container">
-    <div class="nav">
-      <div class="brand"><a href="../"><img src="../../assets/img/randaworks_logo_text.png" alt="RandaWorks" style="height: 28px; vertical-align: middle;"></a></div>
+    <nav class="nav">
+      <div class="brand"><a href="../"><picture><source srcset="../../assets/img/randaworks_logo_text.webp" type="image/webp"><img src="../../assets/img/randaworks_logo_text.png" alt="RandaWorks" style="height: 28px; vertical-align: middle;"></picture></a></div>
       <div class="links">
         <a href="../games/">Games</a>
         <a href="../videos/">Videos</a>
         <a href="../news/">News</a>
         <a href="../contact/">Contact</a>
       </div>
-    </div>
+    </nav>
     <main id="main-content" class="card">
       <h1>Contact</h1>
       <p class="muted">Send bug reports, feedback, requests, or media inquiries here.<br />If you prefer email, contact <a href="mailto:contact@randaworks.com">contact@randaworks.com</a>.</p>
@@ -63,7 +64,7 @@
         <div class="form-actions"><button class="cta" id="submitBtn" type="submit">Send</button><span class="muted" id="sendingNote" hidden>Sending...</span></div>
       </form>
     </main>
-    <div class="footer">
+    <footer class="footer">
       <nav class="footer-nav" aria-label="Footer navigation">
         <a href="../about/">About</a>
         <a href="../privacy/">Privacy Policy</a>
@@ -77,7 +78,7 @@
         </a>
       </div>
       <div>&copy; 2026 RandaWorks</div>
-    </div>
+    </footer>
   </div>
   <script src="../../assets/js/analytics-config.js"></script>
   <script src="../../assets/js/analytics.js"></script>

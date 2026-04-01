@@ -11,7 +11,12 @@
     gtag('config', 'G-WNL49Q0CTT');
   </script>
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <link rel="icon" href="./assets/img/randaworks_icon.png" type="image/png">
+  <link rel="icon" href="/assets/img/randaworks_logo_icon.webp" type="image/webp">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Shippori+Mincho:wght@400;700&display=swap">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Shippori+Mincho:wght@400;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Shippori+Mincho:wght@400;700&display=swap" rel="stylesheet"></noscript>
   <title>404 | お探しのページは見つかりません | RandaWorks</title>
   <meta name="description" content="お探しのページは見つかりませんでした。RandaWorksのトップページ、ゲーム一覧、日本史因果クロニクルの作品ページから必要な情報をご確認ください。" />
   <meta name="robots" content="noindex, follow" />
@@ -31,21 +36,24 @@
 <body>
   <a class="skip-link" href="#main-content">メインコンテンツへ移動</a>
   <div class="container">
-    <div class="nav">
-      <div class="brand"><a href="/"><img src="./assets/img/randaworks_logo_text.png" alt="RandaWorks" style="height: 28px; vertical-align: middle;"></a></div>
-    </div>
+    <nav class="nav">
+      <div class="brand"><a href="/"><picture>
+              <source srcset="/assets/img/randaworks_logo_text.webp" type="image/webp">
+              <img src="/assets/img/randaworks_logo_text.png" alt="RandaWorks" style="height: 28px; vertical-align: middle;">
+            </picture></a></div>
+    </nav>
     <main id="main-content" class="hero" style="margin-top: 40px;">
       <h1>404</h1>
       <p>ページが見つかりませんでした。</p>
       <p><a class="cta" href="/">トップページへ戻る</a></p>
     </main>
 
-    <div class="footer">
+    <footer class="footer">
       <nav class="footer-nav" aria-label="フッターナビゲーション">
-        <a href="./about/">About</a>
-        <a href="./privacy/">プライバシーポリシー</a>
-        <a href="./terms/">利用規約</a>
-        <a href="./contact/">お問い合わせ</a>
+        <a href="/about/">About</a>
+        <a href="/privacy/">プライバシーポリシー</a>
+        <a href="/terms/">利用規約</a>
+        <a href="/contact/">お問い合わせ</a>
       </nav>
       <div class="footer-links">
         <a class="footer-link-social" href="https://x.com/RandaWorksJP" target="_blank" rel="me noopener noreferrer" aria-label="RandaWorks公式Xを新しいタブで開く" data-track-event="social_click" data-track-placement="site_footer_x" data-track-label="site footer x">
@@ -54,9 +62,9 @@
         </a>
       </div>
       <div>&copy; 2026 RandaWorks</div>
-    </div>
+    </footer>
   </div>
-  <script src="./assets/js/analytics-config.js"></script>
-  <script src="./assets/js/analytics.js"></script>
+  <script src="/assets/js/analytics-config.js"></script>
+  <script src="/assets/js/analytics.js"></script>
 </body>
 </html>

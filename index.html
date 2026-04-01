@@ -18,6 +18,9 @@
       content="理解や発見がそのまま面白さになるゲームをつくるインディーゲームスタジオです。公開中の作品、ブラウザ体験版、動画、お知らせを掲載しています。"
     />
     <link rel="canonical" href="https://www.randaworks.com/" />
+    <link rel="alternate" hreflang="ja" href="https://www.randaworks.com/" />
+    <link rel="alternate" hreflang="en" href="https://www.randaworks.com/en/" />
+    <link rel="alternate" hreflang="x-default" href="https://www.randaworks.com/" />
     <meta property="og:type" content="website" />
     <meta property="og:title" content="RandaWorks | 理解や発見がそのまま面白さになるゲームをつくるスタジオ" />
     <meta property="og:description" content="理解や発見がそのまま面白さになるゲームをつくるインディーゲームスタジオです。" />
@@ -67,7 +70,7 @@
   <body class="home-page" data-page-type="home">
     <a class="skip-link" href="#main-content">メインコンテンツへ移動</a>
     <div class="container">
-      <div class="nav">
+      <nav class="nav">
         <div class="brand"><a href="./"><picture>
           <source srcset="./assets/img/randaworks_logo_text.webp" type="image/webp">
           <img src="./assets/img/randaworks_logo_text.png" alt="RandaWorks" style="height: 28px; vertical-align: middle;">
@@ -78,7 +81,7 @@
           <a href="./news/">お知らせ</a>
           <a href="./contact/">お問い合わせ</a>
         </div>
-      </div>
+      </nav>
       <main id="main-content">
       <section class="card home-hero-card">
         <div class="home-hero-copy">
@@ -122,11 +125,7 @@
             <li>英雄ごとに異なる時代と戦い方で攻略できる</li>
             <li>ブラウザ体験版からすぐ試せる</li>
           </ul>
-          <div class="cta-band-actions home-feature-actions">
-            <a class="cta cta-steam" href="https://store.steampowered.com/app/4403470" target="_blank" rel="noopener noreferrer" data-analytics="home_featured_cta_wishlist" data-track-event="wishlist_click" data-track-placement="home_featured_steam" data-track-label="home featured wishlist">Steamでウィッシュリスト</a>
-            <a class="cta" href="./games/inga/?src=home_featured#play" data-analytics="home_featured_cta_play" data-track-event="play_cta_click" data-track-placement="home_featured_primary" data-track-label="home featured play">体験版を遊ぶ</a>
-            <a class="cta cta-ghost" href="./games/inga/?src=home_featured" data-analytics="home_featured_cta_gamepage" data-track-event="cta_click" data-track-placement="home_featured_secondary" data-track-label="home featured product">作品ページを見る</a>
-          </div>
+          <a class="cta cta-ghost" href="./games/inga/?src=home_featured" data-analytics="home_featured_cta_gamepage" data-track-event="cta_click" data-track-placement="home_featured_secondary" data-track-label="home featured product" style="margin-top: 8px;">作品ページを見る →</a>
         </aside>
       </section>
 
@@ -202,7 +201,7 @@
         </div>
       </section>
       </main>
-      <div class="footer">
+      <footer class="footer">
         <nav class="footer-nav" aria-label="フッターナビゲーション">
           <a href="./about/">About</a>
           <a href="./privacy/">プライバシーポリシー</a>
@@ -216,7 +215,7 @@
           </a>
         </div>
         <div>&copy; 2026 RandaWorks</div>
-      </div>
+      </footer>
     </div>
     <script src="./assets/js/analytics-config.js"></script>
     <script src="./assets/js/analytics.js"></script>
