@@ -1,5 +1,7 @@
 name = "randaworks-site"
 compatibility_date = "2025-01-01"
+main = "worker.js"
 
 [assets]
 directory = "./"
+binding = "ASSETS"
