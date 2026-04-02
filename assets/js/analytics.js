@@ -114,12 +114,17 @@
     switcher.className = "locale-switch";
     switcher.setAttribute("aria-label", locale === "ja" ? "言語切替" : "Language switcher");
 
+    function setLocaleCookie(value) {
+      document.cookie = "randa_locale=" + value + ";path=/;max-age=31536000;SameSite=Lax";
+    }
+
     var jaLink = document.createElement("a");
     jaLink.className = "locale-switch-link";
     jaLink.href = locale === "ja" ? globalObject.location.pathname + globalObject.location.search + globalObject.location.hash : altPath;
     jaLink.textContent = "JP";
     jaLink.lang = "ja";
     if (locale === "ja") jaLink.setAttribute("aria-current", "true");
+    jaLink.addEventListener("click", function () { setLocaleCookie("ja"); });
 
     var divider = document.createElement("span");
     divider.className = "locale-switch-divider";
@@ -132,6 +137,7 @@
     enLink.textContent = "EN";
     enLink.lang = "en";
     if (locale === "en") enLink.setAttribute("aria-current", "true");
+    enLink.addEventListener("click", function () { setLocaleCookie("en"); });
 
     switcher.appendChild(jaLink);
     switcher.appendChild(divider);
