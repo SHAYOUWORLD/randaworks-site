@@ -109,15 +109,15 @@ body {
 			<div id="status-notice"></div>
 		</div>
 
-		<script src="index.pck.loader.js?v=20260404-v021"></script>
-		<script src="index.js?v=20260404-v021"></script>
+		<script src="index.pck.loader.js?v=20260406-v022"></script>
+		<script src="index.js?v=20260406-v022"></script>
 		<script>
 const LOCAL_DEV_SHELL_HOSTS = new Set(['dev.randa', 'localhost', '127.0.0.1']);
 const CURRENT_HOST = window.location.hostname;
 const IS_LOCAL_DEV_HOST = LOCAL_DEV_SHELL_HOSTS.has(CURRENT_HOST);
 const REMOTE_ASSET_HOSTS = new Set(['www.randaworks.com', 'randaworks.com']);
 const REMOTE_ASSET_BASE = REMOTE_ASSET_HOSTS.has(CURRENT_HOST)
-	? 'https://storage.googleapis.com/randaworks-game-builds/inga-demo/0.2.1/'
+	? 'https://storage.googleapis.com/randaworks-game-builds/inga-demo/0.2.2/'
 	: '';
 const SHELL_ASSET_BASE = new URL('./', window.location.href).href;
 if (IS_LOCAL_DEV_HOST && window.location.protocol !== 'https:' && !window.__RANDA_LOCAL_AUDIO_WORKLET_PATCHED) {
@@ -168,7 +168,7 @@ if (IS_LOCAL_DEV_HOST && window.location.protocol !== 'https:' && !window.__RAND
 	};
 	window.__RANDA_LOCAL_AUDIO_WORKLET_PATCHED = true;
 }
-const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":false,"executable":REMOTE_ASSET_BASE ? `${REMOTE_ASSET_BASE}index` : "index","experimentalVK":false,"fileSizes":{"index.pck":463570404,"index.wasm":38034280},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4};
+const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":false,"executable":REMOTE_ASSET_BASE ? `${REMOTE_ASSET_BASE}index` : "index","experimentalVK":false,"fileSizes":{"index.pck":466860160,"index.wasm":38034280},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4};
 if (REMOTE_ASSET_BASE) {
 	GODOT_CONFIG.mainPack = `${REMOTE_ASSET_BASE}index.pck`;
 }
