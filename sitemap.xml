@@ -43,6 +43,30 @@
     <priority>1.0</priority>
   </url>
   <url>
+    <loc>https://www.randaworks.com/history-tools/</loc>
+    <lastmod>2026-04-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.randaworks.com/nihonshi-quiz/</loc>
+    <lastmod>2026-04-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.randaworks.com/wareki-converter/</loc>
+    <lastmod>2026-04-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.randaworks.com/busho-profile-search/</loc>
+    <lastmod>2026-04-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://www.randaworks.com/en/games/inga/</loc>
     <lastmod>2026-04-02</lastmod>
     <changefreq>monthly</changefreq>

@@ -17,6 +17,10 @@ var LOCALIZED_PATHS = {
   "/terms/": true
 };
 
+var REDIRECT_PATHS = {
+  "/games/inga/history-tools/": "/history-tools/"
+};
+
 var BOT_PATTERN = /bot|crawl|spider|slurp|facebook|twitter|linkedin|whatsapp|telegram|discord|preview|embed|fetch|curl|wget|lighthouse|pagespeed|gtmetrix/i;
 var LOCALE_COOKIE = "randa_locale";
 
@@ -59,6 +63,10 @@ export default {
     var url = new URL(request.url);
     var pathname = normalizePath(url.pathname);
     var userAgent = request.headers.get("user-agent") || "";
+
+    if (REDIRECT_PATHS[pathname]) {
+      return Response.redirect(new URL(REDIRECT_PATHS[pathname] + url.search + url.hash, url.origin), 301);
+    }
 
     // Skip bots
     if (BOT_PATTERN.test(userAgent)) {

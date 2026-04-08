@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-WNL49Q0CTT"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-WNL49Q0CTT');
+  </script>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="icon" href="/assets/img/randaworks_logo_icon.webp" type="image/webp">
+  <title>日本史クイズ 無料ジェネレーター | 飛鳥から明治までランダム出題</title>
+  <meta name="description" content="無料で使える日本史クイズジェネレーター。飛鳥、平安、鎌倉、室町、戦国、江戸、幕末、明治の人物・出来事クイズをランダム出題します。" />
+  <link rel="canonical" href="https://www.randaworks.com/nihonshi-quiz/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="日本史クイズ 無料ジェネレーター" />
+  <meta property="og:description" content="飛鳥から明治までの日本史人物・出来事クイズをランダム出題する無料ページです。" />
+  <meta property="og:url" content="https://www.randaworks.com/nihonshi-quiz/" />
+  <meta property="og:image" content="https://www.randaworks.com/assets/img/games/inga/demo-cards/combo_nobunaga.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="日本史クイズ 無料ジェネレーター" />
+  <meta name="twitter:description" content="飛鳥から明治までの日本史人物・出来事クイズをランダム出題する無料ページです。" />
+  <meta name="twitter:image" content="https://www.randaworks.com/assets/img/games/inga/demo-cards/combo_nobunaga.jpg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Shippori+Mincho:wght@400;700&display=swap">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Shippori+Mincho:wght@400;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Shippori+Mincho:wght@400;700&display=swap" rel="stylesheet"></noscript>
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <link rel="stylesheet" href="/assets/css/history-tools.css">
+</head>
+<body data-page-type="nihonshi_quiz">
+  <a class="skip-link" href="#main-content">メインコンテンツへ移動</a>
+  <div class="container">
+    <header class="nav">
+      <div class="brand"><a href="/"><picture>
+        <source srcset="/assets/img/randaworks_logo_text.webp" type="image/webp">
+        <img src="/assets/img/randaworks_logo_text.png" alt="RandaWorks" style="height: 28px; vertical-align: middle;">
+      </picture></a></div>
+      <div class="links">
+        <a href="/history-tools/">ツール集</a>
+        <a href="/wareki-converter/">元号変換</a>
+        <a href="/busho-profile-search/">人物検索</a>
+        <a href="/games/inga/?src=nihonshi_quiz_nav">ゲームを見る</a>
+      </div>
+    </header>
+
+    <main id="main-content">
+      <nav aria-label="パンくずリスト">
+        <ol class="breadcrumb">
+          <li><a href="/">ホーム</a></li>
+          <li class="breadcrumb-separator" aria-hidden="true">›</li>
+          <li><a href="/history-tools/">日本史ツール集</a></li>
+          <li class="breadcrumb-separator" aria-hidden="true">›</li>
+          <li class="breadcrumb-current" aria-current="page">日本史クイズ</li>
+        </ol>
+      </nav>
+
+      <section class="card history-tools-hero">
+        <div class="history-tools-meta">
+          <span class="badge">無料</span>
+          <span class="badge">認証不要</span>
+          <span class="badge">時代別出題</span>
+          <span class="badge">Wikipedia概要ベース</span>
+        </div>
+        <div>
+          <p class="section-kicker">日本史クイズジェネレーター</p>
+          <h1>日本史クイズを無料でランダム出題</h1>
+          <p>飛鳥から明治までの人物・出来事クイズをその場で生成できます。検索で来た人が単体で使える独立ページにし、最後に興味があれば歴史ゲームへ進める構成です。</p>
+        </div>
+      </section>
+
+      <section class="card tool-shell" id="quiz">
+        <div class="tool-header">
+          <div>
+            <p class="section-kicker">クイズ本体</p>
+            <h2>ランダム問題を出す</h2>
+          </div>
+          <div class="tool-toolbar">
+            <label for="historyQuizPeriod">出題範囲
+              <select id="historyQuizPeriod">
+                <option value="all">すべて</option>
+                <option value="ancient">飛鳥</option>
+                <option value="heian">平安</option>
+                <option value="kamakura">鎌倉</option>
+                <option value="muromachi">室町</option>
+                <option value="sengoku">戦国</option>
+                <option value="edo">江戸</option>
+                <option value="bakumatsu">幕末</option>
+                <option value="meiji">明治</option>
+              </select>
+            </label>
+            <button class="cta" id="historyQuizGenerate" type="button">新しい問題を出す</button>
+          </div>
+        </div>
+        <div class="tool-grid">
+          <div class="tool-question" id="historyQuizQuestion"></div>
+          <div class="quiz-option-grid" id="historyQuizChoices"></div>
+          <div class="tool-result-panel" id="historyQuizExplanation"></div>
+        </div>
+      </section>
+
+      <section class="history-tools-related">
+        <article class="card history-tools-related-card">
+          <p class="section-kicker">関連ツール</p>
+          <h3>他の日本史ページ</h3>
+          <div class="history-tools-link-list">
+            <a href="/wareki-converter/">元号変換へ</a>
+            <a href="/busho-profile-search/">人物検索へ</a>
+            <a href="/history-tools/">ツール集トップへ</a>
+          </div>
+        </article>
+        <article class="card history-tools-game-panel">
+          <p class="section-kicker">次の導線</p>
+          <h3>覚えた流れをゲームで使う</h3>
+          <p>日本史クイズで流れを思い出したら、そのまま『日本史因果クロニクル』の体験版やSteamページへ進めます。</p>
+          <div class="history-tools-link-list">
+            <a href="/games/inga/?src=nihonshi_quiz_game" data-track-event="cta_click" data-track-placement="nihonshi_quiz_game" data-track-label="nihonshi quiz game">ゲーム詳細</a>
+            <a href="/games/inga/play/?src=nihonshi_quiz_play" data-track-event="cta_click" data-track-placement="nihonshi_quiz_play" data-track-label="nihonshi quiz play">ブラウザ版を遊ぶ</a>
+          </div>
+        </article>
+      </section>
+
+      <section class="card" id="steam">
+        <div class="tool-header">
+          <div>
+            <p class="section-kicker">Steamウィジェット</p>
+            <h2>興味が高まった人だけゲームへ</h2>
+          </div>
+        </div>
+        <div class="steam-widget-shell">
+          <iframe src="https://store.steampowered.com/widget/4403470/?utm_source=randaworks&utm_medium=nihonshi_quiz&utm_campaign=widget" title="日本史因果クロニクル Steam Store Widget" loading="lazy"></iframe>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <nav class="footer-nav" aria-label="フッターナビゲーション">
+        <a href="/about/">About</a>
+        <a href="/privacy/">プライバシーポリシー</a>
+        <a href="/terms/">利用規約</a>
+        <a href="/contact/">お問い合わせ</a>
+      </nav>
+      <div class="footer-links">
+        <a href="/history-tools/">日本史ツール集</a>
+        <a href="/wareki-converter/">元号変換</a>
+        <a href="/busho-profile-search/">人物検索</a>
+        <a href="/games/inga/?src=nihonshi_quiz_footer">ゲーム詳細</a>
+      </div>
+      <div>&copy; 2026 RandaWorks</div>
+    </footer>
+  </div>
+  <script src="/assets/js/analytics-config.js"></script>
+  <script src="/assets/js/analytics.js"></script>
+  <script src="/assets/js/history-tools.js"></script>
+</body>
+</html>

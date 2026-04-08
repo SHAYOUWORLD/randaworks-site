@@ -10,6 +10,7 @@ assets/video/games/inga/SteamStorePV_v1.1.mp4
 skills-lock.json
 AGENTS.md
 .wrangler/
+.wrangler*
 
 # Development scripts & backend (not for public deployment)
 scripts/
