@@ -1,0 +1,492 @@
+---
+import ToolLayout from '../../layouts/ToolLayout.astro';
+---
+<ToolLayout
+  title="日本史 一問一答 814問 | 択一・用語クイズ 無料"
+  description="日本史の択一問題350問＋用語クイズ464語。時代別フィルタ・ヒント・解説付き。受験対策・定期テスト対策に。"
+  canonical="https://www.randaworks.com/nihonshi-ichimon-ittou/"
+  ogImage="https://www.randaworks.com/assets/img/games/inga/demo-cards/combo_land_system.jpg"
+  pageType="ichimon_ittou"
+  source="ichimon_ittou"
+  tag="択一+用語・814問"
+  heading="日本史 一問一答"
+  breadcrumbs={[
+    { href: '/history-tools/', label: 'ツール集' },
+    { label: '一問一答' },
+  ]}
+  excludeTools={['nihonshi-ichimon-ittou']}
+  gamePitch="クイズに出てくる用語がゲーム内ではカードとして登場し、因果関係コンボを発動できます。"
+  steamContext="一問一答の知識をカードゲームで実践"
+>
+  <div class="tool-workspace">
+    <!-- Score bar -->
+    <div class="quiz-score-bar" id="scoreBar">
+      <div class="score-item"><span class="score-label">正解率</span><span class="score-value" id="scoreRate">—</span></div>
+      <div class="score-divider"></div>
+      <div class="score-item"><span class="score-label">正解</span><span class="score-value" id="scoreCount">0 / 0</span></div>
+      <div class="score-divider"></div>
+      <div class="score-item"><span class="score-label">連続正解</span><span class="score-value"><span id="streak">0</span> <span class="streak-fire" id="streakFire" style="display:none;">&#x1F525;</span></span></div>
+    </div>
+
+    <!-- Mode toggle -->
+    <div class="quiz-mode-toggle" id="modeToggle">
+      <button class="quiz-mode-btn is-active" data-mode="test">択一問題<span style="font-size:0.72rem;opacity:0.6;margin-left:4px;" id="testCountLabel"></span></button>
+      <button class="quiz-mode-btn" data-mode="term">用語クイズ<span style="font-size:0.72rem;opacity:0.6;margin-left:4px;" id="termCountLabel"></span></button>
+    </div>
+
+    <!-- Era filter -->
+    <div class="era-chips" id="eraChips"></div>
+
+    <!-- Question area -->
+    <div id="questionArea">
+      <div class="quiz-loading" id="loadingMsg">データを読み込み中</div>
+    </div>
+
+    <!-- Choices -->
+    <div class="quiz-choices" id="choicesArea" style="display:none;"></div>
+
+    <!-- Hints -->
+    <div id="hintsArea" style="display:none;"></div>
+
+    <!-- Feedback -->
+    <div id="feedbackArea" style="display:none;"></div>
+  </div>
+  <script is:inline src="/assets/js/history-tools.js"></script>
+  <script is:inline>
+  (function() {
+    var DATA = null;
+    var state = {
+      mode: 'test', pool: [], current: -1,
+      score: 0, total: 0, streak: 0, bestStreak: 0,
+      answered: false, era: 'all', hintsUsed: 0
+    };
+
+    function $(id) { return document.getElementById(id); }
+    function esc(s) {
+      var d = document.createElement('div'); d.textContent = s || ''; return d.innerHTML;
+    }
+    function shuffle(a) {
+      for (var i = a.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var t = a[i]; a[i] = a[j]; a[j] = t;
+      }
+      return a;
+    }
+    function track(ev, payload) {
+      if (window.RandaAnalytics && window.RandaAnalytics.track) window.RandaAnalytics.track(ev, payload);
+      if (typeof gtag === 'function') gtag('event', ev, payload);
+    }
+    function wikiUrl(kw) {
+      return 'https://ja.wikipedia.org/wiki/' + encodeURIComponent(kw);
+    }
+    function reportUrl(id, title, detail) {
+      var t = encodeURIComponent('[クイズ報告] ' + title + ' (' + id + ')');
+      var b = encodeURIComponent('## 報告内容\n\n- 問題ID: `' + id + '`\n- 問題名: ' + title + '\n\n### どこが間違っていますか？\n\n（ここに記入してください）\n\n---\n' + (detail || ''));
+      return 'https://github.com/SHAYOUWORLD/randaworks-site/issues/new?title=' + t + '&body=' + b + '&labels=quiz-report';
+    }
+    function tagClass(tag) {
+      if (tag === '正解') return 'feedback-tag--correct';
+      if (tag === '不正解') return 'feedback-tag--wrong';
+      return 'feedback-tag--wrong';
+    }
+
+    var ERA_NAMES = {
+      all: 'すべて', asuka_nara: '飛鳥・奈良', heian: '平安', kamakura: '鎌倉',
+      muromachi: '室町', sengoku: '戦国', azuchi: '安土桃山', edo: '江戸', bakumatsu: '幕末'
+    };
+
+    // ── Data loading ──
+    function loadData() {
+      fetch('/assets/data/quiz-ichimon.json')
+        .then(function(r) { return r.json(); })
+        .then(function(d) {
+          DATA = d;
+          $('testCountLabel').textContent = '(' + d.events.length + ')';
+          $('termCountLabel').textContent = '(' + d.terms.length + ')';
+          initModeToggle();
+          initEraFilter();
+          rebuildPool();
+        })
+        .catch(function() {
+          $('loadingMsg').textContent = 'データの読み込みに失敗しました。ページを再読み込みしてください。';
+        });
+    }
+
+    // ── Mode toggle ──
+    function initModeToggle() {
+      $('modeToggle').addEventListener('click', function(ev) {
+        var btn = ev.target.closest('.quiz-mode-btn');
+        if (!btn) return;
+        var mode = btn.getAttribute('data-mode');
+        if (mode === state.mode) return;
+        $('modeToggle').querySelectorAll('.quiz-mode-btn').forEach(function(b) { b.classList.remove('is-active'); });
+        btn.classList.add('is-active');
+        state.mode = mode;
+        state.score = 0; state.total = 0; state.streak = 0;
+        updateScore();
+        initEraFilter();
+        rebuildPool();
+        track('ichimon_mode_change', { mode: mode });
+      });
+    }
+
+    // ── Era filter ──
+    function initEraFilter() {
+      var container = $('eraChips');
+      var items = state.mode === 'test' ? DATA.events : DATA.terms;
+      var counts = {};
+      items.forEach(function(q) { counts[q.era] = (counts[q.era] || 0) + 1; });
+
+      var eras = DATA.eras.filter(function(e) {
+        var key = e.id;
+        return (counts[key] || 0) > 0;
+      });
+
+      // Include 'all' for terms
+      var totalCount = items.length;
+      var html = '<button class="era-chip is-active" data-era="all" data-era="all">すべて<span class="era-chip-count">(' + totalCount + ')</span></button>';
+      eras.forEach(function(e) {
+        var c = state.mode === 'test' ? (e.eventCount || 0) : (e.termCount || 0);
+        if (c === 0) return;
+        html += '<button class="era-chip" data-era="' + e.id + '" data-era="' + e.id + '">'
+          + esc(e.name) + '<span class="era-chip-count">(' + c + ')</span></button>';
+      });
+      // Special: 'all' era for terms
+      if (state.mode === 'term') {
+        var allEraCount = items.filter(function(q) { return q.era === 'all'; }).length;
+        if (allEraCount > 0) {
+          html += '<button class="era-chip" data-era="all_era" data-era="all">汎用<span class="era-chip-count">(' + allEraCount + ')</span></button>';
+        }
+      }
+      container.innerHTML = html;
+
+      container.onclick = function(ev) {
+        var btn = ev.target.closest('.era-chip');
+        if (!btn) return;
+        container.querySelectorAll('.era-chip').forEach(function(c) { c.classList.remove('is-active'); });
+        btn.classList.add('is-active');
+        state.era = btn.getAttribute('data-era');
+        state.score = 0; state.total = 0; state.streak = 0;
+        updateScore();
+        rebuildPool();
+      };
+    }
+
+    function rebuildPool() {
+      if (state.mode === 'test') {
+        state.pool = state.era === 'all'
+          ? DATA.events.slice()
+          : DATA.events.filter(function(q) { return q.era === state.era; });
+      } else {
+        state.pool = state.era === 'all'
+          ? DATA.terms.slice()
+          : DATA.terms.filter(function(q) { return q.era === state.era; });
+      }
+      shuffle(state.pool);
+      state.current = -1;
+      nextQuestion();
+    }
+
+    // ── Score ──
+    function updateScore() {
+      var rate = state.total > 0 ? Math.round(state.score / state.total * 100) : 0;
+      $('scoreRate').textContent = state.total > 0 ? rate + '%' : '—';
+      $('scoreCount').textContent = state.score + ' / ' + state.total;
+      $('streak').textContent = state.streak;
+      $('streakFire').style.display = state.streak >= 3 ? 'inline' : 'none';
+    }
+
+    // ── Question ──
+    function nextQuestion() {
+      if (!state.pool.length) {
+        $('questionArea').innerHTML = '<div class="quiz-question-card"><p class="quiz-q-text">この時代の問題はありません。別の時代を選んでください。</p></div>';
+        $('choicesArea').style.display = 'none';
+        return;
+      }
+      state.current = (state.current + 1) % state.pool.length;
+      if (state.current === 0 && state.total > 0) shuffle(state.pool);
+      state.answered = false;
+      state.hintsUsed = 0;
+      if (state.mode === 'test') renderTestQuestion();
+      else renderTermQuestion();
+    }
+
+    function renderTestQuestion() {
+      var q = state.pool[state.current];
+      var eraName = ERA_NAMES[q.era] || q.era;
+
+      var html = '<div class="quiz-question-card">'
+        + '<div class="quiz-q-header">'
+        + '<span class="quiz-q-number">Q' + (state.total + 1) + '</span>'
+        + '<span class="era-badge" data-era="' + esc(q.era) + '">' + esc(eraName) + '</span>'
+        + '</div>'
+        + '<h3 class="quiz-q-title">' + esc(q.title) + '</h3>'
+        + '<p class="quiz-q-text">' + esc(q.question) + '</p>'
+        + '</div>';
+      $('questionArea').innerHTML = html;
+
+      // Choices
+      var nums = ['①', '②', '③', '④'];
+      var choicesHtml = '';
+      q.choices.forEach(function(c, i) {
+        choicesHtml += '<button class="quiz-choice" data-idx="' + i + '">'
+          + '<span class="choice-num">' + nums[i] + '</span>'
+          + '<span>' + esc(c.text) + '</span></button>';
+      });
+      $('choicesArea').innerHTML = choicesHtml;
+      $('choicesArea').style.display = '';
+
+      // Hints
+      if (q.hints && (q.hints.l1 || q.hints.l2)) {
+        var hHtml = '<div class="quiz-hint-row">';
+        if (q.hints.l1) hHtml += '<button class="quiz-hint-btn" id="hint1Btn" data-level="1">ヒント 1</button>';
+        if (q.hints.l2) hHtml += '<button class="quiz-hint-btn" id="hint2Btn" data-level="2">ヒント 2</button>';
+        hHtml += '</div><div id="hintContent"></div>';
+        $('hintsArea').innerHTML = hHtml;
+        $('hintsArea').style.display = '';
+
+        $('hintsArea').onclick = function(ev) {
+          var btn = ev.target.closest('.quiz-hint-btn');
+          if (!btn || btn.disabled) return;
+          btn.disabled = true;
+          state.hintsUsed++;
+          var level = btn.getAttribute('data-level');
+          var text = level === '1' ? q.hints.l1 : q.hints.l2;
+          var hc = $('hintContent');
+          hc.innerHTML += '<div class="quiz-hint-text">' + esc(text) + '</div>';
+          track('ichimon_hint_used', { level: level, title: q.title });
+        };
+      } else {
+        $('hintsArea').style.display = 'none';
+        $('hintsArea').innerHTML = '';
+      }
+
+      $('feedbackArea').style.display = 'none';
+      $('feedbackArea').innerHTML = '';
+    }
+
+    function renderTermQuestion() {
+      var q = state.pool[state.current];
+      var eraName = ERA_NAMES[q.era] || q.era;
+
+      // Weight stars
+      var stars = '';
+      for (var s = 0; s < 5; s++) {
+        stars += s < q.weight ? '<span style="color:#f59e0b;">&#x2605;</span>' : '<span style="color:rgba(255,255,255,0.15);">&#x2605;</span>';
+      }
+
+      var html = '<div class="quiz-question-card">'
+        + '<div class="quiz-q-header">'
+        + '<span class="quiz-q-number">Q' + (state.total + 1) + '</span>'
+        + '<span class="era-badge" data-era="' + esc(q.era) + '">' + esc(eraName) + '</span>'
+        + '<span style="font-size:0.78rem;" title="出題重要度">' + stars + '</span>'
+        + '</div>'
+        + '<p class="quiz-q-text" style="font-size:1rem;">次の説明が指す日本史用語は？</p>'
+        + '<p class="quiz-q-text" style="margin-top:10px;">' + esc(q.summary) + '</p>'
+        + '</div>';
+      $('questionArea').innerHTML = html;
+
+      // Build 4 choices: correct + 3 distractors from similar era
+      var sameEra = DATA.terms.filter(function(t) {
+        return t.id !== q.id && (t.era === q.era || t.era === 'all' || q.era === 'all');
+      });
+      if (sameEra.length < 3) {
+        sameEra = DATA.terms.filter(function(t) { return t.id !== q.id; });
+      }
+      shuffle(sameEra);
+      var distractors = sameEra.slice(0, 3);
+      var options = [{ word: q.word, reading: q.reading, isCorrect: true }];
+      distractors.forEach(function(d) {
+        options.push({ word: d.word, reading: d.reading, isCorrect: false });
+      });
+      shuffle(options);
+
+      var nums = ['①', '②', '③', '④'];
+      var choicesHtml = '';
+      options.forEach(function(o, i) {
+        choicesHtml += '<button class="quiz-choice" data-idx="' + i + '" data-correct="' + (o.isCorrect ? '1' : '0') + '" data-word="' + esc(o.word) + '">'
+          + '<span class="choice-num">' + nums[i] + '</span>'
+          + '<span>' + esc(o.word)
+          + (o.reading ? ' <span style="font-size:0.78rem;color:rgba(255,255,255,0.4);">(' + esc(o.reading) + ')</span>' : '')
+          + '</span></button>';
+      });
+      $('choicesArea').innerHTML = choicesHtml;
+      $('choicesArea').style.display = '';
+
+      $('hintsArea').style.display = 'none';
+      $('hintsArea').innerHTML = '';
+      $('feedbackArea').style.display = 'none';
+      $('feedbackArea').innerHTML = '';
+    }
+
+    // ── Answer ──
+    function handleTestAnswer(idx) {
+      var q = state.pool[state.current];
+      var isCorrect = idx === q.answer;
+      processAnswer(isCorrect);
+
+      var buttons = $('choicesArea').querySelectorAll('.quiz-choice');
+      buttons.forEach(function(btn, i) {
+        btn.disabled = true;
+        if (i === q.answer) btn.classList.add('is-correct');
+        else if (i === idx && !isCorrect) btn.classList.add('is-wrong');
+        else btn.classList.add('is-dimmed');
+      });
+
+      var chosen = q.choices[idx];
+      var correct = q.choices[q.answer];
+
+      var html = '<div class="quiz-feedback">';
+      html += '<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">';
+      if (isCorrect) {
+        html += '<span class="feedback-tag feedback-tag--correct">&#x2713; 正解</span>';
+      } else {
+        html += '<span class="feedback-tag feedback-tag--wrong">&#x2717; 不正解</span>';
+      }
+      html += '</div>';
+
+      // Chosen feedback
+      html += '<p class="quiz-feedback-text">' + esc(chosen.feedback.replace(/^【.+?】/, '').trim()) + '</p>';
+
+      // If wrong, show correct
+      if (!isCorrect) {
+        html += '<div style="margin-top:10px;padding:12px 16px;border-radius:10px;background:rgba(74,158,122,0.08);border:1px solid rgba(74,158,122,0.2);">';
+        html += '<p style="margin:0;font-size:0.85rem;color:rgba(255,255,255,0.6);">正解:</p>';
+        html += '<p style="margin:4px 0 0;font-size:0.9rem;color:rgba(255,255,255,0.85);">' + esc(correct.text) + '</p>';
+        html += '<p style="margin:6px 0 0;font-size:0.85rem;line-height:1.6;color:rgba(255,255,255,0.7);">'
+          + esc(correct.feedback.replace(/^【.+?】/, '').trim()) + '</p>';
+        html += '</div>';
+      }
+
+      // Explanation
+      if (q.explanation) {
+        html += '<div class="quiz-remember"><span class="quiz-remember-label">解説</span>'
+          + '<p>' + esc(q.explanation) + '</p></div>';
+      }
+
+      // Wiki links
+      if (q.keywords && q.keywords.length > 0) {
+        html += '<div class="quiz-wiki-links">';
+        q.keywords.forEach(function(kw) {
+          html += '<a href="' + wikiUrl(kw) + '" target="_blank" rel="noopener noreferrer" class="quiz-wiki-link"'
+            + ' data-track-event="cta_click" data-track-placement="ichimon_wiki">' + esc(kw) + '</a>';
+        });
+        html += '</div>';
+      }
+
+      html += '<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:18px;">';
+      html += '<button class="quiz-next-btn" id="nextBtn" style="margin-top:0;">次の問題へ &#x2192;</button>';
+      html += '<a href="' + reportUrl(q.id, q.title, 'ページ: 一問一答（択一）\n時代: ' + q.era) + '" target="_blank" rel="noopener noreferrer" class="quiz-report-btn">&#x1F6A9; 間違いを報告</a>';
+      html += '</div></div>';
+      $('feedbackArea').innerHTML = html;
+      $('feedbackArea').style.display = '';
+      $('hintsArea').style.display = 'none';
+      $('nextBtn').addEventListener('click', function() { nextQuestion(); });
+      $('feedbackArea').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+      track('ichimon_test_answer', { correct: isCorrect, era: q.era, title: q.title, hintsUsed: state.hintsUsed });
+    }
+
+    function handleTermAnswer(idx) {
+      var q = state.pool[state.current];
+      var buttons = $('choicesArea').querySelectorAll('.quiz-choice');
+      var chosenBtn = buttons[idx];
+      var isCorrect = chosenBtn.getAttribute('data-correct') === '1';
+      processAnswer(isCorrect);
+
+      buttons.forEach(function(btn) {
+        btn.disabled = true;
+        if (btn.getAttribute('data-correct') === '1') btn.classList.add('is-correct');
+        else if (btn === chosenBtn && !isCorrect) btn.classList.add('is-wrong');
+        else btn.classList.add('is-dimmed');
+      });
+
+      var html = '<div class="quiz-feedback">';
+      html += '<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">';
+      if (isCorrect) {
+        html += '<span class="feedback-tag feedback-tag--correct">&#x2713; 正解</span>';
+      } else {
+        html += '<span class="feedback-tag feedback-tag--wrong">&#x2717; 不正解</span>';
+        html += '<span style="font-size:0.9rem;color:#fff;font-weight:600;">正解: ' + esc(q.word) + '</span>';
+      }
+      html += '</div>';
+
+      // Reading
+      if (q.reading) {
+        html += '<p style="margin:8px 0 0;font-size:0.82rem;color:rgba(255,255,255,0.5);">読み: ' + esc(q.reading) + '</p>';
+      }
+
+      // Detail
+      if (q.detail) {
+        html += '<p class="quiz-feedback-text">' + esc(q.detail) + '</p>';
+      }
+
+      // Key points
+      if (q.keyPoints && q.keyPoints.length > 0) {
+        html += '<div class="quiz-points"><span class="quiz-points-label">重要ポイント</span>';
+        q.keyPoints.forEach(function(kp) {
+          html += '<div class="quiz-point">' + esc(kp) + '</div>';
+        });
+        html += '</div>';
+      }
+
+      // Confusion points
+      if (q.confusionPoints && q.confusionPoints.length > 0) {
+        html += '<div class="quiz-points"><span class="quiz-points-label" style="color:#f59e0b;">&#x26A0; 混同注意</span>';
+        q.confusionPoints.forEach(function(cp) {
+          html += '<div class="quiz-point quiz-point--caution">' + esc(cp) + '</div>';
+        });
+        html += '</div>';
+      }
+
+      // Causal chain
+      if (q.causalChain && q.causalChain.length > 1) {
+        html += '<div style="margin-top:14px;"><span class="quiz-points-label">因果の流れ</span>';
+        html += '<div style="display:flex;flex-wrap:wrap;gap:4px;align-items:center;margin-top:6px;">';
+        q.causalChain.forEach(function(step, i) {
+          if (i > 0) html += '<span style="color:rgba(255,255,255,0.2);">→</span>';
+          html += '<span style="padding:4px 10px;border-radius:6px;background:rgba(255,255,255,0.04);font-size:0.82rem;color:rgba(255,255,255,0.7);">' + esc(step) + '</span>';
+        });
+        html += '</div></div>';
+      }
+
+      // Wiki link
+      html += '<div class="quiz-wiki-links">'
+        + '<a href="' + wikiUrl(q.word) + '" target="_blank" rel="noopener noreferrer" class="quiz-wiki-link"'
+        + ' data-track-event="cta_click" data-track-placement="ichimon_wiki">' + esc(q.word) + '</a>'
+        + '</div>';
+
+      html += '<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:18px;">';
+      html += '<button class="quiz-next-btn" id="nextBtn" style="margin-top:0;">次の問題へ &#x2192;</button>';
+      html += '<a href="' + reportUrl(q.id, q.word, 'ページ: 一問一答（用語）\n時代: ' + q.era) + '" target="_blank" rel="noopener noreferrer" class="quiz-report-btn">&#x1F6A9; 間違いを報告</a>';
+      html += '</div></div>';
+      $('feedbackArea').innerHTML = html;
+      $('feedbackArea').style.display = '';
+      $('nextBtn').addEventListener('click', function() { nextQuestion(); });
+      $('feedbackArea').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+      track('ichimon_term_answer', { correct: isCorrect, era: q.era, word: q.word });
+    }
+
+    function processAnswer(isCorrect) {
+      state.total++;
+      if (isCorrect) { state.score++; state.streak++; state.bestStreak = Math.max(state.bestStreak, state.streak); }
+      else { state.streak = 0; }
+      state.answered = true;
+      updateScore();
+    }
+
+    // ── Events ──
+    document.addEventListener('DOMContentLoaded', function() {
+      $('choicesArea').addEventListener('click', function(ev) {
+        var btn = ev.target.closest('.quiz-choice');
+        if (!btn || state.answered) return;
+        var idx = parseInt(btn.getAttribute('data-idx'), 10);
+        if (state.mode === 'test') handleTestAnswer(idx);
+        else handleTermAnswer(idx);
+      });
+      loadData();
+    });
+  })();
+  </script>
+</ToolLayout>

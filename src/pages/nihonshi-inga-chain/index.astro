@@ -1,0 +1,382 @@
+---
+import ToolLayout from '../../layouts/ToolLayout.astro';
+---
+<ToolLayout
+  title="日本史 因果チェーン学習 139本 | 歴史の因果関係を視覚化"
+  description="歴史の因果関係を鎖（チェーン）で可視化。穴埋めクイズで覚え、政治・経済・文化のつながりを体系的に学べます。"
+  canonical="https://www.randaworks.com/nihonshi-inga-chain/"
+  ogImage="https://www.randaworks.com/assets/img/games/inga/demo-cards/combo_land_system.jpg"
+  pageType="inga_chain"
+  source="inga_chain"
+  tag="因果チェーン・139本"
+  heading="日本史 因果チェーン"
+  breadcrumbs={[
+    { href: '/history-tools/', label: 'ツール集' },
+    { label: '因果チェーン' },
+  ]}
+  excludeTools={['nihonshi-inga-chain']}
+  gamePitch="このチェーンはゲーム内で「コンボ」として発動できます。カードの順番が因果関係を再現しています。"
+  steamContext="因果チェーンをコンボとして実際にプレイ"
+>
+  <div class="tool-workspace">
+    <!-- Score bar -->
+    <div class="quiz-score-bar" id="scoreBar">
+      <div class="score-item"><span class="score-label">正解率</span><span class="score-value" id="scoreRate">—</span></div>
+      <div class="score-divider"></div>
+      <div class="score-item"><span class="score-label">正解</span><span class="score-value" id="scoreCount">0 / 0</span></div>
+      <div class="score-divider"></div>
+      <div class="score-item"><span class="score-label">進捗</span><span class="score-value" id="progressCount">0 / 0</span></div>
+    </div>
+
+    <!-- Mode toggle -->
+    <div class="quiz-mode-toggle" id="modeToggle">
+      <button class="quiz-mode-btn is-active" data-mode="quiz">穴埋めクイズ</button>
+      <button class="quiz-mode-btn" data-mode="browse">一覧モード</button>
+    </div>
+
+    <!-- Era filter -->
+    <div class="era-chips" id="eraChips"></div>
+
+    <!-- Chain display -->
+    <div id="chainArea">
+      <div class="quiz-loading" id="loadingMsg">データを読み込み中</div>
+    </div>
+
+    <!-- Choices (quiz mode) -->
+    <div class="quiz-choices" id="choicesArea" style="display:none;"></div>
+
+    <!-- Feedback -->
+    <div id="feedbackArea" style="display:none;"></div>
+  </div>
+  <script is:inline src="/assets/js/history-tools.js"></script>
+  <script is:inline>
+  (function() {
+    var DATA = null;
+    var state = {
+      mode: 'quiz', pool: [], current: -1,
+      score: 0, total: 0, answered: false, era: 'all',
+      hiddenIdx: -1
+    };
+
+    function $(id) { return document.getElementById(id); }
+    function esc(s) {
+      var d = document.createElement('div'); d.textContent = s || ''; return d.innerHTML;
+    }
+    function shuffle(a) {
+      for (var i = a.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var t = a[i]; a[i] = a[j]; a[j] = t;
+      }
+      return a;
+    }
+    function track(ev, payload) {
+      if (window.RandaAnalytics && window.RandaAnalytics.track) window.RandaAnalytics.track(ev, payload);
+      if (typeof gtag === 'function') gtag('event', ev, payload);
+    }
+    function wikiUrl(kw) {
+      return 'https://ja.wikipedia.org/wiki/' + encodeURIComponent(kw);
+    }
+    function reportUrl(id, title, detail) {
+      var t = encodeURIComponent('[クイズ報告] ' + title + ' (' + id + ')');
+      var b = encodeURIComponent('## 報告内容\n\n- 問題ID: `' + id + '`\n- 問題名: ' + title + '\n\n### どこが間違っていますか？\n\n（ここに記入してください）\n\n---\n' + (detail || ''));
+      return 'https://github.com/SHAYOUWORLD/randaworks-site/issues/new?title=' + t + '&body=' + b + '&labels=quiz-report';
+    }
+
+    var ERA_NAMES = {
+      all: 'すべて', asuka_nara: '飛鳥・奈良', heian: '平安', kamakura: '鎌倉',
+      muromachi: '室町', sengoku: '戦国', azuchi: '安土桃山', edo: '江戸', bakumatsu: '幕末'
+    };
+
+    var GENRE_LABELS = { GOV: '政治', ECON: '経済', WAR: '軍事', CULT: '文化' };
+    var RELATION_LABELS = { causal: '因果', parallel: '並列', temporal: '時系列' };
+
+    // ── Data loading ──
+    function loadData() {
+      fetch('/assets/data/quiz-chain.json')
+        .then(function(r) { return r.json(); })
+        .then(function(d) {
+          DATA = d;
+          initModeToggle();
+          initEraFilter();
+          rebuildPool();
+        })
+        .catch(function() {
+          $('loadingMsg').textContent = 'データの読み込みに失敗しました。ページを再読み込みしてください。';
+        });
+    }
+
+    // ── Mode toggle ──
+    function initModeToggle() {
+      $('modeToggle').addEventListener('click', function(ev) {
+        var btn = ev.target.closest('.quiz-mode-btn');
+        if (!btn) return;
+        var mode = btn.getAttribute('data-mode');
+        if (mode === state.mode) return;
+        $('modeToggle').querySelectorAll('.quiz-mode-btn').forEach(function(b) { b.classList.remove('is-active'); });
+        btn.classList.add('is-active');
+        state.mode = mode;
+        state.score = 0; state.total = 0;
+        updateScore();
+        rebuildPool();
+        track('chain_mode_change', { mode: mode });
+      });
+    }
+
+    // ── Era filter ──
+    function initEraFilter() {
+      var container = $('eraChips');
+      var total = DATA.items.length;
+      var html = '<button class="era-chip is-active" data-era="all" data-era="all">すべて<span class="era-chip-count">(' + total + ')</span></button>';
+      DATA.eras.forEach(function(e) {
+        html += '<button class="era-chip" data-era="' + e.id + '" data-era="' + e.id + '">'
+          + esc(e.name) + '<span class="era-chip-count">(' + e.count + ')</span></button>';
+      });
+      container.innerHTML = html;
+
+      container.onclick = function(ev) {
+        var btn = ev.target.closest('.era-chip');
+        if (!btn) return;
+        container.querySelectorAll('.era-chip').forEach(function(c) { c.classList.remove('is-active'); });
+        btn.classList.add('is-active');
+        state.era = btn.getAttribute('data-era');
+        state.score = 0; state.total = 0;
+        updateScore();
+        rebuildPool();
+      };
+    }
+
+    function rebuildPool() {
+      state.pool = state.era === 'all'
+        ? DATA.items.slice()
+        : DATA.items.filter(function(c) { return c.era === state.era; });
+      shuffle(state.pool);
+      state.current = -1;
+      $('progressCount').textContent = '0 / ' + state.pool.length;
+      if (state.mode === 'quiz') nextQuiz();
+      else renderBrowse();
+    }
+
+    // ── Score ──
+    function updateScore() {
+      var rate = state.total > 0 ? Math.round(state.score / state.total * 100) : 0;
+      $('scoreRate').textContent = state.total > 0 ? rate + '%' : '—';
+      $('scoreCount').textContent = state.score + ' / ' + state.total;
+    }
+
+    // ── Quiz mode ──
+    function nextQuiz() {
+      if (!state.pool.length) {
+        $('chainArea').innerHTML = '<div class="chain-card"><p style="color:rgba(255,255,255,0.5);">この時代のチェーンはありません。</p></div>';
+        $('choicesArea').style.display = 'none';
+        return;
+      }
+      state.current = (state.current + 1) % state.pool.length;
+      if (state.current === 0 && state.total > 0) shuffle(state.pool);
+      state.answered = false;
+      $('progressCount').textContent = Math.min(state.total + 1, state.pool.length) + ' / ' + state.pool.length;
+      renderQuiz();
+    }
+
+    function renderQuiz() {
+      var chain = state.pool[state.current];
+      // Hide a random step (not the first)
+      state.hiddenIdx = 1 + Math.floor(Math.random() * (chain.steps.length - 1));
+
+      renderChainCard(chain, state.hiddenIdx);
+
+      // Build choices: correct term + 3 distractors
+      var hiddenStep = chain.steps[state.hiddenIdx];
+      var allTerms = [];
+      DATA.items.forEach(function(c) {
+        c.steps.forEach(function(s) {
+          if (s.id !== hiddenStep.id && !allTerms.find(function(t) { return t.id === s.id; })) {
+            allTerms.push(s);
+          }
+        });
+      });
+      shuffle(allTerms);
+      var distractors = allTerms.slice(0, 3);
+      var options = [{ word: hiddenStep.word, reading: hiddenStep.reading, id: hiddenStep.id, isCorrect: true }];
+      distractors.forEach(function(d) {
+        options.push({ word: d.word, reading: d.reading, id: d.id, isCorrect: false });
+      });
+      shuffle(options);
+
+      var nums = ['①', '②', '③', '④'];
+      var choicesHtml = '';
+      options.forEach(function(o, i) {
+        choicesHtml += '<button class="quiz-choice" data-idx="' + i + '" data-correct="' + (o.isCorrect ? '1' : '0') + '">'
+          + '<span class="choice-num">' + nums[i] + '</span>'
+          + '<span>' + esc(o.word)
+          + (o.reading ? ' <span style="font-size:0.78rem;color:rgba(255,255,255,0.4);">(' + esc(o.reading) + ')</span>' : '')
+          + '</span></button>';
+      });
+      $('choicesArea').innerHTML = choicesHtml;
+      $('choicesArea').style.display = '';
+      $('feedbackArea').style.display = 'none';
+    }
+
+    function renderChainCard(chain, hiddenIdx) {
+      var eraName = ERA_NAMES[chain.era] || chain.era;
+      var genreLabel = GENRE_LABELS[chain.genre] || '';
+      var relLabel = RELATION_LABELS[chain.type] || '';
+      var starsHtml = '';
+      for (var s = 0; s < 5; s++) {
+        starsHtml += s < chain.importance ? '&#x2605;' : '<span style="opacity:0.2;">&#x2605;</span>';
+      }
+
+      var html = '<div class="chain-card">';
+      html += '<div class="chain-header">'
+        + '<span class="chain-name">' + esc(chain.name) + '</span>'
+        + '<span class="era-badge" data-era="' + esc(chain.era) + '">' + esc(eraName) + '</span>';
+      if (genreLabel) html += '<span class="era-badge" style="--era-color:#9ca3af;">' + esc(genreLabel) + '</span>';
+      if (relLabel) html += '<span style="font-size:0.72rem;color:rgba(255,255,255,0.4);">' + esc(relLabel) + '</span>';
+      html += '<span class="chain-importance" title="重要度">' + starsHtml + '</span>';
+      html += '</div>';
+
+      html += '<div class="chain-steps">';
+      chain.steps.forEach(function(step, i) {
+        var isHidden = (hiddenIdx !== undefined && hiddenIdx !== null && i === hiddenIdx);
+        html += '<div class="chain-step' + (isHidden ? ' is-hidden' : '') + '" data-step="' + i + '">';
+        html += '<span class="chain-step-num">' + (i + 1) + '</span>';
+        html += '<div class="chain-step-content">';
+        if (isHidden) {
+          html += '<span class="chain-step-word">？？？</span>';
+          html += '<p class="chain-step-summary">この用語を当ててください</p>';
+        } else {
+          html += '<span class="chain-step-word">' + esc(step.word) + '</span>';
+          if (step.reading) html += '<span class="chain-step-reading">(' + esc(step.reading) + ')</span>';
+          html += '<p class="chain-step-summary">' + esc(step.summary) + '</p>';
+        }
+        html += '</div></div>';
+        if (i < chain.steps.length - 1) {
+          html += '<div class="chain-arrow">' + (chain.ordered ? '↓' : '⟷') + '</div>';
+        }
+      });
+      html += '</div></div>';
+
+      $('chainArea').innerHTML = html;
+    }
+
+    function handleQuizAnswer(idx) {
+      if (state.answered) return;
+      state.answered = true;
+      state.total++;
+
+      var buttons = $('choicesArea').querySelectorAll('.quiz-choice');
+      var chosenBtn = buttons[idx];
+      var isCorrect = chosenBtn.getAttribute('data-correct') === '1';
+      if (isCorrect) state.score++;
+      updateScore();
+
+      buttons.forEach(function(btn) {
+        btn.disabled = true;
+        if (btn.getAttribute('data-correct') === '1') btn.classList.add('is-correct');
+        else if (btn === chosenBtn && !isCorrect) btn.classList.add('is-wrong');
+        else btn.classList.add('is-dimmed');
+      });
+
+      // Reveal the hidden step
+      var chain = state.pool[state.current];
+      var hiddenStep = chain.steps[state.hiddenIdx];
+      var stepEl = $('chainArea').querySelector('.chain-step.is-hidden');
+      if (stepEl) {
+        stepEl.classList.remove('is-hidden');
+        stepEl.classList.add('is-revealed');
+        var contentEl = stepEl.querySelector('.chain-step-content');
+        contentEl.innerHTML = '<span class="chain-step-word">' + esc(hiddenStep.word) + '</span>'
+          + (hiddenStep.reading ? '<span class="chain-step-reading">(' + esc(hiddenStep.reading) + ')</span>' : '')
+          + '<p class="chain-step-summary">' + esc(hiddenStep.summary) + '</p>';
+      }
+
+      // Feedback
+      var html = '<div class="quiz-feedback">';
+      html += isCorrect
+        ? '<span class="feedback-tag feedback-tag--correct">&#x2713; 正解</span>'
+        : '<span class="feedback-tag feedback-tag--wrong">&#x2717; 不正解 — 正解: ' + esc(hiddenStep.word) + '</span>';
+
+      // Wiki links for all steps
+      html += '<div class="quiz-wiki-links" style="margin-top:14px;">';
+      chain.steps.forEach(function(step) {
+        html += '<a href="' + wikiUrl(step.word) + '" target="_blank" rel="noopener noreferrer" class="quiz-wiki-link"'
+          + ' data-track-event="cta_click" data-track-placement="chain_wiki">' + esc(step.word) + '</a>';
+      });
+      html += '</div>';
+
+      html += '<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:18px;">';
+      html += '<button class="quiz-next-btn" id="nextBtn" style="margin-top:0;">次のチェーンへ &#x2192;</button>';
+      html += '<a href="' + reportUrl(chain.id, chain.name, 'ページ: 因果チェーン\n時代: ' + chain.era) + '" target="_blank" rel="noopener noreferrer" class="quiz-report-btn">&#x1F6A9; 間違いを報告</a>';
+      html += '</div></div>';
+      $('feedbackArea').innerHTML = html;
+      $('feedbackArea').style.display = '';
+      $('nextBtn').addEventListener('click', function() { nextQuiz(); });
+
+      track('chain_quiz_answer', { correct: isCorrect, chain: chain.name, era: chain.era });
+    }
+
+    // ── Browse mode ──
+    function renderBrowse() {
+      $('choicesArea').style.display = 'none';
+      $('feedbackArea').style.display = 'none';
+
+      if (!state.pool.length) {
+        $('chainArea').innerHTML = '<div class="chain-card"><p style="color:rgba(255,255,255,0.5);">この時代のチェーンはありません。</p></div>';
+        return;
+      }
+
+      // Sort by importance desc
+      var sorted = state.pool.slice().sort(function(a, b) { return b.importance - a.importance; });
+
+      var html = '';
+      sorted.forEach(function(chain) {
+        var eraName = ERA_NAMES[chain.era] || chain.era;
+        var genreLabel = GENRE_LABELS[chain.genre] || '';
+        var starsHtml = '';
+        for (var s = 0; s < 5; s++) {
+          starsHtml += s < chain.importance ? '&#x2605;' : '<span style="opacity:0.2;">&#x2605;</span>';
+        }
+
+        html += '<div class="chain-card" style="margin-bottom:12px;">';
+        html += '<div class="chain-header">'
+          + '<span class="chain-name">' + esc(chain.name) + '</span>'
+          + '<span class="era-badge" data-era="' + esc(chain.era) + '">' + esc(eraName) + '</span>';
+        if (genreLabel) html += '<span class="era-badge" style="--era-color:#9ca3af;">' + esc(genreLabel) + '</span>';
+        html += '<span class="chain-importance" title="重要度">' + starsHtml + '</span>';
+        html += '</div>';
+
+        html += '<div class="chain-steps">';
+        chain.steps.forEach(function(step, i) {
+          html += '<div class="chain-step">';
+          html += '<span class="chain-step-num">' + (i + 1) + '</span>';
+          html += '<div class="chain-step-content">';
+          html += '<span class="chain-step-word">' + esc(step.word) + '</span>';
+          if (step.reading) html += '<span class="chain-step-reading">(' + esc(step.reading) + ')</span>';
+          html += '<p class="chain-step-summary">' + esc(step.summary) + '</p>';
+          html += '</div>';
+          html += '<a href="' + wikiUrl(step.word) + '" target="_blank" rel="noopener noreferrer"'
+            + ' style="flex-shrink:0;font-size:0.75rem;color:rgba(255,255,255,0.3);text-decoration:none;align-self:center;"'
+            + ' title="Wikipediaで調べる" data-track-event="cta_click" data-track-placement="chain_browse_wiki">📖</a>';
+          html += '</div>';
+          if (i < chain.steps.length - 1) {
+            html += '<div class="chain-arrow">' + (chain.ordered ? '↓' : '⟷') + '</div>';
+          }
+        });
+        html += '</div></div>';
+      });
+
+      $('chainArea').innerHTML = html;
+      $('progressCount').textContent = sorted.length + ' チェーン';
+    }
+
+    // ── Events ──
+    document.addEventListener('DOMContentLoaded', function() {
+      $('choicesArea').addEventListener('click', function(ev) {
+        var btn = ev.target.closest('.quiz-choice');
+        if (!btn || state.answered) return;
+        handleQuizAnswer(parseInt(btn.getAttribute('data-idx'), 10));
+      });
+      loadData();
+    });
+  })();
+  </script>
+</ToolLayout>
