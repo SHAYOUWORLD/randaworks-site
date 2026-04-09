@@ -1,5 +1,5 @@
 name = "randaworks-site"
-account_id = "d981e97cde90c4a082c8b8fa5646f11b"
+account_id = "fc21195d3622d1be9b3490c237c0b427"
 compatibility_date = "2025-01-01"
 main = "worker.js"
 
