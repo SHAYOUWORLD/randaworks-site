@@ -99,11 +99,25 @@ import ToolLayout from '../../../layouts/ToolLayout.astro';
       return data;
     }
 
+    var KYUJI_MAP = {
+      '龍':'竜','鷗':'鴎','澤':'沢','邊':'辺','邉':'辺',
+      '齋':'斎','齊':'斎','櫻':'桜','國':'国','學':'学',
+      '實':'実','會':'会','廣':'広','藝':'芸','萬':'万',
+      '寶':'宝','濱':'浜','豐':'豊','藏':'蔵','黑':'黒',
+      '壽':'寿','與':'与','舊':'旧','條':'条','圖':'図',
+      '讀':'読','號':'号','辯':'弁','惡':'悪','靈':'霊',
+      '佛':'仏','榮':'栄','燒':'焼','瀨':'瀬','樂':'楽',
+      '顯':'顕','鐵':'鉄','險':'険','區':'区','樣':'様',
+      '獨':'独','經':'経','觀':'観','權':'権','點':'点'
+    };
+    var KYUJI_RE = new RegExp('[' + Object.keys(KYUJI_MAP).join('') + ']', 'g');
+
     function normalizeForSearch(value) {
       return String(value || '')
         .toLowerCase()
         .replace(/[\s　]+/g, '')
-        .replace(/[・･・\-_]/g, '');
+        .replace(/[・･・\-_]/g, '')
+        .replace(KYUJI_RE, function (ch) { return KYUJI_MAP[ch] || ch; });
     }
 
     function scoreEntry(entry, normalizedQuery) {
