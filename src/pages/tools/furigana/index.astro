@@ -2,14 +2,14 @@
 import ToolLayout from '../../../layouts/ToolLayout.astro';
 ---
 <ToolLayout
-  title="ふりがなツール | 文章に語ごとの読みを付与"
-  description="文章を入力すると、語ごとの読みを推定してふりがな表示します。人名・地名・一般文の読み確認向けです。"
+  title="漢字読みヒントツール | 工事中"
+  description="漢字読みヒントツールは、精度見直しのため現在工事中です。品質改善後に再公開します。"
   canonical="https://www.randaworks.com/tools/furigana/"
-  pageType="furigana"
+  pageType="furigana_maintenance"
   source="furigana"
-  tag="Kuromoji"
-  heading="ふりがなツール"
-  desc="文章を入力すると、形態素解析ベースで語ごとのふりがなを表示します。完全一致ではありませんが、1字ずつより実用寄りです。"
+  tag="工事中"
+  heading="漢字読みヒントツール"
+  desc="現在このページは工事中です。現行の読みヒント表示は精度が不足していたため、いったん停止しています。"
   breadcrumbs={[
     { href: '/history-tools/', label: 'ツール集' },
     { label: 'ふりがなツール' },
@@ -19,394 +19,45 @@ import ToolLayout from '../../../layouts/ToolLayout.astro';
   steamContext="日本史因果クロニクル — 人名と地名を読み解く戦国カードゲーム"
 >
   <Fragment slot="head">
-    <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+    <meta name="robots" content="noindex, nofollow" />
   </Fragment>
 
-  <div class="tool-workspace" id="furigana-tool">
-    <div class="tool-output furigana-note" style="min-height:auto;margin-bottom:14px;">
-      <span class="tool-output-label">このツールでできること</span>
-      <p>一般的な日本語文を語ごとに分け、読みを推定してふりがな表示します。</p>
-      <p>歴史人物名や地名にもある程度対応しますが、古文、当て字、難読固有名詞では誤差が出ることがあります。</p>
-      <p>処理はブラウザ内で完結します。入力文はサーバーに送信しません。</p>
-    </div>
-
-    <div class="tool-chips" id="furiganaQuickExamples">
-      <button type="button" data-text="関ヶ原の戦いで徳川家康が勝利した。">関ヶ原の戦い</button>
-      <button type="button" data-text="源頼朝は鎌倉幕府を開いた。">源頼朝</button>
-      <button type="button" data-text="織田信長は安土城を築いた。">織田信長</button>
-      <button type="button" data-text="平清盛は太政大臣になった。">平清盛</button>
-    </div>
-
-    <form id="furiganaForm">
-      <div style="margin-bottom: 14px;">
-        <label for="furiganaInput" style="display:block; margin-bottom: 6px; color: var(--text-muted); font-size: 0.92rem;">文章を入力</label>
-        <textarea id="furiganaInput" rows="5" placeholder="関ヶ原の戦いで徳川家康が勝利した。" style="width:100%;min-height:120px;padding:14px;border-radius:12px;border:1px solid rgba(255,255,255,0.12);background:rgba(255,255,255,0.04);color:#fff;font:inherit;resize:vertical;"></textarea>
+  <div class="tool-workspace">
+    <div class="tool-output furigana-maintenance" style="min-height:auto;">
+      <span class="tool-output-label">工事中</span>
+      <h2>現在このツールは停止しています。</h2>
+      <p>現行の実装では、熟語や固有名詞の読みが崩れやすく、実用に足る品質ではありませんでした。</p>
+      <p>誤った読みを広げる状態を避けるため、いったん公開を止めています。精度改善の目処が立った段階で再開します。</p>
+      <div class="furigana-links">
+        <a class="tool-btn" href="/tools/kanji/">漢字検索ツールへ</a>
+        <a class="tool-btn tool-btn-ghost" href="/history-tools/">ツール集へ戻る</a>
       </div>
-      <div class="furigana-actions">
-        <button class="tool-btn" type="submit">ふりがなを付ける</button>
-        <button class="tool-btn tool-btn-ghost" type="button" id="furiganaClearBtn">クリア</button>
-        <button class="tool-btn tool-btn-ghost" type="button" id="furiganaCopyKanaBtn">かなをコピー</button>
-        <button class="tool-btn tool-btn-ghost" type="button" id="furiganaCopyRubyBtn">ルビHTMLをコピー</button>
-      </div>
-    </form>
-
-    <div class="tool-output" id="furiganaResult" aria-live="polite" style="min-height: 120px;">
-      <span class="tool-output-label">文章を入力してふりがなを表示してください。</span>
     </div>
   </div>
 
-  <script type="module" is:inline>
-    import kuromoji from 'https://cdn.jsdelivr.net/npm/kuromoji@0.1.2/+esm';
-    import { toHiragana } from 'https://cdn.jsdelivr.net/npm/wanakana@5.3.1/+esm';
-
-    const DIC_PATH = 'https://cdn.jsdelivr.net/npm/kuromoji@0.1.2/dict/';
-    const OVERRIDES = [
-      ['関ヶ原', 'せきがはら'],
-      ['徳川家康', 'とくがわいえやす'],
-      ['織田信長', 'おだのぶなが'],
-      ['豊臣秀吉', 'とよとみひでよし'],
-      ['石田三成', 'いしだみつなり'],
-      ['明智光秀', 'あけちみつひで'],
-      ['武田信玄', 'たけだしんげん'],
-      ['上杉謙信', 'うえすぎけんしん'],
-      ['伊達政宗', 'だてまさむね'],
-      ['真田幸村', 'さなだゆきむら'],
-      ['源頼朝', 'みなもとのよりとも'],
-      ['平清盛', 'たいらのきよもり'],
-      ['紫式部', 'むらさきしきぶ'],
-      ['聖徳太子', 'しょうとくたいし'],
-      ['足利義満', 'あしかがよしみつ'],
-      ['徳川吉宗', 'とくがわよしむね'],
-      ['鎌倉幕府', 'かまくらばくふ'],
-      ['室町幕府', 'むろまちばくふ'],
-      ['江戸幕府', 'えどばくふ'],
-      ['安土城', 'あづちじょう'],
-      ['姫路城', 'ひめじじょう'],
-      ['平安京', 'へいあんきょう'],
-      ['太政大臣', 'だじょうだいじん'],
-      ['壇ノ浦', 'だんのうら'],
-      ['応仁の乱', 'おうにんのらん'],
-      ['本能寺', 'ほんのうじ'],
-      ['比叡山', 'ひえいざん'],
-      ['延暦寺', 'えんりゃくじ'],
-      ['壬申の乱', 'じんしんのらん'],
-      ['大化の改新', 'たいかのかいしん']
-    ].sort((a, b) => b[0].length - a[0].length);
-    let tokenizerPromise = null;
-    let lastRendered = {
-      kana: '',
-      rubyHtml: ''
-    };
-
-    function $(id) { return document.getElementById(id); }
-    function escapeHtml(value) {
-      return String(value)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;');
-    }
-
-    function track(name, payload) {
-      if (window.RandaAnalytics && typeof window.RandaAnalytics.track === 'function') {
-        window.RandaAnalytics.track(name, payload || {});
-      }
-      if (typeof gtag === 'function') {
-        gtag('event', name, payload || {});
-      }
-    }
-
-    function hasKanji(text) {
-      return /[\u3400-\u4DBF\u4E00-\u9FFF]/.test(text);
-    }
-
-    function getTokenizer() {
-      if (!tokenizerPromise) {
-        tokenizerPromise = new Promise((resolve, reject) => {
-          kuromoji.builder({ dicPath: DIC_PATH }).build((error, tokenizer) => {
-            if (error || !tokenizer) {
-              reject(error || new Error('tokenizer build failed'));
-              return;
-            }
-            resolve(tokenizer);
-          });
-        });
-      }
-      return tokenizerPromise;
-    }
-
-    function tokenReading(token) {
-      if (token.overrideReading) return token.overrideReading;
-      if (!token) return '';
-      const reading = token.reading || token.pronunciation || '';
-      return reading ? toHiragana(reading) : '';
-    }
-
-    function tokenHasKanji(token) {
-      return token && /[\u3400-\u4DBF\u4E00-\u9FFF]/.test(token.surface_form || '');
-    }
-
-    function splitWithOverrides(text) {
-      const parts = [];
-      let cursor = 0;
-
-      while (cursor < text.length) {
-        let matched = null;
-        for (const item of OVERRIDES) {
-          if (text.startsWith(item[0], cursor)) {
-            matched = item;
-            break;
-          }
-        }
-
-        if (matched) {
-          parts.push({
-            kind: 'override',
-            surface_form: matched[0],
-            overrideReading: matched[1]
-          });
-          cursor += matched[0].length;
-          continue;
-        }
-
-        let next = cursor + 1;
-        while (next < text.length) {
-          let hit = false;
-          for (const item of OVERRIDES) {
-            if (text.startsWith(item[0], next)) {
-              hit = true;
-              break;
-            }
-          }
-          if (hit) break;
-          next += 1;
-        }
-
-        parts.push({
-          kind: 'plain',
-          text: text.slice(cursor, next)
-        });
-        cursor = next;
-      }
-
-      return parts;
-    }
-
-    function buildRubyHtml(tokens) {
-      return tokens.map((token) => {
-        const surface = escapeHtml(token.surface_form || '');
-        const reading = tokenReading(token);
-        if (reading && tokenHasKanji(token)) {
-          return '<ruby>' + surface + '<rp>(</rp><rt>' + escapeHtml(reading) + '</rt><rp>)</rp></ruby>';
-        }
-        return surface;
-      }).join('');
-    }
-
-    function renderTokens(text, tokens) {
-      const result = $('furiganaResult');
-      const kanaLine = tokens.map((token) => tokenReading(token) || token.surface_form || '').join('');
-      const rubyLine = buildRubyHtml(tokens);
-      const tokenCards = tokens
-        .filter((token) => tokenHasKanji(token))
-        .map((token) => {
-          const surface = escapeHtml(token.surface_form || '');
-          const reading = escapeHtml(tokenReading(token) || '—');
-          const badge = token.overrideReading ? '<span class="furigana-token-badge">辞書補正</span>' : '';
-          return '<div class="furigana-token-card"><strong>' + surface + '</strong><span>' + reading + '</span>' + badge + '</div>';
-        })
-        .join('');
-
-      lastRendered.kana = kanaLine;
-      lastRendered.rubyHtml = rubyLine;
-
-      result.innerHTML =
-        '<span class="tool-output-label">ふりがな結果</span>' +
-        '<p class="furigana-caption">語ごとの読み推定です。固有名詞や古文では誤差が出ることがあります。</p>' +
-        '<p class="furigana-section-label">かな</p>' +
-        '<div class="furigana-kana">' + escapeHtml(kanaLine) + '</div>' +
-        '<p class="furigana-section-label">原文＋ふりがな</p>' +
-        '<div class="furigana-text">' + rubyLine + '</div>' +
-        '<p class="furigana-section-label">語ごとの読み</p>' +
-        '<div class="furigana-token-grid">' + (tokenCards || '<p class="furigana-caption">漢字語が見つからないため一覧は省略しています。</p>') + '</div>' +
-        '<p class="furigana-caption">入力文字数: ' + escapeHtml(String(text.length)) + '</p>';
-    }
-
-    async function runFurigana(text) {
-      const result = $('furiganaResult');
-      result.innerHTML = '<span class="tool-output-label">解析中…</span>';
-
-      if (!text) {
-        result.innerHTML = '<span class="tool-output-label">文章を入力してください。</span>';
-        return;
-      }
-
-      if (!hasKanji(text)) {
-        result.innerHTML =
-          '<span class="tool-output-label">ふりがな結果</span>' +
-          '<div class="furigana-kana">' + escapeHtml(text) + '</div>' +
-          '<p class="furigana-caption">漢字が含まれていないため、そのまま表示しています。</p>';
-        return;
-      }
-
-      try {
-        const tokenizer = await getTokenizer();
-        const segments = splitWithOverrides(text);
-        const tokens = [];
-        segments.forEach((segment) => {
-          if (segment.kind === 'override') {
-            tokens.push(segment);
-            return;
-          }
-          tokenizer.tokenize(segment.text).forEach((token) => tokens.push(token));
-        });
-        renderTokens(text, tokens);
-        track('furigana_convert', { length: text.length, mode: 'token' });
-      } catch (error) {
-        result.innerHTML = '<span class="tool-output-label">ふりがなの解析に失敗しました。時間を置いて再度お試しください。</span>';
-      }
-    }
-
-    function init() {
-      const form = $('furiganaForm');
-      const input = $('furiganaInput');
-      const clearBtn = $('furiganaClearBtn');
-      const copyKanaBtn = $('furiganaCopyKanaBtn');
-      const copyRubyBtn = $('furiganaCopyRubyBtn');
-      const chips = document.querySelectorAll('[data-text]');
-
-      if (form && input) {
-        form.addEventListener('submit', (event) => {
-          event.preventDefault();
-          runFurigana(input.value.trim());
-        });
-      }
-
-      if (clearBtn && input) {
-        clearBtn.addEventListener('click', () => {
-          input.value = '';
-          lastRendered.kana = '';
-          lastRendered.rubyHtml = '';
-          $('furiganaResult').innerHTML = '<span class="tool-output-label">文章を入力してふりがなを表示してください。</span>';
-        });
-      }
-
-      if (copyKanaBtn) {
-        copyKanaBtn.addEventListener('click', async () => {
-          if (!lastRendered.kana) return;
-          await navigator.clipboard.writeText(lastRendered.kana);
-        });
-      }
-
-      if (copyRubyBtn) {
-        copyRubyBtn.addEventListener('click', async () => {
-          if (!lastRendered.rubyHtml) return;
-          await navigator.clipboard.writeText(lastRendered.rubyHtml);
-        });
-      }
-
-      chips.forEach((chip) => {
-        chip.addEventListener('click', () => {
-          const text = chip.getAttribute('data-text') || '';
-          input.value = text;
-          runFurigana(text);
-        });
-      });
-    }
-
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', init, { once: true });
-    } else {
-      init();
-    }
-  </script>
-
   <style is:inline>
-    .furigana-note p,
-    .furigana-caption {
+    .furigana-maintenance {
+      display: grid;
+      gap: 12px;
+    }
+
+    .furigana-maintenance h2 {
+      margin: 0;
+      font-size: 1.35rem;
+      color: #fff;
+    }
+
+    .furigana-maintenance p {
       margin: 0;
       color: var(--text-muted);
-      font-size: 0.88rem;
-      line-height: 1.7;
+      line-height: 1.8;
     }
 
-    .furigana-note {
-      display: grid;
-      gap: 6px;
-    }
-
-    .furigana-actions {
+    .furigana-links {
       display: flex;
       gap: 10px;
       flex-wrap: wrap;
-    }
-
-    .furigana-section-label {
-      margin: 12px 0 8px;
-      color: var(--tool-accent);
-      font-size: 0.8rem;
-      font-weight: 700;
-      letter-spacing: 0.04em;
-    }
-
-    .furigana-kana,
-    .furigana-text {
-      font-size: 1.4rem;
-      line-height: 2.4;
-      font-family: var(--font-serif);
-      letter-spacing: 0.05em;
-      white-space: pre-wrap;
-      word-break: break-word;
-    }
-
-    .furigana-kana {
-      color: #f2e6dd;
-    }
-
-    .furigana-token-grid {
-      display: grid;
-      gap: 10px;
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    }
-
-    .furigana-token-card {
-      display: grid;
-      gap: 4px;
-      padding: 10px 12px;
-      border-radius: 12px;
-      border: 1px solid rgba(255,255,255,0.08);
-      background: rgba(255,255,255,0.03);
-    }
-
-    .furigana-token-card strong {
-      color: #fff;
-      font-size: 1rem;
-    }
-
-    .furigana-token-card span {
-      color: var(--text-muted);
-      font-size: 0.9rem;
-    }
-
-    .furigana-token-badge {
-      display: inline-flex;
-      width: fit-content;
-      padding: 2px 8px;
-      border-radius: 999px;
-      background: rgba(224,150,126,0.16);
-      color: #ffbf91;
-      font-size: 0.72rem;
-      font-weight: 700;
-    }
-
-    .furigana-text ruby {
-      ruby-position: over;
-    }
-
-    .furigana-text rt {
-      font-size: 0.68em;
-      color: #ffbf91;
-      font-weight: 700;
+      margin-top: 4px;
     }
   </style>
 </ToolLayout>
