@@ -7,7 +7,7 @@ import ToolLayout from '../../../layouts/ToolLayout.astro';
   canonical="https://www.randaworks.com/tools/kanji/"
   pageType="kanji_search"
   source="kanji"
-  tag="KanjiAPI"
+  tag="読み・部首・画数"
   heading="漢字検索"
   breadcrumbs={[{ href: '/history-tools/', label: 'ツール集' }, { label: '漢字検索' }]}
   excludeTools={['kanji']}
@@ -94,6 +94,17 @@ import ToolLayout from '../../../layouts/ToolLayout.astro';
 
   <style is:inline>
     @media (max-width:600px) {
+      .tool-input-row {
+        align-items: stretch;
+      }
+      .tool-input-row > label[for="kanjiInput"] {
+        width: 100%;
+        flex: 1 1 auto !important;
+      }
+      .tool-input-row > label[for="kanjiInput"] input,
+      .tool-input-row > #kanjiSearchBtn {
+        width: 100%;
+      }
       .tool-output > div { grid-template-columns: 1fr !important; }
       .tool-output > div > div:first-child { font-size: 3.5rem !important; }
     }

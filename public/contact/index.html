@@ -200,6 +200,25 @@
         });
       }
 
+      // Prefill from query params (?category=...&message=...&source=...)
+      var params = new URLSearchParams(window.location.search);
+      if (params.get('category') && cat) {
+        var opts = cat.querySelectorAll('option');
+        for (var i = 0; i < opts.length; i++) {
+          if (opts[i].value === params.get('category')) { cat.value = params.get('category'); break; }
+        }
+        if (bugHint && cat.value === '不具合報告') bugHint.style.display = 'block';
+      }
+      if (params.get('message')) {
+        var msg = document.getElementById('message');
+        if (msg) msg.value = params.get('message');
+      }
+      if (params.get('source')) {
+        var srcInput = document.createElement('input');
+        srcInput.type = 'hidden'; srcInput.name = 'source'; srcInput.value = params.get('source');
+        form.appendChild(srcInput);
+      }
+
       if (!form) return;
 
       form.addEventListener('submit', function () {

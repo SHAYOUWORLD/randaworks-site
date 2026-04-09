@@ -1198,3 +1198,59 @@ a.history-tools-link-card:hover { text-shadow: none; }
 @media (max-width: 600px) {
   .quiz-game-cta { grid-template-columns: 100px minmax(0, 1fr); gap: 12px; padding: 12px; }
 }
+
+/* --- Card image in question / feedback --- */
+.quiz-card-img {
+  width: 140px; height: 140px; border-radius: 14px;
+  object-fit: cover; flex-shrink: 0;
+  border: 2px solid rgba(199,166,102,0.3);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5), 0 0 0 1px rgba(199,166,102,0.1);
+  background: #0b0d11;
+}
+
+/* Era badge image (in era chips) */
+.era-chip-img {
+  width: 24px; height: 24px; border-radius: 5px;
+  object-fit: cover; vertical-align: middle;
+  margin-right: 5px;
+}
+
+/* Term card in feedback — visual card with image */
+.quiz-term-card {
+  display: flex; gap: 20px; align-items: flex-start;
+  padding: 22px; border-radius: 16px;
+  background:
+    linear-gradient(135deg, rgba(199,166,102,0.06), rgba(0,0,0,0.35));
+  border: 1px solid rgba(199,166,102,0.18);
+  margin-top: 16px;
+}
+.quiz-term-card .quiz-card-img {
+  width: 120px; height: 120px;
+}
+.quiz-term-card-body { flex: 1; min-width: 0; }
+.quiz-term-card-word {
+  font-family: "Space Grotesk", "Noto Sans JP", sans-serif;
+  font-size: 1.2rem; font-weight: 700; color: #fff;
+}
+.quiz-term-card-reading {
+  font-size: 0.82rem; color: rgba(255,255,255,0.4); margin-left: 6px;
+}
+.quiz-term-card-summary {
+  font-size: 0.88rem; line-height: 1.65; color: rgba(255,255,255,0.65);
+  margin-top: 8px;
+}
+
+/* Chain step with card image */
+.chain-step-img {
+  width: 56px; height: 56px; border-radius: 8px;
+  object-fit: cover; flex-shrink: 0;
+  border: 1px solid rgba(199,166,102,0.25);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+
+@media (max-width: 600px) {
+  .quiz-card-img { width: 100px; height: 100px; }
+  .quiz-term-card { gap: 14px; padding: 16px; }
+  .quiz-term-card .quiz-card-img { width: 90px; height: 90px; }
+  .chain-step-img { width: 44px; height: 44px; }
+}
