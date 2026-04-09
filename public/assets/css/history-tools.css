@@ -342,6 +342,10 @@
   align-items: start;
 }
 
+.quiz-answer > :only-child {
+  grid-column: 1 / -1;
+}
+
 .quiz-answer-thumb,
 .profile-detail-thumb {
   width: 100%;
