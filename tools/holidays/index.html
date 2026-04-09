@@ -105,7 +105,8 @@
         '</div>';
     }
 
-    function runSearch(year, country) {
+    function runSearch(year, country, options) {
+      var shouldTrack = !options || options.track !== false;
       var result = $('holidayResult');
       result.innerHTML = '<span class="tool-output-label">祝日データを取得しています…</span>';
 
@@ -113,7 +114,9 @@
         .then(function (response) { if (!response.ok) throw new Error('fetch failed'); return response.json(); })
         .then(function (data) {
           renderResult(data);
-          track('holiday_search', { year: year, country: country });
+          if (shouldTrack) {
+            track('holiday_search', { year: year, country: country });
+          }
         })
         .catch(function () {
           result.innerHTML = '<span class="tool-output-label">現在このツールは工事中です。API 復旧後に再開します。</span>';
@@ -161,7 +164,7 @@
         if (year) runSearch(year, country);
       });
 
-      runSearch(currentYear, 'JP');
+      runSearch(currentYear, 'JP', { track: false });
     }
 
     if (document.readyState === 'loading') {

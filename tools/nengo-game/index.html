@@ -77,7 +77,8 @@
       if (typeof gtag === 'function') gtag('event', name, payload || {});
     }
 
-    function lookupYear(year) {
+    function lookupYear(year, options) {
+      var shouldTrack = !options || options.track !== false;
       var result = $('nengoResult');
       var jp = HISTORY[year];
 
@@ -96,7 +97,9 @@
       revealState = { year: year, japan: false, world: false };
       renderChallenge(year, jp, worldFact);
 
-      track('nengo_game_lookup', { year: year, event: jp.event });
+      if (shouldTrack) {
+        track('nengo_game_lookup', { year: year, event: jp.event });
+      }
     }
 
     function renderChallenge(year, jp, worldFact) {
@@ -191,7 +194,7 @@
 
       if (randomBtn) randomBtn.addEventListener('click', randomYear);
       if (result) result.addEventListener('click', handleResultClick);
-      if (input && input.value) lookupYear(parseInt(input.value, 10));
+      if (input && input.value) lookupYear(parseInt(input.value, 10), { track: false });
     }
 
     if (document.readyState === 'loading') {

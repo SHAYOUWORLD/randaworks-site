@@ -36,6 +36,13 @@
     function $(id) { return document.getElementById(id); }
     function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
     function rColor(p) { return p >= 95 ? '#60b568' : p >= 90 ? '#8bc34a' : p >= 80 ? '#c7a666' : p > 0 ? '#e06666' : 'var(--text-muted)'; }
+    function isLocalHost(){return /^(dev\.randa|localhost|127\.0\.0\.1)$/i.test(window.location.hostname);}
+    function apiBase(){return isLocalHost()?'http://127.0.0.1:8787':window.location.origin;}
+    function apiUrl(path, params){
+      var url = new URL(path, apiBase());
+      if(params){Object.keys(params).forEach(function(key){if(params[key] != null && params[key] !== '') url.searchParams.set(key, params[key]);});}
+      return url.toString();
+    }
 
     function render() {
       if (!cache) return;
@@ -96,7 +103,7 @@
       try {
         var appids = [];
         for (var j = 0; j < GAMES.length; j++) appids.push(GAMES[j].appid);
-        var r = await fetch('/api/steam/stats/?appids=' + appids.join(','));
+        var r = await fetch(apiUrl('/api/steam/stats/', { appids: appids.join(',') }));
         var d = await r.json();
         if (d.error) throw new Error(d.error);
         cache = [];
