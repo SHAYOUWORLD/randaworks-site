@@ -1,0 +1,55 @@
+---
+import ToolLayout from '../../layouts/ToolLayout.astro';
+---
+<ToolLayout
+  title="元号変換ツール | 明治・大正・昭和・平成・令和を西暦換算"
+  description="明治・大正・昭和・平成・令和を無料で西暦換算。西暦から元号、元号から西暦の両方に対応。"
+  canonical="https://www.randaworks.com/wareki-converter/"
+  ogImage="https://www.randaworks.com/assets/img/games/inga/demo-cards/combo_land_system.jpg"
+  pageType="wareki_converter"
+  source="wareki_converter"
+  tag="明治以降対応"
+  heading="元号変換"
+  breadcrumbs={[
+    { href: '/history-tools/', label: 'ツール集' },
+    { label: '元号変換' },
+  ]}
+  excludeTools={['wareki-converter']}
+  gamePitch="元号で調べた時代の武将たちが、ゲーム内のカードとして登場します。"
+  steamContext="日本史因果クロニクル — 時代をつなぐデッキ構築ローグライク"
+>
+  <div class="tool-workspace">
+    <div class="calculator-grid">
+      <div class="calc-panel">
+        <span class="calc-panel-label">西暦 → 元号</span>
+        <form class="calc-form" id="gregorianForm">
+          <label for="gregorianYear">西暦年
+            <input id="gregorianYear" name="gregorianYear" type="number" min="1868" max="9999" placeholder="2026" value="2026">
+          </label>
+          <button class="tool-btn" type="submit">換算</button>
+        </form>
+        <div class="calc-result-list" id="gregorianResult" aria-live="polite"></div>
+      </div>
+      <div class="calc-panel">
+        <span class="calc-panel-label">元号 → 西暦</span>
+        <form class="calc-form" id="eraForm">
+          <label for="eraName">元号
+            <select id="eraName" name="eraName">
+              <option value="reiwa">令和</option>
+              <option value="heisei">平成</option>
+              <option value="showa">昭和</option>
+              <option value="taisho">大正</option>
+              <option value="meiji">明治</option>
+            </select>
+          </label>
+          <label for="eraYear">年
+            <input id="eraYear" name="eraYear" type="number" min="1" placeholder="8" value="8">
+          </label>
+          <button class="tool-btn" type="submit">換算</button>
+        </form>
+        <div class="calc-result-list" id="eraResult" aria-live="polite"></div>
+      </div>
+    </div>
+  </div>
+  <script is:inline src="/assets/js/history-tools.js"></script>
+</ToolLayout>

@@ -72,11 +72,29 @@ import ToolLayout from '../../../layouts/ToolLayout.astro';
     function $(id) { return document.getElementById(id); }
     function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
     function rColor(p) { return p >= 95 ? '#60b568' : p >= 90 ? '#8bc34a' : p >= 80 ? '#c7a666' : p > 0 ? '#e06666' : 'var(--text-muted)'; }
+    function isLocalHost(){return /^(dev\.randa|localhost|127\.0\.0\.1)$/i.test(window.location.hostname);}
+    function apiBase(){return isLocalHost()?'http://127.0.0.1:8787':window.location.origin;}
+    function apiUrl(path, params){
+      var url = new URL(path, apiBase());
+      if(params){Object.keys(params).forEach(function(key){if(params[key] != null && params[key] !== '') url.searchParams.set(key, params[key]);});}
+      return url.toString();
+    }
 
     function render() {
       if (!cache) return;
       var tbody = $('hltbBody');
       tbody.innerHTML = '';
+      // Featured game at top (PR style)
+      var ftr = document.createElement('tr');
+      ftr.style.borderBottom = '2px solid rgba(199,166,102,0.3)';
+      ftr.style.background = 'linear-gradient(90deg, rgba(199,166,102,0.12) 0%, rgba(199,166,102,0.04) 100%)';
+      ftr.innerHTML =
+        '<td style="padding:10px 8px;text-align:center;"><span style="font-size:0.65rem;color:var(--tool-accent);letter-spacing:0.08em;text-transform:uppercase;">PR</span></td>' +
+        '<td style="padding:10px 8px;"><a href="https://store.steampowered.com/app/' + FEATURED.appid + '/?utm_source=randaworks&utm_medium=hltb&utm_campaign=featured" target="_blank" rel="noopener noreferrer" style="color:var(--tool-accent);font-weight:700;text-decoration:none;" data-track-event="steam_click" data-track-placement="hltb_featured">' + esc(FEATURED.name) + '</a><span style="display:block;font-size:0.72rem;color:var(--text-muted);margin-top:2px;">日本史×デッキ構築ローグライク</span></td>' +
+        '<td colspan="3" style="padding:10px 8px;color:var(--text-muted);text-align:center;font-size:0.82rem;">Steamでウィッシュリスト受付中</td>' +
+        '<td style="text-align:center;padding:10px 8px;"><a href="https://store.steampowered.com/app/' + FEATURED.appid + '/?utm_source=randaworks&utm_medium=hltb&utm_campaign=featured" target="_blank" rel="noopener noreferrer" style="color:var(--tool-accent);font-weight:600;" data-track-event="steam_click" data-track-placement="hltb_featured">Steam</a></td>';
+      tbody.appendChild(ftr);
+
       var list = cache.slice().sort(function (a, b) {
         var va = a[sort.key] || 0, vb = b[sort.key] || 0;
         return sort.desc ? vb - va : va - vb;
@@ -94,15 +112,6 @@ import ToolLayout from '../../../layouts/ToolLayout.astro';
           '<td style="text-align:center;padding:8px;"><a href="https://store.steampowered.com/app/' + esc(g.appid) + '/" target="_blank" rel="noopener noreferrer">Steam</a></td>';
         tbody.appendChild(tr);
       }
-      var ftr = document.createElement('tr');
-      ftr.style.borderBottom = '1px solid rgba(255,255,255,0.04)';
-      ftr.style.background = 'rgba(163,184,108,0.06)';
-      ftr.innerHTML =
-        '<td style="padding:8px;text-align:center;">—</td>' +
-        '<td style="padding:8px;color:var(--tool-accent);font-weight:600;">' + esc(FEATURED.name) + '</td>' +
-        '<td colspan="3" style="padding:8px;color:var(--text-muted);text-align:center;">— 開発中 —</td>' +
-        '<td style="text-align:center;padding:8px;"><a href="https://store.steampowered.com/app/' + FEATURED.appid + '/" target="_blank" rel="noopener noreferrer" data-track-event="steam_click" data-track-placement="hltb_featured">Steam</a></td>';
-      tbody.appendChild(ftr);
       updateHeaders();
     }
 
@@ -130,7 +139,7 @@ import ToolLayout from '../../../layouts/ToolLayout.astro';
       try {
         var appids = [];
         for (var j = 0; j < GAMES.length; j++) appids.push(GAMES[j].appid);
-        var r = await fetch('/api/steam/stats/?appids=' + appids.join(','));
+        var r = await fetch(apiUrl('/api/steam/stats/', { appids: appids.join(',') }));
         var d = await r.json();
         if (d.error) throw new Error(d.error);
         cache = [];
@@ -141,7 +150,7 @@ import ToolLayout from '../../../layouts/ToolLayout.astro';
         render();
         if (d.fetchedAt) $('fetchTime').textContent = '取得: ' + new Date(d.fetchedAt).toLocaleString('ja-JP');
       } catch (e) {
-        $('hltbBody').innerHTML = '<tr><td colspan="6" style="padding:24px;text-align:center;color:#e06666;">データを取得できませんでした。<a href="javascript:location.reload()" style="color:var(--tool-accent);margin-left:8px;">再読み込み</a></td></tr>';
+        $('hltbBody').innerHTML = '<tr><td colspan="6" style="padding:24px;text-align:center;color:#e0b366;">現在このツールは工事中です。API 復旧後に再開します。</td></tr>';
       }
     }
 

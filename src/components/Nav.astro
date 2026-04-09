@@ -1,0 +1,23 @@
+---
+interface Props {
+  links?: { href: string; label: string }[];
+}
+
+const defaultLinks = [
+  { href: '/history-tools/', label: 'ツール集' },
+  { href: '/nihonshi-quiz/', label: '日本史クイズ' },
+  { href: '/busho-profile-search/', label: '人物検索' },
+  { href: '/games/inga/?src=nav', label: 'ゲームを見る' },
+];
+
+const { links = defaultLinks } = Astro.props;
+---
+<header class="nav">
+  <div class="brand"><a href="/"><picture>
+    <source srcset="/assets/img/randaworks_logo_text.webp" type="image/webp">
+    <img src="/assets/img/randaworks_logo_text.png" alt="RandaWorks" style="height: 28px; vertical-align: middle;">
+  </picture></a></div>
+  <div class="links">
+    {links.map(link => <a href={link.href}>{link.label}</a>)}
+  </div>
+</header>

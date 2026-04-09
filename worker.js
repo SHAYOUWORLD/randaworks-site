@@ -37,6 +37,16 @@ var GRAPH_RELATION_PROPS = [
   { pid: "P1038", label: "家臣" },
   { pid: "P511", label: "主君" }
 ];
+var CURATED_BGG_GAMES = {
+  "36218": { name: "Dominion", year: 2008, minPlayers: 2, maxPlayers: 4, minPlaytime: 30, maxPlaytime: 30, rating: 7.6, weight: 2.4, rank: 1 },
+  "147020": { name: "Star Realms", year: 2014, minPlayers: 2, maxPlayers: 2, minPlaytime: 20, maxPlaytime: 20, rating: 7.5, weight: 1.9, rank: 2 },
+  "201808": { name: "Clank!", year: 2016, minPlayers: 2, maxPlayers: 4, minPlaytime: 30, maxPlaytime: 60, rating: 7.6, weight: 2.2, rank: 3 },
+  "191189": { name: "Aeon's End", year: 2016, minPlayers: 1, maxPlayers: 4, minPlaytime: 45, maxPlaytime: 60, rating: 7.9, weight: 2.8, rank: 4 },
+  "129437": { name: "Legendary: Marvel Deck Building Game", year: 2012, minPlayers: 1, maxPlayers: 5, minPlaytime: 30, maxPlaytime: 60, rating: 7.3, weight: 2.5, rank: 5 },
+  "268864": { name: "Undaunted: Normandy", year: 2019, minPlayers: 2, maxPlayers: 2, minPlaytime: 45, maxPlaytime: 60, rating: 7.6, weight: 2.3, rank: 6 },
+  "244884": { name: "Shards of Infinity", year: 2018, minPlayers: 2, maxPlayers: 4, minPlaytime: 30, maxPlaytime: 30, rating: 7.4, weight: 2.0, rank: 7 },
+  "296912": { name: "Fort", year: 2020, minPlayers: 2, maxPlayers: 4, minPlaytime: 20, maxPlaytime: 40, rating: 7.1, weight: 2.1, rank: 8 }
+};
 
 function getCookie(cookieHeader, name) {
   if (!cookieHeader) return "";
@@ -1001,12 +1011,31 @@ async function handleBggStats(request) {
       headers: headers
     });
   } catch (error) {
+    var fallbackGames = {};
+    for (var j = 0; j < ids.length; j++) {
+      if (CURATED_BGG_GAMES[ids[j]]) {
+        fallbackGames[ids[j]] = CURATED_BGG_GAMES[ids[j]];
+      }
+    }
+
+    if (Object.keys(fallbackGames).length) {
+      return jsonResponse({
+        games: fallbackGames,
+        fetchedAt: new Date().toISOString(),
+        source: "curated"
+      }, 200, origin);
+    }
+
     return jsonResponse({ error: "BGGデータを取得できませんでした。" }, 502, origin);
   }
 }
 export default {
   async fetch(request, env) {
     var url = new URL(request.url);
+    if (url.hostname === "randaworks-site.ysh-base.workers.dev") {
+      return Response.redirect("https://www.randaworks.com" + url.pathname + url.search + url.hash, 301);
+    }
+
     var pathname = normalizePath(url.pathname);
     var userAgent = request.headers.get("user-agent") || "";
 

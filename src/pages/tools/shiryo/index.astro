@@ -1,0 +1,325 @@
+---
+import ToolLayout from '../../../layouts/ToolLayout.astro';
+---
+<ToolLayout
+  title="古典史料ビューア | 青空文庫の原文とNDL資料を横断検索"
+  description="青空文庫の公式目録から作品を検索し、本文をその場で表示します。あわせて国立国会図書館デジタルコレクションの所蔵情報も確認できます。"
+  canonical="https://www.randaworks.com/tools/shiryo/"
+  pageType="shiryo"
+  source="shiryo"
+  tag="青空文庫+NDL"
+  heading="古典史料ビューア"
+  desc="青空文庫の原文と、国立国会図書館デジタルコレクションの所蔵情報をまとめて確認できます。"
+  breadcrumbs={[
+    { href: '/history-tools/', label: 'ツール集' },
+    { label: '古典史料ビューア' },
+  ]}
+  excludeTools={['shiryo']}
+  gamePitch="史料で読んだ出来事や人物が、ゲーム内のカードとして因果関係でつながります。"
+  steamContext="日本史因果クロニクル — 史実がカード連鎖になるローグライク"
+>
+  <div class="tool-workspace" id="shiryo-tool">
+    <div class="tool-input-row">
+      <label for="shiryoInput">作品名・著者名
+        <input id="shiryoInput" type="text" placeholder="太平記、吉川英治、平家物語、芥川龍之介…">
+      </label>
+      <button class="tool-btn" type="submit" form="shiryoForm">検索する</button>
+    </div>
+    <form id="shiryoForm" style="display:none;"></form>
+    <div class="tool-chips">
+      <button type="button" data-shiryo-query="太平記">太平記</button>
+      <button type="button" data-shiryo-query="平家物語">平家物語</button>
+      <button type="button" data-shiryo-query="吉川英治">吉川英治</button>
+      <button type="button" data-shiryo-query="芥川龍之介">芥川龍之介</button>
+    </div>
+    <div class="tool-data-grid">
+      <div class="tool-output" id="shiryoAozora" aria-live="polite">
+        <span class="tool-output-label">青空文庫</span>
+        <p>作品名や著者名で検索すると、公式目録から候補を表示します。</p>
+      </div>
+      <div class="tool-output" id="shiryoNdl" aria-live="polite">
+        <span class="tool-output-label">国立国会図書館</span>
+        <p>同じキーワードで NDL も検索します。</p>
+      </div>
+    </div>
+    <div class="tool-output" id="shiryoReader" aria-live="polite">
+      <span class="tool-output-label">本文ビューア</span>
+      <p>青空文庫の検索結果から「原文を読む」を押すと、本文を表示します。</p>
+    </div>
+  </div>
+
+  <script is:inline>
+  (function () {
+    var aozoraIndex = null;
+    var aozoraIndexPromise = null;
+
+    function $(id) { return document.getElementById(id); }
+    function escapeHtml(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+    function track(name, payload) {
+      if (window.RandaAnalytics && typeof window.RandaAnalytics.track === 'function') window.RandaAnalytics.track(name, payload || {});
+      if (typeof gtag === 'function') gtag('event', name, payload || {});
+    }
+
+    function isLocalHost() {
+      return /^(dev\.randa|localhost|127\.0\.0\.1)$/i.test(window.location.hostname);
+    }
+
+    function apiBase() {
+      return isLocalHost() ? 'http://127.0.0.1:8787' : window.location.origin;
+    }
+
+    function apiUrl(path, params) {
+      var url = new URL(path, apiBase());
+      if (params) {
+        Object.keys(params).forEach(function (key) {
+          if (params[key] !== undefined && params[key] !== null && params[key] !== '') {
+            url.searchParams.set(key, params[key]);
+          }
+        });
+      }
+      return url.toString();
+    }
+
+    async function fetchJson(url) {
+      var response = await fetch(url, { headers: { 'Accept': 'application/json' } });
+      var data = null;
+
+      try {
+        data = await response.json();
+      } catch (error) {
+        data = null;
+      }
+
+      if (!response.ok) {
+        var message = data && data.error ? data.error : '現在このツールは工事中です。';
+        throw new Error(message);
+      }
+
+      return data;
+    }
+
+    function normalizeForSearch(value) {
+      return String(value || '')
+        .toLowerCase()
+        .replace(/[\s　]+/g, '')
+        .replace(/[・･・\-_]/g, '');
+    }
+
+    function scoreEntry(entry, normalizedQuery) {
+      var title = normalizeForSearch(entry.title);
+      var titleKana = normalizeForSearch(entry.titleKana);
+      var subtitle = normalizeForSearch(entry.subtitle);
+      var author = normalizeForSearch(entry.author);
+      var authorKana = normalizeForSearch(entry.authorKana);
+      var score = 0;
+
+      if (title === normalizedQuery) score += 300;
+      else if (title.indexOf(normalizedQuery) === 0) score += 220;
+      else if (title.indexOf(normalizedQuery) !== -1) score += 160;
+
+      if (author === normalizedQuery) score += 240;
+      else if (author.indexOf(normalizedQuery) === 0) score += 180;
+      else if (author.indexOf(normalizedQuery) !== -1) score += 130;
+
+      if (titleKana.indexOf(normalizedQuery) !== -1) score += 80;
+      if (authorKana.indexOf(normalizedQuery) !== -1) score += 70;
+      if (subtitle && subtitle.indexOf(normalizedQuery) !== -1) score += 50;
+
+      return score;
+    }
+
+    async function loadAozoraIndex() {
+      if (aozoraIndex) return aozoraIndex;
+      if (aozoraIndexPromise) return aozoraIndexPromise;
+
+      aozoraIndexPromise = fetch('/data/aozora-index.json', { cache: 'force-cache' })
+        .then(function (response) {
+          if (!response.ok) throw new Error('青空文庫の索引を読み込めませんでした。');
+          return response.json();
+        })
+        .then(function (data) {
+          aozoraIndex = Array.isArray(data) ? data : [];
+          return aozoraIndex;
+        });
+
+      return aozoraIndexPromise;
+    }
+
+    function searchAozoraEntries(query) {
+      var normalizedQuery = normalizeForSearch(query);
+      if (!normalizedQuery || !Array.isArray(aozoraIndex)) return [];
+
+      return aozoraIndex
+        .map(function (entry) {
+          return { entry: entry, score: scoreEntry(entry, normalizedQuery) };
+        })
+        .filter(function (item) { return item.score > 0; })
+        .sort(function (a, b) {
+          if (b.score !== a.score) return b.score - a.score;
+          return (a.entry.title || '').length - (b.entry.title || '').length;
+        })
+        .slice(0, 8)
+        .map(function (item) { return item.entry; });
+    }
+
+    function bindAozoraButtons(results) {
+      var panel = $('shiryoAozora');
+      Array.prototype.forEach.call(panel.querySelectorAll('[data-aozora-read]'), function (button) {
+        button.addEventListener('click', function () {
+          var index = Number(button.getAttribute('data-aozora-read'));
+          var entry = results[index];
+          if (!entry || !entry.htmlUrl) return;
+          loadAozoraText(entry);
+        });
+      });
+    }
+
+    function renderAozoraResults(query, results) {
+      var panel = $('shiryoAozora');
+      var html = '<span class="tool-output-label">青空文庫（' + results.length + '件）</span>';
+
+      if (!results.length) {
+        html += '<p>「' + escapeHtml(query) + '」に一致する作品は見つかりませんでした。</p>';
+        html += '<div class="tool-data-card"><strong>青空文庫で直接見る</strong><a href="https://www.aozora.gr.jp/index_pages/person_all.html" target="_blank" rel="noopener noreferrer">青空文庫の作品一覧</a></div>';
+        panel.innerHTML = html;
+        return;
+      }
+
+      results.forEach(function (entry, index) {
+        var meta = [];
+        if (entry.author) meta.push(entry.author);
+        if (entry.published) meta.push(entry.published);
+        if (entry.role && entry.role !== '著者') meta.push(entry.role);
+
+        html += '<div class="tool-data-card">';
+        html += '<strong>' + escapeHtml(entry.title) + '</strong>';
+        if (entry.subtitle) html += '<span>' + escapeHtml(entry.subtitle) + '</span>';
+        if (meta.length) html += '<span>' + escapeHtml(meta.join(' / ')) + '</span>';
+        html += '<div style="display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.75rem;">';
+        html += '<button class="tool-btn" type="button" data-aozora-read="' + index + '">原文を読む</button>';
+        html += '<a href="' + escapeHtml(entry.cardUrl) + '" target="_blank" rel="noopener noreferrer">図書カード</a>';
+        html += '<a href="' + escapeHtml(entry.htmlUrl) + '" target="_blank" rel="noopener noreferrer">青空文庫で開く</a>';
+        html += '</div></div>';
+      });
+
+      panel.innerHTML = html;
+      bindAozoraButtons(results);
+    }
+
+    function renderReaderError(message) {
+      var panel = $('shiryoReader');
+      var note = isLocalHost() ? '<p style="margin-top:.75rem;">ローカル確認時は、別ターミナルで <code>npx wrangler dev --port 8787</code> を起動してください。</p>' : '';
+      panel.innerHTML = '<span class="tool-output-label">本文ビューア</span><p>' + escapeHtml(message) + '</p>' + note;
+    }
+
+    async function loadAozoraText(entry) {
+      var panel = $('shiryoReader');
+      panel.innerHTML = '<span class="tool-output-label">本文ビューア</span><p>本文を取得中…</p>';
+
+      try {
+        var data = await fetchJson(apiUrl('/api/shiryo/aozora/text/', { url: entry.htmlUrl }));
+        var byline = [];
+        if (data.author) byline.push(data.author);
+        if (data.translator) byline.push(data.translator);
+
+        var html = '<span class="tool-output-label">本文ビューア</span>';
+        html += '<div class="tool-data-card"><strong>' + escapeHtml(data.title || entry.title) + '</strong>';
+        if (byline.length) html += '<span>' + escapeHtml(byline.join(' / ')) + '</span>';
+        html += '<div style="display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.75rem;">';
+        html += '<a href="' + escapeHtml(data.sourceUrl || entry.htmlUrl) + '" target="_blank" rel="noopener noreferrer">青空文庫の原ページ</a>';
+        html += '<a href="' + escapeHtml(entry.cardUrl) + '" target="_blank" rel="noopener noreferrer">図書カード</a>';
+        html += '</div>';
+        html += '<pre style="white-space:pre-wrap;overflow:auto;max-height:44rem;margin-top:1rem;">' + escapeHtml(data.text || '') + '</pre>';
+        html += '</div>';
+        panel.innerHTML = html;
+        track('shiryo_read_text', { title: entry.title, author: entry.author || '' });
+      } catch (error) {
+        renderReaderError(error.message || '現在このツールは工事中です。');
+      }
+    }
+
+    async function searchAozora(query) {
+      var panel = $('shiryoAozora');
+      panel.innerHTML = '<span class="tool-output-label">青空文庫</span><p>索引を読み込み中…</p>';
+
+      try {
+        await loadAozoraIndex();
+        var results = searchAozoraEntries(query);
+        renderAozoraResults(query, results);
+        if (results[0] && results[0].htmlUrl) {
+          loadAozoraText(results[0]);
+        } else {
+          $('shiryoReader').innerHTML = '<span class="tool-output-label">本文ビューア</span><p>本文を表示できる候補が見つかりませんでした。</p>';
+        }
+      } catch (error) {
+        panel.innerHTML = '<span class="tool-output-label">青空文庫</span><p>' + escapeHtml(error.message || '現在このツールは工事中です。') + '</p>';
+      }
+    }
+
+    async function searchNdl(query) {
+      var panel = $('shiryoNdl');
+      panel.innerHTML = '<span class="tool-output-label">国立国会図書館</span><p>検索中…</p>';
+
+      try {
+        var data = await fetchJson(apiUrl('/api/shiryo/ndl/', { q: query }));
+        var results = data && Array.isArray(data.results) ? data.results : [];
+
+        if (!results.length) {
+          panel.innerHTML = '<span class="tool-output-label">国立国会図書館</span><p>一致する資料が見つかりませんでした。</p>';
+          return;
+        }
+
+        var html = '<span class="tool-output-label">国立国会図書館（' + results.length + '件）</span>';
+        results.forEach(function (item) {
+          var meta = [];
+          if (item.creator) meta.push(item.creator);
+          if (item.date) meta.push(item.date);
+
+          html += '<div class="tool-data-card"><strong>' + escapeHtml(item.title) + '</strong>';
+          if (meta.length) html += '<span>' + escapeHtml(meta.join(' / ')) + '</span>';
+          if (item.summary) html += '<span>' + escapeHtml(item.summary.slice(0, 140)) + '</span>';
+          if (item.url) html += '<a href="' + escapeHtml(item.url) + '" target="_blank" rel="noopener noreferrer">NDLで見る</a>';
+          html += '</div>';
+        });
+        panel.innerHTML = html;
+      } catch (error) {
+        var note = isLocalHost() ? ' 別ターミナルで <code>npx wrangler dev --port 8787</code> を起動するとローカルでも確認できます。' : '';
+        panel.innerHTML = '<span class="tool-output-label">国立国会図書館</span><p>' + escapeHtml(error.message || '現在このツールは工事中です。') + '</p>' + note;
+      }
+    }
+
+    function search(query) {
+      if (!query) return;
+      searchAozora(query);
+      searchNdl(query);
+      track('shiryo_search', { query: query });
+    }
+
+    function init() {
+      var form = $('shiryoForm');
+      var input = $('shiryoInput');
+      var quickBtns = document.querySelectorAll('[data-shiryo-query]');
+
+      if (form) form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        search(input.value.trim());
+      });
+
+      Array.prototype.forEach.call(quickBtns, function (btn) {
+        btn.addEventListener('click', function () {
+          var q = btn.getAttribute('data-shiryo-query');
+          input.value = q;
+          search(q);
+        });
+      });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init, { once: true });
+    } else {
+      init();
+    }
+  })();
+  </script>
+</ToolLayout>

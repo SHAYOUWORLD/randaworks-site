@@ -1,0 +1,314 @@
+---
+import ToolLayout from '../../../layouts/ToolLayout.astro';
+---
+<ToolLayout
+  title="武将タロット占い | 歴史の英雄があなたの運命を読む"
+  description="日本史の武将がタロットであなたの運命を占う無料ツール。大アルカナ22枚×正逆位置の本格占い。"
+  canonical="https://www.randaworks.com/tools/gacha/"
+  pageType="gacha"
+  source="gacha"
+  tag="日本史因果クロニクル"
+  heading="武将タロット占い"
+  breadcrumbs={[{ href: '/history-tools/', label: 'ツール集' }, { label: '武将タロット占い' }]}
+  excludeTools={['gacha']}
+  gamePitch="占いに登場する武将は、ゲーム内でもカードとして使えます。どんな因果効果を持つか確かめてみてください。"
+  steamContext="占い師の武将をゲームで使う"
+>
+  <div class="tool-workspace" style="text-align:center;">
+    <button class="tool-btn" id="gachaDrawBtn" type="button" style="font-size:1.05rem;padding:16px 44px;">タロットを引く</button>
+    <div id="gachaResult" style="margin-top:24px;min-height:200px;text-align:left;" aria-live="polite">
+      <div class="gacha-placeholder">ボタンを押すと武将がタロットで占います</div>
+    </div>
+  </div>
+
+  <script is:inline>
+  (function () {
+    var CHARS = [
+      {name:'厩戸皇子',era:'飛鳥時代',img:'/assets/img/characters/shotoku.webp',cards:['蘇我馬子','中臣鎌足','冠位十二階','十七条憲法','大化の改新','乙巳の変','飛鳥文化']},
+      {name:'鑑真',era:'奈良時代',img:'/assets/img/characters/ganjin.webp',cards:['行基','大宝律令','東大寺大仏造立','平城京遷都','国分寺・国分尼寺','墾田永年私財法']},
+      {name:'紫式部',era:'平安時代',img:'/assets/img/characters/murasaki.webp',cards:['藤原道長','菅原道真','摂関政治','国風文化','古今和歌集','平将門の乱','院政']},
+      {name:'北条政子',era:'鎌倉時代',img:'/assets/img/characters/masako.webp',cards:['北条泰時','御成敗式目','元寇','承久の乱','執権政治','守護・地頭']},
+      {name:'足利義満',era:'室町時代',img:'/assets/img/characters/yoshimitsu.webp',cards:['足利尊氏','勘合貿易','南北朝の動乱','応仁の乱','北山文化','東山文化','建武の新政']},
+      {name:'織田信長',era:'戦国・安土桃山',img:'/assets/img/characters/nobunaga.webp',cards:['豊臣秀吉','徳川家康','本能寺の変','鉄砲伝来','関ヶ原の戦い','太閤検地','楽市楽座','刀狩令']},
+      {name:'徳川吉宗',era:'江戸中期',img:'/assets/img/characters/yoshimune.webp',cards:['享保の改革','参勤交代','武家諸法度','鎖国','公事方御定書','寺子屋','島原・天草一揆']},
+      {name:'勝海舟',era:'幕末',img:'/assets/img/characters/katsu.webp',cards:['黒船来航','薩長同盟','日米和親条約','蘭学','海国兵談','化政文化','浮世絵']}
+    ];
+    var TAROT = [
+      {name:'愚者',num:'0',up:'自由な発想が道を切り拓く。常識にとらわれず、新しい一歩を踏み出す時。',rev:'計画なき行動は混乱を招く。一度立ち止まり、足元を確かめよ。'},
+      {name:'魔術師',num:'I',up:'才能と意志が結実する時。手元の道具を信じ、行動に移せ。',rev:'口先だけで手が動かぬ。実力を過信せず、基本に立ち返れ。'},
+      {name:'女教皇',num:'II',up:'直感が真実を告げている。静かに内なる声に耳を傾けよ。',rev:'秘密や疑念が判断を曇らせる。信頼できる者に心を開け。'},
+      {name:'女帝',num:'III',up:'豊かさと創造の気運あり。愛情を注いだものが実りを迎える。',rev:'過保護や停滞に注意。手放す勇気が新たな実りを生む。'},
+      {name:'皇帝',num:'IV',up:'揺るぎない意志でまとめ上げる時。責任を引き受ければ道は開ける。',rev:'支配欲や頑固さが周囲を遠ざける。柔軟さを忘れるな。'},
+      {name:'教皇',num:'V',up:'信頼と教えが力となる。良き師や仲間との縁を大切に。',rev:'形式に囚われ本質を見失う恐れ。自分自身の信念を問い直せ。'},
+      {name:'恋人',num:'VI',up:'大切な選択の時。心の声に従えば、最良の道が見える。',rev:'迷いや誘惑が判断を鈍らせる。何を本当に望むのか見極めよ。'},
+      {name:'戦車',num:'VII',up:'強い意志で突き進め。困難を乗り越える力が今、漲っている。',rev:'暴走や焦りは禁物。力の使いどころを見極めよ。'},
+      {name:'力',num:'VIII',up:'穏やかな強さが試練を制する。忍耐と慈悲で困難に向き合え。',rev:'感情に振り回される恐れ。自分を律する心を取り戻せ。'},
+      {name:'隠者',num:'IX',up:'孤独の中にこそ答えがある。内省の時間が知恵を授ける。',rev:'孤立しすぎは視野を狭める。時には他者の光を頼れ。'},
+      {name:'運命の輪',num:'X',up:'転機が訪れる。流れに身を任せれば、好機を掴める。',rev:'変化への抵抗は苦しみを生む。受け入れる覚悟が鍵。'},
+      {name:'正義',num:'XI',up:'公正な判断が求められる時。誠実であれば結果はついてくる。',rev:'偏りや不公平が生じやすい。バランスを意識せよ。'},
+      {name:'吊された男',num:'XII',up:'視点を変えれば世界が変わる。犠牲の先に深い悟りがある。',rev:'無意味な我慢は自らを縛る。執着を手放せ。'},
+      {name:'死神',num:'XIII',up:'終わりは始まり。古きを断ち切れば、新たな道が拓ける。',rev:'変化を恐れて停滞している。過去への執着を解き放て。'},
+      {name:'節制',num:'XIV',up:'調和とバランスが幸運を呼ぶ。焦らず着実に歩を進めよ。',rev:'極端に走りやすい時。中庸の大切さを思い出せ。'},
+      {name:'悪魔',num:'XV',up:'欲望や執着を自覚せよ。束縛の正体を見極めれば解放される。',rev:'鎖を断ち切る力が湧いてくる。依存から抜け出す好機。'},
+      {name:'塔',num:'XVI',up:'突然の変化が古い構造を壊す。崩壊の先にこそ真の再建がある。',rev:'崩壊を恐れて変化を先延ばしにしている。小さな修正を今すぐ。'},
+      {name:'星',num:'XVII',up:'希望の光が差し込む。信じる心が未来を照らす時。',rev:'理想と現実の乖離に注意。足元を固めてから夢を追え。'},
+      {name:'月',num:'XVIII',up:'不安や幻想に惑わされるな。真実は霧の向こうにある。',rev:'混乱が晴れ始める兆し。直感を信じて前へ進め。'},
+      {name:'太陽',num:'XIX',up:'喜びと成功の時。エネルギーに満ち、全てが好転する。',rev:'楽観しすぎに注意。光が強い時ほど影も濃い。'},
+      {name:'審判',num:'XX',up:'過去の努力が報われる時。覚悟を決めれば復活の道が開ける。',rev:'過去に囚われ前へ進めない。自分を許し、新たに歩み出せ。'},
+      {name:'世界',num:'XXI',up:'一つの物語が完成する。達成と統合の喜びを味わえ。',rev:'あと一歩が踏み出せない。完璧を求めず、今を認めよ。'}
+    ];
+
+    function pickChar(){return CHARS[Math.floor(Math.random()*CHARS.length)];}
+    function pickTarot(){return TAROT[Math.floor(Math.random()*TAROT.length)];}
+    function pickCards(arr,n){var a=arr.slice(),r=[];for(var i=0;i<n&&a.length;i++){var j=Math.floor(Math.random()*a.length);r.push(a.splice(j,1)[0]);}return r;}
+
+    function $(id){return document.getElementById(id);}
+    function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+    function track(n,p){if(window.RandaAnalytics&&window.RandaAnalytics.track)window.RandaAnalytics.track(n,p||{});if(typeof gtag==='function')gtag('event',n,p||{});}
+
+    function draw() {
+      var btn=$('gachaDrawBtn'),r=$('gachaResult');
+      btn.disabled=true;btn.textContent='…';
+      r.innerHTML='<div class="gacha-loading">札をめくっています…</div>';
+
+      setTimeout(function(){
+        var ch=pickChar();
+        var tarot=pickTarot();
+        var isUp=Math.random()<0.5;
+        var orient=isUp?'正位置':'逆位置';
+        var meaning=isUp?tarot.up:tarot.rev;
+        var orientCls=isUp?'is-upright':'is-reversed';
+        var related=pickCards(ch.cards,3);
+        var tagsHtml='';
+        for(var j=0;j<related.length;j++) tagsHtml+='<span class="gacha-tag">'+esc(related[j])+'</span>';
+
+        r.innerHTML=
+          '<div class="gacha-card gacha-reveal">' +
+            '<div class="gacha-portrait-col">' +
+              '<div class="gacha-portrait-frame">' +
+                '<img src="'+esc(ch.img)+'" alt="'+esc(ch.name)+'" class="gacha-portrait">' +
+              '</div>' +
+              '<div class="gacha-char-name">'+esc(ch.name)+'</div>' +
+              '<div class="gacha-char-era">'+esc(ch.era)+'</div>' +
+            '</div>' +
+            '<div class="gacha-reading-col">' +
+              '<div class="gacha-reading-header">' +
+                '<span class="gacha-reader-label">'+esc(ch.name)+'の占い</span>' +
+              '</div>' +
+              '<div class="gacha-tarot-name">' +
+                '<span class="gacha-tarot-num">'+esc(tarot.num)+'</span>' +
+                '<span>'+esc(tarot.name)+'</span>' +
+              '</div>' +
+              '<div class="gacha-orient '+orientCls+'">'+esc(orient)+'</div>' +
+              '<div class="gacha-divider"></div>' +
+              '<p class="gacha-meaning">'+esc(meaning)+'</p>' +
+              '<div class="gacha-tags-section">' +
+                '<span class="gacha-tags-label">関連カード</span>' +
+                '<div class="gacha-tags">'+tagsHtml+'</div>' +
+              '</div>' +
+            '</div>' +
+          '</div>';
+
+        track('gacha_draw',{warrior:ch.name,tarot:tarot.name,orient:orient});
+        btn.disabled=false;btn.textContent='もう一度引く';
+      }, 500);
+    }
+    function init(){$('gachaDrawBtn').addEventListener('click',draw);}
+    document.readyState==='loading'?document.addEventListener('DOMContentLoaded',init,{once:true}):init();
+  })();
+  </script>
+
+  <style is:inline>
+    .gacha-placeholder {
+      color: rgba(255,255,255,0.3);
+      font-size: 0.9rem;
+      text-align: center;
+      padding: 40px 0;
+    }
+    .gacha-loading {
+      text-align: center;
+      padding: 40px 0;
+      color: var(--tool-accent);
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      animation: gachaPulse 1s ease-in-out infinite;
+    }
+    @keyframes gachaPulse {
+      0%,100% { opacity: 0.5; }
+      50% { opacity: 1; }
+    }
+
+    /* --- Card reveal --- */
+    .gacha-card {
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      gap: 28px;
+      align-items: start;
+      padding: 28px;
+      border-radius: 16px;
+      background:
+        radial-gradient(ellipse at top left, rgba(232,120,74,0.08), transparent 60%),
+        radial-gradient(ellipse at bottom right, rgba(232,120,74,0.04), transparent 60%),
+        rgba(0,0,0,0.35);
+      border: 1px solid rgba(232,120,74,0.15);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.04);
+    }
+    .gacha-reveal {
+      animation: gachaReveal 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+    @keyframes gachaReveal {
+      from { opacity: 0; transform: translateY(20px) scale(0.97); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    /* --- Portrait column --- */
+    .gacha-portrait-col {
+      text-align: center;
+    }
+    .gacha-portrait-frame {
+      position: relative;
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.5), 0 0 0 1px rgba(232,120,74,0.2);
+    }
+    .gacha-portrait-frame::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: 14px;
+      border: 2px solid rgba(232,120,74,0.25);
+      pointer-events: none;
+    }
+    .gacha-portrait {
+      width: 100%;
+      display: block;
+      border-radius: 14px;
+    }
+    .gacha-char-name {
+      margin-top: 12px;
+      font-family: "Space Grotesk", "Noto Sans JP", sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #fff;
+    }
+    .gacha-char-era {
+      margin-top: 2px;
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.45);
+      letter-spacing: 0.04em;
+    }
+
+    /* --- Reading column --- */
+    .gacha-reading-col {
+      min-width: 0;
+    }
+    .gacha-reader-label {
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--tool-accent);
+      opacity: 0.8;
+    }
+    .gacha-tarot-name {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+      margin-top: 8px;
+    }
+    .gacha-tarot-num {
+      font-family: "Space Grotesk", serif;
+      font-size: 2.4rem;
+      font-weight: 700;
+      line-height: 1;
+      color: rgba(255,255,255,0.12);
+    }
+    .gacha-tarot-name > span:last-child {
+      font-family: "Noto Sans JP", sans-serif;
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: -0.01em;
+    }
+
+    .gacha-orient {
+      display: inline-block;
+      margin-top: 8px;
+      padding: 4px 16px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+    }
+    .gacha-orient.is-upright {
+      color: var(--tool-accent);
+      background: rgba(232,120,74,0.12);
+      border: 1px solid rgba(232,120,74,0.3);
+    }
+    .gacha-orient.is-reversed {
+      color: #b8a0d2;
+      background: rgba(184,160,210,0.1);
+      border: 1px solid rgba(184,160,210,0.25);
+    }
+
+    .gacha-divider {
+      margin: 16px 0;
+      height: 1px;
+      background: linear-gradient(90deg, rgba(232,120,74,0.25), transparent 80%);
+    }
+
+    .gacha-meaning {
+      margin: 0;
+      font-size: 1.0rem;
+      line-height: 1.8;
+      color: rgba(255,255,255,0.8);
+    }
+
+    .gacha-tags-section {
+      margin-top: 20px;
+    }
+    .gacha-tags-label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.35);
+    }
+    .gacha-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .gacha-tag {
+      display: inline-block;
+      padding: 3px 12px;
+      border-radius: 6px;
+      font-size: 0.78rem;
+      background: rgba(232,120,74,0.08);
+      color: var(--tool-accent);
+      border: 1px solid rgba(232,120,74,0.15);
+    }
+
+    /* --- Responsive --- */
+    @media(max-width:600px){
+      .gacha-card {
+        grid-template-columns: 1fr;
+        gap: 20px;
+        padding: 20px;
+      }
+      .gacha-portrait-col {
+        display: grid;
+        grid-template-columns: 120px 1fr;
+        gap: 16px;
+        align-items: center;
+        text-align: left;
+      }
+      .gacha-char-name { margin-top: 0; }
+      .gacha-tarot-num { font-size: 1.8rem; }
+      .gacha-tarot-name > span:last-child { font-size: 1.3rem; }
+    }
+  </style>
+</ToolLayout>

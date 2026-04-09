@@ -1,0 +1,198 @@
+---
+import ToolLayout from '../../../layouts/ToolLayout.astro';
+---
+<ToolLayout
+  title="人物関係ビジュアライザー | 武将の関係をグラフで可視化"
+  description="Wikidataの構造化データを使い、武将・歴史人物のつながりをネットワーク図で可視化。織田信長や徳川家康の人間関係を視覚的に探索できます。"
+  canonical="https://www.randaworks.com/tools/graph/"
+  pageType="person_graph"
+  source="graph"
+  tag="Wikidata"
+  heading="人物関係ビジュアライザー"
+  desc="武将・歴史人物の家族・主従・敵対関係をネットワーク図で可視化。"
+  breadcrumbs={[
+    { href: '/history-tools/', label: 'ツール集' },
+    { label: '人物関係ビジュアライザー' },
+  ]}
+  excludeTools={['graph']}
+  gamePitch="人物間の主従・敵対関係は、ゲーム内のカード相性システムに反映されています。"
+  steamContext="日本史因果クロニクル — 武将の関係が連鎖を生むカードゲーム"
+>
+  <div class="tool-workspace" id="graph-tool">
+    <div class="tool-input-row">
+      <label for="graphInput">人物名（日本語）
+        <input id="graphInput" type="text" placeholder="織田信長" value="織田信長">
+      </label>
+      <button class="tool-btn" type="submit" form="graphForm">検索する</button>
+    </div>
+    <form id="graphForm" style="display:none;"></form>
+    <div class="tool-chips">
+      <button type="button" data-graph-query="織田信長">織田信長</button>
+      <button type="button" data-graph-query="徳川家康">徳川家康</button>
+      <button type="button" data-graph-query="豊臣秀吉">豊臣秀吉</button>
+      <button type="button" data-graph-query="源頼朝">源頼朝</button>
+      <button type="button" data-graph-query="坂本龍馬">坂本龍馬</button>
+    </div>
+    <div class="tool-output" id="graphResult" aria-live="polite" style="min-height: 400px;">
+      <span class="tool-output-label">人物名を入力して検索してください。</span>
+      <canvas id="graphCanvas" width="800" height="500" style="width:100%;height:auto;display:none;border-radius:14px;"></canvas>
+    </div>
+  </div>
+
+  <script is:inline>
+  (function () {
+    function $(id) { return document.getElementById(id); }
+    function escapeHtml(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+    function isLocalHost(){return /^(dev\.randa|localhost|127\.0\.0\.1)$/i.test(window.location.hostname);}
+    function apiBase(){return isLocalHost()?'http://127.0.0.1:8787':window.location.origin;}
+    function apiUrl(path, params){
+      var url = new URL(path, apiBase());
+      if(params){Object.keys(params).forEach(function(key){if(params[key])url.searchParams.set(key, params[key]);});}
+      return url.toString();
+    }
+
+    function track(name, payload) {
+      if (window.RandaAnalytics && typeof window.RandaAnalytics.track === 'function') window.RandaAnalytics.track(name, payload || {});
+      if (typeof gtag === 'function') gtag('event', name, payload || {});
+    }
+
+    function findPerson(name) {
+      return fetch(apiUrl('/api/graph/find/', { name: name }), {
+        headers: { 'Accept': 'application/json' }
+      }).then(function (r) { if (!r.ok) throw new Error('fetch failed'); return r.json(); }).then(function (data) {
+        return data && data.person ? data.person : null;
+      });
+    }
+
+    function getRelations(qid) {
+      return fetch(apiUrl('/api/graph/relations/', { qid: qid }), {
+        headers: { 'Accept': 'application/json' }
+      }).then(function (r) { if (!r.ok) throw new Error('fetch failed'); return r.json(); }).then(function (data) {
+        return data && data.relations ? data.relations : [];
+      });
+    }
+
+    function drawGraph(center, relations) {
+      var canvas = $('graphCanvas');
+      canvas.style.display = 'block';
+      var ctx = canvas.getContext('2d');
+      var w = canvas.width, h = canvas.height;
+      var cx = w / 2, cy = h / 2;
+      ctx.clearRect(0, 0, w, h);
+
+      // Background
+      ctx.fillStyle = '#0b0d11';
+      ctx.fillRect(0, 0, w, h);
+
+      // Draw center node
+      ctx.beginPath();
+      ctx.arc(cx, cy, 30, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(199,166,102,0.3)';
+      ctx.fill();
+      ctx.strokeStyle = '#c7a666';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+      ctx.fillStyle = '#fff';
+      ctx.font = '14px "Noto Sans JP", sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(center, cx, cy);
+
+      if (!relations.length) {
+        ctx.fillStyle = '#9ca3af';
+        ctx.font = '13px "Noto Sans JP", sans-serif';
+        ctx.fillText('関連人物が見つかりませんでした', cx, cy + 60);
+        return;
+      }
+
+      var angleStep = (Math.PI * 2) / relations.length;
+      var radius = Math.min(w, h) * 0.35;
+
+      relations.forEach(function (rel, i) {
+        var angle = angleStep * i - Math.PI / 2;
+        var x = cx + Math.cos(angle) * radius;
+        var y = cy + Math.sin(angle) * radius;
+
+        // Edge
+        ctx.beginPath();
+        ctx.moveTo(cx, cy);
+        ctx.lineTo(x, y);
+        ctx.strokeStyle = 'rgba(255,255,255,0.15)';
+        ctx.lineWidth = 1;
+        ctx.stroke();
+
+        // Relation label on edge
+        var mx = (cx + x) / 2, my = (cy + y) / 2;
+        ctx.fillStyle = '#c7a666';
+        ctx.font = '11px "Noto Sans JP", sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText(rel.relation, mx, my - 6);
+
+        // Node
+        ctx.beginPath();
+        ctx.arc(x, y, 22, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(255,255,255,0.06)';
+        ctx.fill();
+        ctx.strokeStyle = 'rgba(255,255,255,0.2)';
+        ctx.lineWidth = 1;
+        ctx.stroke();
+
+        ctx.fillStyle = '#f0f2f5';
+        ctx.font = '12px "Noto Sans JP", sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(rel.label.length > 6 ? rel.label.slice(0, 5) + '…' : rel.label, x, y);
+      });
+    }
+
+    function search(name) {
+      var result = $('graphResult');
+      var canvas = $('graphCanvas');
+      canvas.style.display = 'none';
+
+      if (!name) { result.innerHTML = '<span class="tool-output-label">人物名を入力してください。</span>'; return; }
+
+      result.innerHTML = '<span class="tool-output-label">Wikidata を検索中…</span>';
+
+      findPerson(name)
+        .then(function (person) {
+          if (!person) {
+            result.innerHTML = '<span class="tool-output-label">「' + escapeHtml(name) + '」が見つかりませんでした。別の名前でお試しください。</span>';
+            return;
+          }
+          result.innerHTML = '<span class="tool-output-label">関係データを取得中…</span>';
+          return getRelations(person.qid).then(function (rels) {
+            result.innerHTML = '';
+            result.appendChild(canvas);
+            drawGraph(person.label, rels);
+            track('graph_view', { person: person.label, relations: rels.length });
+          });
+        })
+        .catch(function () {
+          result.innerHTML = '<span class="tool-output-label">現在このツールは工事中です。API 復旧後に再開します。</span>';
+        });
+    }
+
+    function init() {
+      var form = $('graphForm');
+      var input = $('graphInput');
+      var quickBtns = document.querySelectorAll('[data-graph-query]');
+
+      if (form) form.addEventListener('submit', function (e) { e.preventDefault(); search(input.value.trim()); });
+      Array.prototype.forEach.call(quickBtns, function (btn) {
+        btn.addEventListener('click', function () {
+          var q = btn.getAttribute('data-graph-query');
+          input.value = q;
+          search(q);
+        });
+      });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init, { once: true });
+    } else {
+      init();
+    }
+  })();
+  </script>
+</ToolLayout>

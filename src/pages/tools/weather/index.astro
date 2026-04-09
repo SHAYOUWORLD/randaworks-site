@@ -15,7 +15,7 @@ import ToolLayout from '../../../layouts/ToolLayout.astro';
     { label: '過去の天気しらべ' },
   ]}
   excludeTools={['weather']}
-  gamePitch="天候はゲーム内の合戦カードにも影響します。関ヶ原の霧や桶狭間の豪雨がカード効果に。"
+  steamContext="日本史因果クロニクル — 日本史×デッキ構築カードゲーム"
 >
   <div class="tool-workspace" id="weather-tool">
     <div class="tool-input-row">
@@ -105,7 +105,7 @@ import ToolLayout from '../../../layouts/ToolLayout.astro';
           renderWeather(dateStr, city, d);
         })
         .catch(function () {
-          result.innerHTML = '<span class="tool-output-label">気象データを取得できませんでした。日付が範囲内か確認してください。</span>';
+          result.innerHTML = '<span class="tool-output-label">現在このツールは工事中です。API 復旧後に再開します。</span>';
         });
 
       track('weather_search', { date: dateStr, city: cityName });
@@ -119,7 +119,7 @@ import ToolLayout from '../../../layouts/ToolLayout.astro';
       var wind = daily.windspeed_10m_max ? daily.windspeed_10m_max[0] : null;
 
       if (tMax === null && tMin === null) {
-        result.innerHTML = '<span class="tool-output-label">この日のデータは取得できませんでした。1940年以降の日付をお試しください。</span>';
+        result.innerHTML = '<span class="tool-output-label">現在このツールは工事中です。API 復旧後に再開します。</span>';
         return;
       }
 

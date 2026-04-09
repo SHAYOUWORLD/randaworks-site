@@ -1,0 +1,14 @@
+{
+  "name": "randaworks-site",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev --port 8888 --host dev.randa",
+    "build": "astro build && node scripts/clean-dist.mjs",
+    "preview": "astro preview --port 8888",
+    "deploy:preview": "npm run build && npx wrangler deploy --env preview"
+  },
+  "dependencies": {
+    "astro": "^6.1.4"
+  }
+}

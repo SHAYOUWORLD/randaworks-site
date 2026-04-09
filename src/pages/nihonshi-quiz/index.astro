@@ -1,0 +1,43 @@
+---
+import ToolLayout from '../../layouts/ToolLayout.astro';
+---
+<ToolLayout
+  title="日本史クイズ 無料ジェネレーター | 飛鳥から明治までランダム出題"
+  description="飛鳥、平安、鎌倉、室町、戦国、江戸、幕末、明治の人物・出来事クイズをランダム出題。"
+  canonical="https://www.randaworks.com/nihonshi-quiz/"
+  ogImage="https://www.randaworks.com/assets/img/games/inga/demo-cards/combo_nobunaga.jpg"
+  pageType="nihonshi_quiz"
+  source="nihonshi_quiz"
+  tag="Wikipedia概要ベース"
+  heading="日本史クイズ"
+  breadcrumbs={[
+    { href: '/history-tools/', label: 'ツール集' },
+    { label: '日本史クイズ' },
+  ]}
+  excludeTools={['nihonshi-quiz']}
+  gamePitch="このクイズに出てきた人物や出来事が、ゲーム内ではカードとして登場します。"
+  steamContext="クイズで扱った時代をカードで再体験"
+>
+  <div class="tool-workspace">
+    <div class="tool-input-row" style="justify-content: space-between;">
+      <label for="historyQuizPeriod" style="min-width:0;">出題範囲
+        <select id="historyQuizPeriod">
+          <option value="all">すべて</option>
+          <option value="ancient">飛鳥</option>
+          <option value="heian">平安</option>
+          <option value="kamakura">鎌倉</option>
+          <option value="muromachi">室町</option>
+          <option value="sengoku">戦国</option>
+          <option value="edo">江戸</option>
+          <option value="bakumatsu">幕末</option>
+          <option value="meiji">明治</option>
+        </select>
+      </label>
+      <button class="tool-btn" id="historyQuizGenerate" type="button">出題</button>
+    </div>
+    <div class="tool-output" id="historyQuizQuestion"></div>
+    <div class="quiz-option-grid" id="historyQuizChoices"></div>
+    <div class="tool-output" id="historyQuizExplanation" style="margin-top:12px;"></div>
+  </div>
+  <script is:inline src="/assets/js/history-tools.js"></script>
+</ToolLayout>

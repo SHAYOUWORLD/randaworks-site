@@ -1,0 +1,22 @@
+---
+interface Props {
+  source?: string;
+}
+
+const { source = 'page' } = Astro.props;
+---
+<footer class="footer">
+  <nav class="footer-nav" aria-label="フッターナビゲーション">
+    <a href="/about/">About</a>
+    <a href="/privacy/">プライバシーポリシー</a>
+    <a href="/terms/">利用規約</a>
+    <a href="/contact/">お問い合わせ</a>
+  </nav>
+  <div class="footer-links">
+    <a href="/history-tools/">日本史ツール集</a>
+    <a href="/nihonshi-quiz/">日本史クイズ</a>
+    <a href="/busho-profile-search/">人物検索</a>
+    <a href={`/games/inga/?src=${source}_footer`}>ゲーム詳細</a>
+  </div>
+  <div>&copy; 2026 RandaWorks</div>
+</footer>

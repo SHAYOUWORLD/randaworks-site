@@ -1,0 +1,133 @@
+---
+import ToolLayout from '../../../layouts/ToolLayout.astro';
+---
+<ToolLayout
+  title="漢字読みヒントツール | 1字ごとの読み候補を表示"
+  description="テキストを貼り付けると、KanjiAPI を使って漢字1字ごとの読み候補を表示します。かな変換ではなく、読みの当たりを付けるための補助ツールです。"
+  canonical="https://www.randaworks.com/tools/furigana/"
+  pageType="furigana"
+  source="furigana"
+  tag="KanjiAPI"
+  heading="漢字読みヒントツール"
+  desc="テキストを入力すると、KanjiAPI で漢字1字ごとの読み候補を表示します。"
+  breadcrumbs={[
+    { href: '/history-tools/', label: 'ツール集' },
+    { label: '漢字読みヒントツール' },
+  ]}
+  excludeTools={['furigana']}
+  gamePitch="武将名や地名の読みがわかると、ゲーム内の歴史カードがもっと楽しめます。"
+  steamContext="日本史因果クロニクル — 漢字で読み解く戦国カードゲーム"
+>
+  <div class="tool-workspace" id="furigana-tool">
+    <div class="tool-output furigana-note" style="min-height:auto;margin-bottom:14px;">
+      <span class="tool-output-label">このツールでできること</span>
+      <p>文全体をかなに変換する機能ではありません。漢字1字ごとの読み候補を見て、読みの当たりを付けるための補助表示です。</p>
+      <p>熟語、固有名詞、古文の文脈に沿った正確な読みは保証しません。</p>
+    </div>
+    <form id="furiganaForm">
+      <div style="margin-bottom: 14px;">
+        <label for="furiganaInput" style="display:block; margin-bottom: 6px; color: var(--text-muted); font-size: 0.92rem;">テキストを貼り付け</label>
+        <textarea id="furiganaInput" rows="5" placeholder="関ヶ原の戦いにて石田三成敗れたり" style="width:100%;min-height:120px;padding:14px;border-radius:12px;border:1px solid rgba(255,255,255,0.12);background:rgba(255,255,255,0.04);color:#fff;font:inherit;resize:vertical;"></textarea>
+      </div>
+      <button class="tool-btn" type="submit">読みヒントを出す</button>
+    </form>
+    <div class="tool-output" id="furiganaResult" aria-live="polite" style="min-height: 80px;">
+      <span class="tool-output-label">テキストを入力して読みヒントを表示してください。</span>
+    </div>
+  </div>
+
+  <script is:inline>
+  (function () {
+    function $(id) { return document.getElementById(id); }
+    function escapeHtml(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+    function isLocalHost(){return /^(dev\.randa|localhost|127\.0\.0\.1)$/i.test(window.location.hostname);}
+    function apiBase(){return isLocalHost()?'http://127.0.0.1:8787':window.location.origin;}
+    function apiUrl(path){return new URL(path, apiBase()).toString();}
+
+    function track(name, payload) {
+      if (window.RandaAnalytics && typeof window.RandaAnalytics.track === 'function') window.RandaAnalytics.track(name, payload || {});
+      if (typeof gtag === 'function') gtag('event', name, payload || {});
+    }
+
+    function hasKanji(str) {
+      return /[\u4e00-\u9fff\u3400-\u4dbf]/.test(str);
+    }
+
+    function addFurigana(text) {
+      var result = $('furiganaResult');
+      result.innerHTML = '<span class="tool-output-label">解析中…</span>';
+
+      if (!hasKanji(text)) {
+        result.innerHTML = '<span class="tool-output-label">読みヒント</span><div class="furigana-text">' + escapeHtml(text) + '</div><p style="color:var(--text-muted);font-size:0.88rem;">漢字が含まれていないため、そのまま表示しています。</p>';
+        return;
+      }
+
+      fetch(apiUrl('/api/furigana/'), {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({ text: text })
+      })
+      .then(function (r) { return r.ok ? r.json() : Promise.reject(); })
+      .then(function (data) {
+        var readingMap = data && data.readingMap ? data.readingMap : {};
+        var kanaHint = '';
+        var html = '<span class="tool-output-label">読みヒント（1字ごと）</span>';
+        html += '<p class="furigana-caption">かな化ではなく、漢字ごとの読み候補を機械的につないだ目安です。</p>';
+        html += '<p class="furigana-section-label">かな目安</p><div class="furigana-kana">';
+        for (var i = 0; i < text.length; i++) {
+          var ch = text[i];
+          kanaHint += readingMap[ch] || ch;
+        }
+        html += escapeHtml(kanaHint) + '</div>';
+        html += '<p class="furigana-section-label">原文＋読みヒント</p><div class="furigana-text">';
+        for (var j = 0; j < text.length; j++) {
+          var ch = text[j];
+          if (readingMap[ch]) {
+            html += '<ruby>' + escapeHtml(ch) + '<rp>(</rp><rt>' + escapeHtml(readingMap[ch]) + '</rt><rp>)</rp></ruby>';
+          } else {
+            html += escapeHtml(ch);
+          }
+        }
+        html += '</div>';
+        html += '<p class="furigana-caption">※ KanjiAPI による1字ずつの読み推定です。熟語の正確な読みとは異なる場合があります。</p>';
+        result.innerHTML = html;
+        track('furigana_convert', { length: text.length });
+      })
+      .catch(function () {
+        result.innerHTML = '<span class="tool-output-label">現在このツールは工事中です。API 復旧後に再開します。</span>';
+      });
+    }
+
+    function init() {
+      var form = $('furiganaForm');
+      if (form) form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var text = $('furiganaInput').value.trim();
+        if (text) addFurigana(text);
+      });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init, { once: true });
+    } else {
+      init();
+    }
+  })();
+  </script>
+
+  <style is:inline>
+    .furigana-note p,
+    .furigana-caption { margin: 0; color: var(--text-muted); font-size: 0.88rem; line-height: 1.7; }
+    .furigana-note { display: grid; gap: 6px; }
+    .furigana-section-label { margin: 12px 0 8px; color: var(--tool-accent); font-size: 0.8rem; font-weight: 700; letter-spacing: 0.04em; }
+    .furigana-kana,
+    .furigana-text { font-size: 1.4rem; line-height: 2.6; font-family: var(--font-serif); letter-spacing: 0.05em; }
+    .furigana-kana { white-space: pre-wrap; color: #f2e6dd; }
+    .furigana-text { white-space: pre-wrap; }
+    .furigana-text ruby { ruby-position: over; }
+    .furigana-text rt { font-size: 0.7em; color: #ffbf91; font-weight: 700; }
+  </style>
+</ToolLayout>

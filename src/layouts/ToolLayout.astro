@@ -1,0 +1,72 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import Breadcrumb from '../components/Breadcrumb.astro';
+import RelatedTools from '../components/RelatedTools.astro';
+import SteamWidget from '../components/SteamWidget.astro';
+
+interface BreadcrumbItem {
+  href?: string;
+  label: string;
+}
+
+interface Props {
+  title: string;
+  description: string;
+  canonical: string;
+  ogImage?: string;
+  pageType: string;
+  source: string;
+  tag?: string;
+  heading: string;
+  desc?: string;
+  breadcrumbs: BreadcrumbItem[];
+  excludeTools?: string[];
+  navLinks?: { href: string; label: string }[];
+  gamePitch?: string;
+  steamContext?: string;
+}
+
+const {
+  title,
+  description,
+  canonical,
+  ogImage,
+  pageType,
+  source,
+  tag,
+  heading,
+  desc,
+  breadcrumbs,
+  excludeTools = [],
+  navLinks,
+  gamePitch,
+  steamContext,
+} = Astro.props;
+---
+<BaseLayout title={title} description={description} canonical={canonical} ogImage={ogImage} pageType={pageType}>
+  <slot name="head" slot="head" />
+  <div class="container tool-page">
+    <Nav links={navLinks} />
+
+    <main id="main-content">
+      <Breadcrumb items={breadcrumbs} />
+
+      <div class="tool-page-header">
+        <h1>{heading}</h1>
+        {tag && <span class="tool-page-tag">{tag}</span>}
+      </div>
+      {desc && <p class="tool-page-desc">{desc}</p>}
+
+      <slot />
+
+      <div class="tool-footer-section">
+        <RelatedTools source={source} exclude={excludeTools} gamePitch={gamePitch} />
+        <SteamWidget source={source} context={steamContext} />
+      </div>
+    </main>
+
+    <Footer source={source} />
+  </div>
+</BaseLayout>

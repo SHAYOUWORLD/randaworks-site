@@ -9,7 +9,7 @@ import ToolLayout from '../../../layouts/ToolLayout.astro';
   source="steamstats"
   tag="ライブデータ"
   heading="インディーゲーム市場ダッシュボード"
-  desc="デッキ構築×ローグライクの主要タイトルをSteam市場データ付きでランキング表示。リアルタイム更新。"
+  desc="デッキ構築×ローグライク50タイトルをSteam市場データ付きでランキング表示。リアルタイム更新。"
   breadcrumbs={[{ href: '/history-tools/', label: 'ツール集' }, { label: '市場ダッシュボード' }]}
   excludeTools={['steamstats']}
   gamePitch="ランキングに掲載中の日本史デッキ構築ローグライク。Steam市場データもリアルタイムで確認できます。"
@@ -43,11 +43,10 @@ import ToolLayout from '../../../layouts/ToolLayout.astro';
   <script is:inline>
   (function () {
     var GAMES = [
+      // --- Deck-building roguelikes ---
       { appid: '646570', name: 'Slay the Spire' },
       { appid: '1892930', name: 'Slay the Spire 2' },
       { appid: '2379780', name: 'Balatro' },
-      { appid: '1145360', name: 'Hades' },
-      { appid: '1145350', name: 'Hades II' },
       { appid: '1092790', name: 'Inscryption' },
       { appid: '1102190', name: 'Monster Train' },
       { appid: '601840', name: 'Griftlands' },
@@ -56,7 +55,46 @@ import ToolLayout from '../../../layouts/ToolLayout.astro';
       { appid: '1135810', name: 'Vault of the Void' },
       { appid: '1076200', name: 'Roguebook' },
       { appid: '998740', name: 'Ring of Pain' },
-      { appid: '1075740', name: 'Banners of Ruin' }
+      { appid: '1075740', name: 'Banners of Ruin' },
+      { appid: '1265820', name: 'Fights in Tight Spaces' },
+      { appid: '960690', name: 'One Step From Eden' },
+      { appid: '1199030', name: 'Tainted Grail: Conquest' },
+      { appid: '981430', name: 'Gordian Quest' },
+      { appid: '2179850', name: 'Cobalt Core' },
+      { appid: '1811990', name: 'Wildfrost' },
+      { appid: '1296610', name: 'Peglin' },
+      { appid: '1404850', name: 'Luck be a Landlord' },
+      { appid: '681730', name: 'Nowhere Prophet' },
+      { appid: '1046300', name: 'Pirates Outlaws' },
+      { appid: '994220', name: 'Neoverse' },
+      { appid: '698640', name: 'Deep Sky Derelicts' },
+      { appid: '1970580', name: 'Backpack Hero' },
+      { appid: '1256670', name: 'Library of Ruina' },
+      { appid: '1948280', name: 'Stacklands' },
+      // --- Roguelike / roguelite ---
+      { appid: '1145360', name: 'Hades' },
+      { appid: '1145350', name: 'Hades II' },
+      { appid: '588650', name: 'Dead Cells' },
+      { appid: '590380', name: 'Into the Breach' },
+      { appid: '250900', name: 'The Binding of Isaac: Rebirth' },
+      { appid: '311690', name: 'Enter the Gungeon' },
+      { appid: '632360', name: 'Risk of Rain 2' },
+      { appid: '262060', name: 'Darkest Dungeon' },
+      { appid: '1940340', name: 'Darkest Dungeon II' },
+      { appid: '1313140', name: 'Cult of the Lamb' },
+      { appid: '1794680', name: 'Vampire Survivors' },
+      { appid: '212680', name: 'FTL: Faster Than Light' },
+      { appid: '881100', name: 'Noita' },
+      { appid: '1253920', name: 'Rogue Legacy 2' },
+      { appid: '861540', name: 'Dicey Dungeons' },
+      { appid: '1942280', name: 'Brotato' },
+      { appid: '418530', name: 'Spelunky 2' },
+      { appid: '242680', name: 'Nuclear Throne' },
+      { appid: '1649240', name: 'Returnal' },
+      { appid: '1972440', name: 'Shotgun King' },
+      { appid: '527230', name: 'For the King' },
+      { appid: '857980', name: 'Void Bastards' },
+      { appid: '333640', name: 'Caves of Qud' }
     ];
     var FEATURED = { appid: '4403470', name: '日本史因果クロニクル' };
     var REVIEW_JA = {
@@ -76,11 +114,29 @@ import ToolLayout from '../../../layouts/ToolLayout.astro';
     function $(id) { return document.getElementById(id); }
     function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
     function rColor(p) { return p >= 95 ? '#60b568' : p >= 90 ? '#8bc34a' : p >= 80 ? '#c7a666' : p > 0 ? '#e06666' : 'var(--text-muted)'; }
+    function isLocalHost(){return /^(dev\.randa|localhost|127\.0\.0\.1)$/i.test(window.location.hostname);}
+    function apiBase(){return isLocalHost()?'http://127.0.0.1:8787':window.location.origin;}
+    function apiUrl(path, params){
+      var url = new URL(path, apiBase());
+      if(params){Object.keys(params).forEach(function(key){if(params[key] != null && params[key] !== '') url.searchParams.set(key, params[key]);});}
+      return url.toString();
+    }
 
     function render() {
       if (!cache) return;
       var tbody = $('statsBody');
       tbody.innerHTML = '';
+      // Featured game at top (PR style)
+      var ftr = document.createElement('tr');
+      ftr.style.borderBottom = '2px solid rgba(199,166,102,0.3)';
+      ftr.style.background = 'linear-gradient(90deg, rgba(199,166,102,0.12) 0%, rgba(199,166,102,0.04) 100%)';
+      ftr.innerHTML =
+        '<td style="padding:10px 8px;text-align:center;"><span style="font-size:0.65rem;color:var(--tool-accent);letter-spacing:0.08em;text-transform:uppercase;">PR</span></td>' +
+        '<td style="padding:10px 8px;"><a href="https://store.steampowered.com/app/' + FEATURED.appid + '/?utm_source=randaworks&utm_medium=steamstats&utm_campaign=featured" target="_blank" rel="noopener noreferrer" style="color:var(--tool-accent);font-weight:700;text-decoration:none;" data-track-event="steam_click" data-track-placement="steamstats_featured">' + esc(FEATURED.name) + '</a><span style="display:block;font-size:0.72rem;color:var(--text-muted);margin-top:2px;">日本史×デッキ構築ローグライク</span></td>' +
+        '<td colspan="4" style="padding:10px 8px;color:var(--text-muted);text-align:center;font-size:0.82rem;">Steamでウィッシュリスト受付中</td>' +
+        '<td style="text-align:center;padding:10px 8px;"><a href="https://store.steampowered.com/app/' + FEATURED.appid + '/?utm_source=randaworks&utm_medium=steamstats&utm_campaign=featured" target="_blank" rel="noopener noreferrer" style="color:var(--tool-accent);font-weight:600;" data-track-event="steam_click" data-track-placement="steamstats_featured">Steam</a></td>';
+      tbody.appendChild(ftr);
+
       var list = cache.slice().sort(function (a, b) {
         var va = a[sort.key] || 0, vb = b[sort.key] || 0;
         return sort.desc ? vb - va : va - vb;
@@ -99,15 +155,6 @@ import ToolLayout from '../../../layouts/ToolLayout.astro';
           '<td style="text-align:center;padding:8px;"><a href="https://store.steampowered.com/app/' + esc(g.appid) + '/" target="_blank" rel="noopener noreferrer">Steam</a></td>';
         tbody.appendChild(tr);
       }
-      var ftr = document.createElement('tr');
-      ftr.style.borderBottom = '1px solid rgba(255,255,255,0.04)';
-      ftr.style.background = 'rgba(122,158,199,0.06)';
-      ftr.innerHTML =
-        '<td style="padding:8px;text-align:center;">—</td>' +
-        '<td style="padding:8px;color:var(--tool-accent);font-weight:600;">' + esc(FEATURED.name) + '</td>' +
-        '<td colspan="4" style="padding:8px;color:var(--text-muted);text-align:center;">— 開発中 —</td>' +
-        '<td style="text-align:center;padding:8px;"><a href="https://store.steampowered.com/app/' + FEATURED.appid + '/" target="_blank" rel="noopener noreferrer" data-track-event="steam_click" data-track-placement="steamstats_featured">Steam</a></td>';
-      tbody.appendChild(ftr);
       updateHeaders();
     }
 
@@ -119,6 +166,12 @@ import ToolLayout from '../../../layouts/ToolLayout.astro';
         th.setAttribute('data-label', label);
         th.textContent = th.getAttribute('data-sort') === sort.key ? label + (sort.desc ? ' ▼' : ' ▲') : label;
       }
+    }
+
+    function chunk(arr, size) {
+      var chunks = [];
+      for (var i = 0; i < arr.length; i += size) chunks.push(arr.slice(i, i + size));
+      return chunks;
     }
 
     async function init() {
@@ -133,20 +186,28 @@ import ToolLayout from '../../../layouts/ToolLayout.astro';
         })(ths[i]);
       }
       try {
-        var appids = [];
-        for (var j = 0; j < GAMES.length; j++) appids.push(GAMES[j].appid);
-        var r = await fetch('/api/steam/stats/?appids=' + appids.join(','));
-        var d = await r.json();
-        if (d.error) throw new Error(d.error);
+        var batches = chunk(GAMES, 25);
+        var responses = await Promise.all(batches.map(function (batch) {
+          var ids = batch.map(function (g) { return g.appid; }).join(',');
+          return fetch(apiUrl('/api/steam/stats/', { appids: ids })).then(function (r) { return r.json(); });
+        }));
+        var allGames = {};
+        var lastFetched = null;
+        for (var b = 0; b < responses.length; b++) {
+          var d = responses[b];
+          if (d.error) continue;
+          if (d.fetchedAt) lastFetched = d.fetchedAt;
+          for (var id in d.games) { if (d.games.hasOwnProperty(id)) allGames[id] = d.games[id]; }
+        }
         cache = [];
         for (var k = 0; k < GAMES.length; k++) {
-          var g = d.games[GAMES[k].appid];
+          var g = allGames[GAMES[k].appid];
           if (g) { g.appid = GAMES[k].appid; g.name = GAMES[k].name; cache.push(g); }
         }
         render();
-        if (d.fetchedAt) $('fetchTime').textContent = '取得: ' + new Date(d.fetchedAt).toLocaleString('ja-JP');
+        if (lastFetched) $('fetchTime').textContent = '取得: ' + new Date(lastFetched).toLocaleString('ja-JP');
       } catch (e) {
-        $('statsBody').innerHTML = '<tr><td colspan="7" style="padding:24px;text-align:center;color:#e06666;">データを取得できませんでした。<a href="javascript:location.reload()" style="color:var(--tool-accent);margin-left:8px;">再読み込み</a></td></tr>';
+        $('statsBody').innerHTML = '<tr><td colspan="7" style="padding:24px;text-align:center;color:#e0b366;">現在このツールは工事中です。API 復旧後に再開します。</td></tr>';
       }
     }
 
