@@ -1,0 +1,44 @@
+---
+interface Props {
+  source: string;
+  exclude?: string[];
+  gamePitch?: string;
+}
+
+const { source, exclude = [], gamePitch } = Astro.props;
+
+const allTools = [
+  { href: '/nihonshi-quiz/', label: '日本史クイズ' },
+  { href: '/wareki-converter/', label: '元号変換' },
+  { href: '/busho-profile-search/', label: '人物検索' },
+  { href: '/tools/kanji/', label: '漢字検索' },
+  { href: '/tools/gacha/', label: '武将ガチャ' },
+  { href: '/tools/holidays/', label: '祝日チェッカー' },
+  { href: '/tools/nengo-game/', label: '年号ゲーム' },
+  { href: '/tools/trivia/', label: '世界史クイズ' },
+  { href: '/tools/graph/', label: '人物グラフ' },
+  { href: '/tools/weather/', label: '過去の天気' },
+  { href: '/history-tools/', label: '全ツール一覧' },
+];
+
+const filtered = allTools.filter(t => !exclude.some(e => t.href.includes(e)));
+const links = filtered.slice(0, 5);
+---
+<div class={gamePitch ? 'tool-related-grid' : ''}>
+  <div class="tool-related-card">
+    <h3>他のツール</h3>
+    <div class="tool-related-links">
+      {links.map(link => <a href={link.href}>{link.label}</a>)}
+    </div>
+  </div>
+  {gamePitch && (
+    <div class="tool-related-card">
+      <h3>ゲームとの接点</h3>
+      <p style="color:var(--text-muted);font-size:0.85rem;margin:0 0 12px;">{gamePitch}</p>
+      <div class="tool-related-links">
+        <a href={`/games/inga/?src=${source}_game`} data-track-event="cta_click" data-track-placement={`${source}_game`}>詳細</a>
+        <a href={`/games/inga/play/?src=${source}_play`} data-track-event="cta_click" data-track-placement={`${source}_play`}>体験版</a>
+      </div>
+    </div>
+  )}
+</div>

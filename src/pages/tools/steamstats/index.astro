@@ -1,0 +1,156 @@
+---
+import ToolLayout from '../../../layouts/ToolLayout.astro';
+---
+<ToolLayout
+  title="インディーゲーム市場ダッシュボード | デッキ構築×ローグライク市場"
+  description="デッキ構築×ローグライクジャンルのSteam市場データをリアルタイム表示。Steam公式APIベース。"
+  canonical="https://www.randaworks.com/tools/steamstats/"
+  pageType="steamstats"
+  source="steamstats"
+  tag="ライブデータ"
+  heading="インディーゲーム市場ダッシュボード"
+  desc="デッキ構築×ローグライクの主要タイトルをSteam市場データ付きでランキング表示。リアルタイム更新。"
+  breadcrumbs={[{ href: '/history-tools/', label: 'ツール集' }, { label: '市場ダッシュボード' }]}
+  excludeTools={['steamstats']}
+  gamePitch="ランキングに掲載中の日本史デッキ構築ローグライク。Steam市場データもリアルタイムで確認できます。"
+  steamContext="同ジャンルの日本史デッキ構築ローグライク"
+>
+  <div class="tool-workspace" id="steamstats-tool">
+    <div style="overflow-x:auto;">
+      <table style="width:100%;border-collapse:collapse;font-size:0.88rem;font-family:'Space Grotesk','Noto Sans JP',sans-serif;" id="statsTable">
+        <thead>
+          <tr style="border-bottom:1px solid rgba(255,255,255,0.1);">
+            <th style="text-align:center;padding:10px 8px;color:var(--tool-accent);font-size:0.72rem;letter-spacing:0.06em;text-transform:uppercase;font-weight:600;width:40px;">#</th>
+            <th style="text-align:left;padding:10px 8px;color:var(--tool-accent);font-size:0.72rem;letter-spacing:0.06em;text-transform:uppercase;font-weight:600;">ゲーム名</th>
+            <th style="text-align:right;padding:10px 8px;color:var(--tool-accent);font-size:0.72rem;letter-spacing:0.06em;text-transform:uppercase;font-weight:600;cursor:pointer;" data-sort="totalReviews">レビュー数 ▼</th>
+            <th style="text-align:right;padding:10px 8px;color:var(--tool-accent);font-size:0.72rem;letter-spacing:0.06em;text-transform:uppercase;font-weight:600;cursor:pointer;" data-sort="positiveRate">好評率</th>
+            <th style="text-align:left;padding:10px 8px;color:var(--tool-accent);font-size:0.72rem;letter-spacing:0.06em;text-transform:uppercase;font-weight:600;">評価</th>
+            <th style="text-align:right;padding:10px 8px;color:var(--tool-accent);font-size:0.72rem;letter-spacing:0.06em;text-transform:uppercase;font-weight:600;cursor:pointer;" data-sort="ccu">同接</th>
+            <th style="text-align:center;padding:10px 8px;color:var(--tool-accent);font-size:0.72rem;letter-spacing:0.06em;text-transform:uppercase;font-weight:600;">Steam</th>
+          </tr>
+        </thead>
+        <tbody id="statsBody">
+          <tr><td colspan="7" style="padding:24px;text-align:center;color:var(--text-muted);">データ取得中…</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="tool-output" style="margin-top:16px;">
+      <span class="tool-output-label">データについて</span>
+      <p style="margin:0;color:var(--text-muted);font-size:0.82rem;">Steam公式APIからリアルタイム取得。見出しクリックでソート可能。<span id="fetchTime" style="margin-left:8px;"></span></p>
+    </div>
+  </div>
+
+  <script is:inline>
+  (function () {
+    var GAMES = [
+      { appid: '646570', name: 'Slay the Spire' },
+      { appid: '1892930', name: 'Slay the Spire 2' },
+      { appid: '2379780', name: 'Balatro' },
+      { appid: '1145360', name: 'Hades' },
+      { appid: '1145350', name: 'Hades II' },
+      { appid: '1092790', name: 'Inscryption' },
+      { appid: '1102190', name: 'Monster Train' },
+      { appid: '601840', name: 'Griftlands' },
+      { appid: '1385380', name: 'Across the Obelisk' },
+      { appid: '1188930', name: 'Chrono Ark' },
+      { appid: '1135810', name: 'Vault of the Void' },
+      { appid: '1076200', name: 'Roguebook' },
+      { appid: '998740', name: 'Ring of Pain' },
+      { appid: '1075740', name: 'Banners of Ruin' }
+    ];
+    var FEATURED = { appid: '4403470', name: '日本史因果クロニクル' };
+    var REVIEW_JA = {
+      'Overwhelmingly Positive': '圧倒的に好評',
+      'Very Positive': '非常に好評',
+      'Positive': '好評',
+      'Mostly Positive': 'やや好評',
+      'Mixed': '賛否両論',
+      'Mostly Negative': 'やや不評',
+      'Negative': '不評',
+      'Very Negative': '非常に不評',
+      'Overwhelmingly Negative': '圧倒的に不評'
+    };
+    var sort = { key: 'totalReviews', desc: true };
+    var cache = null;
+
+    function $(id) { return document.getElementById(id); }
+    function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+    function rColor(p) { return p >= 95 ? '#60b568' : p >= 90 ? '#8bc34a' : p >= 80 ? '#c7a666' : p > 0 ? '#e06666' : 'var(--text-muted)'; }
+
+    function render() {
+      if (!cache) return;
+      var tbody = $('statsBody');
+      tbody.innerHTML = '';
+      var list = cache.slice().sort(function (a, b) {
+        var va = a[sort.key] || 0, vb = b[sort.key] || 0;
+        return sort.desc ? vb - va : va - vb;
+      });
+      for (var i = 0; i < list.length; i++) {
+        var g = list[i];
+        var tr = document.createElement('tr');
+        tr.style.borderBottom = '1px solid rgba(255,255,255,0.04)';
+        tr.innerHTML =
+          '<td style="padding:8px;text-align:center;color:var(--text-muted);">' + (i + 1) + '</td>' +
+          '<td style="padding:8px;">' + esc(g.name) + '</td>' +
+          '<td style="text-align:right;padding:8px;color:var(--text-muted);">' + (g.totalReviews || 0).toLocaleString() + '</td>' +
+          '<td style="text-align:right;padding:8px;color:' + rColor(g.positiveRate) + ';">' + (g.positiveRate > 0 ? g.positiveRate + '%' : '—') + '</td>' +
+          '<td style="padding:8px;color:var(--text-muted);font-size:0.82rem;">' + esc(REVIEW_JA[g.reviewDesc] || g.reviewDesc || '—') + '</td>' +
+          '<td style="text-align:right;padding:8px;color:var(--text-muted);">' + (g.ccu > 0 ? g.ccu.toLocaleString() : '—') + '</td>' +
+          '<td style="text-align:center;padding:8px;"><a href="https://store.steampowered.com/app/' + esc(g.appid) + '/" target="_blank" rel="noopener noreferrer">Steam</a></td>';
+        tbody.appendChild(tr);
+      }
+      var ftr = document.createElement('tr');
+      ftr.style.borderBottom = '1px solid rgba(255,255,255,0.04)';
+      ftr.style.background = 'rgba(122,158,199,0.06)';
+      ftr.innerHTML =
+        '<td style="padding:8px;text-align:center;">—</td>' +
+        '<td style="padding:8px;color:var(--tool-accent);font-weight:600;">' + esc(FEATURED.name) + '</td>' +
+        '<td colspan="4" style="padding:8px;color:var(--text-muted);text-align:center;">— 開発中 —</td>' +
+        '<td style="text-align:center;padding:8px;"><a href="https://store.steampowered.com/app/' + FEATURED.appid + '/" target="_blank" rel="noopener noreferrer" data-track-event="steam_click" data-track-placement="steamstats_featured">Steam</a></td>';
+      tbody.appendChild(ftr);
+      updateHeaders();
+    }
+
+    function updateHeaders() {
+      var ths = document.querySelectorAll('#statsTable th[data-sort]');
+      for (var i = 0; i < ths.length; i++) {
+        var th = ths[i];
+        var label = th.getAttribute('data-label') || th.textContent.replace(/[\s▲▼]+$/g, '').trim();
+        th.setAttribute('data-label', label);
+        th.textContent = th.getAttribute('data-sort') === sort.key ? label + (sort.desc ? ' ▼' : ' ▲') : label;
+      }
+    }
+
+    async function init() {
+      var ths = document.querySelectorAll('#statsTable th[data-sort]');
+      for (var i = 0; i < ths.length; i++) {
+        (function (th) {
+          th.addEventListener('click', function () {
+            var key = th.getAttribute('data-sort');
+            if (sort.key === key) { sort.desc = !sort.desc; } else { sort.key = key; sort.desc = true; }
+            render();
+          });
+        })(ths[i]);
+      }
+      try {
+        var appids = [];
+        for (var j = 0; j < GAMES.length; j++) appids.push(GAMES[j].appid);
+        var r = await fetch('/api/steam/stats/?appids=' + appids.join(','));
+        var d = await r.json();
+        if (d.error) throw new Error(d.error);
+        cache = [];
+        for (var k = 0; k < GAMES.length; k++) {
+          var g = d.games[GAMES[k].appid];
+          if (g) { g.appid = GAMES[k].appid; g.name = GAMES[k].name; cache.push(g); }
+        }
+        render();
+        if (d.fetchedAt) $('fetchTime').textContent = '取得: ' + new Date(d.fetchedAt).toLocaleString('ja-JP');
+      } catch (e) {
+        $('statsBody').innerHTML = '<tr><td colspan="7" style="padding:24px;text-align:center;color:#e06666;">データを取得できませんでした。<a href="javascript:location.reload()" style="color:var(--tool-accent);margin-left:8px;">再読み込み</a></td></tr>';
+      }
+    }
+
+    document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', init, { once: true }) : init();
+  })();
+  </script>
+</ToolLayout>

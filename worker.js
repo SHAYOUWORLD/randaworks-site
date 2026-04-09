@@ -1004,7 +1004,6 @@ async function handleBggStats(request) {
     return jsonResponse({ error: "BGGデータを取得できませんでした。" }, 502, origin);
   }
 }
-
 export default {
   async fetch(request, env) {
     var url = new URL(request.url);

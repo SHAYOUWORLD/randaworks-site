@@ -1,0 +1,196 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Nav from '../../components/Nav.astro';
+import Footer from '../../components/Footer.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+
+const tools = [
+  {
+    kicker: '日本史クイズジェネレーター',
+    title: '日本史クイズをランダム出題',
+    desc: 'Wikipedia の公開概要をもとに、飛鳥から明治までの人物・出来事クイズをその場で生成します。',
+    href: '/nihonshi-quiz/',
+    label: 'クイズページへ',
+    track: 'quiz',
+  },
+  {
+    kicker: '年号・元号カリキュレーター',
+    title: '明治・大正・昭和・平成・令和を換算',
+    desc: '「令和 何年」「明治 西暦 変換」の検索意図に合わせて、年単位で即座に換算できます。',
+    href: '/wareki-converter/',
+    label: '元号変換ページへ',
+    track: 'converter',
+  },
+  {
+    kicker: '武将プロフィール検索',
+    title: '織田信長や徳川家康を横断検索',
+    desc: '武将や歴史人物の Wikipedia 公開概要をまとめて調べられます。',
+    href: '/busho-profile-search/',
+    label: '人物検索ページへ',
+    track: 'profile',
+  },
+  {
+    kicker: '漢字検索ツール',
+    title: '武将名・地名の漢字を即検索',
+    desc: '読み・部首・画数・意味を即表示。毎日使えるブックマーク向けツールです。',
+    href: '/tools/kanji/',
+    label: '漢字検索ページへ',
+    track: 'kanji',
+  },
+  {
+    kicker: '武将カード運勢ガチャ',
+    title: 'カードを引いて武将と運勢を表示',
+    desc: 'ランダムにカードを引くと武将が登場。毎日リセットで繰り返し遊べます。',
+    href: '/tools/gacha/',
+    label: 'ガチャページへ',
+    track: 'gacha',
+  },
+  {
+    kicker: '祝日・連休チェッカー',
+    title: '年と国を選んで祝日一覧を検索',
+    desc: '日本やアメリカなどの祝日一覧と3連休以上を表示。旅行や営業日確認向けの軽量ツールです。',
+    href: '/tools/holidays/',
+    label: '祝日ページへ',
+    track: 'holidays',
+  },
+  {
+    kicker: '年号×世界史ゲーム',
+    title: '日本史と世界史を同じ年で比較',
+    desc: '「1600年に世界で何が起きた？」を日英両方で表示。受験にもSNSにも。',
+    href: '/tools/nengo-game/',
+    label: '年号ゲームページへ',
+    track: 'nengo_game',
+  },
+  {
+    kicker: '世界史×日本史クロスクイズ',
+    title: '英語の歴史トリビアに日本史を組み合わせ',
+    desc: 'Open Trivia DB の世界史問題と日本史データを組み合わせたクイズです。',
+    href: '/tools/trivia/',
+    label: 'クロスクイズページへ',
+    track: 'trivia',
+  },
+  {
+    kicker: '人物関係ビジュアライザー',
+    title: '武将・出来事の関係をグラフで可視化',
+    desc: 'Wikidata の構造化データを使い、人物間のつながりをネットワーク図で表示します。',
+    href: '/tools/graph/',
+    label: '人物グラフページへ',
+    track: 'graph',
+  },
+  {
+    kicker: '古典史料ビューア',
+    title: '青空文庫＋国立国会図書館で史料を読む',
+    desc: '歴史小説・軍記物の原文を表示し、NDL の関連史料も横断検索します。',
+    href: '/tools/shiryo/',
+    label: '史料ビューアページへ',
+    track: 'shiryo',
+  },
+  {
+    kicker: '漢字読みヒントツール',
+    title: '漢字1字ごとの読み候補を表示',
+    desc: 'KanjiAPI を使って漢字ごとの読み候補を表示する補助ツールです。文全体のかな変換ではありません。',
+    href: '/tools/furigana/',
+    label: '読みヒントページへ',
+    track: 'furigana',
+  },
+  {
+    kicker: '過去の天気しらべ',
+    title: '日付と都市で過去の気象データを検索',
+    desc: '1940年〜現在の気温・降水量・風速を検索。誕生日やあの日の天気を調べよう。',
+    href: '/tools/weather/',
+    label: '過去の天気ページへ',
+    track: 'weather',
+  },
+  {
+    kicker: 'デッキ構築ゲーム図鑑',
+    title: 'デジタル×ボードゲームを横断比較',
+    desc: 'RAWG + BoardGameGeek のデータでデッキ構築ゲームを一覧。Chronicle Runも掲載。',
+    href: '/tools/deckgames/',
+    label: 'デッキ図鑑ページへ',
+    track: 'deckgames',
+  },
+  {
+    kicker: 'インディーゲーム市場ダッシュボード',
+    title: 'SteamSpy データで市場を分析',
+    desc: 'ジャンル別の推定所有者数・レビュースコアを可視化。開発者コミュニティ向け。',
+    href: '/tools/steamstats/',
+    label: '市場データページへ',
+    track: 'steamstats',
+  },
+  {
+    kicker: 'ゲームクリア時間比較',
+    title: '購入前にプレイ時間を比較',
+    desc: 'ローグライク・デッキ構築ゲームのクリア時間を比較表示します。',
+    href: '/tools/hltb/',
+    label: 'クリア時間ページへ',
+    track: 'hltb',
+  },
+];
+
+const navLinks = [
+  { href: '/nihonshi-quiz/', label: 'クイズ' },
+  { href: '/wareki-converter/', label: '元号変換' },
+  { href: '/busho-profile-search/', label: '人物検索' },
+  { href: '/games/inga/?src=history_tools_hub_nav', label: 'ゲームを見る' },
+];
+
+const toolCount = tools.length;
+---
+<BaseLayout
+  title="日本史ツール集 | 無料クイズ・元号変換・武将検索・漢字検索"
+  description={`無料で使える日本史ツール集。日本史クイズ、元号変換、武将検索、漢字検索、武将ガチャ、年号ゲームなど${toolCount}の独立ツールを使えます。`}
+  canonical="https://www.randaworks.com/history-tools/"
+  pageType="history_tools_hub"
+>
+  <div class="container tool-page">
+    <Nav links={navLinks} />
+
+    <main id="main-content">
+      <Breadcrumb items={[{ label: 'ツール集' }]} />
+
+      <div class="tool-page-header">
+        <h1>日本史ツール集</h1>
+        <span class="tool-page-tag">{toolCount}ツール</span>
+      </div>
+      <p class="tool-page-desc">検索で使える独立ツールをまとめています。各ページは単体で完結し、興味があればゲームへ進めます。</p>
+
+      <div class="history-tools-page-nav" style="margin-bottom:28px;">
+        <a class="tool-btn" href="/nihonshi-quiz/">日本史クイズ</a>
+        <a class="tool-btn tool-btn-ghost" href="/wareki-converter/">元号変換</a>
+        <a class="tool-btn tool-btn-ghost" href="/busho-profile-search/">武将検索</a>
+        <a class="tool-btn tool-btn-ghost" href="https://store.steampowered.com/app/4403470/?utm_source=randaworks&utm_medium=history_tools_hub&utm_campaign=steam" target="_blank" rel="noopener noreferrer" data-track-event="wishlist_click" data-track-placement="history_tools_hub_steam">Steam</a>
+      </div>
+
+      <section class="history-tools-card-grid">
+        {tools.map(tool => (
+          <a href={tool.href} class="history-tools-link-card" data-track-event="cta_click" data-track-placement={`history_tools_hub_${tool.track}`}>
+            <span class="tool-output-label">{tool.kicker}</span>
+            <strong>{tool.title}</strong>
+            <span class="tool-card-desc">{tool.desc}</span>
+          </a>
+        ))}
+      </section>
+
+      <div class="tool-related-grid" style="margin-top:36px;">
+        <div class="tool-related-card">
+          <h3>ゲームで試す</h3>
+          <p style="color:var(--text-muted);font-size:0.85rem;margin:0 0 12px;">ツールで調べた内容を、日本史カード連鎖のゲームで体験できます。</p>
+          <div class="tool-related-links">
+            <a href="/games/inga/?src=history_tools_hub_game" data-track-event="cta_click" data-track-placement="history_tools_hub_game">ゲーム詳細</a>
+            <a href="/games/inga/play/?src=history_tools_hub_play" data-track-event="cta_click" data-track-placement="history_tools_hub_play">体験版</a>
+            <a href="https://store.steampowered.com/app/4403470/?utm_source=randaworks&utm_medium=history_tools_hub&utm_campaign=widget" target="_blank" rel="noopener noreferrer" data-track-event="wishlist_click" data-track-placement="history_tools_hub_widget_cta">Steam</a>
+          </div>
+        </div>
+        <div class="tool-related-card" id="steam">
+          <span class="tool-output-label">Steam</span>
+          <div class="steam-widget-shell">
+            <iframe src="https://store.steampowered.com/widget/4403470/?utm_source=randaworks&utm_medium=history_tools_hub&utm_campaign=widget" title="日本史因果クロニクル Steam Store Widget" loading="lazy"></iframe>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <Footer source="history_tools_hub" />
+  </div>
+  <script is:inline src="/assets/js/history-tools.js"></script>
+</BaseLayout>

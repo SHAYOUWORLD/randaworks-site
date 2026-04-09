@@ -1,0 +1,119 @@
+---
+import ToolLayout from '../../../layouts/ToolLayout.astro';
+---
+<ToolLayout
+  title="デッキ構築ゲーム図鑑 | デジタル×ボードゲーム横断比較"
+  description="デッキ構築×ローグライクゲームをデジタル・ボードゲーム合わせて一覧比較。Steamデータはリアルタイム。"
+  canonical="https://www.randaworks.com/tools/deckgames/"
+  pageType="deckgames"
+  source="deckgames"
+  tag="キュレーション"
+  heading="デッキ構築ゲーム図鑑"
+  desc="デジタルとボードゲームのデッキ構築タイトルをキュレーション表示。Steamデータはリアルタイム。"
+  breadcrumbs={[{ href: '/history-tools/', label: 'ツール集' }, { label: 'デッキ図鑑' }]}
+  excludeTools={['deckgames']}
+  gamePitch="この図鑑に掲載中の日本史デッキ構築ローグライク。ブラウザで体験版をプレイできます。"
+  steamContext="同ジャンルの日本史デッキ構築ローグライク"
+>
+  <div class="tool-workspace">
+    <h2>デジタルゲーム</h2>
+    <div class="tool-data-card" style="border-color: rgba(199,166,102,0.4);">
+      <strong style="color: var(--accent-gold);">日本史因果クロニクル (Chronicle Run)</strong>
+      <span>日本史の因果関係をカード連鎖で学べるデッキ構築ローグライク。RandaWorks開発。</span>
+      <a href="https://store.steampowered.com/app/4403470/" target="_blank" rel="noopener noreferrer" data-track-event="steam_click" data-track-placement="deckgames_featured">Steamで見る</a>
+    </div>
+    <div style="display:grid;gap:10px;margin-top:14px;" id="digitalList">
+      <div style="padding:16px;text-align:center;color:var(--text-muted);">データ取得中…</div>
+    </div>
+  </div>
+
+  <div class="tool-workspace" style="margin-top:20px;">
+    <h2>ボードゲーム</h2>
+    <div style="display:grid;gap:10px;" id="boardList"></div>
+  </div>
+
+  <script is:inline>
+  (function () {
+    var DIGITAL = [
+      { appid: '646570', name: 'Slay the Spire', desc: 'デッキ構築ローグライクの金字塔。3キャラ×カードシナジー。' },
+      { appid: '1892930', name: 'Slay the Spire 2', desc: '続編。新メカニクスとキャラ追加。' },
+      { appid: '2379780', name: 'Balatro', desc: 'ポーカー×ローグライク。ジョーカーの組み合わせが鍵。' },
+      { appid: '1092790', name: 'Inscryption', desc: 'カードゲーム×ホラー×メタ構造。' },
+      { appid: '1102190', name: 'Monster Train', desc: 'タワーディフェンス×デッキ構築。マルチフロア戦闘。' },
+      { appid: '601840', name: 'Griftlands', desc: '交渉と戦闘の2デッキシステム。' },
+      { appid: '1188930', name: 'Chrono Ark', desc: 'パーティ制デッキ構築RPG。' },
+      { appid: '1385380', name: 'Across the Obelisk', desc: 'Co-opデッキ構築RPG。4人パーティ。' },
+      { appid: '1135810', name: 'Vault of the Void', desc: 'パージ重視の戦略的デッキ構築。' },
+      { appid: '998740', name: 'Ring of Pain', desc: 'ダンジョンリング×カード選択。' }
+    ];
+
+    var BOARD = [
+      { name: 'Dominion', year: '2008', bggRating: '7.6', bggId: '36218', desc: 'デッキ構築メカニクスの元祖。' },
+      { name: 'Star Realms', year: '2014', bggRating: '7.5', bggId: '147020', desc: '2人対戦デッキ構築。宇宙テーマ。' },
+      { name: 'Clank!', year: '2016', bggRating: '7.6', bggId: '201808', desc: 'ボード探索×デッキ構築。ドラゴンから逃げろ。' },
+      { name: 'Aeon\'s End', year: '2016', bggRating: '7.9', bggId: '191189', desc: 'Co-op デッキ構築。デッキをシャッフルしない独自ルール。' },
+      { name: 'Legendary: Marvel', year: '2012', bggRating: '7.3', bggId: '129437', desc: 'マーベルヒーローの協力デッキ構築。' },
+      { name: 'Undaunted: Normandy', year: '2019', bggRating: '7.6', bggId: '268864', desc: 'WWII戦術×デッキ構築。' },
+      { name: 'Shards of Infinity', year: '2018', bggRating: '7.4', bggId: '244884', desc: 'マスタリーシステムが特徴の対戦型。' },
+      { name: 'Fort', year: '2020', bggRating: '7.1', bggId: '296912', desc: '子供の秘密基地テーマ。デッキ構築+フォロー。' }
+    ];
+
+    var REVIEW_JA = {
+      'Overwhelmingly Positive': '圧倒的に好評',
+      'Very Positive': '非常に好評',
+      'Positive': '好評',
+      'Mostly Positive': 'やや好評',
+      'Mixed': '賛否両論'
+    };
+
+    function $(id) { return document.getElementById(id); }
+    function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+    function rColor(p) { return p >= 95 ? '#60b568' : p >= 90 ? '#8bc34a' : p >= 80 ? '#c7a666' : p > 0 ? '#e06666' : 'var(--text-muted)'; }
+
+    function renderDigital(apiData) {
+      var dl = $('digitalList');
+      dl.innerHTML = '';
+      var sorted = DIGITAL.slice().sort(function (a, b) {
+        var ga = apiData[a.appid], gb = apiData[b.appid];
+        var ra = ga ? ga.totalReviews : 0, rb = gb ? gb.totalReviews : 0;
+        return rb - ra;
+      });
+      for (var i = 0; i < sorted.length; i++) {
+        var item = sorted[i];
+        var g = apiData[item.appid];
+        var stats = '';
+        if (g && g.totalReviews > 0) {
+          var ja = REVIEW_JA[g.reviewDesc] || g.reviewDesc || '';
+          stats = ' <span style="color:' + rColor(g.positiveRate) + ';font-size:0.78rem;font-weight:400;">' + ja + '</span>' +
+            '<span style="color:var(--text-muted);font-size:0.78rem;font-weight:400;margin-left:6px;">(' + g.totalReviews.toLocaleString() + ' reviews)</span>';
+        }
+        dl.innerHTML += '<div class="tool-data-card"><strong>' + esc(item.name) + stats + '</strong><span>' + esc(item.desc) + '</span><a href="https://store.steampowered.com/app/' + esc(item.appid) + '/" target="_blank" rel="noopener noreferrer">Steam</a></div>';
+      }
+    }
+
+    function renderBoard() {
+      var bl = $('boardList');
+      for (var i = 0; i < BOARD.length; i++) {
+        var g = BOARD[i];
+        bl.innerHTML += '<div class="tool-data-card"><strong>' + esc(g.name) + ' <span style="color:var(--text-muted);font-weight:400;font-size:0.82rem;">(' + g.year + ' / BGG ' + g.bggRating + ')</span></strong><span>' + esc(g.desc) + '</span><a href="https://boardgamegeek.com/boardgame/' + esc(g.bggId) + '" target="_blank" rel="noopener noreferrer">BGG</a></div>';
+      }
+    }
+
+    async function init() {
+      renderBoard();
+      try {
+        var appids = [];
+        for (var i = 0; i < DIGITAL.length; i++) appids.push(DIGITAL[i].appid);
+        var r = await fetch('/api/steam/stats/?appids=' + appids.join(','));
+        var d = await r.json();
+        if (d.error) throw new Error(d.error);
+        renderDigital(d.games || {});
+      } catch (e) {
+        $('digitalList').innerHTML = '<div style="padding:16px;text-align:center;color:#e06666;">データを取得できませんでした。<a href="javascript:location.reload()" style="color:var(--tool-accent);margin-left:8px;">再読み込み</a></div>';
+      }
+    }
+
+    document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', init, { once: true }) : init();
+  })();
+  </script>
+</ToolLayout>

@@ -1,0 +1,211 @@
+---
+import ToolLayout from '../../../layouts/ToolLayout.astro';
+---
+<ToolLayout
+  title="過去の天気しらべ | 日付と都市で気象データを検索"
+  description="1940年から現在までの過去の天気を検索。日付と都市を選ぶだけで気温・降水量・風速を表示。誕生日の天気やあの日の天気を調べよう。"
+  canonical="https://www.randaworks.com/tools/weather/"
+  pageType="past_weather"
+  source="weather"
+  tag="Open-Meteo"
+  heading="過去の天気しらべ"
+  desc="日付と都市を選んで、過去の気象データを検索できます。誕生日やあの日の天気を調べてみよう。"
+  breadcrumbs={[
+    { href: '/history-tools/', label: 'ツール集' },
+    { label: '過去の天気しらべ' },
+  ]}
+  excludeTools={['weather']}
+  gamePitch="天候はゲーム内の合戦カードにも影響します。関ヶ原の霧や桶狭間の豪雨がカード効果に。"
+>
+  <div class="tool-workspace" id="weather-tool">
+    <div class="tool-input-row">
+      <label>
+        日付
+        <input type="date" id="dateInput" min="1940-01-01" />
+      </label>
+      <label>
+        都市
+        <select id="citySelect"></select>
+      </label>
+      <button type="button" class="tool-btn" id="searchBtn">検索</button>
+    </div>
+
+    <div class="tool-chips" id="presetChips"></div>
+
+    <div class="tool-output" id="weatherResult" aria-live="polite" style="min-height: 120px;">
+      <span class="tool-output-label">日付と都市を選んで検索してください。</span>
+    </div>
+  </div>
+
+  <script is:inline>
+  (function () {
+    var CITIES = [
+      { name: '東京', lat: 35.6762, lon: 139.6503 },
+      { name: '大阪', lat: 34.6937, lon: 135.5023 },
+      { name: '名古屋', lat: 35.1815, lon: 136.9066 },
+      { name: '福岡', lat: 33.5904, lon: 130.4017 },
+      { name: '札幌', lat: 43.0618, lon: 141.3545 },
+      { name: '仙台', lat: 38.2682, lon: 140.8694 },
+      { name: '広島', lat: 34.3853, lon: 132.4553 },
+      { name: '京都', lat: 35.0116, lon: 135.7681 },
+      { name: '新潟', lat: 37.9026, lon: 139.0236 },
+      { name: '那覇', lat: 26.3344, lon: 127.7810 },
+    ];
+
+    var PRESETS = [
+      { label: '東京タワー完成日', date: '1958-12-23', city: '東京' },
+      { label: '東京オリンピック開会式', date: '1964-10-10', city: '東京' },
+      { label: '大阪万博開幕', date: '1970-03-15', city: '大阪' },
+      { label: '平成最初の日', date: '1989-01-08', city: '東京' },
+      { label: '令和最初の日', date: '2019-05-01', city: '東京' },
+    ];
+
+    function $(id) { return document.getElementById(id); }
+    function escapeHtml(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+    function isLocalHost() { return /^(dev\.randa|localhost|127\.0\.0\.1)$/i.test(window.location.hostname); }
+    function apiBase() { return isLocalHost() ? 'http://127.0.0.1:8787' : window.location.origin; }
+    function apiUrl(path, params) {
+      var url = new URL(path, apiBase());
+      if (params) { Object.keys(params).forEach(function (key) { if (params[key] != null && params[key] !== '') url.searchParams.set(key, params[key]); }); }
+      return url.toString();
+    }
+
+    function track(name, payload) {
+      if (window.RandaAnalytics && typeof window.RandaAnalytics.track === 'function') window.RandaAnalytics.track(name, payload || {});
+      if (typeof gtag === 'function') gtag('event', name, payload || {});
+    }
+
+    function findCity(name) {
+      for (var i = 0; i < CITIES.length; i++) { if (CITIES[i].name === name) return CITIES[i]; }
+      return CITIES[0];
+    }
+
+    function formatDateJa(dateStr) {
+      var parts = dateStr.split('-');
+      return parts[0] + '年' + Number(parts[1]) + '月' + Number(parts[2]) + '日';
+    }
+
+    function weatherIcon(tMax, precip) {
+      if (precip > 10) return '🌧️';
+      if (precip > 0.5) return '🌦️';
+      if (tMax >= 30) return '☀️';
+      if (tMax <= 5) return '❄️';
+      return '⛅';
+    }
+
+    function doSearch(dateStr, cityName) {
+      var result = $('weatherResult');
+      var city = findCity(cityName);
+      result.innerHTML = '<span class="tool-output-label">' + escapeHtml(formatDateJa(dateStr)) + '（' + escapeHtml(city.name) + '）のデータを取得中…</span>';
+
+      fetch(apiUrl('/api/weather/archive/', { lat: city.lat, lon: city.lon, date: dateStr }))
+        .then(function (r) { if (!r.ok) throw new Error('fetch failed'); return r.json(); })
+        .then(function (data) {
+          var d = data.daily || {};
+          renderWeather(dateStr, city, d);
+        })
+        .catch(function () {
+          result.innerHTML = '<span class="tool-output-label">気象データを取得できませんでした。日付が範囲内か確認してください。</span>';
+        });
+
+      track('weather_search', { date: dateStr, city: cityName });
+    }
+
+    function renderWeather(dateStr, city, daily) {
+      var result = $('weatherResult');
+      var tMax = daily.temperature_2m_max ? daily.temperature_2m_max[0] : null;
+      var tMin = daily.temperature_2m_min ? daily.temperature_2m_min[0] : null;
+      var precip = daily.precipitation_sum ? daily.precipitation_sum[0] : null;
+      var wind = daily.windspeed_10m_max ? daily.windspeed_10m_max[0] : null;
+
+      if (tMax === null && tMin === null) {
+        result.innerHTML = '<span class="tool-output-label">この日のデータは取得できませんでした。1940年以降の日付をお試しください。</span>';
+        return;
+      }
+
+      var icon = weatherIcon(tMax, precip);
+      var html = '<div class="weather-header">' +
+        '<span class="weather-icon">' + icon + '</span>' +
+        '<div>' +
+        '<h3>' + escapeHtml(formatDateJa(dateStr)) + '　' + escapeHtml(city.name) + '</h3>' +
+        '</div>' +
+        '</div>' +
+        '<div class="tool-data-grid">';
+
+      if (tMax !== null) html += '<div class="tool-data-card"><strong>最高気温</strong><span>' + tMax + ' °C</span></div>';
+      if (tMin !== null) html += '<div class="tool-data-card"><strong>最低気温</strong><span>' + tMin + ' °C</span></div>';
+      if (precip !== null) html += '<div class="tool-data-card"><strong>降水量</strong><span>' + precip + ' mm</span></div>';
+      if (wind !== null) html += '<div class="tool-data-card"><strong>最大風速</strong><span>' + wind + ' km/h</span></div>';
+
+      html += '</div>';
+      result.innerHTML = html;
+    }
+
+    function init() {
+      // City select
+      var select = $('citySelect');
+      CITIES.forEach(function (c) {
+        var opt = document.createElement('option');
+        opt.value = c.name;
+        opt.textContent = c.name;
+        select.appendChild(opt);
+      });
+
+      // Date input: max = yesterday
+      var dateInput = $('dateInput');
+      var yesterday = new Date();
+      yesterday.setDate(yesterday.getDate() - 2); // archive API delay
+      dateInput.max = yesterday.toISOString().split('T')[0];
+
+      // Preset chips
+      var chips = $('presetChips');
+      PRESETS.forEach(function (p) {
+        var btn = document.createElement('button');
+        btn.type = 'button';
+        btn.textContent = p.label;
+        btn.addEventListener('click', function () {
+          dateInput.value = p.date;
+          select.value = p.city;
+          doSearch(p.date, p.city);
+        });
+        chips.appendChild(btn);
+      });
+
+      // Search button
+      $('searchBtn').addEventListener('click', function () {
+        var date = dateInput.value;
+        var city = select.value;
+        if (!date) {
+          $('weatherResult').innerHTML = '<span class="tool-output-label">日付を入力してください。</span>';
+          return;
+        }
+        doSearch(date, city);
+      });
+
+      // Enter key on date input
+      dateInput.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') { $('searchBtn').click(); }
+      });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init, { once: true });
+    } else {
+      init();
+    }
+  })();
+  </script>
+
+  <style is:inline>
+    .weather-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+    .weather-icon {
+      font-size: 2.2rem;
+      line-height: 1;
+    }
+  </style>
+</ToolLayout>

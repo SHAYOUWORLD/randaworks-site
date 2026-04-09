@@ -1,0 +1,6 @@
+/*
+  X-Frame-Options: SAMEORIGIN
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=()
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://static.cloudflareinsights.com https://storage.googleapis.com; img-src 'self' https://i.ytimg.com https://storage.googleapis.com https://upload.wikimedia.org https://*.wikimedia.org data: blob:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://randaworks-analytics-945977546061.asia-northeast1.run.app https://storage.googleapis.com https://ja.wikipedia.org https://*.wikipedia.org; frame-src 'self' https://www.youtube.com https://www.youtube-nocookie.com https://store.steampowered.com; media-src 'self' https://storage.googleapis.com
