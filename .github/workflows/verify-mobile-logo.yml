@@ -1,10 +1,6 @@
 name: Verify Mobile Logo Rule
 
 on:
-  pull_request:
-  push:
-    branches-ignore:
-      - main
   workflow_dispatch:
 
 jobs:
