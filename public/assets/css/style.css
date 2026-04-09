@@ -2529,22 +2529,19 @@ tr.is-mine:hover { background: rgba(212, 175, 55, 0.22); }
    - Leaves h3 (card titles) and gold accents intact for brand consistency
    ========================================= */
 body.journal-page {
-  --bg-dark: #0d1117;
-  --card-bg: rgba(22, 27, 34, 0.94);
-  --card-border: rgba(139, 148, 158, 0.1);
-  --card-hover-border: rgba(179, 145, 85, 0.24);
-  --text-main: #e6edf3;
-  --text-muted: #8b949e;
-  --accent-gold: #c9a04e;
+  --bg-dark: #f5f0e8;
+  --bg-surface: #faf7f2;
+  --card-bg: #ffffff;
+  --card-border: rgba(44, 24, 16, 0.08);
+  --card-hover-border: rgba(184, 92, 60, 0.22);
+  --text-main: #333333;
+  --text-heading: #2c1810;
+  --text-muted: #7a7067;
+  --accent-gold: #b85c3c;
+  --accent-hover: #9a4a2f;
+  --accent-subtle: rgba(184, 92, 60, 0.08);
 
   background: var(--bg-dark);
-  background-image:
-    linear-gradient(180deg, rgba(13, 17, 23, 0.98), rgba(8, 12, 18, 0.99)),
-    radial-gradient(
-      circle at 100% 0%,
-      rgba(179, 145, 85, 0.06),
-      transparent 28%
-    );
   color: var(--text-main);
 }
 
@@ -2557,7 +2554,7 @@ body.journal-page h2 {
 body.journal-page h1,
 body.journal-page h2,
 body.journal-page h3 {
-  color: #f0f6fc;
+  color: var(--text-heading);
 }
 
 body.journal-page p,
@@ -2572,24 +2569,24 @@ body.journal-page .muted {
 }
 
 body.journal-page a {
-  color: #d4a44e;
+  color: var(--accent-gold);
 }
 
 body.journal-page a:hover {
-  color: #e8bd6a;
+  color: var(--accent-hover);
   text-shadow: none;
 }
 
 body.journal-page .nav {
-  background: rgba(13, 17, 23, 0.92);
-  border-color: rgba(139, 148, 158, 0.1);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.24);
-  backdrop-filter: none;
-  -webkit-backdrop-filter: none;
+  background: rgba(250, 247, 242, 0.95);
+  border-color: rgba(44, 24, 16, 0.06);
+  box-shadow: 0 1px 3px rgba(44, 24, 16, 0.06);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 
 body.journal-page .brand a {
-  color: #f0f6fc;
+  color: var(--text-heading);
 }
 
 body.journal-page .links a {
@@ -2598,21 +2595,21 @@ body.journal-page .links a {
 
 body.journal-page .links a:hover,
 body.journal-page .links a[aria-current="page"] {
-  color: #e8bd6a;
+  color: var(--accent-gold);
 }
 
 body.journal-page .card,
 body.journal-page .surface-panel,
 body.journal-page .hero-stat {
-  background: rgba(22, 27, 34, 0.94);
-  border-color: rgba(139, 148, 158, 0.1);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+  background: var(--card-bg);
+  border-color: var(--card-border);
+  box-shadow: 0 1px 4px rgba(44, 24, 16, 0.05);
 }
 
 body.journal-page .card:hover {
   transform: none;
-  border-color: rgba(179, 145, 85, 0.18);
-  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.22);
+  border-color: var(--card-hover-border);
+  box-shadow: 0 2px 8px rgba(44, 24, 16, 0.08);
 }
 
 body.journal-page .card::before {
@@ -2620,39 +2617,37 @@ body.journal-page .card::before {
 }
 
 body.journal-page .cta-band {
-  background:
-    radial-gradient(circle at top, rgba(179, 145, 85, 0.08), transparent 42%),
-    linear-gradient(180deg, rgba(13, 17, 23, 0.98), rgba(8, 12, 18, 0.99));
+  background: var(--bg-surface);
 }
 
 body.journal-page .cta,
 body.journal-page button.cta {
-  background: #c9a04e;
-  color: #0d1117;
+  background: var(--accent-gold);
+  color: #ffffff;
   box-shadow: none;
 }
 
 body.journal-page .cta:hover,
 body.journal-page button.cta:hover {
-  background: #d4ad5e;
+  background: var(--accent-hover);
   filter: none;
 }
 
 body.journal-page .cta-ghost {
-  background: rgba(139, 148, 158, 0.04);
+  background: transparent;
   color: var(--text-main);
-  border-color: rgba(139, 148, 158, 0.1);
+  border-color: var(--card-border);
   box-shadow: none;
 }
 
 body.journal-page .badge {
-  background: rgba(179, 145, 85, 0.12);
-  border-color: rgba(179, 145, 85, 0.24);
-  color: #d9bc89;
+  background: var(--accent-subtle);
+  border-color: rgba(184, 92, 60, 0.15);
+  color: var(--accent-gold);
 }
 
 body.journal-page .footer {
-  border-top-color: rgba(139, 148, 158, 0.1);
+  border-top-color: rgba(44, 24, 16, 0.08);
   color: var(--text-muted);
 }
 
@@ -2800,10 +2795,10 @@ body.journal-page .footer {
 /* Article header */
 .journal-article-header {
   display: grid;
-  gap: 18px;
+  gap: 16px;
   margin: 0 0 40px;
-  padding: 8px 0 28px;
-  border-bottom: 1px solid var(--card-border);
+  padding: 8px 0 32px;
+  border-bottom: 1px solid rgba(44, 24, 16, 0.1);
 }
 
 .journal-article-meta-row {
@@ -2816,28 +2811,28 @@ body.journal-page .footer {
 .journal-article-category {
   display: inline-flex;
   align-items: center;
-  min-height: 32px;
-  padding: 4px 12px;
-  border-radius: 999px;
-  background: rgba(179, 145, 85, 0.12);
-  border: 1px solid rgba(179, 145, 85, 0.24);
-  color: #d9bc89;
-  font-size: 0.82rem;
+  min-height: 28px;
+  padding: 3px 10px;
+  border-radius: 4px;
+  background: var(--accent-subtle);
+  border: none;
+  color: var(--accent-gold);
+  font-size: 0.78rem;
   font-weight: 700;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
 }
 
 .journal-article-meta-separator {
-  color: rgba(139, 148, 158, 0.5);
+  color: rgba(44, 24, 16, 0.2);
 }
 
 .journal-article-header h1 {
-  max-width: 14ch;
+  max-width: 20em;
   margin: 0;
-  font-size: clamp(2.3rem, 5vw, 4.1rem);
-  line-height: 1.18;
-  letter-spacing: -0.03em;
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+  line-height: 1.3;
+  letter-spacing: -0.02em;
 }
 
 .journal-article-meta {
@@ -2847,11 +2842,11 @@ body.journal-page .footer {
 }
 
 .journal-article-lead {
-  max-width: 56ch;
+  max-width: 680px;
   margin: 0;
   color: var(--text-muted);
-  font-size: 1.05rem;
-  line-height: 1.9;
+  font-size: 1rem;
+  line-height: 1.85;
 }
 
 /* ── Prose typography for markdown article body ── */
@@ -3142,12 +3137,12 @@ body.journal-page .footer {
 
 /* References section */
 .journal-references {
-  background: rgba(22, 27, 34, 0.92);
-  border: 1px solid rgba(139, 148, 158, 0.1);
-  border-radius: 16px;
+  background: rgba(44, 24, 16, 0.02);
+  border: 1px solid rgba(44, 24, 16, 0.08);
+  border-radius: 8px;
   padding: 32px;
   margin-bottom: 48px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+  box-shadow: none;
 }
 
 .journal-references h2 {
@@ -3166,9 +3161,9 @@ body.journal-page .footer {
 
 /* Article nav */
 .journal-article-nav {
-  margin-top: 12px;
+  margin-top: 24px;
   padding-top: 28px;
-  border-top: 1px solid var(--card-border);
+  border-top: 1px solid rgba(44, 24, 16, 0.1);
 }
 
 .journal-nav-link {
@@ -3278,16 +3273,15 @@ body.journal-page .footer {
   line-height: 1.8;
 }
 
-/* Inline code in journal */
-.journal-article code,
+/* Inline code in journal (outside article body) */
 .journal-references code {
   font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
   font-size: 0.85em;
-  background: rgba(139, 148, 158, 0.06);
-  border: 1px solid rgba(139, 148, 158, 0.1);
-  border-radius: 4px;
-  padding: 2px 6px;
-  color: rgba(240, 229, 216, 0.95);
+  background: rgba(44, 24, 16, 0.04);
+  border: 1px solid rgba(44, 24, 16, 0.08);
+  border-radius: 3px;
+  padding: 2px 5px;
+  color: #6b4c3b;
   word-break: break-all;
 }
 
