@@ -1,5 +1,37 @@
 ---
 import ToolLayout from '../../layouts/ToolLayout.astro';
+
+const faqItems = [
+  {
+    question: 'この元号変換ツールで何ができますか？',
+    answer: '明治、大正、昭和、平成、令和について、西暦から元号、元号から西暦の両方向で変換できます。和暦の年号確認や書類入力前の確認向けです。',
+  },
+  {
+    question: '元年にも対応していますか？',
+    answer: 'はい。元年は1年として扱って換算できます。たとえば令和元年は2019年、平成元年は1989年です。',
+  },
+  {
+    question: 'どの時代まで対応していますか？',
+    answer: 'このページでは明治以降の元号に対応しています。古い時代の年号や旧暦換算は対象外です。',
+  },
+  {
+    question: '公的書類の最終確認にも使えますか？',
+    answer: '簡易確認には使えますが、重要な申請や証明書類では必ず公式書式や原本表記も確認してください。',
+  }
+];
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqItems.map((item) => ({
+    '@type': 'Question',
+    name: item.question,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: item.answer,
+    },
+  })),
+};
 ---
 <ToolLayout
   title="元号変換ツール | 明治・大正・昭和・平成・令和を西暦換算"
@@ -18,6 +50,10 @@ import ToolLayout from '../../layouts/ToolLayout.astro';
   gamePitch="元号で調べた時代の武将たちが、ゲーム内のカードとして登場します。"
   steamContext="日本史因果クロニクル — 時代をつなぐデッキ構築ローグライク"
 >
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+  </Fragment>
+
   <div class="tool-workspace">
     <div class="calculator-grid">
       <div class="calc-panel">
@@ -51,5 +87,49 @@ import ToolLayout from '../../layouts/ToolLayout.astro';
       </div>
     </div>
   </div>
+
+  <section class="tool-workspace tool-rich-section">
+    <h2>このツールでできること</h2>
+    <div class="tool-rich-grid">
+      <div class="tool-data-card">
+        <strong>西暦から元号へ換算</strong>
+        <span>西暦年を入力すると、その年に対応する元号をすぐ確認できます。</span>
+      </div>
+      <div class="tool-data-card">
+        <strong>元号から西暦へ換算</strong>
+        <span>令和、平成、昭和、大正、明治の各年を西暦に逆変換できます。</span>
+      </div>
+      <div class="tool-data-card">
+        <strong>書類入力前の確認に便利</strong>
+        <span>履歴書や申込書などで和暦が必要なとき、軽く確認してから記入できます。</span>
+      </div>
+      <div class="tool-data-card">
+        <strong>日本史の時代感覚の補助</strong>
+        <span>明治以降の年代を西暦と元号の両方で覚えたいときにも使えます。</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="tool-workspace tool-rich-section">
+    <h2>使い方</h2>
+    <ol class="tool-rich-list">
+      <li>西暦から調べたい場合は左側、元号から調べたい場合は右側を使います。</li>
+      <li>年を入力して「換算」を押すと、その場で結果が表示されます。</li>
+      <li>複数年を続けて確認したいときは、そのまま値を変えて再度換算してください。</li>
+    </ol>
+  </section>
+
+  <section class="tool-workspace tool-rich-section">
+    <h2>よくある質問</h2>
+    <div class="tool-faq-list">
+      {faqItems.map((item) => (
+        <details class="tool-faq-item">
+          <summary>{item.question}</summary>
+          <p>{item.answer}</p>
+        </details>
+      ))}
+    </div>
+  </section>
+
   <script is:inline src="/assets/js/history-tools.js"></script>
 </ToolLayout>
