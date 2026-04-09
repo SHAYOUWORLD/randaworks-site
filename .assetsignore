@@ -1,6 +1,7 @@
 .git/
 .github/
 .claude/
+.agents/
 .gitignore
 .assetsignore
 wrangler.toml
@@ -9,3 +10,15 @@ worker.js
 node_modules/
 .wrangler/
 .wrangler*
+src/
+public/
+journal-src/
+astro.config.mjs
+tsconfig.json
+package.json
+package-lock.json
+.env
+.env.*
+tmp-*
+games/inga/play/downloads/
+games/inga/play/build-v*
