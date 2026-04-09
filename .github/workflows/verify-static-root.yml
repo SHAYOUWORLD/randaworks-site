@@ -1,0 +1,19 @@
+name: Verify Static Root
+
+on:
+  pull_request:
+  push:
+    branches-ignore:
+      - main
+  workflow_dispatch:
+
+jobs:
+  verify-static-root:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Verify production static root files
+        shell: pwsh
+        run: ./.github/scripts/verify-static-root.ps1
