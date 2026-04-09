@@ -69,4 +69,72 @@ const {
 
     <Footer source={source} />
   </div>
+
+  <style is:inline>
+    .tool-rich-section {
+      display: grid;
+      gap: 14px;
+      margin-top: 20px;
+    }
+
+    .tool-rich-section h2 {
+      margin: 0;
+      color: #fff;
+      font-size: 1.08rem;
+    }
+
+    .tool-rich-section p,
+    .tool-rich-section li {
+      margin: 0;
+      color: var(--text-muted);
+      line-height: 1.75;
+      font-size: 0.92rem;
+    }
+
+    .tool-rich-list {
+      display: grid;
+      gap: 10px;
+      padding-left: 1.2rem;
+      margin: 0;
+    }
+
+    .tool-rich-grid {
+      display: grid;
+      gap: 14px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .tool-faq-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .tool-faq-item {
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.02);
+      padding: 14px 16px;
+    }
+
+    .tool-faq-item summary {
+      cursor: pointer;
+      color: #fff;
+      font-weight: 700;
+      list-style: none;
+    }
+
+    .tool-faq-item summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .tool-faq-item p {
+      margin-top: 10px;
+    }
+
+    @media (max-width: 720px) {
+      .tool-rich-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
 </BaseLayout>
