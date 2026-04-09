@@ -29,6 +29,9 @@ node_modules/
 # Draft articles (not for public repo - move to src/content/journal/ when ready to publish)
 drafts/
 
+# Internal docs (strategy, planning - not for public repo)
+docs/
+
 # Temporary files
 .tmp/
 output/
