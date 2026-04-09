@@ -6,6 +6,30 @@ import Breadcrumb from '../../components/Breadcrumb.astro';
 
 const historyTools = [
   {
+    kicker: '日本史 因果クイズ 350問',
+    title: '歴史シナリオで因果関係を学ぶ',
+    desc: '「もしあなたがこの時代にいたら？」飛鳥〜幕末の歴史的場面を追体験しながら因果関係を学ぶシナリオ型クイズ。全350問。',
+    href: '/nihonshi-inga-quiz/',
+    label: '因果クイズへ',
+    track: 'inga_quiz',
+  },
+  {
+    kicker: '日本史 一問一答 814問',
+    title: '択一問題＋用語クイズで定着',
+    desc: '受験頻出の択一問題350問と用語クイズ464語。ヒント・解説・混同注意ポイント付き。',
+    href: '/nihonshi-ichimon-ittou/',
+    label: '一問一答へ',
+    track: 'ichimon_ittou',
+  },
+  {
+    kicker: '日本史 因果チェーン 139本',
+    title: '歴史の因果関係を鎖で可視化',
+    desc: '政治・経済・文化のつながりをチェーンで表示。穴埋めクイズ＋一覧モードで因果関係を体系的に学べます。',
+    href: '/nihonshi-inga-chain/',
+    label: '因果チェーンへ',
+    track: 'inga_chain',
+  },
+  {
     kicker: '日本史クイズジェネレーター',
     title: '日本史クイズをランダム出題',
     desc: 'Wikipedia の公開概要をもとに、飛鳥から明治までの人物・出来事クイズをその場で生成します。',
@@ -77,6 +101,14 @@ const historyTools = [
     label: '史料ビューアページへ',
     track: 'shiryo',
   },
+  {
+    kicker: 'ふりがなツール',
+    title: '文章を語ごとに読みに変換',
+    desc: '形態素解析ベースで、人物名・地名を含む文章に語ごとのふりがなを付けます。',
+    href: '/tools/furigana/',
+    label: 'ふりがなページへ',
+    track: 'furigana',
+  },
 ];
 
 const utilityTools = [
@@ -95,6 +127,14 @@ const utilityTools = [
     href: '/tools/weather/',
     label: '過去の天気ページへ',
     track: 'weather',
+  },
+  {
+    kicker: '文字数カウンター',
+    title: 'X投稿用の文字数と残りを確認',
+    desc: '通常文字数、空白抜き、URL数に加え、X weighted count と各種上限を同時に確認できます。',
+    href: '/tools/moji-counter/',
+    label: '文字数カウンターページへ',
+    track: 'moji_counter',
   },
   {
     kicker: 'デッキ構築ボードゲーム図鑑',
@@ -123,9 +163,11 @@ const utilityTools = [
 ];
 
 const navLinks = [
+  { href: '/nihonshi-inga-quiz/', label: '因果クイズ' },
+  { href: '/nihonshi-ichimon-ittou/', label: '一問一答' },
+  { href: '/nihonshi-inga-chain/', label: '因果チェーン' },
   { href: '/nihonshi-quiz/', label: 'クイズ' },
   { href: '/wareki-converter/', label: '元号変換' },
-  { href: '/busho-profile-search/', label: '人物検索' },
   { href: '/games/inga/?src=history_tools_hub_nav', label: 'ゲームを見る' },
 ];
 

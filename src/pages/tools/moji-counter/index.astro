@@ -1,0 +1,461 @@
+---
+import ToolLayout from '../../../layouts/ToolLayout.astro';
+---
+<ToolLayout
+  title="文字数カウンター | X投稿文字数・行数・URL数を同時確認"
+  description="文字数、空白抜き文字数、行数、段落数、URL数、UTF-8バイト数、X投稿用のweighted countをリアルタイムで確認できます。"
+  canonical="https://www.randaworks.com/tools/moji-counter/"
+  pageType="char_counter"
+  source="moji_counter"
+  tag="X Count"
+  heading="文字数カウンター"
+  desc="通常の文字数だけでなく、X投稿向けのweighted countや残り文字数も同時に確認できます。"
+  breadcrumbs={[
+    { href: '/history-tools/', label: 'ツール集' },
+    { label: '文字数カウンター' },
+  ]}
+  excludeTools={['moji-counter']}
+  gamePitch="説明文や紹介文の文字量を整えると、ゲームの投稿や告知も読みやすくなります。"
+  steamContext="日本史因果クロニクル — 投稿文の長さを整える告知支援ツール"
+>
+  <Fragment slot="head">
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+  </Fragment>
+
+  <div class="tool-workspace">
+    <div class="tool-output counter-note" style="min-height:auto;margin-bottom:14px;">
+      <span class="tool-output-label">できること</span>
+      <p>通常文字数、空白抜き文字数、行数、段落数、URL数、UTF-8バイト数、読了目安をリアルタイムで表示します。</p>
+      <p>X の文字数は weighted count で計算し、URL は 23 文字換算、返信先頭メンション除外にも対応します。</p>
+    </div>
+
+    <div class="tool-chips" id="counterExamples">
+      <button type="button" data-text="関ヶ原の戦いで徳川家康が勝利した。">短文</button>
+      <button type="button" data-text="新作の体験版を公開しました。遊んだ感想をぜひ教えてください。 https://www.randaworks.com/games/inga/">URL入り投稿</button>
+      <button type="button" data-text="@user1 @user2 ご感想ありがとうございます。アップデート内容をまとめました。">返信風</button>
+    </div>
+
+    <div style="margin-bottom: 14px;">
+      <label for="counterInput" style="display:block; margin-bottom: 6px; color: var(--text-muted); font-size: 0.92rem;">テキストを入力</label>
+      <textarea id="counterInput" rows="10" placeholder="ここに文章を入力してください" style="width:100%;min-height:220px;padding:14px;border-radius:12px;border:1px solid rgba(255,255,255,0.12);background:rgba(255,255,255,0.04);color:#fff;font:inherit;resize:vertical;"></textarea>
+    </div>
+
+    <div class="counter-controls">
+      <label class="counter-check">
+        <input id="xReplyMode" type="checkbox" />
+        <span>Xの返信として計算する</span>
+      </label>
+      <label class="counter-custom-limit">
+        <span>任意上限</span>
+        <input id="customLimit" type="number" min="1" step="1" value="1000" />
+      </label>
+      <button class="tool-btn tool-btn-ghost" type="button" id="counterClearBtn">クリア</button>
+      <button class="tool-btn tool-btn-ghost" type="button" id="counterCopyBtn">本文をコピー</button>
+    </div>
+
+    <section class="counter-grid" id="counterPrimary">
+      <article class="counter-card counter-card-emphasis">
+        <span class="tool-output-label">通常文字数</span>
+        <strong id="countGraphemes">0</strong>
+        <span>見た目の文字単位</span>
+      </article>
+      <article class="counter-card counter-card-emphasis">
+        <span class="tool-output-label">X weighted count</span>
+        <strong id="countXWeighted">0</strong>
+        <span id="countXState">標準投稿 280字まで</span>
+      </article>
+      <article class="counter-card">
+        <span class="tool-output-label">空白抜き</span>
+        <strong id="countNoSpaces">0</strong>
+        <span>改行・空白を除外</span>
+      </article>
+      <article class="counter-card">
+        <span class="tool-output-label">行数</span>
+        <strong id="countLines">0</strong>
+        <span>改行単位</span>
+      </article>
+      <article class="counter-card">
+        <span class="tool-output-label">段落数</span>
+        <strong id="countParagraphs">0</strong>
+        <span>空行区切り</span>
+      </article>
+      <article class="counter-card">
+        <span class="tool-output-label">URL数</span>
+        <strong id="countUrls">0</strong>
+        <span id="countUrlReserved">Xでは0文字予約</span>
+      </article>
+      <article class="counter-card">
+        <span class="tool-output-label">単語数</span>
+        <strong id="countWords">0</strong>
+        <span>英語中心の語数</span>
+      </article>
+      <article class="counter-card">
+        <span class="tool-output-label">UTF-8バイト数</span>
+        <strong id="countBytes">0</strong>
+        <span>APIや保存サイズ確認向け</span>
+      </article>
+      <article class="counter-card">
+        <span class="tool-output-label">読了目安</span>
+        <strong id="countReading">0秒</strong>
+        <span>日本語500字/分、英語200語/分</span>
+      </article>
+    </section>
+
+    <section class="counter-grid counter-grid-limits">
+      <article class="counter-card limit-card">
+        <span class="tool-output-label">X 標準</span>
+        <strong id="limitXStandard">残り 280</strong>
+        <span>weighted countで計算</span>
+      </article>
+      <article class="counter-card limit-card">
+        <span class="tool-output-label">X 長文</span>
+        <strong id="limitXLong">残り 4000</strong>
+        <span>長文投稿の目安</span>
+      </article>
+      <article class="counter-card limit-card">
+        <span class="tool-output-label">Instagram</span>
+        <strong id="limitInstagram">残り 2200</strong>
+        <span>キャプション上限</span>
+      </article>
+      <article class="counter-card limit-card">
+        <span class="tool-output-label">LINE</span>
+        <strong id="limitLine">残り 500</strong>
+        <span>メッセージ目安</span>
+      </article>
+      <article class="counter-card limit-card">
+        <span class="tool-output-label">Meta Description</span>
+        <strong id="limitMeta">残り 160</strong>
+        <span>SEO用目安</span>
+      </article>
+      <article class="counter-card limit-card">
+        <span class="tool-output-label">任意上限</span>
+        <strong id="limitCustom">残り 1000</strong>
+        <span>自由に設定</span>
+      </article>
+    </section>
+  </div>
+
+  <div class="tool-rich-section">
+    <section class="tool-output" style="min-height:auto;">
+      <h2>使い方</h2>
+      <ol class="tool-rich-list">
+        <li>本文を貼り付けると、文字数やURL数がリアルタイムで更新されます。</li>
+        <li>X投稿を作るときは `X weighted count` と `X 標準` の残り文字数を見ます。</li>
+        <li>返信文なら `Xの返信として計算する` をオンにすると、先頭メンションを除外して確認できます。</li>
+      </ol>
+    </section>
+  </div>
+
+  <script type="module" is:inline>
+    let twitterTextPromise = null;
+    const URL_LENGTH = 23;
+    const LIMITS = {
+      xStandard: 280,
+      xLong: 4000,
+      instagram: 2200,
+      line: 500,
+      meta: 160
+    };
+
+    const encoder = new TextEncoder();
+    const graphemeSegmenter = typeof Intl !== 'undefined' && Intl.Segmenter
+      ? new Intl.Segmenter('ja', { granularity: 'grapheme' })
+      : null;
+    const wordSegmenter = typeof Intl !== 'undefined' && Intl.Segmenter
+      ? new Intl.Segmenter('ja', { granularity: 'word' })
+      : null;
+
+    function $(id) { return document.getElementById(id); }
+
+    function track(name, payload) {
+      if (window.RandaAnalytics && typeof window.RandaAnalytics.track === 'function') {
+        window.RandaAnalytics.track(name, payload || {});
+      }
+      if (typeof gtag === 'function') {
+        gtag('event', name, payload || {});
+      }
+    }
+
+    function getTwitterText() {
+      if (!twitterTextPromise) {
+        twitterTextPromise = import('https://cdn.jsdelivr.net/npm/twitter-text@3.1.0/+esm')
+          .catch(() => null);
+      }
+      return twitterTextPromise;
+    }
+
+    function getGraphemes(text) {
+      if (!text) return [];
+      if (graphemeSegmenter) {
+        return Array.from(graphemeSegmenter.segment(text), (item) => item.segment);
+      }
+      return Array.from(text);
+    }
+
+    function countWords(text) {
+      if (!text.trim()) return 0;
+      if (wordSegmenter) {
+        return Array.from(wordSegmenter.segment(text)).filter((item) => item.isWordLike).length;
+      }
+      const matches = text.trim().match(/[^\s]+/g);
+      return matches ? matches.length : 0;
+    }
+
+    function findUrls(text) {
+      const matches = text.match(/https?:\/\/[^\s]+|www\.[^\s]+/gi);
+      return matches || [];
+    }
+
+    function isEmoji(grapheme) {
+      return /\p{Extended_Pictographic}/u.test(grapheme);
+    }
+
+    function isWideXChar(grapheme) {
+      return /[\p{Script=Han}\p{Script=Hiragana}\p{Script=Katakana}\p{Script=Hangul}]/u.test(grapheme);
+    }
+
+    function stripReplyMentions(text) {
+      return text.replace(/^(?:\s*@[\w_]{1,15})+\s*/u, '');
+    }
+
+    function fallbackXCount(text, replyMode) {
+      let source = text.normalize('NFC');
+      if (replyMode) {
+        source = stripReplyMentions(source);
+      }
+
+      const urlRegex = /https?:\/\/[^\s]+|www\.[^\s]+/gi;
+      let weighted = 0;
+      let cursor = 0;
+      let match;
+
+      while ((match = urlRegex.exec(source)) !== null) {
+        const before = source.slice(cursor, match.index);
+        getGraphemes(before).forEach((grapheme) => {
+          if (isEmoji(grapheme) || isWideXChar(grapheme)) {
+            weighted += 2;
+          } else {
+            weighted += 1;
+          }
+        });
+        weighted += URL_LENGTH;
+        cursor = match.index + match[0].length;
+      }
+
+      const tail = source.slice(cursor);
+      getGraphemes(tail).forEach((grapheme) => {
+        if (isEmoji(grapheme) || isWideXChar(grapheme)) {
+          weighted += 2;
+        } else {
+          weighted += 1;
+        }
+      });
+
+      return {
+        weightedLength: weighted,
+        valid: weighted <= LIMITS.xStandard
+      };
+    }
+
+    async function getXMetrics(text, replyMode) {
+      const lib = await getTwitterText();
+      const source = replyMode ? stripReplyMentions(text) : text;
+      const parseTweet = lib && (lib.parseTweet || (lib.default && lib.default.parseTweet));
+      if (typeof parseTweet === 'function') {
+        return parseTweet(source);
+      }
+      return fallbackXCount(source, false);
+    }
+
+    function formatRemaining(limit, current) {
+      const remaining = limit - current;
+      return '残り ' + remaining.toLocaleString();
+    }
+
+    function formatReadingTime(text, words, graphemesNoSpace) {
+      const latinWords = words;
+      const japaneseChars = (text.match(/[\p{Script=Han}\p{Script=Hiragana}\p{Script=Katakana}]/gu) || []).length;
+      const seconds = Math.ceil((japaneseChars / 500 + latinWords / 200) * 60);
+      if (seconds <= 0) return '0秒';
+      if (seconds < 60) return seconds + '秒';
+      const min = Math.floor(seconds / 60);
+      const sec = seconds % 60;
+      return sec ? min + '分' + sec + '秒' : min + '分';
+    }
+
+    function updateCounterCard(id, value) {
+      const el = $(id);
+      if (el) el.textContent = value;
+    }
+
+    function updateLimitCard(id, current, limit) {
+      const el = $(id);
+      if (!el) return;
+      el.textContent = formatRemaining(limit, current);
+      el.classList.toggle('over-limit', current > limit);
+    }
+
+    async function recalc() {
+      const text = $('counterInput').value || '';
+      const replyMode = $('xReplyMode').checked;
+      const customLimit = Math.max(1, Number($('customLimit').value || 1000));
+
+      const graphemes = getGraphemes(text);
+      const noSpaces = getGraphemes(text.replace(/\s/gu, ''));
+      const lines = text ? text.split(/\r\n|\r|\n/).length : 0;
+      const paragraphs = text.trim() ? text.trim().split(/\n\s*\n/).length : 0;
+      const urls = findUrls(text);
+      const words = countWords(text);
+      const bytes = encoder.encode(text).length;
+      const xResult = await getXMetrics(text, replyMode);
+      const xWeighted = Number(xResult && xResult.weightedLength ? xResult.weightedLength : 0);
+
+      updateCounterCard('countGraphemes', graphemes.length.toLocaleString());
+      updateCounterCard('countNoSpaces', noSpaces.length.toLocaleString());
+      updateCounterCard('countLines', lines.toLocaleString());
+      updateCounterCard('countParagraphs', paragraphs.toLocaleString());
+      updateCounterCard('countUrls', urls.length.toLocaleString());
+      updateCounterCard('countWords', words.toLocaleString());
+      updateCounterCard('countBytes', bytes.toLocaleString());
+      updateCounterCard('countXWeighted', xWeighted.toLocaleString());
+      updateCounterCard('countReading', formatReadingTime(text, words, noSpaces.length));
+      updateCounterCard('countXState', replyMode ? '返信先頭メンション除外' : '標準投稿 280字まで');
+      updateCounterCard('countUrlReserved', 'Xでは ' + (urls.length * URL_LENGTH).toLocaleString() + '文字予約');
+
+      updateLimitCard('limitXStandard', xWeighted, LIMITS.xStandard);
+      updateLimitCard('limitXLong', xWeighted, LIMITS.xLong);
+      updateLimitCard('limitInstagram', graphemes.length, LIMITS.instagram);
+      updateLimitCard('limitLine', graphemes.length, LIMITS.line);
+      updateLimitCard('limitMeta', graphemes.length, LIMITS.meta);
+      updateLimitCard('limitCustom', graphemes.length, customLimit);
+    }
+
+    function init() {
+      const input = $('counterInput');
+      const clearBtn = $('counterClearBtn');
+      const copyBtn = $('counterCopyBtn');
+      const replyMode = $('xReplyMode');
+      const customLimit = $('customLimit');
+      const chips = document.querySelectorAll('[data-text]');
+
+      input.addEventListener('input', recalc);
+      replyMode.addEventListener('change', recalc);
+      customLimit.addEventListener('input', recalc);
+
+      clearBtn.addEventListener('click', () => {
+        input.value = '';
+        recalc();
+      });
+
+      copyBtn.addEventListener('click', async () => {
+        if (!input.value) return;
+        await navigator.clipboard.writeText(input.value);
+      });
+
+      chips.forEach((chip) => {
+        chip.addEventListener('click', () => {
+          input.value = chip.getAttribute('data-text') || '';
+          recalc();
+        });
+      });
+
+      recalc();
+      input.addEventListener('blur', () => {
+        if (input.value.trim()) {
+          track('moji_counter_use', { length: input.value.length });
+        }
+      });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init, { once: true });
+    } else {
+      init();
+    }
+  </script>
+
+  <style is:inline>
+    .counter-note p {
+      margin: 0;
+      color: var(--text-muted);
+      font-size: 0.88rem;
+      line-height: 1.7;
+    }
+
+    .counter-note {
+      display: grid;
+      gap: 6px;
+    }
+
+    .counter-controls {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .counter-check,
+    .counter-custom-limit {
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    .counter-custom-limit input {
+      width: 100px;
+      padding: 8px 10px;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.04);
+      color: #fff;
+      font: inherit;
+    }
+
+    .counter-grid {
+      display: grid;
+      gap: 12px;
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    }
+
+    .counter-grid + .counter-grid {
+      margin-top: 14px;
+    }
+
+    .counter-card {
+      display: grid;
+      gap: 8px;
+      padding: 16px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.03);
+    }
+
+    .counter-card strong {
+      color: #fff;
+      font-size: clamp(1.5rem, 3vw, 2rem);
+      line-height: 1.1;
+    }
+
+    .counter-card span:last-child {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      line-height: 1.6;
+    }
+
+    .counter-card-emphasis {
+      background: linear-gradient(180deg, rgba(87,164,212,0.16), rgba(255,255,255,0.03));
+      border-color: rgba(87,164,212,0.26);
+    }
+
+    .limit-card strong {
+      font-size: 1.2rem;
+    }
+
+    .over-limit {
+      color: #ff8f8f;
+    }
+  </style>
+</ToolLayout>

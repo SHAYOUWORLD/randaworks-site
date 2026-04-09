@@ -1,0 +1,152 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import ArticleSchema from '../components/ArticleSchema.astro';
+import { getReadingTime } from '../utils/reading-time.ts';
+
+interface Props {
+  title: string;
+  description: string;
+  pubDate: Date;
+  updatedDate?: Date;
+  category: string;
+  tags: string[];
+  heroImage?: string;
+  rawContent: string;
+}
+
+const {
+  title,
+  description,
+  pubDate,
+  updatedDate,
+  category,
+  tags,
+  heroImage,
+  rawContent,
+} = Astro.props;
+
+const categoryLabels: Record<string, string> = {
+  'devlog': '開発ログ',
+  'game-design': 'ゲーム設計',
+  'research': 'リサーチ',
+  'ai': 'AI活用',
+  'guides': 'ガイド',
+};
+
+const categoryLabel = categoryLabels[category] || category;
+const categoryUrl = `https://www.randaworks.com/journal/${category}/`;
+const canonicalUrl = Astro.url.href;
+const ogImage = heroImage || 'https://www.randaworks.com/assets/img/randaworks_logo_full.png';
+const readingTime = getReadingTime(rawContent);
+
+const formatDate = (date: Date) => {
+  return `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日`;
+};
+
+const formatDateISO = (date: Date) => date.toISOString().split('T')[0];
+
+const navLinks = [
+  { href: '/journal/', label: '制作ノート' },
+  { href: '/games/inga/?src=nav', label: 'ゲームを見る' },
+  { href: '/history-tools/', label: 'ツール集' },
+  { href: '/contact/', label: 'お問い合わせ' },
+];
+---
+<BaseLayout
+  title={`${title} | ${categoryLabel} | RandaWorks`}
+  description={description}
+  canonical={canonicalUrl}
+  ogImage={ogImage}
+  pageType="journal"
+>
+  <Fragment slot="head">
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="RandaWorks" />
+    <meta property="og:locale" content="ja_JP" />
+    <meta name="twitter:site" content="@RandaWorksJP" />
+    <link rel="alternate" type="application/rss+xml" title="RandaWorks 制作ノート" href="/rss.xml" />
+    <ArticleSchema
+      title={title}
+      description={description}
+      url={canonicalUrl}
+      image={ogImage}
+      datePublished={formatDateISO(pubDate)}
+      dateModified={updatedDate ? formatDateISO(updatedDate) : undefined}
+      category={categoryLabel}
+      categoryUrl={categoryUrl}
+    />
+  </Fragment>
+
+  <div class="container journal-page">
+    <Nav links={navLinks} />
+
+    <main id="main-content">
+      <nav aria-label="パンくずリスト">
+        <ul class="breadcrumb">
+          <li><a href="/">ホーム</a></li>
+          <li class="breadcrumb-separator" aria-hidden="true">›</li>
+          <li><a href="/journal/">制作ノート</a></li>
+          <li class="breadcrumb-separator" aria-hidden="true">›</li>
+          <li><a href={`/journal/${category}/`}>{categoryLabel}</a></li>
+          <li class="breadcrumb-separator" aria-hidden="true">›</li>
+          <li class="breadcrumb-current" aria-current="page">{title.length > 30 ? title.slice(0, 30) + '…' : title}</li>
+        </ul>
+      </nav>
+
+      <article class="journal-article">
+        <header class="journal-article-header">
+          <div class="journal-article-meta-row">
+            <span class="journal-article-category">{categoryLabel}</span>
+            <span class="journal-article-meta-separator" aria-hidden="true">&bull;</span>
+            <time class="journal-article-meta" datetime={formatDateISO(pubDate)}>{formatDate(pubDate)}</time>
+            {updatedDate && (
+              <span class="journal-article-meta">（更新: {formatDate(updatedDate)}）</span>
+            )}
+            <span class="journal-article-meta-separator" aria-hidden="true">&bull;</span>
+            <span class="journal-article-meta">{readingTime}で読める</span>
+          </div>
+          <h1>{title}</h1>
+          <p class="journal-article-lead">{description}</p>
+        </header>
+
+        {tags.length > 0 && (
+          <div class="journal-tags">
+            {tags.map((tag) => (
+              <span class="journal-tag">#{tag}</span>
+            ))}
+          </div>
+        )}
+
+        <div class="journal-article-body">
+          <slot />
+        </div>
+
+        <nav class="journal-article-nav" aria-label="記事ナビゲーション">
+          <a class="journal-nav-link" href={`/journal/${category}/`}>← {categoryLabel}一覧へ戻る</a>
+        </nav>
+      </article>
+    </main>
+
+    <Footer source="journal" />
+  </div>
+</BaseLayout>
+
+<style is:inline>
+  .journal-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 32px;
+  }
+
+  .journal-tag {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 999px;
+    padding: 2px 10px;
+  }
+</style>

@@ -18,6 +18,7 @@
 [data-page-type="shiryo"]            { --tool-accent: #9b8e7b; --tool-glow: rgba(155,142,123,0.10); }
 [data-page-type="furigana"],
 [data-page-type="furigana_maintenance"] { --tool-accent: #e0967e; --tool-glow: rgba(224,150,126,0.10); }
+[data-page-type="char_counter"]      { --tool-accent: #57a4d4; --tool-glow: rgba(87,164,212,0.12); }
 [data-page-type="past_weather"]      { --tool-accent: #6db0a0; --tool-glow: rgba(109,176,160,0.10); }
 [data-page-type="deckgames"]         { --tool-accent: #c97373; --tool-glow: rgba(201,115,115,0.10); }
 [data-page-type="steamstats"]        { --tool-accent: #7a9ec7; --tool-glow: rgba(122,158,199,0.10); }
@@ -688,4 +689,512 @@ a.history-tools-link-card:hover { text-shadow: none; }
   .quiz-option-grid { grid-template-columns: 1fr; }
   .quiz-answer { grid-template-columns: 1fr; }
   .history-tools-hero { padding: 24px 18px; }
+}
+
+/* ==========================================================================
+   Quiz Pages — 因果クイズ / 一問一答 / 因果チェーン
+   ========================================================================== */
+
+/* --- Page accents --- */
+[data-page-type="inga_quiz"]     { --tool-accent: #d4534b; --tool-glow: rgba(212,83,75,0.10); }
+[data-page-type="ichimon_ittou"] { --tool-accent: #5b8cc7; --tool-glow: rgba(91,140,199,0.10); }
+[data-page-type="inga_chain"]    { --tool-accent: #4a9e7a; --tool-glow: rgba(74,158,122,0.10); }
+
+/* --- Era badge --- */
+.era-badge {
+  display: inline-flex; align-items: center;
+  padding: 3px 10px; border-radius: 6px;
+  font-size: 0.72rem; font-weight: 600; letter-spacing: 0.04em;
+  background: color-mix(in srgb, var(--era-color, #888) 15%, transparent);
+  color: var(--era-color, #888);
+  border: 1px solid color-mix(in srgb, var(--era-color, #888) 25%, transparent);
+  white-space: nowrap;
+}
+[data-era="asuka_nara"] { --era-color: #4a7c59; }
+[data-era="heian"]      { --era-color: #8b5cf6; }
+[data-era="kamakura"]   { --era-color: #3b82f6; }
+[data-era="muromachi"]  { --era-color: #6366f1; }
+[data-era="sengoku"]    { --era-color: #ef4444; }
+[data-era="azuchi"]     { --era-color: #f59e0b; }
+[data-era="edo"]        { --era-color: #0ea5e9; }
+[data-era="bakumatsu"]  { --era-color: #f97316; }
+[data-era="all"]        { --era-color: #9ca3af; }
+
+/* --- Era chip filter --- */
+.era-chips {
+  display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 18px;
+}
+.era-chip {
+  padding: 5px 12px; border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.03);
+  color: rgba(255,255,255,0.6);
+  font: inherit; font-size: 0.78rem; cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.era-chip:hover {
+  border-color: color-mix(in srgb, var(--era-color, #888) 40%, transparent);
+  color: var(--era-color, #888);
+}
+.era-chip.is-active {
+  background: color-mix(in srgb, var(--era-color, #888) 15%, transparent);
+  border-color: color-mix(in srgb, var(--era-color, #888) 40%, transparent);
+  color: var(--era-color, #888);
+  font-weight: 600;
+}
+.era-chip .era-chip-count {
+  font-size: 0.68rem; opacity: 0.7; margin-left: 3px;
+}
+
+/* --- Quiz score bar --- */
+.quiz-score-bar {
+  display: flex; gap: 16px; align-items: center; flex-wrap: wrap;
+  margin-bottom: 16px; padding: 12px 18px;
+  border-radius: 10px;
+  background: rgba(0,0,0,0.3);
+  border: 1px solid rgba(255,255,255,0.05);
+  font-size: 0.82rem; color: rgba(255,255,255,0.6);
+}
+.quiz-score-bar .score-label { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.06em; opacity: 0.7; }
+.quiz-score-bar .score-value { font-family: "Space Grotesk", sans-serif; font-size: 1.1rem; font-weight: 700; color: #fff; }
+.quiz-score-bar .score-item { display: flex; flex-direction: column; gap: 2px; }
+.quiz-score-bar .score-divider { width: 1px; height: 28px; background: rgba(255,255,255,0.08); }
+.quiz-score-bar .streak-fire { color: #f59e0b; }
+
+/* --- Quiz question card --- */
+.quiz-question-card {
+  padding: 24px; border-radius: 14px; margin-bottom: 16px;
+  background: rgba(0,0,0,0.25);
+  border: 1px solid rgba(255,255,255,0.06);
+}
+.quiz-question-card .quiz-q-header {
+  display: flex; align-items: center; gap: 10px; margin-bottom: 14px; flex-wrap: wrap;
+}
+.quiz-question-card .quiz-q-number {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 0.72rem; font-weight: 700; letter-spacing: 0.06em;
+  color: var(--tool-accent); text-transform: uppercase;
+}
+.quiz-question-card .quiz-q-title {
+  font-family: "Space Grotesk", "Noto Sans JP", sans-serif;
+  font-size: 1.1rem; font-weight: 600; color: #fff; margin: 0 0 10px;
+}
+.quiz-question-card .quiz-q-text {
+  font-size: 0.92rem; line-height: 1.75; color: rgba(255,255,255,0.8);
+  margin: 0; white-space: pre-line;
+}
+
+/* --- Quiz choices (enhanced) --- */
+.quiz-choices {
+  display: grid; gap: 10px; margin-bottom: 16px;
+}
+.quiz-choice {
+  display: flex; align-items: flex-start; gap: 12px;
+  padding: 14px 18px; border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.03);
+  color: #fff; font: inherit; font-size: 0.9rem; line-height: 1.6;
+  text-align: left; cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.quiz-choice:hover:not(:disabled) {
+  border-color: color-mix(in srgb, var(--tool-accent) 50%, transparent);
+  background: var(--tool-glow);
+  transform: translateY(-1px);
+}
+.quiz-choice:disabled { cursor: default; }
+.quiz-choice .choice-num {
+  flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+  width: 26px; height: 26px; border-radius: 50%;
+  font-family: "Space Grotesk", sans-serif; font-size: 0.78rem; font-weight: 700;
+  background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.5);
+  transition: all 0.2s;
+}
+.quiz-choice.is-correct {
+  background: rgba(74, 158, 122, 0.15);
+  border-color: rgba(74, 158, 122, 0.5);
+}
+.quiz-choice.is-correct .choice-num {
+  background: #4a9e7a; color: #fff;
+}
+.quiz-choice.is-wrong {
+  background: rgba(212, 83, 75, 0.12);
+  border-color: rgba(212, 83, 75, 0.4);
+}
+.quiz-choice.is-wrong .choice-num {
+  background: #d4534b; color: #fff;
+}
+.quiz-choice.is-dimmed {
+  opacity: 0.45;
+}
+
+/* --- Feedback tag badges --- */
+.feedback-tag {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 4px 12px; border-radius: 6px;
+  font-size: 0.75rem; font-weight: 700; letter-spacing: 0.04em;
+}
+.feedback-tag--correct {
+  background: rgba(74,158,122,0.18); color: #6dd5a0;
+  border: 1px solid rgba(74,158,122,0.3);
+}
+.feedback-tag--wrong {
+  background: rgba(212,83,75,0.15); color: #f08080;
+  border: 1px solid rgba(212,83,75,0.3);
+}
+.feedback-tag--anachronism {
+  background: rgba(239,68,68,0.12); color: #f87171;
+  border: 1px solid rgba(239,68,68,0.25);
+}
+.feedback-tag--confusion {
+  background: rgba(245,158,11,0.12); color: #fbbf24;
+  border: 1px solid rgba(245,158,11,0.25);
+}
+.feedback-tag--absurd {
+  background: rgba(220,38,38,0.15); color: #fca5a5;
+  border: 1px solid rgba(220,38,38,0.3);
+}
+
+/* --- Feedback panel --- */
+.quiz-feedback {
+  padding: 22px; border-radius: 14px; margin-top: 14px;
+  background: rgba(0,0,0,0.2);
+  border: 1px solid rgba(255,255,255,0.06);
+  animation: quizFeedbackIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+@keyframes quizFeedbackIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.quiz-feedback-text {
+  font-size: 0.9rem; line-height: 1.7; color: rgba(255,255,255,0.8);
+  margin: 12px 0;
+}
+
+/* Anchor facts */
+.quiz-facts {
+  list-style: none; padding: 0; margin: 14px 0 0;
+  display: grid; gap: 8px;
+}
+.quiz-facts li {
+  padding: 10px 14px; border-radius: 8px;
+  background: rgba(255,255,255,0.03);
+  border-left: 3px solid var(--tool-accent);
+  font-size: 0.85rem; line-height: 1.6; color: rgba(255,255,255,0.75);
+}
+
+/* Remember box */
+.quiz-remember {
+  margin-top: 14px; padding: 14px 18px; border-radius: 10px;
+  background: color-mix(in srgb, var(--tool-accent) 8%, transparent);
+  border: 1px solid color-mix(in srgb, var(--tool-accent) 20%, transparent);
+}
+.quiz-remember-label {
+  display: block; font-size: 0.68rem; font-weight: 700;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--tool-accent); margin-bottom: 6px;
+}
+.quiz-remember p {
+  font-size: 0.88rem; line-height: 1.6; color: rgba(255,255,255,0.85);
+  margin: 0;
+}
+
+/* Wiki links */
+.quiz-wiki-links {
+  display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px;
+}
+.quiz-wiki-link {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 5px 12px; border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.02);
+  color: rgba(255,255,255,0.7); font-size: 0.8rem;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+.quiz-wiki-link:hover {
+  border-color: color-mix(in srgb, var(--tool-accent) 40%, transparent);
+  color: #fff; text-shadow: none;
+}
+.quiz-wiki-link::before { content: "📖 "; font-size: 0.75rem; }
+
+/* Key points / Confusion points */
+.quiz-points {
+  margin-top: 14px; display: grid; gap: 6px;
+}
+.quiz-points-label {
+  font-size: 0.7rem; font-weight: 700; letter-spacing: 0.06em;
+  text-transform: uppercase; color: var(--tool-accent); margin-bottom: 4px;
+}
+.quiz-point {
+  padding: 8px 12px; border-radius: 8px;
+  background: rgba(255,255,255,0.03);
+  font-size: 0.84rem; line-height: 1.55; color: rgba(255,255,255,0.7);
+}
+.quiz-point--caution {
+  border-left: 3px solid #f59e0b;
+  background: rgba(245,158,11,0.06);
+}
+
+/* Hint buttons */
+.quiz-hint-row {
+  display: flex; gap: 8px; margin-top: 10px;
+}
+.quiz-hint-btn {
+  padding: 6px 14px; border-radius: 8px;
+  border: 1px dashed rgba(255,255,255,0.15);
+  background: transparent;
+  color: rgba(255,255,255,0.5); font: inherit; font-size: 0.78rem;
+  cursor: pointer; transition: all 0.2s;
+}
+.quiz-hint-btn:hover { border-color: var(--tool-accent); color: var(--tool-accent); }
+.quiz-hint-btn:disabled { opacity: 0.3; cursor: default; }
+.quiz-hint-text {
+  padding: 10px 14px; border-radius: 8px; margin-top: 8px;
+  background: rgba(245,158,11,0.06);
+  border: 1px solid rgba(245,158,11,0.15);
+  font-size: 0.84rem; color: rgba(255,255,255,0.7);
+  animation: quizFeedbackIn 0.2s ease both;
+}
+
+/* Next button */
+.quiz-next-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  margin-top: 18px; padding: 12px 28px;
+  border-radius: 10px; border: none;
+  background: var(--tool-accent); color: #0a0a0a;
+  font: inherit; font-size: 0.88rem; font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s;
+}
+.quiz-next-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px color-mix(in srgb, var(--tool-accent) 30%, transparent);
+}
+
+/* Report button */
+.quiz-report-btn {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 8px 14px; border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: transparent;
+  color: rgba(255,255,255,0.4); font-size: 0.78rem;
+  text-decoration: none; cursor: pointer;
+  transition: all 0.2s;
+}
+.quiz-report-btn:hover {
+  border-color: rgba(245,158,11,0.4);
+  color: #fbbf24; text-shadow: none;
+}
+
+/* --- Mode toggle --- */
+.quiz-mode-toggle {
+  display: inline-flex; border-radius: 10px; overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.08);
+  margin-bottom: 16px;
+}
+.quiz-mode-btn {
+  padding: 8px 20px; border: none;
+  background: rgba(255,255,255,0.03);
+  color: rgba(255,255,255,0.5);
+  font: inherit; font-size: 0.82rem; font-weight: 500;
+  cursor: pointer; transition: all 0.2s;
+}
+.quiz-mode-btn.is-active {
+  background: color-mix(in srgb, var(--tool-accent) 20%, transparent);
+  color: var(--tool-accent); font-weight: 600;
+}
+.quiz-mode-btn:hover:not(.is-active) { color: rgba(255,255,255,0.8); }
+
+/* --- Chain visualization --- */
+.chain-card {
+  padding: 24px; border-radius: 14px;
+  background: rgba(0,0,0,0.25);
+  border: 1px solid rgba(255,255,255,0.06);
+  margin-bottom: 16px;
+}
+.chain-header {
+  display: flex; align-items: center; gap: 10px; margin-bottom: 18px; flex-wrap: wrap;
+}
+.chain-name {
+  font-family: "Space Grotesk", "Noto Sans JP", sans-serif;
+  font-size: 1.05rem; font-weight: 600; color: #fff;
+}
+.chain-importance {
+  font-size: 0.75rem; color: #f59e0b;
+}
+.chain-steps {
+  display: flex; flex-direction: column; gap: 0; position: relative;
+}
+.chain-step {
+  display: flex; align-items: flex-start; gap: 14px;
+  padding: 14px 16px; border-radius: 10px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+  position: relative;
+  transition: all 0.3s;
+}
+.chain-step + .chain-step { margin-top: 8px; }
+.chain-step::before {
+  content: ""; position: absolute;
+  left: 30px; top: -8px;
+  width: 2px; height: 8px;
+  background: rgba(255,255,255,0.1);
+}
+.chain-step:first-child::before { display: none; }
+.chain-step-num {
+  flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+  width: 28px; height: 28px; border-radius: 50%;
+  background: color-mix(in srgb, var(--tool-accent) 15%, transparent);
+  color: var(--tool-accent);
+  font-family: "Space Grotesk", sans-serif; font-size: 0.78rem; font-weight: 700;
+}
+.chain-step-content { flex: 1; min-width: 0; }
+.chain-step-word {
+  font-weight: 600; color: #fff; font-size: 0.92rem;
+}
+.chain-step-reading {
+  font-size: 0.75rem; color: rgba(255,255,255,0.4); margin-left: 6px;
+}
+.chain-step-summary {
+  font-size: 0.82rem; line-height: 1.55; color: rgba(255,255,255,0.6);
+  margin-top: 4px;
+}
+.chain-step.is-hidden {
+  border: 2px dashed color-mix(in srgb, var(--tool-accent) 40%, transparent);
+  background: color-mix(in srgb, var(--tool-accent) 5%, transparent);
+}
+.chain-step.is-hidden .chain-step-word {
+  color: var(--tool-accent);
+}
+.chain-step.is-revealed {
+  border-color: rgba(74,158,122,0.4);
+  background: rgba(74,158,122,0.08);
+  animation: quizFeedbackIn 0.3s ease both;
+}
+.chain-arrow {
+  display: flex; justify-content: center; padding: 2px 0;
+  color: rgba(255,255,255,0.15); font-size: 0.9rem;
+}
+
+/* --- Loading shimmer --- */
+.quiz-loading {
+  display: flex; align-items: center; justify-content: center;
+  min-height: 200px; color: rgba(255,255,255,0.4); font-size: 0.88rem;
+}
+.quiz-loading::after {
+  content: ""; display: inline-block; width: 18px; height: 18px;
+  margin-left: 8px; border: 2px solid rgba(255,255,255,0.1);
+  border-top-color: var(--tool-accent);
+  border-radius: 50%;
+  animation: quizSpin 0.7s linear infinite;
+}
+@keyframes quizSpin { to { transform: rotate(360deg); } }
+
+/* --- Responsive (quiz pages) --- */
+@media (max-width: 600px) {
+  .quiz-score-bar { gap: 10px; padding: 10px 14px; }
+  .quiz-score-bar .score-value { font-size: 0.95rem; }
+  .quiz-question-card { padding: 18px; }
+  .quiz-choice { padding: 12px 14px; font-size: 0.85rem; }
+  .chain-steps { gap: 0; }
+  .chain-step { padding: 12px; }
+  .era-chips { gap: 4px; }
+  .era-chip { padding: 4px 10px; font-size: 0.73rem; }
+}
+
+/* ==========================================================================
+   Rich Quiz Enhancements — Wikipedia cards, resource links, game preview
+   ========================================================================== */
+
+/* --- Wikipedia card --- */
+.wiki-card {
+  display: grid; grid-template-columns: 100px minmax(0, 1fr);
+  gap: 16px; align-items: start;
+  margin-top: 16px; padding: 18px; border-radius: 12px;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.06);
+  animation: quizFeedbackIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.wiki-card-thumb {
+  width: 100%; border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: #0b0d11; object-fit: cover;
+  aspect-ratio: 1;
+}
+.wiki-card-body { min-width: 0; }
+.wiki-card-title {
+  font-family: "Space Grotesk", "Noto Sans JP", sans-serif;
+  font-size: 0.95rem; font-weight: 600; color: #fff;
+  margin: 0 0 6px;
+}
+.wiki-card-extract {
+  font-size: 0.84rem; line-height: 1.65;
+  color: rgba(255,255,255,0.6); margin: 0 0 10px;
+}
+.wiki-card-link {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 0.8rem; color: var(--tool-accent);
+  text-decoration: none;
+}
+.wiki-card-link:hover { color: #fff; text-shadow: none; }
+
+@media (max-width: 600px) {
+  .wiki-card { grid-template-columns: 72px minmax(0, 1fr); gap: 12px; padding: 14px; }
+}
+
+/* --- Resource links grid --- */
+.quiz-resources {
+  display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px;
+}
+.quiz-resource {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 6px 14px; border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.06);
+  background: rgba(255,255,255,0.02);
+  color: rgba(255,255,255,0.55); font-size: 0.78rem;
+  text-decoration: none; transition: all 0.2s;
+}
+.quiz-resource:hover {
+  border-color: color-mix(in srgb, var(--tool-accent) 35%, transparent);
+  color: rgba(255,255,255,0.85); text-shadow: none;
+}
+.quiz-resource-icon { font-size: 0.85rem; }
+
+/* --- Game preview card --- */
+.quiz-game-cta {
+  display: grid; grid-template-columns: 140px minmax(0, 1fr);
+  gap: 16px; align-items: center;
+  margin-top: 18px; padding: 16px 20px; border-radius: 12px;
+  background:
+    linear-gradient(135deg, rgba(199,166,102,0.06), rgba(189,49,49,0.04));
+  border: 1px solid rgba(199,166,102,0.15);
+  text-decoration: none; color: inherit;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.quiz-game-cta:hover {
+  border-color: rgba(199,166,102,0.35);
+  transform: translateY(-1px);
+  text-shadow: none;
+}
+.quiz-game-cta-img {
+  width: 100%; border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.08);
+  object-fit: cover; aspect-ratio: 16/9;
+}
+.quiz-game-cta-body { min-width: 0; }
+.quiz-game-cta-label {
+  font-size: 0.68rem; font-weight: 700; letter-spacing: 0.06em;
+  text-transform: uppercase; color: #c7a666; margin-bottom: 4px;
+}
+.quiz-game-cta-title {
+  font-family: "Space Grotesk", "Noto Sans JP", sans-serif;
+  font-size: 0.92rem; font-weight: 600; color: #fff; margin-bottom: 4px;
+}
+.quiz-game-cta-desc {
+  font-size: 0.8rem; color: rgba(255,255,255,0.5); line-height: 1.5;
+}
+
+@media (max-width: 600px) {
+  .quiz-game-cta { grid-template-columns: 100px minmax(0, 1fr); gap: 12px; padding: 12px; }
 }
