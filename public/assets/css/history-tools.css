@@ -16,7 +16,8 @@
 [data-page-type="trivia"]            { --tool-accent: #b07cc6; --tool-glow: rgba(176,124,198,0.10); }
 [data-page-type="person_graph"]      { --tool-accent: #5b9bd5; --tool-glow: rgba(91,155,213,0.10); }
 [data-page-type="shiryo"]            { --tool-accent: #9b8e7b; --tool-glow: rgba(155,142,123,0.10); }
-[data-page-type="furigana"]          { --tool-accent: #e0967e; --tool-glow: rgba(224,150,126,0.10); }
+[data-page-type="furigana"],
+[data-page-type="furigana_maintenance"] { --tool-accent: #e0967e; --tool-glow: rgba(224,150,126,0.10); }
 [data-page-type="past_weather"]      { --tool-accent: #6db0a0; --tool-glow: rgba(109,176,160,0.10); }
 [data-page-type="deckgames"]         { --tool-accent: #c97373; --tool-glow: rgba(201,115,115,0.10); }
 [data-page-type="steamstats"]        { --tool-accent: #7a9ec7; --tool-glow: rgba(122,158,199,0.10); }
