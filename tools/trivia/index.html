@@ -1,0 +1,113 @@
+<!DOCTYPE html><html lang="ja"> <head><meta charset="utf-8"><script async src="https://www.googletagmanager.com/gtag/js?id=G-WNL49Q0CTT"></script><script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-WNL49Q0CTT');
+  </script><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="icon" href="/assets/img/randaworks_logo_icon.webp" type="image/webp"><title>世界史×日本史クロスクイズ | 英語の歴史トリビアに挑戦</title><meta name="description" content="Open Trivia DBの世界史クイズに日本史の出来事を組み合わせたクロスクイズ。英語圏の歴史トリビアと日本史を同時に学べます。"><link rel="canonical" href="https://www.randaworks.com/tools/trivia/"><meta property="og:type" content="website"><meta property="og:title" content="世界史×日本史クロスクイズ | 英語の歴史トリビアに挑戦"><meta property="og:description" content="Open Trivia DBの世界史クイズに日本史の出来事を組み合わせたクロスクイズ。英語圏の歴史トリビアと日本史を同時に学べます。"><meta property="og:url" content="https://www.randaworks.com/tools/trivia/"><meta property="og:image" content="https://www.randaworks.com/assets/img/games/inga/demo-cards/combo_nobunaga.jpg"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="世界史×日本史クロスクイズ | 英語の歴史トリビアに挑戦"><meta name="twitter:description" content="Open Trivia DBの世界史クイズに日本史の出来事を組み合わせたクロスクイズ。英語圏の歴史トリビアと日本史を同時に学べます。"><meta name="twitter:image" content="https://www.randaworks.com/assets/img/games/inga/demo-cards/combo_nobunaga.jpg"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Shippori+Mincho:wght@400;700&family=Space+Grotesk:wght@400;500;600;700&display=swap"><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Shippori+Mincho:wght@400;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Shippori+Mincho:wght@400;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet"></noscript><link rel="stylesheet" href="/assets/css/style.css"><link rel="stylesheet" href="/assets/css/history-tools.css"></head> <body data-page-type="trivia"> <a class="skip-link" href="#main-content">メインコンテンツへ移動</a>   <div class="container tool-page"> <header class="nav"> <div class="brand"><a href="/"><picture> <source srcset="/assets/img/randaworks_logo_text.webp" type="image/webp"> <img src="/assets/img/randaworks_logo_text.png" alt="RandaWorks" style="height: 28px; vertical-align: middle;"> </picture></a></div> <div class="links"> <a href="/history-tools/">ツール集</a><a href="/nihonshi-quiz/">日本史クイズ</a><a href="/busho-profile-search/">人物検索</a><a href="/games/inga/?src=nav">ゲームを見る</a> </div> </header> <main id="main-content"> <nav aria-label="パンくずリスト"> <ol class="breadcrumb"> <li><a href="/">ホーム</a></li>  <li class="breadcrumb-separator" aria-hidden="true">›</li> <li><a href="/history-tools/">ツール集</a></li> <li class="breadcrumb-separator" aria-hidden="true">›</li> <li class="breadcrumb-current" aria-current="page">世界史×日本史クロスクイズ</li> </ol> </nav> <div class="tool-page-header"> <h1>世界史×日本史クロスクイズ</h1> <span class="tool-page-tag">OpenTriviaDB</span> </div> <p class="tool-page-desc">英語圏の歴史トリビアに日本史を組み合わせた4択クイズ。</p>  <div class="tool-workspace" id="trivia-tool"> <div class="tool-input-row"> <label for="triviaDifficulty">難易度
+<select id="triviaDifficulty"> <option value="easy">Easy</option> <option value="medium" selected>Medium</option> <option value="hard">Hard</option> </select> </label> <button class="tool-btn" id="triviaNewBtn" type="button">新しい問題</button> </div> <div class="tool-output" id="triviaQuestion"></div> <div class="quiz-option-grid" id="triviaChoices"></div> <div class="tool-output" id="triviaExplanation"></div> </div> <script>
+  (function () {
+    var state = { correct: '', question: '' };
+
+    function $(id) { return document.getElementById(id); }
+    function escapeHtml(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+    function decodeHtml(s) { var t = document.createElement('textarea'); t.innerHTML = s; return t.value; }
+    function isLocalHost(){return /^(dev\.randa|localhost|127\.0\.0\.1)$/i.test(window.location.hostname);}
+    function apiBase(){return isLocalHost()?'http://127.0.0.1:8787':window.location.origin;}
+    function apiUrl(path, params){
+      var url = new URL(path, apiBase());
+      if(params){Object.keys(params).forEach(function(key){if(params[key])url.searchParams.set(key, params[key]);});}
+      return url.toString();
+    }
+
+    function track(name, payload) {
+      if (window.RandaAnalytics && typeof window.RandaAnalytics.track === 'function') window.RandaAnalytics.track(name, payload || {});
+      if (typeof gtag === 'function') gtag('event', name, payload || {});
+    }
+
+    function shuffle(arr) {
+      var a = arr.slice();
+      for (var i = a.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var t = a[i]; a[i] = a[j]; a[j] = t;
+      }
+      return a;
+    }
+
+    function fetchQuestion() {
+      var btn = $('triviaNewBtn');
+      var diff = $('triviaDifficulty').value;
+      btn.disabled = true;
+      btn.textContent = '取得中…';
+      $('triviaQuestion').innerHTML = '<span class="tool-output-label">問題を取得しています…</span>';
+      $('triviaChoices').innerHTML = '';
+      $('triviaExplanation').innerHTML = '';
+
+      fetch(apiUrl('/api/trivia/', { difficulty: diff }), { headers: { 'Accept': 'application/json' } })
+        .then(function (r) { if (!r.ok) throw new Error('fetch failed'); return r.json(); })
+        .then(function (data) {
+          if (!data.results || !data.results.length) throw new Error('no data');
+          var q = data.results[0];
+          state.correct = decodeHtml(q.correct_answer);
+          state.question = decodeHtml(q.question);
+          var choices = shuffle(q.incorrect_answers.map(decodeHtml).concat([state.correct]));
+
+          $('triviaQuestion').innerHTML =
+            '<span class="tool-output-label">History / ' + escapeHtml(q.difficulty) + '</span>' +
+            '<h3>' + escapeHtml(state.question) + '</h3>';
+
+          var container = $('triviaChoices');
+          container.innerHTML = '';
+          choices.forEach(function (c) {
+            var b = document.createElement('button');
+            b.type = 'button';
+            b.className = 'quiz-option';
+            b.textContent = c;
+            b.setAttribute('data-choice', c);
+            container.appendChild(b);
+          });
+
+          $('triviaExplanation').innerHTML = '<span class="tool-output-label">回答すると正解と解説を表示します。</span>';
+          track('trivia_question', { difficulty: diff });
+        })
+        .catch(function () {
+          $('triviaQuestion').innerHTML = '<span class="tool-output-label">現在このツールは工事中です。API 復旧後に再開します。</span>';
+        })
+        .finally(function () {
+          btn.disabled = false;
+          btn.textContent = '新しい問題';
+        });
+    }
+
+    function handleAnswer(e) {
+      var btn = e.target;
+      if (!btn || !btn.matches('.quiz-option') || !state.correct) return;
+      var chosen = btn.getAttribute('data-choice');
+      var isCorrect = chosen === state.correct;
+      var options = document.querySelectorAll('#triviaChoices .quiz-option');
+      Array.prototype.forEach.call(options, function (o) {
+        o.disabled = true;
+        var oc = o.getAttribute('data-choice') === state.correct;
+        o.classList.add(oc ? 'is-correct' : 'is-muted');
+        if (o === btn && !isCorrect) o.classList.add('is-incorrect');
+      });
+
+      $('triviaExplanation').innerHTML =
+        '<span class="tool-output-label">' + (isCorrect ? '正解です！' : '不正解。正解は「' + escapeHtml(state.correct) + '」です。') + '</span>' +
+        '<p>問題: ' + escapeHtml(state.question) + '</p>';
+
+      track('trivia_answer', { correct: isCorrect, answer: state.correct });
+    }
+
+    function init() {
+      $('triviaNewBtn').addEventListener('click', fetchQuestion);
+      $('triviaChoices').addEventListener('click', handleAnswer);
+      fetchQuestion();
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init, { once: true });
+    } else {
+      init();
+    }
+  })();
+  </script>  <div class="tool-footer-section"> <div class="tool-related-grid"> <div class="tool-related-card"> <h3>他のツール</h3> <div class="tool-related-links"> <a href="/nihonshi-quiz/">日本史クイズ</a><a href="/wareki-converter/">元号変換</a><a href="/busho-profile-search/">人物検索</a><a href="/tools/kanji/">漢字検索</a><a href="/tools/gacha/">武将ガチャ</a> </div> </div> <div class="tool-related-card"> <h3>ゲームとの接点</h3> <p style="color:var(--text-muted);font-size:0.85rem;margin:0 0 12px;">世界史と日本史の同時代比較は、ゲーム内のカード連鎖でも重要な視点です。</p> <div class="tool-related-links"> <a href="/games/inga/?src=trivia_game" data-track-event="cta_click" data-track-placement="trivia_game">詳細</a> <a href="/games/inga/play/?src=trivia_play" data-track-event="cta_click" data-track-placement="trivia_play">体験版</a> </div> </div> </div> <div class="tool-related-card" id="steam" style="margin-top:16px;"><span class="tool-output-label">日本史因果クロニクル — 因果関係で歴史を体験するカードゲーム</span><div class="steam-widget-shell"><iframe src="https://store.steampowered.com/widget/4403470/?utm_source=randaworks&#38;utm_medium=trivia&#38;utm_campaign=widget" title="日本史因果クロニクル Steam Store Widget" loading="lazy"></iframe></div></div> </div> </main> <footer class="footer"> <nav class="footer-nav" aria-label="フッターナビゲーション"> <a href="/about/">About</a> <a href="/privacy/">プライバシーポリシー</a> <a href="/terms/">利用規約</a> <a href="/contact/">お問い合わせ</a> </nav> <div class="footer-links"> <a href="/history-tools/">日本史ツール集</a> <a href="/nihonshi-quiz/">日本史クイズ</a> <a href="/busho-profile-search/">人物検索</a> <a href="/games/inga/?src=trivia_footer">ゲーム詳細</a> </div> <div>&copy; 2026 RandaWorks</div> </footer> </div>  <script src="/assets/js/analytics-config.js"></script> <script src="/assets/js/analytics.js"></script> </body> </html>
