@@ -1,0 +1,27 @@
+---
+interface BreadcrumbItem {
+  href?: string;
+  label: string;
+}
+
+interface Props {
+  items: BreadcrumbItem[];
+}
+
+const { items } = Astro.props;
+---
+<nav aria-label="パンくずリスト">
+  <ol class="breadcrumb">
+    <li><a href="/">ホーム</a></li>
+    {items.map((item, i) => (
+      <>
+        <li class="breadcrumb-separator" aria-hidden="true">›</li>
+        {i < items.length - 1 ? (
+          <li><a href={item.href}>{item.label}</a></li>
+        ) : (
+          <li class="breadcrumb-current" aria-current="page">{item.label}</li>
+        )}
+      </>
+    ))}
+  </ol>
+</nav>

@@ -1,0 +1,215 @@
+---
+import ToolLayout from '../../../layouts/ToolLayout.astro';
+---
+<ToolLayout
+  title="祝日・連休チェッカー | 年と国で祝日一覧を検索"
+  description="日本・アメリカ・イギリスなどの祝日一覧と3連休以上を検索。年と国を選ぶだけのシンプルな祝日チェッカーです。"
+  canonical="https://www.randaworks.com/tools/holidays/"
+  pageType="holiday_checker"
+  source="holidays"
+  tag="Nager.Date"
+  heading="祝日・連休チェッカー"
+  desc="年と国を選ぶだけで、祝日一覧と3連休以上の候補を表示します。旅行、営業日確認、記事ネタ探しに使えます。"
+  breadcrumbs={[
+    { href: '/history-tools/', label: 'ツール集' },
+    { label: '祝日・連休チェッカー' },
+  ]}
+  excludeTools={['holidays']}
+  gamePitch="連休にじっくり遊べる日本史デッキ構築ローグライク。ブラウザで体験版もプレイ可能。"
+  steamContext="日本史因果クロニクル — 連休にぴったりのカードゲーム"
+>
+  <div class="tool-workspace" id="holiday-tool">
+    <div class="tool-input-row">
+      <label>
+        年
+        <input id="holidayYear" type="number" min="1900" max="2100" value="2026">
+      </label>
+      <label>
+        国
+        <select id="holidayCountry"></select>
+      </label>
+      <button type="button" class="tool-btn" id="holidaySearchBtn">検索</button>
+    </div>
+
+    <div class="tool-chips" id="holidayChips"></div>
+
+    <div class="tool-output" id="holidayResult" aria-live="polite">
+      <span class="tool-output-label">年と国を選んで検索してください。</span>
+    </div>
+  </div>
+
+  <script is:inline>
+  (function () {
+    var COUNTRIES = [
+      { code: 'JP', label: '日本' },
+      { code: 'US', label: 'アメリカ' },
+      { code: 'GB', label: 'イギリス' },
+      { code: 'DE', label: 'ドイツ' },
+      { code: 'FR', label: 'フランス' },
+      { code: 'IT', label: 'イタリア' },
+      { code: 'ES', label: 'スペイン' },
+      { code: 'CA', label: 'カナダ' },
+      { code: 'AU', label: 'オーストラリア' },
+      { code: 'KR', label: '韓国' }
+    ];
+
+    function $(id) { return document.getElementById(id); }
+    function escapeHtml(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+    function isLocalHost(){return /^(dev\.randa|localhost|127\.0\.0\.1)$/i.test(window.location.hostname);}
+    function apiBase(){return isLocalHost()?'http://127.0.0.1:8787':window.location.origin;}
+    function apiUrl(path, params){
+      var url = new URL(path, apiBase());
+      if(params){Object.keys(params).forEach(function(key){if(params[key] != null && params[key] !== '') url.searchParams.set(key, params[key]);});}
+      return url.toString();
+    }
+
+    function track(name, payload) {
+      if (window.RandaAnalytics && typeof window.RandaAnalytics.track === 'function') window.RandaAnalytics.track(name, payload || {});
+      if (typeof gtag === 'function') gtag('event', name, payload || {});
+    }
+
+    function getCountryLabel(code) {
+      for (var i = 0; i < COUNTRIES.length; i++) {
+        if (COUNTRIES[i].code === code) return COUNTRIES[i].label;
+      }
+      return code;
+    }
+
+    function formatDateJa(dateStr) {
+      var parts = String(dateStr).split('-');
+      return parts[0] + '年' + Number(parts[1]) + '月' + Number(parts[2]) + '日';
+    }
+
+    function renderHolidayCards(holidays) {
+      if (!holidays.length) {
+        return '<p class="holiday-empty">祝日データがありません。</p>';
+      }
+
+      return '<div class="holiday-list">' + holidays.map(function (item) {
+        return '<div class="tool-data-card">' +
+          '<strong>' + escapeHtml(formatDateJa(item.date)) + '</strong>' +
+          '<span>' + escapeHtml(item.localName || item.name || '祝日') + '</span>' +
+          (item.name && item.localName !== item.name ? '<span>英語名: ' + escapeHtml(item.name) + '</span>' : '') +
+        '</div>';
+      }).join('') + '</div>';
+    }
+
+    function renderLongWeekends(spans) {
+      if (!spans.length) {
+        return '<p class="holiday-empty">3連休以上は見つかりませんでした。</p>';
+      }
+
+      return '<div class="holiday-list">' + spans.map(function (span) {
+        return '<div class="tool-data-card">' +
+          '<strong>' + escapeHtml(formatDateJa(span.startDate)) + ' 〜 ' + escapeHtml(formatDateJa(span.endDate)) + '</strong>' +
+          '<span>' + span.dayCount + '連休</span>' +
+          '<span>祝日を ' + span.holidayCount + ' 日含みます。</span>' +
+        '</div>';
+      }).join('') + '</div>';
+    }
+
+    function renderResult(payload) {
+      var holidays = payload.holidays || [];
+      var longWeekends = payload.longWeekends || [];
+      var result = $('holidayResult');
+      var countryName = getCountryLabel(payload.countryCode);
+      var firstHoliday = holidays.length ? formatDateJa(holidays[0].date) : '—';
+
+      result.innerHTML =
+        '<div class="holiday-shell">' +
+          '<div class="tool-data-grid">' +
+            '<div class="tool-data-card"><strong>' + escapeHtml(payload.year + '年 / ' + countryName) + '</strong><span>祝日検索結果</span></div>' +
+            '<div class="tool-data-card"><strong>' + holidays.length + '日</strong><span>祝日数</span></div>' +
+            '<div class="tool-data-card"><strong>' + longWeekends.length + '件</strong><span>3連休以上</span></div>' +
+            '<div class="tool-data-card"><strong>' + escapeHtml(firstHoliday) + '</strong><span>最初の祝日</span></div>' +
+          '</div>' +
+          '<div class="holiday-sections">' +
+            '<section>' +
+              '<p class="tool-note">3連休以上</p>' +
+              renderLongWeekends(longWeekends) +
+            '</section>' +
+            '<section>' +
+              '<p class="tool-note">祝日一覧</p>' +
+              renderHolidayCards(holidays) +
+            '</section>' +
+          '</div>' +
+        '</div>';
+    }
+
+    function runSearch(year, country, options) {
+      var shouldTrack = !options || options.track !== false;
+      var result = $('holidayResult');
+      result.innerHTML = '<span class="tool-output-label">祝日データを取得しています…</span>';
+
+      fetch(apiUrl('/api/holidays/', { year: year, country: country }), { headers: { 'Accept': 'application/json' } })
+        .then(function (response) { if (!response.ok) throw new Error('fetch failed'); return response.json(); })
+        .then(function (data) {
+          renderResult(data);
+          if (shouldTrack) {
+            track('holiday_search', { year: year, country: country });
+          }
+        })
+        .catch(function () {
+          result.innerHTML = '<span class="tool-output-label">現在このツールは工事中です。API 復旧後に再開します。</span>';
+        });
+    }
+
+    function init() {
+      var yearInput = $('holidayYear');
+      var countrySelect = $('holidayCountry');
+      var searchBtn = $('holidaySearchBtn');
+      var chips = $('holidayChips');
+      var now = new Date();
+      var currentYear = now.getFullYear();
+
+      yearInput.value = currentYear;
+
+      COUNTRIES.forEach(function (country) {
+        var option = document.createElement('option');
+        option.value = country.code;
+        option.textContent = country.label;
+        if (country.code === 'JP') option.selected = true;
+        countrySelect.appendChild(option);
+      });
+
+      [
+        { label: '今年の日本', year: currentYear, country: 'JP' },
+        { label: '来年の日本', year: currentYear + 1, country: 'JP' },
+        { label: '今年のアメリカ', year: currentYear, country: 'US' },
+        { label: '今年のイギリス', year: currentYear, country: 'GB' }
+      ].forEach(function (preset) {
+        var button = document.createElement('button');
+        button.type = 'button';
+        button.textContent = preset.label;
+        button.addEventListener('click', function () {
+          yearInput.value = preset.year;
+          countrySelect.value = preset.country;
+          runSearch(preset.year, preset.country);
+        });
+        chips.appendChild(button);
+      });
+
+      searchBtn.addEventListener('click', function () {
+        var year = parseInt(yearInput.value, 10);
+        var country = countrySelect.value;
+        if (year) runSearch(year, country);
+      });
+
+      runSearch(currentYear, 'JP', { track: false });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init, { once: true });
+    } else {
+      init();
+    }
+  })();
+  </script>
+
+  <style is:inline>
+    .holiday-shell,
+    .holiday-sections,
+    .holiday-list { display: grid; gap: 14px; }
+    .holiday-empty { margin: 0; color: var(--text-muted); font-size: 0.92rem; }
+  </style>
+</ToolLayout>

@@ -4,7 +4,7 @@ import Nav from '../../components/Nav.astro';
 import Footer from '../../components/Footer.astro';
 import Breadcrumb from '../../components/Breadcrumb.astro';
 
-const tools = [
+const historyTools = [
   {
     kicker: '日本史クイズジェネレーター',
     title: '日本史クイズをランダム出題',
@@ -46,14 +46,6 @@ const tools = [
     track: 'gacha',
   },
   {
-    kicker: '祝日・連休チェッカー',
-    title: '年と国を選んで祝日一覧を検索',
-    desc: '日本やアメリカなどの祝日一覧と3連休以上を表示。旅行や営業日確認向けの軽量ツールです。',
-    href: '/tools/holidays/',
-    label: '祝日ページへ',
-    track: 'holidays',
-  },
-  {
     kicker: '年号×世界史ゲーム',
     title: '日本史と世界史を同じ年で比較',
     desc: '「1600年に世界で何が起きた？」を日英両方で表示。受験にもSNSにも。',
@@ -93,6 +85,17 @@ const tools = [
     label: '読みヒントページへ',
     track: 'furigana',
   },
+];
+
+const utilityTools = [
+  {
+    kicker: '祝日・連休チェッカー',
+    title: '年と国を選んで祝日一覧を検索',
+    desc: '日本やアメリカなどの祝日一覧と3連休以上を表示。旅行や営業日確認向けの軽量ツールです。',
+    href: '/tools/holidays/',
+    label: '祝日ページへ',
+    track: 'holidays',
+  },
   {
     kicker: '過去の天気しらべ',
     title: '日付と都市で過去の気象データを検索',
@@ -102,27 +105,27 @@ const tools = [
     track: 'weather',
   },
   {
-    kicker: 'デッキ構築ゲーム図鑑',
-    title: 'デジタル×ボードゲームを横断比較',
-    desc: 'RAWG + BoardGameGeek のデータでデッキ構築ゲームを一覧。Chronicle Runも掲載。',
+    kicker: 'デッキ構築ボードゲーム図鑑',
+    title: 'デジタルとボードゲームを横断比較',
+    desc: 'デッキ構築ゲームをデジタルとボードゲームで並べて比較。Steamデータはリアルタイム、BGG情報は参照値です。',
     href: '/tools/deckgames/',
-    label: 'デッキ図鑑ページへ',
+    label: 'ボードゲーム図鑑へ',
     track: 'deckgames',
   },
   {
     kicker: 'インディーゲーム市場ダッシュボード',
-    title: 'SteamSpy データで市場を分析',
-    desc: 'ジャンル別の推定所有者数・レビュースコアを可視化。開発者コミュニティ向け。',
+    title: 'Steam公式データで市場感を把握',
+    desc: 'レビュー数・好評率・同時接続数を表示。デッキ構築やローグライク周辺の市場感をざっくり把握できます。',
     href: '/tools/steamstats/',
     label: '市場データページへ',
     track: 'steamstats',
   },
   {
-    kicker: 'ゲームクリア時間比較',
-    title: '購入前にプレイ時間を比較',
-    desc: 'ローグライク・デッキ構築ゲームのクリア時間を比較表示します。',
+    kicker: 'リアルタイムプレイヤー統計',
+    title: '同接プレイヤー数と評価を比較',
+    desc: 'デッキ構築×ローグライクの同時接続数とレビュー評価を一覧で比較できます。',
     href: '/tools/hltb/',
-    label: 'クリア時間ページへ',
+    label: 'プレイヤー統計ページへ',
     track: 'hltb',
   },
 ];
@@ -134,11 +137,12 @@ const navLinks = [
   { href: '/games/inga/?src=history_tools_hub_nav', label: 'ゲームを見る' },
 ];
 
-const toolCount = tools.length;
+const allTools = historyTools.concat(utilityTools);
+const toolCount = allTools.length;
 ---
 <BaseLayout
-  title="日本史ツール集 | 無料クイズ・元号変換・武将検索・漢字検索"
-  description={`無料で使える日本史ツール集。日本史クイズ、元号変換、武将検索、漢字検索、武将ガチャ、年号ゲームなど${toolCount}の独立ツールを使えます。`}
+  title="日本史ツール集 | 無料クイズ・元号変換・人物検索"
+  description={`無料で使える日本史学習ツールと関連便利ツールをまとめたハブです。日本史クイズ、元号変換、人物検索、年号比較、史料検索など${toolCount}ページを使えます。`}
   canonical="https://www.randaworks.com/history-tools/"
   pageType="history_tools_hub"
 >
@@ -152,7 +156,7 @@ const toolCount = tools.length;
         <h1>日本史ツール集</h1>
         <span class="tool-page-tag">{toolCount}ツール</span>
       </div>
-      <p class="tool-page-desc">検索で使える独立ツールをまとめています。各ページは単体で完結し、興味があればゲームへ進めます。</p>
+      <p class="tool-page-desc">日本史の学習・調べものに使えるページを中心にまとめています。下段には関連する便利ツールも分けて掲載しています。</p>
 
       <div class="history-tools-page-nav" style="margin-bottom:28px;">
         <a class="tool-btn" href="/nihonshi-quiz/">日本史クイズ</a>
@@ -161,14 +165,36 @@ const toolCount = tools.length;
         <a class="tool-btn tool-btn-ghost" href="https://store.steampowered.com/app/4403470/?utm_source=randaworks&utm_medium=history_tools_hub&utm_campaign=steam" target="_blank" rel="noopener noreferrer" data-track-event="wishlist_click" data-track-placement="history_tools_hub_steam">Steam</a>
       </div>
 
-      <section class="history-tools-card-grid">
-        {tools.map(tool => (
-          <a href={tool.href} class="history-tools-link-card" data-track-event="cta_click" data-track-placement={`history_tools_hub_${tool.track}`}>
-            <span class="tool-output-label">{tool.kicker}</span>
-            <strong>{tool.title}</strong>
-            <span class="tool-card-desc">{tool.desc}</span>
-          </a>
-        ))}
+      <section style="display:grid;gap:14px;">
+        <div>
+          <h2 style="margin:0 0 8px;">日本史学習ツール</h2>
+          <p style="margin:0;color:var(--text-muted);font-size:0.9rem;">日本史の暗記、比較、人物調べ、史料確認に寄せた主要ツールです。</p>
+        </div>
+        <div class="history-tools-card-grid">
+          {historyTools.map(tool => (
+            <a href={tool.href} class="history-tools-link-card" data-track-event="cta_click" data-track-placement={`history_tools_hub_${tool.track}`}>
+              <span class="tool-output-label">{tool.kicker}</span>
+              <strong>{tool.title}</strong>
+              <span class="tool-card-desc">{tool.desc}</span>
+            </a>
+          ))}
+        </div>
+      </section>
+
+      <section style="display:grid;gap:14px;margin-top:28px;">
+        <div>
+          <h2 style="margin:0 0 8px;">関連便利ツール</h2>
+          <p style="margin:0;color:var(--text-muted);font-size:0.9rem;">検索流入を広く取りつつ、周辺テーマで回遊しやすい軽量ツールです。</p>
+        </div>
+        <div class="history-tools-card-grid">
+          {utilityTools.map(tool => (
+            <a href={tool.href} class="history-tools-link-card" data-track-event="cta_click" data-track-placement={`history_tools_hub_${tool.track}`}>
+              <span class="tool-output-label">{tool.kicker}</span>
+              <strong>{tool.title}</strong>
+              <span class="tool-card-desc">{tool.desc}</span>
+            </a>
+          ))}
+        </div>
       </section>
 
       <div class="tool-related-grid" style="margin-top:36px;">

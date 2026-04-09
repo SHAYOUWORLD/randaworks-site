@@ -1,5 +1,37 @@
 ---
 import ToolLayout from '../../../layouts/ToolLayout.astro';
+
+const faqItems = [
+  {
+    question: 'この過去の天気ツールで何が分かりますか？',
+    answer: '指定した日付と都市について、最高気温、最低気温、降水量、最大風速を確認できます。誕生日やイベント当日の天気を振り返る用途向けです。',
+  },
+  {
+    question: 'どの期間の天気を検索できますか？',
+    answer: '1940年以降の過去データを対象にしています。直近すぎる日付は外部アーカイブAPIの反映待ちで取得できない場合があります。',
+  },
+  {
+    question: '都市は自由入力できますか？',
+    answer: '現状は主要都市をプルダウンで選ぶ方式です。東京、大阪、名古屋、福岡などをすぐ比較できます。',
+  },
+  {
+    question: 'データが出ない日はありますか？',
+    answer: 'はい。外部API側に欠損がある日付や、対象範囲外の日付では取得できません。その場合は別の日付や都市で再検索してください。',
+  }
+];
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqItems.map((item) => ({
+    '@type': 'Question',
+    name: item.question,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: item.answer,
+    },
+  })),
+};
 ---
 <ToolLayout
   title="過去の天気しらべ | 日付と都市で気象データを検索"
@@ -15,8 +47,13 @@ import ToolLayout from '../../../layouts/ToolLayout.astro';
     { label: '過去の天気しらべ' },
   ]}
   excludeTools={['weather']}
+  steamContext="日本史因果クロニクル — 日本史×デッキ構築カードゲーム"
   gamePitch="天候はゲーム内の合戦カードにも影響します。関ヶ原の霧や桶狭間の豪雨がカード効果に。"
 >
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+  </Fragment>
+
   <div class="tool-workspace" id="weather-tool">
     <div class="tool-input-row">
       <label>
@@ -36,6 +73,49 @@ import ToolLayout from '../../../layouts/ToolLayout.astro';
       <span class="tool-output-label">日付と都市を選んで検索してください。</span>
     </div>
   </div>
+
+  <section class="tool-workspace tool-rich-section">
+    <h2>このツールでできること</h2>
+    <div class="tool-rich-grid">
+      <div class="tool-data-card">
+        <strong>過去の気温を確認</strong>
+        <span>最高気温と最低気温を並べて見られるので、暑かった日や寒かった日の比較に使えます。</span>
+      </div>
+      <div class="tool-data-card">
+        <strong>降水量と風も確認</strong>
+        <span>雨量や風の強さも分かるため、単なる晴れ雨以上の振り返りができます。</span>
+      </div>
+      <div class="tool-data-card">
+        <strong>記念日や出来事の確認</strong>
+        <span>誕生日、入学式、イベント当日など、特定の日の天気を調べる用途に向いています。</span>
+      </div>
+      <div class="tool-data-card">
+        <strong>主要都市をすぐ比較</strong>
+        <span>東京や大阪などをプルダウンからすぐ選べるので、検索に迷いません。</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="tool-workspace tool-rich-section">
+    <h2>使い方</h2>
+    <ol class="tool-rich-list">
+      <li>日付を選び、都市をプルダウンから選択します。</li>
+      <li>「検索」を押すと、その日の気象データがカード形式で表示されます。</li>
+      <li>まずはプリセットから試し、使い方が分かったら任意の日付へ広げるのが簡単です。</li>
+    </ol>
+  </section>
+
+  <section class="tool-workspace tool-rich-section">
+    <h2>よくある質問</h2>
+    <div class="tool-faq-list">
+      {faqItems.map((item) => (
+        <details class="tool-faq-item">
+          <summary>{item.question}</summary>
+          <p>{item.answer}</p>
+        </details>
+      ))}
+    </div>
+  </section>
 
   <script is:inline>
   (function () {
@@ -105,7 +185,7 @@ import ToolLayout from '../../../layouts/ToolLayout.astro';
           renderWeather(dateStr, city, d);
         })
         .catch(function () {
-          result.innerHTML = '<span class="tool-output-label">気象データを取得できませんでした。日付が範囲内か確認してください。</span>';
+          result.innerHTML = '<span class="tool-output-label">現在このツールは工事中です。API 復旧後に再開します。</span>';
         });
 
       track('weather_search', { date: dateStr, city: cityName });
@@ -119,7 +199,7 @@ import ToolLayout from '../../../layouts/ToolLayout.astro';
       var wind = daily.windspeed_10m_max ? daily.windspeed_10m_max[0] : null;
 
       if (tMax === null && tMin === null) {
-        result.innerHTML = '<span class="tool-output-label">この日のデータは取得できませんでした。1940年以降の日付をお試しください。</span>';
+        result.innerHTML = '<span class="tool-output-label">現在このツールは工事中です。API 復旧後に再開します。</span>';
         return;
       }
 

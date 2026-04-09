@@ -1,0 +1,20 @@
+---
+interface Props {
+  source: string;
+  context?: string;
+}
+
+const { source, context } = Astro.props;
+---
+{context && (
+  <div class="tool-related-card" id="steam" style="margin-top:16px;">
+    <span class="tool-output-label">{context}</span>
+    <div class="steam-widget-shell">
+      <iframe
+        src={`https://store.steampowered.com/widget/4403470/?utm_source=randaworks&utm_medium=${source}&utm_campaign=widget`}
+        title="日本史因果クロニクル Steam Store Widget"
+        loading="lazy"
+      ></iframe>
+    </div>
+  </div>
+)}

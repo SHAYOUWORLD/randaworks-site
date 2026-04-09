@@ -12,8 +12,8 @@ import ToolLayout from '../../../layouts/ToolLayout.astro';
   desc="デジタルとボードゲームのデッキ構築タイトルをキュレーション表示。Steamデータはリアルタイム。"
   breadcrumbs={[{ href: '/history-tools/', label: 'ツール集' }, { label: 'デッキ図鑑' }]}
   excludeTools={['deckgames']}
-  gamePitch="この図鑑に掲載中の日本史デッキ構築ローグライク。ブラウザで体験版をプレイできます。"
-  steamContext="同ジャンルの日本史デッキ構築ローグライク"
+  gamePitch="デッキ構築の楽しさをデジタルで体験。日本史×カード連鎖のローグライクです。"
+  steamContext="デッキ構築をデジタルで遊ぶなら"
 >
   <div class="tool-workspace">
     <h2>デジタルゲーム</h2>
@@ -69,6 +69,13 @@ import ToolLayout from '../../../layouts/ToolLayout.astro';
     function $(id) { return document.getElementById(id); }
     function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
     function rColor(p) { return p >= 95 ? '#60b568' : p >= 90 ? '#8bc34a' : p >= 80 ? '#c7a666' : p > 0 ? '#e06666' : 'var(--text-muted)'; }
+    function isLocalHost(){return /^(dev\.randa|localhost|127\.0\.0\.1)$/i.test(window.location.hostname);}
+    function apiBase(){return isLocalHost()?'http://127.0.0.1:8787':window.location.origin;}
+    function apiUrl(path, params){
+      var url = new URL(path, apiBase());
+      if(params){Object.keys(params).forEach(function(key){if(params[key] != null && params[key] !== '') url.searchParams.set(key, params[key]);});}
+      return url.toString();
+    }
 
     function renderDigital(apiData) {
       var dl = $('digitalList');
@@ -104,12 +111,12 @@ import ToolLayout from '../../../layouts/ToolLayout.astro';
       try {
         var appids = [];
         for (var i = 0; i < DIGITAL.length; i++) appids.push(DIGITAL[i].appid);
-        var r = await fetch('/api/steam/stats/?appids=' + appids.join(','));
+        var r = await fetch(apiUrl('/api/steam/stats/', { appids: appids.join(',') }));
         var d = await r.json();
         if (d.error) throw new Error(d.error);
         renderDigital(d.games || {});
       } catch (e) {
-        $('digitalList').innerHTML = '<div style="padding:16px;text-align:center;color:#e06666;">データを取得できませんでした。<a href="javascript:location.reload()" style="color:var(--tool-accent);margin-left:8px;">再読み込み</a></div>';
+        $('digitalList').innerHTML = '<div style="padding:16px;text-align:center;color:#e0b366;">現在このツールは工事中です。API 復旧後に再開します。</div>';
       }
     }
 

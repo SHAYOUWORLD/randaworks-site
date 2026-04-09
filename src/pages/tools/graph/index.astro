@@ -1,0 +1,543 @@
+---
+import ToolLayout from '../../../layouts/ToolLayout.astro';
+---
+<ToolLayout
+  title="人物関係ビジュアライザー | 武将の関係をグラフで可視化"
+  description="Wikidataの構造化データを使い、武将・歴史人物のつながりをネットワーク図で可視化。織田信長や徳川家康の人間関係を視覚的に探索できます。"
+  canonical="https://www.randaworks.com/tools/graph/"
+  pageType="person_graph"
+  source="graph"
+  tag="Wikidata"
+  heading="人物関係ビジュアライザー"
+  desc="武将・歴史人物の家族・主従・敵対関係をネットワーク図で可視化。"
+  breadcrumbs={[
+    { href: '/history-tools/', label: 'ツール集' },
+    { label: '人物関係ビジュアライザー' },
+  ]}
+  excludeTools={['graph']}
+  gamePitch="人物間の主従・敵対関係は、ゲーム内のカード相性システムに反映されています。"
+  steamContext="日本史因果クロニクル — 武将の関係が連鎖を生むカードゲーム"
+>
+  <div class="tool-workspace" id="graph-tool">
+    <div class="tool-input-row">
+      <label for="graphInput">人物名（日本語）
+        <input id="graphInput" type="text" placeholder="織田信長" value="織田信長">
+      </label>
+      <button class="tool-btn" type="submit" form="graphForm">検索する</button>
+    </div>
+    <form id="graphForm" style="display:none;"></form>
+    <div class="tool-chips">
+      <button type="button" data-graph-query="織田信長">織田信長</button>
+      <button type="button" data-graph-query="徳川家康">徳川家康</button>
+      <button type="button" data-graph-query="豊臣秀吉">豊臣秀吉</button>
+      <button type="button" data-graph-query="源頼朝">源頼朝</button>
+      <button type="button" data-graph-query="坂本龍馬">坂本龍馬</button>
+    </div>
+    <div class="tool-output" id="graphResult" aria-live="polite" style="min-height: 400px; position:relative;">
+      <span class="tool-output-label">人物名を入力して検索してください。</span>
+      <div id="graphContainer" style="display:none; position:relative;">
+        <canvas id="graphCanvas" width="800" height="600" style="width:100%;height:auto;border-radius:14px;cursor:grab;touch-action:none;"></canvas>
+        <div id="graphControls" style="position:absolute;top:12px;right:12px;display:flex;flex-direction:column;gap:6px;z-index:2;">
+          <button type="button" id="graphZoomIn" title="拡大" style="width:36px;height:36px;border:1px solid rgba(255,255,255,0.2);background:rgba(11,13,17,0.85);color:#fff;border-radius:8px;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px);">+</button>
+          <button type="button" id="graphZoomOut" title="縮小" style="width:36px;height:36px;border:1px solid rgba(255,255,255,0.2);background:rgba(11,13,17,0.85);color:#fff;border-radius:8px;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px);">−</button>
+          <button type="button" id="graphZoomReset" title="リセット" style="width:36px;height:36px;border:1px solid rgba(255,255,255,0.2);background:rgba(11,13,17,0.85);color:#fff;border-radius:8px;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px);">⊙</button>
+        </div>
+        <div id="graphTooltip" style="display:none;position:absolute;background:rgba(11,13,17,0.95);color:#f0f2f5;padding:6px 12px;border-radius:8px;font-size:13px;pointer-events:none;border:1px solid rgba(199,166,102,0.4);white-space:nowrap;z-index:3;"></div>
+        <div id="graphHint" style="position:absolute;bottom:12px;left:50%;transform:translateX(-50%);color:rgba(255,255,255,0.35);font-size:11px;pointer-events:none;z-index:2;">ホイールで拡大縮小 · ドラッグで移動 · ノードクリックで検索</div>
+      </div>
+    </div>
+  </div>
+
+  <script is:inline>
+  (function () {
+    function $(id) { return document.getElementById(id); }
+    function escapeHtml(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+    function isLocalHost(){return /^(dev\.randa|localhost|127\.0\.0\.1)$/i.test(window.location.hostname);}
+    function apiBase(){return isLocalHost()?'http://127.0.0.1:8787':window.location.origin;}
+    function apiUrl(path, params){
+      var url = new URL(path, apiBase());
+      if(params){Object.keys(params).forEach(function(key){if(params[key])url.searchParams.set(key, params[key]);});}
+      return url.toString();
+    }
+
+    function track(name, payload) {
+      if (window.RandaAnalytics && typeof window.RandaAnalytics.track === 'function') window.RandaAnalytics.track(name, payload || {});
+      if (typeof gtag === 'function') gtag('event', name, payload || {});
+    }
+
+    function findPerson(name) {
+      return fetch(apiUrl('/api/graph/find/', { name: name }), {
+        headers: { 'Accept': 'application/json' }
+      }).then(function (r) { if (!r.ok) throw new Error('fetch failed'); return r.json(); }).then(function (data) {
+        return data && data.person ? data.person : null;
+      });
+    }
+
+    function getRelations(qid) {
+      return fetch(apiUrl('/api/graph/relations/', { qid: qid }), {
+        headers: { 'Accept': 'application/json' }
+      }).then(function (r) { if (!r.ok) throw new Error('fetch failed'); return r.json(); }).then(function (data) {
+        return data && data.relations ? data.relations : [];
+      });
+    }
+
+    /* ── Relation color mapping ── */
+    var REL_COLORS = {
+      '父': '#5b9bd5', '母': '#e06c9f', '配偶者': '#e06c9f',
+      '子': '#7bc67e', '兄弟姉妹': '#a78bfa', '家臣': '#f59e42', '主君': '#ef4444'
+    };
+    function relColor(rel) { return REL_COLORS[rel] || '#c7a666'; }
+
+    /* ── Graph state ── */
+    var graphState = {
+      scale: 1, offsetX: 0, offsetY: 0,
+      nodes: [], center: '', hoveredNode: -1,
+      minScale: 0.3, maxScale: 4
+    };
+
+    function layoutNodes(center, relations, w, h) {
+      var cx = w / 2, cy = h / 2;
+      var nodes = [{ label: center, x: cx, y: cy, r: 34, isCenter: true, relation: '' }];
+
+      if (!relations.length) return nodes;
+
+      /* Group by relation type for clustered layout */
+      var groups = {};
+      relations.forEach(function (rel) {
+        if (!groups[rel.relation]) groups[rel.relation] = [];
+        groups[rel.relation].push(rel);
+      });
+      var groupKeys = Object.keys(groups);
+      var total = relations.length;
+
+      /* Multi-ring layout for many nodes */
+      var maxPerRing = 16;
+      var ringCount = Math.ceil(total / maxPerRing);
+      var baseRadius = Math.min(w, h) * 0.28;
+      var ringSpacing = Math.min(w, h) * 0.18;
+
+      var idx = 0;
+      var allRels = [];
+      /* Interleave groups so same-type nodes cluster together */
+      groupKeys.forEach(function (key) {
+        groups[key].forEach(function (rel) { allRels.push(rel); });
+      });
+
+      for (var ring = 0; ring < ringCount; ring++) {
+        var nodesInRing = Math.min(maxPerRing, total - ring * maxPerRing);
+        var radius = baseRadius + ring * ringSpacing;
+        var angleStep = (Math.PI * 2) / nodesInRing;
+        var startAngle = -Math.PI / 2 + ring * 0.3; /* slight rotation offset per ring */
+
+        for (var j = 0; j < nodesInRing; j++) {
+          var rel = allRels[idx];
+          var angle = angleStep * j + startAngle;
+          var nodeR = ring === 0 ? 26 : 22;
+          nodes.push({
+            label: rel.label,
+            x: cx + Math.cos(angle) * radius,
+            y: cy + Math.sin(angle) * radius,
+            r: nodeR,
+            isCenter: false,
+            relation: rel.relation
+          });
+          idx++;
+        }
+      }
+      return nodes;
+    }
+
+    function drawGraph(center, relations) {
+      var canvas = $('graphCanvas');
+      var container = $('graphContainer');
+      container.style.display = 'block';
+      var ctx = canvas.getContext('2d');
+
+      /* Retina support */
+      var dpr = window.devicePixelRatio || 1;
+      var displayW = canvas.clientWidth;
+      var displayH = Math.round(displayW * 0.75); /* 4:3 aspect */
+      canvas.width = displayW * dpr;
+      canvas.height = displayH * dpr;
+      canvas.style.height = displayH + 'px';
+
+      var w = canvas.width / dpr;
+      var h = canvas.height / dpr;
+
+      /* Layout */
+      graphState.nodes = layoutNodes(center, relations, w, h);
+      graphState.center = center;
+      graphState.scale = 1;
+      graphState.offsetX = 0;
+      graphState.offsetY = 0;
+      graphState.hoveredNode = -1;
+
+      render();
+    }
+
+    function render() {
+      var canvas = $('graphCanvas');
+      var ctx = canvas.getContext('2d');
+      var dpr = window.devicePixelRatio || 1;
+      var w = canvas.width / dpr;
+      var h = canvas.height / dpr;
+      var s = graphState;
+
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.clearRect(0, 0, w, h);
+
+      /* Background */
+      ctx.fillStyle = '#0b0d11';
+      ctx.fillRect(0, 0, w, h);
+
+      ctx.save();
+      ctx.translate(w / 2 + s.offsetX, h / 2 + s.offsetY);
+      ctx.scale(s.scale, s.scale);
+      ctx.translate(-w / 2, -h / 2);
+
+      var nodes = s.nodes;
+      if (nodes.length === 0) { ctx.restore(); return; }
+
+      var centerNode = nodes[0];
+
+      /* Draw edges first */
+      for (var i = 1; i < nodes.length; i++) {
+        var n = nodes[i];
+        var col = relColor(n.relation);
+        ctx.beginPath();
+        ctx.moveTo(centerNode.x, centerNode.y);
+        ctx.lineTo(n.x, n.y);
+        ctx.strokeStyle = i === s.hoveredNode ? col : 'rgba(255,255,255,0.12)';
+        ctx.lineWidth = i === s.hoveredNode ? 2 : 1;
+        ctx.stroke();
+
+        /* Relation label on edge */
+        var mx = (centerNode.x + n.x) / 2;
+        var my = (centerNode.y + n.y) / 2;
+        /* Offset label away from line */
+        var dx = n.x - centerNode.x, dy = n.y - centerNode.y;
+        var len = Math.sqrt(dx * dx + dy * dy) || 1;
+        var perpX = -dy / len * 10, perpY = dx / len * 10;
+        ctx.fillStyle = col;
+        ctx.globalAlpha = i === s.hoveredNode ? 1 : 0.7;
+        ctx.font = '11px "Noto Sans JP", sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(n.relation, mx + perpX, my + perpY);
+        ctx.globalAlpha = 1;
+      }
+
+      /* Draw peripheral nodes */
+      for (var i = 1; i < nodes.length; i++) {
+        var n = nodes[i];
+        var hovered = i === s.hoveredNode;
+        var col = relColor(n.relation);
+
+        ctx.beginPath();
+        ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
+        ctx.fillStyle = hovered ? 'rgba(255,255,255,0.12)' : 'rgba(255,255,255,0.04)';
+        ctx.fill();
+        ctx.strokeStyle = hovered ? col : 'rgba(255,255,255,0.18)';
+        ctx.lineWidth = hovered ? 2 : 1;
+        ctx.stroke();
+
+        ctx.fillStyle = hovered ? '#fff' : '#e0e2e5';
+        ctx.font = (hovered ? 'bold ' : '') + '12px "Noto Sans JP", sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        var displayLabel = n.label.length > 7 ? n.label.slice(0, 6) + '…' : n.label;
+        ctx.fillText(displayLabel, n.x, n.y);
+      }
+
+      /* Draw center node (on top) */
+      ctx.beginPath();
+      ctx.arc(centerNode.x, centerNode.y, centerNode.r, 0, Math.PI * 2);
+      var grad = ctx.createRadialGradient(centerNode.x, centerNode.y, 0, centerNode.x, centerNode.y, centerNode.r);
+      grad.addColorStop(0, 'rgba(199,166,102,0.4)');
+      grad.addColorStop(1, 'rgba(199,166,102,0.15)');
+      ctx.fillStyle = grad;
+      ctx.fill();
+      ctx.strokeStyle = '#c7a666';
+      ctx.lineWidth = 2.5;
+      ctx.stroke();
+      ctx.fillStyle = '#fff';
+      ctx.font = 'bold 14px "Noto Sans JP", sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(centerNode.label, centerNode.x, centerNode.y);
+
+      if (nodes.length === 1) {
+        ctx.fillStyle = '#9ca3af';
+        ctx.font = '13px "Noto Sans JP", sans-serif';
+        ctx.fillText('関連人物が見つかりませんでした', centerNode.x, centerNode.y + 60);
+      }
+
+      /* Legend */
+      ctx.restore();
+      var legend = {};
+      for (var i = 1; i < nodes.length; i++) {
+        var r = nodes[i].relation;
+        if (!legend[r]) legend[r] = relColor(r);
+      }
+      var keys = Object.keys(legend);
+      if (keys.length > 0) {
+        var lx = 14, ly = 18;
+        ctx.font = '11px "Noto Sans JP", sans-serif';
+        ctx.textAlign = 'left';
+        ctx.textBaseline = 'middle';
+        keys.forEach(function (key) {
+          ctx.fillStyle = legend[key];
+          ctx.beginPath();
+          ctx.arc(lx + 5, ly, 4, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.fillText(key, lx + 14, ly);
+          lx += ctx.measureText(key).width + 30;
+        });
+      }
+    }
+
+    /* ── Interaction helpers ── */
+    function canvasToGraph(clientX, clientY) {
+      var canvas = $('graphCanvas');
+      var rect = canvas.getBoundingClientRect();
+      var dpr = window.devicePixelRatio || 1;
+      var w = canvas.width / dpr, h = canvas.height / dpr;
+      var scaleX = w / rect.width, scaleY = h / rect.height;
+      var px = (clientX - rect.left) * scaleX;
+      var py = (clientY - rect.top) * scaleY;
+      /* Reverse the transform */
+      var s = graphState;
+      var gx = (px - w / 2 - s.offsetX) / s.scale + w / 2;
+      var gy = (py - h / 2 - s.offsetY) / s.scale + h / 2;
+      return { x: gx, y: gy, px: px, py: py };
+    }
+
+    function hitTest(gx, gy) {
+      var nodes = graphState.nodes;
+      /* Check peripheral nodes first (reverse order, skip center) */
+      for (var i = nodes.length - 1; i >= 1; i--) {
+        var n = nodes[i];
+        var dx = gx - n.x, dy = gy - n.y;
+        if (dx * dx + dy * dy <= (n.r + 4) * (n.r + 4)) return i;
+      }
+      return -1;
+    }
+
+    function setupInteraction() {
+      var canvas = $('graphCanvas');
+      var tooltip = $('graphTooltip');
+      var isDragging = false, lastX = 0, lastY = 0;
+
+      /* Mouse wheel zoom */
+      canvas.addEventListener('wheel', function (e) {
+        e.preventDefault();
+        var delta = e.deltaY > 0 ? 0.9 : 1.1;
+        var newScale = graphState.scale * delta;
+        newScale = Math.max(graphState.minScale, Math.min(graphState.maxScale, newScale));
+
+        /* Zoom toward cursor */
+        var rect = canvas.getBoundingClientRect();
+        var dpr = window.devicePixelRatio || 1;
+        var w = canvas.width / dpr, h = canvas.height / dpr;
+        var mx = (e.clientX - rect.left) * (w / rect.width) - w / 2;
+        var my = (e.clientY - rect.top) * (h / rect.height) - h / 2;
+
+        var factor = newScale / graphState.scale;
+        graphState.offsetX = mx - factor * (mx - graphState.offsetX);
+        graphState.offsetY = my - factor * (my - graphState.offsetY);
+        graphState.scale = newScale;
+        render();
+      }, { passive: false });
+
+      /* Mouse drag pan */
+      canvas.addEventListener('mousedown', function (e) {
+        isDragging = true;
+        lastX = e.clientX;
+        lastY = e.clientY;
+        canvas.style.cursor = 'grabbing';
+      });
+      window.addEventListener('mousemove', function (e) {
+        if (isDragging) {
+          var rect = canvas.getBoundingClientRect();
+          var dpr = window.devicePixelRatio || 1;
+          var w = canvas.width / dpr;
+          var scaleX = w / rect.width;
+          graphState.offsetX += (e.clientX - lastX) * scaleX;
+          graphState.offsetY += (e.clientY - lastY) * scaleX;
+          lastX = e.clientX;
+          lastY = e.clientY;
+          render();
+          return;
+        }
+        /* Hover detection */
+        if (!graphState.nodes.length) return;
+        var rect = canvas.getBoundingClientRect();
+        if (e.clientX < rect.left || e.clientX > rect.right || e.clientY < rect.top || e.clientY > rect.bottom) {
+          if (graphState.hoveredNode !== -1) { graphState.hoveredNode = -1; render(); tooltip.style.display = 'none'; }
+          return;
+        }
+        var pt = canvasToGraph(e.clientX, e.clientY);
+        var hit = hitTest(pt.x, pt.y);
+        if (hit !== graphState.hoveredNode) {
+          graphState.hoveredNode = hit;
+          render();
+        }
+        if (hit >= 1) {
+          var n = graphState.nodes[hit];
+          tooltip.textContent = n.label + '（' + n.relation + '）';
+          var containerRect = $('graphContainer').getBoundingClientRect();
+          tooltip.style.left = (e.clientX - containerRect.left + 12) + 'px';
+          tooltip.style.top = (e.clientY - containerRect.top - 30) + 'px';
+          tooltip.style.display = 'block';
+          canvas.style.cursor = 'pointer';
+        } else {
+          tooltip.style.display = 'none';
+          canvas.style.cursor = isDragging ? 'grabbing' : 'grab';
+        }
+      });
+      window.addEventListener('mouseup', function () {
+        isDragging = false;
+        canvas.style.cursor = 'grab';
+      });
+
+      /* Click node to search */
+      canvas.addEventListener('click', function (e) {
+        if (!graphState.nodes.length) return;
+        var pt = canvasToGraph(e.clientX, e.clientY);
+        var hit = hitTest(pt.x, pt.y);
+        if (hit >= 1) {
+          var name = graphState.nodes[hit].label;
+          $('graphInput').value = name;
+          search(name);
+        }
+      });
+
+      /* Touch support */
+      var touchStartDist = 0, touchStartScale = 1;
+      var lastTouchX = 0, lastTouchY = 0, touchCount = 0;
+
+      canvas.addEventListener('touchstart', function (e) {
+        e.preventDefault();
+        touchCount = e.touches.length;
+        if (touchCount === 1) {
+          lastTouchX = e.touches[0].clientX;
+          lastTouchY = e.touches[0].clientY;
+        } else if (touchCount === 2) {
+          var dx = e.touches[0].clientX - e.touches[1].clientX;
+          var dy = e.touches[0].clientY - e.touches[1].clientY;
+          touchStartDist = Math.sqrt(dx * dx + dy * dy);
+          touchStartScale = graphState.scale;
+        }
+      }, { passive: false });
+
+      canvas.addEventListener('touchmove', function (e) {
+        e.preventDefault();
+        if (e.touches.length === 1 && touchCount === 1) {
+          var rect = canvas.getBoundingClientRect();
+          var dpr = window.devicePixelRatio || 1;
+          var w = canvas.width / dpr;
+          var scaleX = w / rect.width;
+          graphState.offsetX += (e.touches[0].clientX - lastTouchX) * scaleX;
+          graphState.offsetY += (e.touches[0].clientY - lastTouchY) * scaleX;
+          lastTouchX = e.touches[0].clientX;
+          lastTouchY = e.touches[0].clientY;
+          render();
+        } else if (e.touches.length === 2) {
+          var dx = e.touches[0].clientX - e.touches[1].clientX;
+          var dy = e.touches[0].clientY - e.touches[1].clientY;
+          var dist = Math.sqrt(dx * dx + dy * dy);
+          var newScale = touchStartScale * (dist / touchStartDist);
+          graphState.scale = Math.max(graphState.minScale, Math.min(graphState.maxScale, newScale));
+          render();
+        }
+      }, { passive: false });
+
+      canvas.addEventListener('touchend', function (e) {
+        if (e.changedTouches.length === 1 && touchCount === 1) {
+          var t = e.changedTouches[0];
+          var pt = canvasToGraph(t.clientX, t.clientY);
+          var hit = hitTest(pt.x, pt.y);
+          if (hit >= 1) {
+            var name = graphState.nodes[hit].label;
+            $('graphInput').value = name;
+            search(name);
+          }
+        }
+        touchCount = e.touches.length;
+      });
+
+      /* Zoom buttons */
+      $('graphZoomIn').addEventListener('click', function () {
+        graphState.scale = Math.min(graphState.maxScale, graphState.scale * 1.3);
+        render();
+      });
+      $('graphZoomOut').addEventListener('click', function () {
+        graphState.scale = Math.max(graphState.minScale, graphState.scale / 1.3);
+        render();
+      });
+      $('graphZoomReset').addEventListener('click', function () {
+        graphState.scale = 1;
+        graphState.offsetX = 0;
+        graphState.offsetY = 0;
+        render();
+      });
+    }
+
+    function search(name) {
+      var result = $('graphResult');
+      var container = $('graphContainer');
+      var tooltip = $('graphTooltip');
+      container.style.display = 'none';
+      if (tooltip) tooltip.style.display = 'none';
+
+      if (!name) { result.innerHTML = '<span class="tool-output-label">人物名を入力してください。</span>'; result.appendChild(container); return; }
+
+      result.innerHTML = '<span class="tool-output-label">Wikidata を検索中…</span>';
+      result.appendChild(container);
+
+      findPerson(name)
+        .then(function (person) {
+          if (!person) {
+            result.innerHTML = '<span class="tool-output-label">「' + escapeHtml(name) + '」が見つかりませんでした。別の名前でお試しください。</span>';
+            result.appendChild(container);
+            return;
+          }
+          result.innerHTML = '<span class="tool-output-label">関係データを取得中…</span>';
+          result.appendChild(container);
+          return getRelations(person.qid).then(function (rels) {
+            result.innerHTML = '';
+            result.appendChild(container);
+            drawGraph(person.label, rels);
+            track('graph_view', { person: person.label, relations: rels.length });
+          });
+        })
+        .catch(function () {
+          result.innerHTML = '<span class="tool-output-label">現在このツールは工事中です。API 復旧後に再開します。</span>';
+          result.appendChild(container);
+        });
+    }
+
+    function init() {
+      var form = $('graphForm');
+      var input = $('graphInput');
+      var quickBtns = document.querySelectorAll('[data-graph-query]');
+
+      if (form) form.addEventListener('submit', function (e) { e.preventDefault(); search(input.value.trim()); });
+      Array.prototype.forEach.call(quickBtns, function (btn) {
+        btn.addEventListener('click', function () {
+          var q = btn.getAttribute('data-graph-query');
+          input.value = q;
+          search(q);
+        });
+      });
+      setupInteraction();
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init, { once: true });
+    } else {
+      init();
+    }
+  })();
+  </script>
+</ToolLayout>

@@ -1,0 +1,42 @@
+---
+import ToolLayout from '../../layouts/ToolLayout.astro';
+---
+<ToolLayout
+  title="武将プロフィール検索 | 織田信長・徳川家康・坂本龍馬を調べる"
+  description="武将・歴史人物を無料で検索。Wikipedia公開概要をもとにプロフィールを表示。"
+  canonical="https://www.randaworks.com/busho-profile-search/"
+  ogImage="https://www.randaworks.com/assets/img/games/inga/demo-cards/hero_nobunaga.jpg"
+  pageType="busho_profile_search"
+  source="busho_profile"
+  tag="ロングテール向け"
+  heading="人物検索"
+  breadcrumbs={[
+    { href: '/history-tools/', label: 'ツール集' },
+    { label: '人物検索' },
+  ]}
+  excludeTools={['busho-profile-search']}
+  gamePitch="ここで調べた武将がゲーム内のカードとして登場します。人物像を知ってからプレイすると因果関係が見えやすくなります。"
+  steamContext="日本史因果クロニクル — 武将たちが登場するデッキ構築ローグライク"
+>
+  <div class="tool-workspace">
+    <form id="profileSearchForm">
+      <div class="profile-search-row">
+        <input id="profileSearchInput" name="profileSearchInput" type="search" placeholder="織田信長、徳川家康、紫式部…">
+        <button class="tool-btn" type="submit">検索</button>
+      </div>
+    </form>
+    <div class="tool-chips">
+      <button type="button" data-profile-query="織田信長">織田信長</button>
+      <button type="button" data-profile-query="徳川家康">徳川家康</button>
+      <button type="button" data-profile-query="坂本龍馬">坂本龍馬</button>
+      <button type="button" data-profile-query="西郷隆盛">西郷隆盛</button>
+      <button type="button" data-profile-query="源頼朝">源頼朝</button>
+      <button type="button" data-profile-query="紫式部">紫式部</button>
+    </div>
+    <div class="profile-layout">
+      <div class="tool-surface profile-result-list" id="profileResults" aria-live="polite"></div>
+      <div class="tool-result-panel" id="profileDetail"></div>
+    </div>
+  </div>
+  <script is:inline src="/assets/js/history-tools.js"></script>
+</ToolLayout>

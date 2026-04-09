@@ -1,10 +1,12 @@
 # Large binaries (hosted on GCS)
-games/inga/play/build/*.pck.part*
-games/inga/play/build/*.wasm
-games/inga/play/downloads/
-assets/video/games/inga/SteamStorePV_v1.1.mp4
+public/games/inga/play/build/*.pck.part*
+public/games/inga/play/build/*.wasm
+public/games/inga/play/downloads/
+public/assets/video/games/inga/SteamStorePV_v1.1.mp4
 
 # Local settings
+.env
+.env.*
 .claude/
 .agents/
 skills-lock.json
@@ -19,25 +21,31 @@ scripts/
 cloud-analytics/
 start-local-analytics.bat
 
+# Astro build output
+dist/
+node_modules/
+.astro/
+
 # Temporary files
 .tmp/
 output/
 progress.md
 nul
-admin/release/randaworks-game-builds-cors.json
+public/admin/release/randaworks-game-builds-cors.json
+tmp-*
 
-# Astro journal build artifacts (source in journal-src/, output committed in journal/)
+# Astro journal build artifacts (source in journal-src/, output committed in public/journal/)
 journal-src/node_modules/
 journal-src/.astro/
 journal-src/dist/
 
 # Unpublished journal work-in-progress
 # Remove these ignore rules when journal content becomes publishable.
-journal/ai/
-journal/collections/
-journal/content-assets.mjs
-journal/content-modules.mjs
-journal/devlog/
-journal/game-design/
-journal/game-study/
-journal/research/
+public/journal/ai/
+public/journal/collections/
+public/journal/content-assets.mjs
+public/journal/content-modules.mjs
+public/journal/devlog/
+public/journal/game-design/
+public/journal/game-study/
+public/journal/research/

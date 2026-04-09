@@ -1,0 +1,101 @@
+---
+import ToolLayout from '../../../layouts/ToolLayout.astro';
+---
+<ToolLayout
+  title="漢字検索ツール | 読み方・部首・画数・意味"
+  description="武将名・地名の漢字を読み方、部首、画数、意味で即検索。"
+  canonical="https://www.randaworks.com/tools/kanji/"
+  pageType="kanji_search"
+  source="kanji"
+  tag="KanjiAPI"
+  heading="漢字検索"
+  breadcrumbs={[{ href: '/history-tools/', label: 'ツール集' }, { label: '漢字検索' }]}
+  excludeTools={['kanji']}
+  gamePitch="調べた漢字が登場する武将たちを、日本史カード連鎖ゲームで体験できます。"
+  steamContext="日本史因果クロニクル — 漢字で読み解く戦国カードゲーム"
+>
+  <div class="tool-workspace">
+    <div class="tool-input-row">
+      <label for="kanjiInput" style="flex:0 0 120px;">漢字
+        <input id="kanjiInput" type="text" maxlength="1" placeholder="信" autocomplete="off" style="font-size:1.8rem;text-align:center;font-family:'Space Grotesk',sans-serif;">
+      </label>
+      <button class="tool-btn" type="button" id="kanjiSearchBtn">検索</button>
+    </div>
+    <div class="tool-chips" id="kanjiQuickSearch">
+      <button type="button" data-kanji="信">信</button>
+      <button type="button" data-kanji="長">長</button>
+      <button type="button" data-kanji="武">武</button>
+      <button type="button" data-kanji="将">将</button>
+      <button type="button" data-kanji="戦">戦</button>
+      <button type="button" data-kanji="城">城</button>
+      <button type="button" data-kanji="刀">刀</button>
+      <button type="button" data-kanji="龍">龍</button>
+    </div>
+    <div class="tool-output" id="kanjiResult" aria-live="polite">
+      <span class="tool-empty">漢字を入力して検索</span>
+    </div>
+  </div>
+
+  <script is:inline>
+  (function () {
+    var cache = {};
+    function $(id) { return document.getElementById(id); }
+    function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+    function track(n, p) { if (window.RandaAnalytics && window.RandaAnalytics.track) window.RandaAnalytics.track(n, p||{}); if (typeof gtag==='function') gtag('event',n,p||{}); }
+    function isLocalHost(){return /^(dev\.randa|localhost|127\.0\.0\.1)$/i.test(window.location.hostname);}
+    function apiBase(){return isLocalHost()?'http://127.0.0.1:8787':window.location.origin;}
+    function apiUrl(path, params){
+      var url = new URL(path, apiBase());
+      if(params){Object.keys(params).forEach(function(key){if(params[key])url.searchParams.set(key, params[key]);});}
+      return url.toString();
+    }
+
+    function search(ch) {
+      var r = $('kanjiResult');
+      if (!ch || !/[\u4e00-\u9fff\u3400-\u4dbf]/.test(ch)) { r.innerHTML = '<span class="tool-empty">漢字1文字を入力</span>'; return; }
+      if (cache[ch]) { render(cache[ch]); return; }
+      r.innerHTML = '<span class="tool-output-label">検索中…</span>';
+      fetch(apiUrl('/api/kanji/', { ch: ch }), { headers: { 'Accept': 'application/json' } })
+        .then(function(r){if(!r.ok)throw 0;return r.json();})
+        .then(function(d){cache[ch]=d;render(d);track('kanji_search',{kanji:ch});})
+        .catch(function(){r.innerHTML='<span class="tool-empty">現在このツールは工事中です</span>';});
+    }
+
+    function render(d) {
+      var on = d.on_readings && d.on_readings.length ? d.on_readings.join('、') : '—';
+      var kun = d.kun_readings && d.kun_readings.length ? d.kun_readings.join('、') : '—';
+      var meanings = d.meanings && d.meanings.length ? d.meanings.join(', ') : '—';
+      var grade = d.grade ? '小学'+d.grade+'年' : '—';
+      var jlpt = d.jlpt ? 'N'+d.jlpt : '—';
+      $('kanjiResult').innerHTML =
+        '<div style="display:grid;grid-template-columns:auto 1fr;gap:24px;align-items:start;">' +
+          '<div style="font-size:5rem;line-height:1;color:var(--tool-accent);font-family:\'Shippori Mincho\',serif;text-align:center;min-width:90px;">' + esc(d.kanji) + '</div>' +
+          '<div class="tool-data-grid">' +
+            '<div class="tool-data-card"><strong>音読み</strong><span>'+esc(on)+'</span></div>' +
+            '<div class="tool-data-card"><strong>訓読み</strong><span>'+esc(kun)+'</span></div>' +
+            '<div class="tool-data-card"><strong>意味</strong><span>'+esc(meanings)+'</span></div>' +
+            '<div class="tool-data-card"><strong>画数</strong><span>'+(d.stroke_count||'—')+'画</span></div>' +
+            '<div class="tool-data-card"><strong>学年</strong><span>'+esc(grade)+'</span></div>' +
+            '<div class="tool-data-card"><strong>JLPT</strong><span>'+esc(jlpt)+'</span></div>' +
+          '</div>' +
+        '</div>';
+    }
+
+    function init() {
+      $('kanjiSearchBtn').addEventListener('click', function(){search($('kanjiInput').value.trim().charAt(0));});
+      $('kanjiInput').addEventListener('keydown', function(e){if(e.key==='Enter'){e.preventDefault();search(this.value.trim().charAt(0));}});
+      document.querySelectorAll('[data-kanji]').forEach(function(b){
+        b.addEventListener('click', function(){var k=b.getAttribute('data-kanji');$('kanjiInput').value=k;search(k);});
+      });
+    }
+    document.readyState==='loading'?document.addEventListener('DOMContentLoaded',init,{once:true}):init();
+  })();
+  </script>
+
+  <style is:inline>
+    @media (max-width:600px) {
+      .tool-output > div { grid-template-columns: 1fr !important; }
+      .tool-output > div > div:first-child { font-size: 3.5rem !important; }
+    }
+  </style>
+</ToolLayout>
