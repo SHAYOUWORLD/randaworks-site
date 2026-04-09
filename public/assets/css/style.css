@@ -2529,22 +2529,19 @@ tr.is-mine:hover { background: rgba(212, 175, 55, 0.22); }
    - Leaves h3 (card titles) and gold accents intact for brand consistency
    ========================================= */
 body.journal-page {
-  --bg-dark: #0d1117;
-  --card-bg: rgba(22, 27, 34, 0.94);
-  --card-border: rgba(139, 148, 158, 0.1);
-  --card-hover-border: rgba(179, 145, 85, 0.24);
-  --text-main: #e6edf3;
-  --text-muted: #8b949e;
-  --accent-gold: #c9a04e;
+  --bg-dark: #1c1917;
+  --bg-surface: #231f1c;
+  --card-bg: rgba(35, 31, 28, 0.94);
+  --card-border: rgba(231, 229, 228, 0.08);
+  --card-hover-border: rgba(194, 133, 90, 0.25);
+  --text-main: #d6d3d1;
+  --text-heading: #f5f5f4;
+  --text-muted: #a8a29e;
+  --accent-gold: #c2855a;
+  --accent-hover: #d9a87a;
+  --accent-subtle: rgba(194, 133, 90, 0.1);
 
   background: var(--bg-dark);
-  background-image:
-    linear-gradient(180deg, rgba(13, 17, 23, 0.98), rgba(8, 12, 18, 0.99)),
-    radial-gradient(
-      circle at 100% 0%,
-      rgba(179, 145, 85, 0.06),
-      transparent 28%
-    );
   color: var(--text-main);
 }
 
@@ -2557,7 +2554,7 @@ body.journal-page h2 {
 body.journal-page h1,
 body.journal-page h2,
 body.journal-page h3 {
-  color: #f0f6fc;
+  color: var(--text-heading);
 }
 
 body.journal-page p,
@@ -2572,24 +2569,24 @@ body.journal-page .muted {
 }
 
 body.journal-page a {
-  color: #d4a44e;
+  color: var(--accent-gold);
 }
 
 body.journal-page a:hover {
-  color: #e8bd6a;
+  color: var(--accent-hover);
   text-shadow: none;
 }
 
 body.journal-page .nav {
-  background: rgba(13, 17, 23, 0.92);
-  border-color: rgba(139, 148, 158, 0.1);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.24);
-  backdrop-filter: none;
-  -webkit-backdrop-filter: none;
+  background: rgba(28, 25, 23, 0.92);
+  border-color: rgba(231, 229, 228, 0.06);
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 
 body.journal-page .brand a {
-  color: #f0f6fc;
+  color: var(--text-heading);
 }
 
 body.journal-page .links a {
@@ -2598,21 +2595,21 @@ body.journal-page .links a {
 
 body.journal-page .links a:hover,
 body.journal-page .links a[aria-current="page"] {
-  color: #e8bd6a;
+  color: var(--accent-gold);
 }
 
 body.journal-page .card,
 body.journal-page .surface-panel,
 body.journal-page .hero-stat {
-  background: rgba(22, 27, 34, 0.94);
-  border-color: rgba(139, 148, 158, 0.1);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+  background: var(--card-bg);
+  border-color: var(--card-border);
+  box-shadow: 0 1px 4px rgba(44, 24, 16, 0.05);
 }
 
 body.journal-page .card:hover {
   transform: none;
-  border-color: rgba(179, 145, 85, 0.18);
-  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.22);
+  border-color: var(--card-hover-border);
+  box-shadow: 0 2px 8px rgba(231, 229, 228, 0.06);
 }
 
 body.journal-page .card::before {
@@ -2620,39 +2617,37 @@ body.journal-page .card::before {
 }
 
 body.journal-page .cta-band {
-  background:
-    radial-gradient(circle at top, rgba(179, 145, 85, 0.08), transparent 42%),
-    linear-gradient(180deg, rgba(13, 17, 23, 0.98), rgba(8, 12, 18, 0.99));
+  background: var(--bg-surface);
 }
 
 body.journal-page .cta,
 body.journal-page button.cta {
-  background: #c9a04e;
-  color: #0d1117;
+  background: var(--accent-gold);
+  color: #1c1917;
   box-shadow: none;
 }
 
 body.journal-page .cta:hover,
 body.journal-page button.cta:hover {
-  background: #d4ad5e;
+  background: var(--accent-hover);
   filter: none;
 }
 
 body.journal-page .cta-ghost {
-  background: rgba(139, 148, 158, 0.04);
+  background: transparent;
   color: var(--text-main);
-  border-color: rgba(139, 148, 158, 0.1);
+  border-color: var(--card-border);
   box-shadow: none;
 }
 
 body.journal-page .badge {
-  background: rgba(179, 145, 85, 0.12);
-  border-color: rgba(179, 145, 85, 0.24);
-  color: #d9bc89;
+  background: var(--accent-subtle);
+  border-color: rgba(184, 92, 60, 0.15);
+  color: var(--accent-gold);
 }
 
 body.journal-page .footer {
-  border-top-color: rgba(139, 148, 158, 0.1);
+  border-top-color: rgba(231, 229, 228, 0.06);
   color: var(--text-muted);
 }
 
@@ -2800,10 +2795,10 @@ body.journal-page .footer {
 /* Article header */
 .journal-article-header {
   display: grid;
-  gap: 18px;
+  gap: 16px;
   margin: 0 0 40px;
-  padding: 8px 0 28px;
-  border-bottom: 1px solid var(--card-border);
+  padding: 8px 0 32px;
+  border-bottom: 1px solid rgba(231, 229, 228, 0.08);
 }
 
 .journal-article-meta-row {
@@ -2816,28 +2811,28 @@ body.journal-page .footer {
 .journal-article-category {
   display: inline-flex;
   align-items: center;
-  min-height: 32px;
-  padding: 4px 12px;
-  border-radius: 999px;
-  background: rgba(179, 145, 85, 0.12);
-  border: 1px solid rgba(179, 145, 85, 0.24);
-  color: #d9bc89;
-  font-size: 0.82rem;
+  min-height: 28px;
+  padding: 3px 10px;
+  border-radius: 4px;
+  background: var(--accent-subtle);
+  border: none;
+  color: var(--accent-gold);
+  font-size: 0.78rem;
   font-weight: 700;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
 }
 
 .journal-article-meta-separator {
-  color: rgba(139, 148, 158, 0.5);
+  color: rgba(44, 24, 16, 0.2);
 }
 
 .journal-article-header h1 {
-  max-width: 14ch;
+  max-width: 20em;
   margin: 0;
-  font-size: clamp(2.3rem, 5vw, 4.1rem);
-  line-height: 1.18;
-  letter-spacing: -0.03em;
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+  line-height: 1.3;
+  letter-spacing: -0.02em;
 }
 
 .journal-article-meta {
@@ -2847,27 +2842,226 @@ body.journal-page .footer {
 }
 
 .journal-article-lead {
-  max-width: 56ch;
+  max-width: 680px;
   margin: 0;
   color: var(--text-muted);
-  font-size: 1.05rem;
-  line-height: 1.9;
+  font-size: 1rem;
+  line-height: 1.85;
 }
 
+/* ── Prose typography for markdown article body ── */
 .journal-article-body {
-  max-width: 760px;
+  max-width: 680px;
+  font-size: 1.05rem;
+  color: #d6d3d1;
+  line-height: 2.05;
 }
 
+/* Paragraphs — generous spacing for clear separation */
 .journal-article-body p {
-  margin-bottom: 1.5em;
+  margin: 0 0 1.9em;
+}
+
+/* Headings */
+.journal-article-body h2 {
+  margin: 3em 0 1em;
+  padding-bottom: 0.35em;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--text-heading);
+  border-bottom: 1px solid rgba(231, 229, 228, 0.1);
+  line-height: 1.45;
+}
+
+.journal-article-body h2:first-child {
+  margin-top: 0;
+}
+
+.journal-article-body h3 {
+  margin: 2.2em 0 0.8em;
+  font-size: 1.08rem;
+  font-weight: 700;
+  color: var(--accent-gold);
+  line-height: 1.5;
+}
+
+.journal-article-body h4 {
+  margin: 1.8em 0 0.6em;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-heading);
+}
+
+/* Strong & emphasis */
+.journal-article-body strong {
+  color: var(--text-heading);
+  font-weight: 700;
+}
+
+.journal-article-body em {
+  color: #a8a29e;
+  font-style: italic;
+}
+
+/* Lists — extra breathing room */
+.journal-article-body ul,
+.journal-article-body ol {
+  margin: 1em 0 1.9em;
+  padding-left: 1.4em;
+}
+
+.journal-article-body ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.journal-article-body ul > li {
+  position: relative;
+  padding-left: 1.2em;
+  margin-bottom: 0.7em;
   line-height: 1.9;
+}
+
+.journal-article-body ul > li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.82em;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--accent-gold);
+  opacity: 0.55;
+}
+
+.journal-article-body ol > li {
+  margin-bottom: 0.7em;
+  line-height: 1.9;
+  padding-left: 0.3em;
+}
+
+.journal-article-body ol > li::marker {
+  color: var(--accent-gold);
+  font-weight: 600;
+  font-size: 0.95em;
+}
+
+/* Tables */
+.journal-article-body table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.8em 0 2.2em;
+  font-size: 0.92rem;
+  line-height: 1.65;
+}
+
+.journal-article-body thead th {
+  padding: 10px 14px;
+  text-align: left;
+  font-weight: 600;
+  color: var(--text-muted);
+  border-bottom: 2px solid rgba(231, 229, 228, 0.08);
+  background: rgba(231, 229, 228, 0.03);
+  white-space: nowrap;
+}
+
+.journal-article-body tbody td {
+  padding: 10px 14px;
+  border-bottom: 1px solid rgba(231, 229, 228, 0.05);
+  vertical-align: top;
+}
+
+.journal-article-body tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.journal-article-body tbody tr:hover {
+  background: rgba(231, 229, 228, 0.02);
+}
+
+/* Blockquotes */
+.journal-article-body blockquote {
+  margin: 1.8em 0 2em;
+  padding: 1em 1.3em;
+  border-left: 3px solid var(--accent-gold);
+  background: rgba(184, 92, 60, 0.04);
+  border-radius: 0 6px 6px 0;
+  color: #a8a29e;
+}
+
+.journal-article-body blockquote p {
+  margin-bottom: 0.6em;
+}
+
+.journal-article-body blockquote p:last-child {
+  margin-bottom: 0;
+}
+
+/* Horizontal rules */
+.journal-article-body hr {
+  margin: 3em 0;
+  border: none;
+  border-top: 1px solid rgba(231, 229, 228, 0.08);
+}
+
+/* Inline code */
+.journal-article-body code {
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  font-size: 0.85em;
+  background: rgba(231, 229, 228, 0.04);
+  border: 1px solid rgba(231, 229, 228, 0.06);
+  border-radius: 3px;
+  padding: 2px 5px;
+  color: #d9a87a;
+  word-break: break-all;
+}
+
+/* Code blocks */
+.journal-article-body pre {
+  margin: 1.8em 0 2.2em;
+  padding: 1.2em 1.4em;
+  background: rgba(0, 0, 0, 0.3);
+  border: none;
+  border-radius: 6px;
+  overflow-x: auto;
+  line-height: 1.55;
+}
+
+.journal-article-body pre code {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: 0.88rem;
+  color: #e7e5e4;
+}
+
+/* Links */
+.journal-article-body a {
+  color: var(--accent-gold);
+  text-decoration: underline;
+  text-decoration-color: rgba(184, 92, 60, 0.3);
+  text-underline-offset: 3px;
+  transition: text-decoration-color 0.15s;
+}
+
+.journal-article-body a:hover {
+  text-decoration-color: rgba(184, 92, 60, 0.7);
+  color: var(--accent-hover);
+}
+
+/* Images */
+.journal-article-body img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 6px;
+  margin: 1.8em 0;
 }
 
 .journal-article-body .specs-table {
   margin: 24px 0 32px;
 }
 
-/* Article sections */
+/* Article sections (legacy class support) */
 .journal-section {
   margin-bottom: 48px;
 }
@@ -2943,12 +3137,12 @@ body.journal-page .footer {
 
 /* References section */
 .journal-references {
-  background: rgba(22, 27, 34, 0.92);
-  border: 1px solid rgba(139, 148, 158, 0.1);
-  border-radius: 16px;
+  background: rgba(231, 229, 228, 0.03);
+  border: 1px solid rgba(231, 229, 228, 0.06);
+  border-radius: 8px;
   padding: 32px;
   margin-bottom: 48px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+  box-shadow: none;
 }
 
 .journal-references h2 {
@@ -2967,9 +3161,9 @@ body.journal-page .footer {
 
 /* Article nav */
 .journal-article-nav {
-  margin-top: 12px;
+  margin-top: 24px;
   padding-top: 28px;
-  border-top: 1px solid var(--card-border);
+  border-top: 1px solid rgba(231, 229, 228, 0.08);
 }
 
 .journal-nav-link {
@@ -3079,16 +3273,15 @@ body.journal-page .footer {
   line-height: 1.8;
 }
 
-/* Inline code in journal */
-.journal-article code,
+/* Inline code in journal (outside article body) */
 .journal-references code {
   font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
   font-size: 0.85em;
-  background: rgba(139, 148, 158, 0.06);
-  border: 1px solid rgba(139, 148, 158, 0.1);
-  border-radius: 4px;
-  padding: 2px 6px;
-  color: rgba(240, 229, 216, 0.95);
+  background: rgba(231, 229, 228, 0.04);
+  border: 1px solid rgba(231, 229, 228, 0.06);
+  border-radius: 3px;
+  padding: 2px 5px;
+  color: #d9a87a;
   word-break: break-all;
 }
 
@@ -3114,7 +3307,25 @@ body.journal-page .breadcrumb-current {
 @media (max-width: 768px) {
   .journal-page-header h1 {
     max-width: 100%;
-    font-size: clamp(1.9rem, 8vw, 3rem);
+    font-size: clamp(1.6rem, 6vw, 2.2rem);
+  }
+
+  .journal-article-body {
+    font-size: 1rem;
+  }
+
+  .journal-article-body h2 {
+    font-size: 1.18rem;
+    margin-top: 2.4em;
+  }
+
+  .journal-article-body table {
+    font-size: 0.85rem;
+  }
+
+  .journal-article-body thead th,
+  .journal-article-body tbody td {
+    padding: 8px 10px;
   }
 
   .journal-section-panel {
