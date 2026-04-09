@@ -1,0 +1,234 @@
+<!DOCTYPE html><html lang="ja"> <head><meta charset="utf-8"><script async src="https://www.googletagmanager.com/gtag/js?id=G-WNL49Q0CTT"></script><script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-WNL49Q0CTT');
+  </script><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="icon" href="/assets/img/randaworks_logo_icon.webp" type="image/webp"><title>年号×世界史ゲーム | 同じ年に世界で何が起きた？</title><meta name="description" content="日本史の年号と世界史の出来事を同じ年で比較。受験にも使える年号暗記ゲームです。Numbers APIで英語圏のトリビアも表示。"><link rel="canonical" href="https://www.randaworks.com/tools/nengo-game/"><meta property="og:type" content="website"><meta property="og:title" content="年号×世界史ゲーム | 同じ年に世界で何が起きた？"><meta property="og:description" content="日本史の年号と世界史の出来事を同じ年で比較。受験にも使える年号暗記ゲームです。Numbers APIで英語圏のトリビアも表示。"><meta property="og:url" content="https://www.randaworks.com/tools/nengo-game/"><meta property="og:image" content="https://www.randaworks.com/assets/img/games/inga/demo-cards/combo_nobunaga.jpg"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="年号×世界史ゲーム | 同じ年に世界で何が起きた？"><meta name="twitter:description" content="日本史の年号と世界史の出来事を同じ年で比較。受験にも使える年号暗記ゲームです。Numbers APIで英語圏のトリビアも表示。"><meta name="twitter:image" content="https://www.randaworks.com/assets/img/games/inga/demo-cards/combo_nobunaga.jpg"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Shippori+Mincho:wght@400;700&family=Space+Grotesk:wght@400;500;600;700&display=swap"><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Shippori+Mincho:wght@400;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'"><noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Shippori+Mincho:wght@400;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet"></noscript><link rel="stylesheet" href="/assets/css/style.css"><link rel="stylesheet" href="/assets/css/history-tools.css"></head> <body data-page-type="nengo_game"> <a class="skip-link" href="#main-content">メインコンテンツへ移動</a>   <div class="container tool-page"> <header class="nav"> <div class="brand"><a href="/"><picture> <source srcset="/assets/img/randaworks_logo_text.webp" type="image/webp"> <img src="/assets/img/randaworks_logo_text.png" alt="RandaWorks" style="height: 28px; vertical-align: middle;"> </picture></a></div> <div class="links"> <a href="/history-tools/">ツール集</a><a href="/nihonshi-quiz/">日本史クイズ</a><a href="/busho-profile-search/">人物検索</a><a href="/games/inga/?src=nav">ゲームを見る</a> </div> </header> <main id="main-content"> <nav aria-label="パンくずリスト"> <ol class="breadcrumb"> <li><a href="/">ホーム</a></li>  <li class="breadcrumb-separator" aria-hidden="true">›</li> <li><a href="/history-tools/">ツール集</a></li> <li class="breadcrumb-separator" aria-hidden="true">›</li> <li class="breadcrumb-current" aria-current="page">年号×世界史ゲーム</li> </ol> </nav> <div class="tool-page-header"> <h1>年号×世界史ゲーム</h1> <span class="tool-page-tag">NumbersAPI</span> </div> <p class="tool-page-desc">日本史の重要年号を表示し、同じ年に世界で起きた出来事を英語のトリビアとして並べます。</p>  <div class="tool-workspace" id="nengo-tool"> <div class="tool-input-row"> <label for="nengoYearInput">西暦年を入力
+<input id="nengoYearInput" type="number" min="600" max="1912" placeholder="1600" value="1600"> </label> <button class="tool-btn" id="nengoRandomBtn" type="button">ランダムに出題</button> </div> <div class="tool-output" id="nengoResult" aria-live="polite"> <span class="tool-output-label">年を入力するか、ランダムボタンを押してください。</span> </div> </div> <script>
+  (function () {
+    var WORLD_HISTORY = {
+      645: 'ササン朝ペルシアがアラブ軍に敗北し衰退が始まる。',
+      710: 'イスラム帝国がイベリア半島に進出（ウマイヤ朝）。',
+      794: 'ヴァイキングがイングランドのリンディスファーン修道院を襲撃（793年）した翌年。',
+      1185: '第3回十字軍の準備が始まる時期。東ローマ帝国でアンゲロス王朝が成立。',
+      1192: '第3回十字軍でリチャード1世とサラディンが休戦協定を結ぶ。',
+      1274: 'マルコ・ポーロが元朝のフビライに仕えていた時期。',
+      1333: '英仏百年戦争の前哨戦が始まる時期。黒死病流行の直前。',
+      1338: '英仏百年戦争が本格化。エドワード3世がフランス王位を主張。',
+      1467: 'グーテンベルクの活版印刷が普及し始める時期。ルネサンス最盛期。',
+      1543: 'コペルニクスが地動説を発表（「天球の回転について」刊行）。',
+      1549: 'イングランドで最初の「共通祈禱書」が導入される。',
+      1560: 'エリザベス1世がイングランド女王として統治を確立。',
+      1573: 'バルトロメオの虐殺（1572年）の翌年。フランス宗教戦争が激化。',
+      1582: 'グレゴリオ暦が導入される（ローマ教皇グレゴリウス13世）。',
+      1590: 'シェイクスピアがロンドンで劇作家として活動を始める時期。',
+      1600: 'シェイクスピアが「ハムレット」を執筆し始める。東インド会社設立。',
+      1603: 'エリザベス1世が死去。ジェームズ1世がイングランド王に。',
+      1615: '三十年戦争の直前。ヨーロッパで宗教的緊張が高まる。',
+      1639: 'イングランド内戦の前兆。ピューリタン革命へ向かう時期。',
+      1716: 'スペイン継承戦争が終結（1714年）した直後の安定期。',
+      1853: 'クリミア戦争が始まる。ナイチンゲールが看護活動を開始。',
+      1858: 'ダーウィンとウォレスが自然選択説を共同発表。インド大反乱の翌年。',
+      1867: 'カール・マルクスが「資本論」第1巻を刊行。',
+      1868: 'スエズ運河の建設が進行中。米国では南北戦争後の再建期。',
+      1877: 'エジソンが蓄音機を発明。ビクトリア女王がインド皇帝を兼任。',
+      1894: 'ドレフュス事件がフランスで発生。日清戦争と同年。',
+      1904: 'ライト兄弟の初飛行（1903年）の翌年。英仏協商が成立。',
+    };
+
+    var HISTORY = {
+      645: { event: '大化の改新', era: '大化元年', memo: '中大兄皇子と中臣鎌足の政変' },
+      710: { event: '平城京遷都', era: '和銅3年', memo: '奈良時代の始まり' },
+      794: { event: '平安京遷都', era: '延暦13年', memo: '桓武天皇が京都へ遷都' },
+      1185: { event: '壇ノ浦の戦い', era: '元暦2年', memo: '平氏滅亡・源氏の勝利' },
+      1192: { event: '鎌倉幕府成立', era: '建久3年', memo: '源頼朝が征夷大将軍に' },
+      1274: { event: '文永の役', era: '文永11年', memo: '元寇・モンゴル軍来襲' },
+      1333: { event: '鎌倉幕府滅亡', era: '元弘3年', memo: '後醍醐天皇の討幕' },
+      1338: { event: '室町幕府成立', era: '暦応元年', memo: '足利尊氏が征夷大将軍に' },
+      1467: { event: '応仁の乱', era: '応仁元年', memo: '戦国時代の幕開け' },
+      1543: { event: '鉄砲伝来', era: '天文12年', memo: 'ポルトガル人が種子島に漂着' },
+      1549: { event: 'キリスト教伝来', era: '天文18年', memo: 'ザビエルが鹿児島に上陸' },
+      1560: { event: '桶狭間の戦い', era: '永禄3年', memo: '織田信長が今川義元を討つ' },
+      1573: { event: '室町幕府滅亡', era: '天正元年', memo: '織田信長が足利義昭を追放' },
+      1582: { event: '本能寺の変', era: '天正10年', memo: '明智光秀の謀反・信長の死' },
+      1590: { event: '天下統一', era: '天正18年', memo: '豊臣秀吉の小田原征伐' },
+      1600: { event: '関ヶ原の戦い', era: '慶長5年', memo: '石田三成vs徳川家康' },
+      1603: { event: '江戸幕府開府', era: '慶長8年', memo: '徳川家康が征夷大将軍に' },
+      1615: { event: '大坂夏の陣', era: '慶長20年', memo: '豊臣家滅亡' },
+      1639: { event: '鎖国完成', era: '寛永16年', memo: 'ポルトガル船の来航禁止' },
+      1716: { event: '享保の改革', era: '享保元年', memo: '徳川吉宗の幕政改革' },
+      1853: { event: '黒船来航', era: '嘉永6年', memo: 'ペリーが浦賀に来航' },
+      1858: { event: '日米修好通商条約', era: '安政5年', memo: '不平等条約の締結' },
+      1867: { event: '大政奉還', era: '慶応3年', memo: '徳川慶喜が政権を朝廷に返還' },
+      1868: { event: '明治維新', era: '明治元年', memo: '近代国家への転換' },
+      1877: { event: '西南戦争', era: '明治10年', memo: '西郷隆盛の最後の戦い' },
+      1894: { event: '日清戦争', era: '明治27年', memo: '清国との戦争' },
+      1904: { event: '日露戦争', era: '明治37年', memo: 'ロシア帝国との戦争' },
+    };
+
+    var YEARS = Object.keys(HISTORY).map(Number).sort(function (a, b) { return a - b; });
+    var revealState = { year: null, japan: false, world: false };
+
+    function $(id) { return document.getElementById(id); }
+    function escapeHtml(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+    function track(name, payload) {
+      if (window.RandaAnalytics && typeof window.RandaAnalytics.track === 'function') window.RandaAnalytics.track(name, payload || {});
+      if (typeof gtag === 'function') gtag('event', name, payload || {});
+    }
+
+    function lookupYear(year) {
+      var result = $('nengoResult');
+      var jp = HISTORY[year];
+
+      if (!jp) {
+        revealState = { year: null, japan: false, world: false };
+        var closest = YEARS.reduce(function (prev, curr) {
+          return Math.abs(curr - year) < Math.abs(prev - year) ? curr : prev;
+        });
+        result.innerHTML =
+          '<span class="tool-output-label">' + year + '年の日本史イベントはデータにありません。</span>' +
+          '<p>最寄りの年号: <a href="#" class="nengo-year-link" data-year="' + closest + '">' + closest + '年（' + escapeHtml(HISTORY[closest].event) + '）</a></p>';
+        return;
+      }
+
+      var worldFact = WORLD_HISTORY[year] || null;
+      revealState = { year: year, japan: false, world: false };
+      renderChallenge(year, jp, worldFact);
+
+      track('nengo_game_lookup', { year: year, event: jp.event });
+    }
+
+    function renderChallenge(year, jp, worldFact) {
+      var result = $('nengoResult');
+      result.innerHTML =
+        '<div class="nengo-challenge">' +
+          '<div class="tool-data-card nengo-year-card">' +
+            '<span class="tool-output-label">出題年</span>' +
+            '<strong>' + year + '年</strong>' +
+            '<span>下のカードをそれぞれめくって、日本史と世界史の答え合わせをしてください。</span>' +
+          '</div>' +
+          '<div class="nengo-flip-grid">' +
+            renderHiddenCard('japan', year, jp) +
+            renderHiddenCard('world', year, worldFact) +
+          '</div>' +
+        '</div>';
+    }
+
+    function renderHiddenCard(kind, year, payload) {
+      var isJapan = kind === 'japan';
+      var revealed = revealState[kind];
+      var title = isJapan ? '🗾 日本史' : '🌍 世界史';
+      var buttonLabel = isJapan ? '日本史をめくる' : '世界史をめくる';
+      var answer = revealed
+        ? renderAnswer(kind, year, payload)
+        : '<div class="nengo-secret">？？？</div><p class="nengo-secret-hint">まずはこの年に何が起きたか思い出してから、カードをめくってください。</p>';
+
+      return '<section class="tool-data-card nengo-flip-card" data-revealed="' + (revealed ? 'true' : 'false') + '">' +
+        '<div class="nengo-flip-card__header">' +
+          '<strong>' + title + '</strong>' +
+          '<button class="tool-btn tool-btn-ghost nengo-reveal-btn" type="button" data-reveal="' + kind + '"' + (revealed ? ' disabled' : '') + '>' +
+            (revealed ? '表示済み' : buttonLabel) +
+          '</button>' +
+        '</div>' +
+        '<div class="nengo-flip-card__body">' + answer + '</div>' +
+      '</section>';
+    }
+
+    function renderAnswer(kind, year, payload) {
+      if (kind === 'japan') {
+        return '<p class="nengo-answer-title">' + escapeHtml(payload.event) + '</p>' +
+          '<p class="nengo-answer-sub">' + year + '年 / ' + escapeHtml(payload.era) + '</p>' +
+          '<p class="nengo-answer-body">' + escapeHtml(payload.memo) + '</p>';
+      }
+
+      if (!payload) {
+        return '<p class="nengo-answer-title">同年の世界史データは未登録です。</p>' +
+          '<p class="nengo-answer-sub">' + year + '年</p>';
+      }
+
+      return '<p class="nengo-answer-title">' + year + '年の世界史</p>' +
+        '<p class="nengo-answer-body">' + escapeHtml(payload) + '</p>';
+    }
+
+    function handleResultClick(e) {
+      var yearLink = e.target.closest('.nengo-year-link');
+      if (yearLink) {
+        e.preventDefault();
+        var y = parseInt(yearLink.getAttribute('data-year'), 10);
+        $('nengoYearInput').value = y;
+        lookupYear(y);
+        return;
+      }
+
+      var revealButton = e.target.closest('.nengo-reveal-btn');
+      if (!revealButton || !revealState.year) return;
+
+      var side = revealButton.getAttribute('data-reveal');
+      if (!side || revealState[side]) return;
+
+      revealState[side] = true;
+      renderChallenge(revealState.year, HISTORY[revealState.year], WORLD_HISTORY[revealState.year] || null);
+      track('nengo_game_reveal', { year: revealState.year, side: side });
+    }
+
+    function randomYear() {
+      var y = YEARS[Math.floor(Math.random() * YEARS.length)];
+      $('nengoYearInput').value = y;
+      lookupYear(y);
+      track('nengo_game_random', { year: y, event: HISTORY[y].event });
+    }
+
+    function init() {
+      var input = $('nengoYearInput');
+      var randomBtn = $('nengoRandomBtn');
+      var result = $('nengoResult');
+
+      if (input) input.addEventListener('change', function () {
+        var y = parseInt(input.value, 10);
+        if (y) lookupYear(y);
+      });
+
+      if (randomBtn) randomBtn.addEventListener('click', randomYear);
+      if (result) result.addEventListener('click', handleResultClick);
+      if (input && input.value) lookupYear(parseInt(input.value, 10));
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init, { once: true });
+    } else {
+      init();
+    }
+  })();
+  </script> <style>
+    .nengo-challenge { display: grid; gap: 14px; }
+    .nengo-year-card strong { font-size: clamp(1.4rem, 4vw, 2rem); }
+    .nengo-flip-grid { display: grid; gap: 14px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .nengo-flip-card { min-height: 220px; }
+    .nengo-flip-card__header { display: flex; justify-content: space-between; gap: 12px; align-items: center; }
+    .nengo-flip-card__body { display: grid; gap: 10px; align-content: center; flex: 1 1 auto; min-height: 130px; }
+    .nengo-secret {
+      display: grid;
+      place-items: center;
+      min-height: 96px;
+      border-radius: 12px;
+      border: 1px dashed rgba(255,255,255,0.14);
+      background: rgba(255,255,255,0.02);
+      color: #fff;
+      font-family: "Space Grotesk", "Noto Sans JP", sans-serif;
+      font-size: clamp(1.8rem, 5vw, 2.6rem);
+      font-weight: 700;
+      letter-spacing: 0.08em;
+    }
+    .nengo-secret-hint,
+    .nengo-answer-sub,
+    .nengo-answer-body { margin: 0; color: var(--text-muted); font-size: 0.85rem; line-height: 1.6; }
+    .nengo-answer-title { margin: 0; color: #fff; font-size: 1rem; font-weight: 700; }
+    .nengo-loading { display: grid; gap: 14px; }
+
+    @media (max-width: 720px) {
+      .nengo-flip-grid { grid-template-columns: 1fr; }
+      .nengo-flip-card__header { flex-direction: column; align-items: flex-start; }
+      .nengo-reveal-btn { width: 100%; }
+    }
+  </style>  <div class="tool-footer-section"> <div class="tool-related-grid"> <div class="tool-related-card"> <h3>他のツール</h3> <div class="tool-related-links"> <a href="/nihonshi-quiz/">日本史クイズ</a><a href="/wareki-converter/">元号変換</a><a href="/busho-profile-search/">人物検索</a><a href="/tools/kanji/">漢字検索</a><a href="/tools/gacha/">武将ガチャ</a> </div> </div> <div class="tool-related-card"> <h3>ゲームとの接点</h3> <p style="color:var(--text-muted);font-size:0.85rem;margin:0 0 12px;">年号で覚えた時代感覚がそのままゲームの戦略に活きます。カードの因果連鎖は時代順に強くなる設計です。</p> <div class="tool-related-links"> <a href="/games/inga/?src=nengo_game_game" data-track-event="cta_click" data-track-placement="nengo_game_game">詳細</a> <a href="/games/inga/play/?src=nengo_game_play" data-track-event="cta_click" data-track-placement="nengo_game_play">体験版</a> </div> </div> </div> <div class="tool-related-card" id="steam" style="margin-top:16px;"><span class="tool-output-label">年号の知識をカード連鎖で活用</span><div class="steam-widget-shell"><iframe src="https://store.steampowered.com/widget/4403470/?utm_source=randaworks&#38;utm_medium=nengo_game&#38;utm_campaign=widget" title="日本史因果クロニクル Steam Store Widget" loading="lazy"></iframe></div></div> </div> </main> <footer class="footer"> <nav class="footer-nav" aria-label="フッターナビゲーション"> <a href="/about/">About</a> <a href="/privacy/">プライバシーポリシー</a> <a href="/terms/">利用規約</a> <a href="/contact/">お問い合わせ</a> </nav> <div class="footer-links"> <a href="/history-tools/">日本史ツール集</a> <a href="/nihonshi-quiz/">日本史クイズ</a> <a href="/busho-profile-search/">人物検索</a> <a href="/games/inga/?src=nengo_game_footer">ゲーム詳細</a> </div> <div>&copy; 2026 RandaWorks</div> </footer> </div>  <script src="/assets/js/analytics-config.js"></script> <script src="/assets/js/analytics.js"></script> </body> </html>
