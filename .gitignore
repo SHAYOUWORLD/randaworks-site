@@ -26,6 +26,9 @@ dist/
 node_modules/
 .astro/
 
+# Draft articles (not for public repo - move to src/content/journal/ when ready to publish)
+drafts/
+
 # Temporary files
 .tmp/
 output/
