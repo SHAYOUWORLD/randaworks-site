@@ -88,6 +88,67 @@ import ToolLayout from '../../layouts/ToolLayout.astro';
       return 'https://github.com/SHAYOUWORLD/randaworks-site/issues/new?title=' + t + '&body=' + b + '&labels=quiz-report';
     }
 
+    // ── Wikipedia API ──
+    var wikiCache = {};
+    function fetchWiki(keyword) {
+      if (wikiCache[keyword]) return Promise.resolve(wikiCache[keyword]);
+      return fetch('https://ja.wikipedia.org/api/rest_v1/page/summary/' + encodeURIComponent(keyword))
+        .then(function(r) { return r.ok ? r.json() : null; })
+        .then(function(d) { if (d && d.type !== 'disambiguation') { wikiCache[keyword] = d; return d; } return null; })
+        .catch(function() { return null; });
+    }
+
+    function renderWikiCard(containerId, keyword) {
+      fetchWiki(keyword).then(function(d) {
+        if (!d) return;
+        var el = $(containerId);
+        if (!el) return;
+        var thumb = d.thumbnail && d.thumbnail.source ? d.thumbnail.source : '';
+        var extract = d.extract ? (d.extract.length > 200 ? d.extract.substring(0, 200) + '…' : d.extract) : '';
+        var url = d.content_urls && d.content_urls.desktop ? d.content_urls.desktop.page : wikiUrl(keyword);
+        var html = '<div class="wiki-card">';
+        if (thumb) html += '<img src="' + esc(thumb) + '" alt="' + esc(d.title) + '" class="wiki-card-thumb" loading="lazy">';
+        html += '<div class="wiki-card-body">';
+        html += '<h4 class="wiki-card-title">' + esc(d.title) + '</h4>';
+        if (extract) html += '<p class="wiki-card-extract">' + esc(extract) + '</p>';
+        html += '<a href="' + esc(url) + '" target="_blank" rel="noopener noreferrer" class="wiki-card-link"'
+          + ' data-track-event="cta_click" data-track-placement="inga_quiz_wiki_card">&#x1F4D6; Wikipediaで続きを読む</a>';
+        html += '</div></div>';
+        el.innerHTML = html;
+      });
+    }
+
+    function buildResourceLinks(keyword) {
+      var kw = encodeURIComponent(keyword);
+      return '<div class="quiz-resources">'
+        + '<a href="' + wikiUrl(keyword) + '" target="_blank" rel="noopener noreferrer" class="quiz-resource" data-track-event="cta_click" data-track-placement="inga_quiz_res_wiki"><span class="quiz-resource-icon">&#x1F4D6;</span> Wikipedia</a>'
+        + '<a href="https://ndlsearch.ndl.go.jp/search?keyword=' + kw + '" target="_blank" rel="noopener noreferrer" class="quiz-resource" data-track-event="cta_click" data-track-placement="inga_quiz_res_ndl"><span class="quiz-resource-icon">&#x1F3DB;</span> 国立国会図書館</a>'
+        + '<a href="https://cir.nii.ac.jp/all?q=' + kw + '" target="_blank" rel="noopener noreferrer" class="quiz-resource" data-track-event="cta_click" data-track-placement="inga_quiz_res_cinii"><span class="quiz-resource-icon">&#x1F4DA;</span> CiNii</a>'
+        + '<a href="/tools/shiryo/?q=' + kw + '" class="quiz-resource" data-track-event="cta_click" data-track-placement="inga_quiz_res_shiryo"><span class="quiz-resource-icon">&#x1F4DC;</span> 古典史料</a>'
+        + '</div>';
+    }
+
+    var GAME_SCREENSHOTS = [
+      '/assets/img/games/inga/ss_01.webp',
+      '/assets/img/games/inga/ss_02.webp',
+      '/assets/img/games/inga/ss_03.webp',
+      '/assets/img/games/inga/ss_04.webp',
+      '/assets/img/games/inga/ss_05.webp',
+      '/assets/img/games/inga/ss_06.webp',
+    ];
+    var ssIdx = 0;
+    function buildGameCta(source) {
+      var img = GAME_SCREENSHOTS[ssIdx % GAME_SCREENSHOTS.length];
+      ssIdx++;
+      return '<a href="/games/inga/?src=' + source + '" class="quiz-game-cta">'
+        + '<img src="' + img + '" alt="日本史因果クロニクル" class="quiz-game-cta-img" loading="lazy">'
+        + '<div class="quiz-game-cta-body">'
+        + '<div class="quiz-game-cta-label">&#x1F3AE; Game</div>'
+        + '<div class="quiz-game-cta-title">このシナリオをゲームでプレイ</div>'
+        + '<div class="quiz-game-cta-desc">日本史因果クロニクルでは、このクイズのシナリオが実際のゲームイベントとして登場します。</div>'
+        + '</div></a>';
+    }
+
     // ── Data loading ──
     function loadData() {
       fetch('/assets/data/quiz-inga.json')
@@ -258,26 +319,28 @@ import ToolLayout from '../../layouts/ToolLayout.astro';
           + '</div>';
       }
 
-      // Wiki links
-      if (q.keywords && q.keywords.length > 0) {
-        html += '<div class="quiz-wiki-links">';
-        q.keywords.forEach(function(kw) {
-          html += '<a href="' + wikiUrl(kw) + '" target="_blank" rel="noopener noreferrer" class="quiz-wiki-link"'
-            + ' data-track-event="cta_click" data-track-placement="inga_quiz_wiki">'
-            + esc(kw) + '</a>';
-        });
-        html += '</div>';
-      }
+      // Wikipedia card placeholder
+      var mainKeyword = (q.keywords && q.keywords[0]) || q.title;
+      html += '<div id="wikiCardSlot"></div>';
+
+      // Resource links
+      html += buildResourceLinks(mainKeyword);
+
+      // Game CTA
+      html += buildGameCta('inga_quiz_feedback');
 
       // Next + Report buttons
       html += '<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:18px;">';
       html += '<button class="quiz-next-btn" id="nextBtn" style="margin-top:0;">次の問題へ &#x2192;</button>';
-      html += '<a href="' + reportUrl(q.id, q.title, 'ページ: 因果クイズ\n時代: ' + (ERA_NAMES ? '' : '') + q.era) + '" target="_blank" rel="noopener noreferrer" class="quiz-report-btn">&#x1F6A9; 間違いを報告</a>';
+      html += '<a href="' + reportUrl(q.id, q.title, 'ページ: 因果クイズ\n時代: ' + q.era) + '" target="_blank" rel="noopener noreferrer" class="quiz-report-btn">&#x1F6A9; 間違いを報告</a>';
       html += '</div>';
       html += '</div>';
 
       $('feedbackArea').innerHTML = html;
       $('feedbackArea').style.display = '';
+
+      // Async: fetch Wikipedia thumbnail + summary
+      renderWikiCard('wikiCardSlot', mainKeyword);
 
       $('nextBtn').addEventListener('click', function() { nextQuestion(); });
       $('feedbackArea').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
