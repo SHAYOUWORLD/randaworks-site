@@ -2,27 +2,27 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://www.randaworks.com/</loc>
-    <lastmod>2026-04-02</lastmod>
+    <lastmod>2026-04-09</lastmod>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://www.randaworks.com/en/</loc>
-    <lastmod>2026-04-02</lastmod>
+    <lastmod>2026-04-09</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://www.randaworks.com/contact/</loc>
+    <loc>https://www.randaworks.com/about/</loc>
     <lastmod>2026-04-02</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://www.randaworks.com/en/contact/</loc>
+    <loc>https://www.randaworks.com/en/about/</loc>
     <lastmod>2026-04-02</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.5</priority>
   </url>
   <url>
     <loc>https://www.randaworks.com/games/</loc>
@@ -38,7 +38,7 @@
   </url>
   <url>
     <loc>https://www.randaworks.com/games/inga/</loc>
-    <lastmod>2026-04-01</lastmod>
+    <lastmod>2026-04-09</lastmod>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
   </url>
@@ -97,56 +97,20 @@
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://www.randaworks.com/news/</loc>
+    <loc>https://www.randaworks.com/contact/</loc>
+    <lastmod>2026-04-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.randaworks.com/en/contact/</loc>
     <lastmod>2026-04-02</lastmod>
-    <changefreq>weekly</changefreq>
+    <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.randaworks.com/en/news/</loc>
-    <lastmod>2026-04-02</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://www.randaworks.com/news/video-page-launch/</loc>
-    <lastmod>2026-04-02</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://www.randaworks.com/en/news/video-page-launch/</loc>
-    <lastmod>2026-04-02</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://www.randaworks.com/news/site-renewal/</loc>
-    <lastmod>2026-04-02</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://www.randaworks.com/en/news/site-renewal/</loc>
-    <lastmod>2026-04-02</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://www.randaworks.com/about/</loc>
-    <lastmod>2026-04-02</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://www.randaworks.com/en/about/</loc>
-    <lastmod>2026-04-02</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
     <loc>https://www.randaworks.com/privacy/</loc>
-    <lastmod>2026-04-02</lastmod>
+    <lastmod>2026-04-09</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>
   </url>
@@ -167,6 +131,12 @@
     <lastmod>2026-04-02</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://www.randaworks.com/faq/</loc>
+    <lastmod>2026-04-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.randaworks.com/support/</loc>
@@ -193,39 +163,28 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://www.randaworks.com/journal/</loc>
-    <lastmod>2026-04-02</lastmod>
+    <loc>https://www.randaworks.com/history-tools/</loc>
+    <lastmod>2026-04-08</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
+    <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.randaworks.com/journal/devlog/</loc>
-    <lastmod>2026-04-02</lastmod>
+    <loc>https://www.randaworks.com/nihonshi-quiz/</loc>
+    <lastmod>2026-04-08</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
+    <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.randaworks.com/journal/game-design/</loc>
-    <lastmod>2026-04-02</lastmod>
+    <loc>https://www.randaworks.com/wareki-converter/</loc>
+    <lastmod>2026-04-08</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
+    <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.randaworks.com/journal/ai/</loc>
-    <lastmod>2026-04-02</lastmod>
+    <loc>https://www.randaworks.com/busho-profile-search/</loc>
+    <lastmod>2026-04-08</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://www.randaworks.com/journal/game-study/</loc>
-    <lastmod>2026-04-02</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://www.randaworks.com/journal/research/</loc>
-    <lastmod>2026-04-02</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
+    <priority>0.8</priority>
   </url>
 </urlset>
+

@@ -320,6 +320,13 @@
     return score;
   }
 
+  function truncateExtract(text, limit) {
+    if (!text) return "";
+    var normalized = text.replace(/\s+/g, " ").trim();
+    if (normalized.length <= limit) return normalized;
+    return normalized.slice(0, limit) + "…";
+  }
+
   function renderProfileDetail(item) {
     var detail = $("profileDetail");
     if (!detail) return;
@@ -329,6 +336,7 @@
     var link = item.content_urls && item.content_urls.desktop && item.content_urls.desktop.page
       ? item.content_urls.desktop.page
       : "https://ja.wikipedia.org/wiki/" + encodeURIComponent(item.title);
+    var extractText = truncateExtract(item.extract || "", 300) || "概要を取得できませんでした。";
 
     detail.innerHTML =
       "<div class=\"profile-detail-card\">" +
@@ -337,7 +345,7 @@
           "<p class=\"tool-note\">Wikipedia 公開概要</p>" +
           "<h3>" + escapeHtml(item.title) + "</h3>" +
           "<p>" + escapeHtml(item.description || "") + "</p>" +
-          "<p>" + escapeHtml(item.extract || "概要を取得できませんでした。") + "</p>" +
+          "<p class=\"profile-detail-extract\">" + escapeHtml(extractText) + "</p>" +
           "<p><a href=\"" + escapeHtml(link) + "\" target=\"_blank\" rel=\"noopener noreferrer\" data-track-event=\"cta_click\" data-track-placement=\"history_tools_profile_wiki\" data-track-label=\"history tools profile wiki\">Wikipediaで詳しく読む</a></p>" +
         "</div>" +
       "</div>";
@@ -410,7 +418,7 @@
         renderProfileResults(trimmed, items.filter(function (item) { return !!item; }));
       })
       .catch(function () {
-        if (results) results.innerHTML = "<p>Wikipedia 検索に失敗しました。時間をおいて再試行してください。</p>";
+        if (results) results.innerHTML = "<p>現在このツールは工事中です。API 復旧後に再開します。</p>";
       });
   }
 

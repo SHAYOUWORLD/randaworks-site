@@ -930,6 +930,80 @@ async function handleSteamStats(request) {
   }
 }
 
+async function handleBggStats(request) {
+  var origin = request.headers.get("origin") || "";
+
+  if (request.method === "OPTIONS") {
+    return textResponse("", 204, origin);
+  }
+
+  if (request.method !== "GET") {
+    return jsonResponse({ error: "Method not allowed" }, 405, origin);
+  }
+
+  var url = new URL(request.url);
+  var raw = (url.searchParams.get("ids") || "").split(",");
+  var ids = [];
+  for (var i = 0; i < raw.length && ids.length < 30; i++) {
+    var id = raw[i].trim();
+    if (/^\d+$/.test(id)) ids.push(id);
+  }
+
+  if (!ids.length) {
+    return jsonResponse({ error: "idsを指定してください。" }, 400, origin);
+  }
+
+  try {
+    var resp = await fetch(
+      "https://boardgamegeek.com/xmlapi2/thing?id=" + ids.join(",") + "&stats=1",
+      {
+        headers: { "Accept": "application/xml", "User-Agent": "RandaWorks Site Viewer/1.0" },
+        cf: { cacheTtl: 86400, cacheEverything: true }
+      }
+    );
+    if (!resp.ok) throw new Error("BGG API error");
+    var xml = await resp.text();
+
+    var games = {};
+    var itemPattern = /<item[^>]*id="(\d+)"[^>]*>([\s\S]*?)<\/item>/g;
+    var match;
+    while ((match = itemPattern.exec(xml)) !== null) {
+      var itemId = match[1];
+      var block = match[2];
+      var nameMatch = block.match(/<name[^>]*type="primary"[^>]*value="([^"]*)"[^>]*\/>/);
+      var yearMatch = block.match(/<yearpublished[^>]*value="([^"]*)"[^>]*\/>/);
+      var minPMatch = block.match(/<minplayers[^>]*value="([^"]*)"[^>]*\/>/);
+      var maxPMatch = block.match(/<maxplayers[^>]*value="([^"]*)"[^>]*\/>/);
+      var minTMatch = block.match(/<minplaytime[^>]*value="([^"]*)"[^>]*\/>/);
+      var maxTMatch = block.match(/<maxplaytime[^>]*value="([^"]*)"[^>]*\/>/);
+      var avgMatch = block.match(/<average[^>]*value="([^"]*)"[^>]*\/>/);
+      var weightMatch = block.match(/<averageweight[^>]*value="([^"]*)"[^>]*\/>/);
+      var rankMatch = block.match(/<rank[^>]*type="subtype"[^>]*name="boardgame"[^>]*value="([^"]*)"[^>]*\/>/);
+
+      games[itemId] = {
+        name: nameMatch ? nameMatch[1] : "",
+        year: yearMatch ? Number(yearMatch[1]) : 0,
+        minPlayers: minPMatch ? Number(minPMatch[1]) : 0,
+        maxPlayers: maxPMatch ? Number(maxPMatch[1]) : 0,
+        minPlaytime: minTMatch ? Number(minTMatch[1]) : 0,
+        maxPlaytime: maxTMatch ? Number(maxTMatch[1]) : 0,
+        rating: avgMatch ? parseFloat(avgMatch[1]) : 0,
+        weight: weightMatch ? parseFloat(weightMatch[1]) : 0,
+        rank: rankMatch && rankMatch[1] !== "Not Ranked" ? Number(rankMatch[1]) : 0
+      };
+    }
+
+    var headers = getCorsHeaders(origin);
+    headers["Content-Type"] = "application/json; charset=UTF-8";
+    headers["Cache-Control"] = "public, max-age=86400";
+    return new Response(JSON.stringify({ games: games, fetchedAt: new Date().toISOString() }), {
+      status: 200,
+      headers: headers
+    });
+  } catch (error) {
+    return jsonResponse({ error: "BGGデータを取得できませんでした。" }, 502, origin);
+  }
+}
 export default {
   async fetch(request, env) {
     var url = new URL(request.url);
@@ -975,6 +1049,10 @@ export default {
 
     if (pathname === "/api/steam/stats/") {
       return handleSteamStats(request);
+    }
+
+    if (pathname === "/api/bgg/stats/") {
+      return handleBggStats(request);
     }
 
     if (REDIRECT_PATHS[pathname]) {
