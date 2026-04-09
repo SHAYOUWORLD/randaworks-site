@@ -2,13 +2,13 @@
 import ToolLayout from '../../layouts/ToolLayout.astro';
 ---
 <ToolLayout
-  title="日本史 因果チェーン学習 139本 | 歴史の因果関係を視覚化"
+  title="日本史 因果チェーン | 歴史の因果関係を視覚化・穴埋めクイズ"
   description="歴史の因果関係を鎖（チェーン）で可視化。穴埋めクイズで覚え、政治・経済・文化のつながりを体系的に学べます。"
   canonical="https://www.randaworks.com/nihonshi-inga-chain/"
   ogImage="https://www.randaworks.com/assets/img/games/inga/demo-cards/combo_land_system.jpg"
   pageType="inga_chain"
   source="inga_chain"
-  tag="因果チェーン・139本"
+  tag="穴埋め+一覧"
   heading="日本史 因果チェーン"
   breadcrumbs={[
     { href: '/history-tools/', label: 'ツール集' },
@@ -62,6 +62,7 @@ import ToolLayout from '../../layouts/ToolLayout.astro';
     function esc(s) {
       var d = document.createElement('div'); d.textContent = s || ''; return d.innerHTML;
     }
+    function cardImgUrl(termId) { return '/assets/img/cards/' + termId + '.webp'; }
     function shuffle(a) {
       for (var i = a.length - 1; i > 0; i--) {
         var j = Math.floor(Math.random() * (i + 1));
@@ -76,10 +77,8 @@ import ToolLayout from '../../layouts/ToolLayout.astro';
     function wikiUrl(kw) {
       return 'https://ja.wikipedia.org/wiki/' + encodeURIComponent(kw);
     }
-    function reportUrl(id, title, detail) {
-      var t = encodeURIComponent('[クイズ報告] ' + title + ' (' + id + ')');
-      var b = encodeURIComponent('## 報告内容\n\n- 問題ID: `' + id + '`\n- 問題名: ' + title + '\n\n### どこが間違っていますか？\n\n（ここに記入してください）\n\n---\n' + (detail || ''));
-      return 'https://github.com/SHAYOUWORLD/randaworks-site/issues/new?title=' + t + '&body=' + b + '&labels=quiz-report';
+    function contactUrl(title) {
+      return '/contact/?category=' + encodeURIComponent('不具合報告') + '&source=quiz&message=' + encodeURIComponent('【' + title + '】の内容について\n\n');
     }
 
     var ERA_NAMES = {
@@ -238,6 +237,7 @@ import ToolLayout from '../../layouts/ToolLayout.astro';
       chain.steps.forEach(function(step, i) {
         var isHidden = (hiddenIdx !== undefined && hiddenIdx !== null && i === hiddenIdx);
         html += '<div class="chain-step' + (isHidden ? ' is-hidden' : '') + '" data-step="' + i + '">';
+        if (!isHidden && step.img) html += '<img src="' + cardImgUrl(step.id) + '" alt="" class="chain-step-img" loading="lazy">';
         html += '<span class="chain-step-num">' + (i + 1) + '</span>';
         html += '<div class="chain-step-content">';
         if (isHidden) {
@@ -305,7 +305,7 @@ import ToolLayout from '../../layouts/ToolLayout.astro';
 
       html += '<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:18px;">';
       html += '<button class="quiz-next-btn" id="nextBtn" style="margin-top:0;">次のチェーンへ &#x2192;</button>';
-      html += '<a href="' + reportUrl(chain.id, chain.name, 'ページ: 因果チェーン\n時代: ' + chain.era) + '" target="_blank" rel="noopener noreferrer" class="quiz-report-btn">&#x1F6A9; 間違いを報告</a>';
+      html += '<a href="' + contactUrl(chain.name) + '" class="quiz-report-btn">&#x1F6A9; 間違いを報告</a>';
       html += '</div></div>';
       $('feedbackArea').innerHTML = html;
       $('feedbackArea').style.display = '';
@@ -347,6 +347,7 @@ import ToolLayout from '../../layouts/ToolLayout.astro';
         html += '<div class="chain-steps">';
         chain.steps.forEach(function(step, i) {
           html += '<div class="chain-step">';
+          if (step.img) html += '<img src="' + cardImgUrl(step.id) + '" alt="" class="chain-step-img" loading="lazy">';
           html += '<span class="chain-step-num">' + (i + 1) + '</span>';
           html += '<div class="chain-step-content">';
           html += '<span class="chain-step-word">' + esc(step.word) + '</span>';

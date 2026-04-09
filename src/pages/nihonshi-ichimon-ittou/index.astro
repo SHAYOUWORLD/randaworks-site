@@ -2,13 +2,13 @@
 import ToolLayout from '../../layouts/ToolLayout.astro';
 ---
 <ToolLayout
-  title="日本史 一問一答 814問 | 択一・用語クイズ 無料"
+  title="日本史 一問一答 | 択一問題＋用語クイズ 解説付き・無料"
   description="日本史の択一問題350問＋用語クイズ464語。時代別フィルタ・ヒント・解説付き。受験対策・定期テスト対策に。"
   canonical="https://www.randaworks.com/nihonshi-ichimon-ittou/"
   ogImage="https://www.randaworks.com/assets/img/games/inga/demo-cards/combo_land_system.jpg"
   pageType="ichimon_ittou"
   source="ichimon_ittou"
-  tag="択一+用語・814問"
+  tag="解説付き"
   heading="日本史 一問一答"
   breadcrumbs={[
     { href: '/history-tools/', label: 'ツール集' },
@@ -65,6 +65,17 @@ import ToolLayout from '../../layouts/ToolLayout.astro';
     function esc(s) {
       var d = document.createElement('div'); d.textContent = s || ''; return d.innerHTML;
     }
+    function cardImgUrl(termId) { return '/assets/img/cards/' + termId + '.webp'; }
+    function cardImgsHtml(imgs) {
+      if (!imgs || !imgs.length) return '';
+      return imgs.map(function(tid) { return '<img src="' + cardImgUrl(tid) + '" alt="" class="quiz-card-img" loading="lazy">'; }).join('');
+    }
+    var ERA_BADGES = {
+      asuka_nara: '/assets/img/badges/P02_asuka.jpg', heian: '/assets/img/badges/P03_heian.jpg',
+      kamakura: '/assets/img/badges/P04_kamakura.jpg', muromachi: '/assets/img/badges/P05_muromachi.jpg',
+      sengoku: '/assets/img/badges/P06_sengoku.jpg', azuchi: '/assets/img/badges/P06_sengoku.jpg',
+      edo: '/assets/img/badges/P07_edo.jpg', bakumatsu: '/assets/img/badges/P08_bakumatsu.jpg',
+    };
     function shuffle(a) {
       for (var i = a.length - 1; i > 0; i--) {
         var j = Math.floor(Math.random() * (i + 1));
@@ -79,10 +90,8 @@ import ToolLayout from '../../layouts/ToolLayout.astro';
     function wikiUrl(kw) {
       return 'https://ja.wikipedia.org/wiki/' + encodeURIComponent(kw);
     }
-    function reportUrl(id, title, detail) {
-      var t = encodeURIComponent('[クイズ報告] ' + title + ' (' + id + ')');
-      var b = encodeURIComponent('## 報告内容\n\n- 問題ID: `' + id + '`\n- 問題名: ' + title + '\n\n### どこが間違っていますか？\n\n（ここに記入してください）\n\n---\n' + (detail || ''));
-      return 'https://github.com/SHAYOUWORLD/randaworks-site/issues/new?title=' + t + '&body=' + b + '&labels=quiz-report';
+    function contactUrl(title) {
+      return '/contact/?category=' + encodeURIComponent('不具合報告') + '&source=quiz&message=' + encodeURIComponent('【' + title + '】の内容について\n\n');
     }
     function tagClass(tag) {
       if (tag === '正解') return 'feedback-tag--correct';
@@ -215,14 +224,17 @@ import ToolLayout from '../../layouts/ToolLayout.astro';
       var q = state.pool[state.current];
       var eraName = ERA_NAMES[q.era] || q.era;
 
-      var html = '<div class="quiz-question-card">'
+      var badgeImg = ERA_BADGES[q.era] ? '<img src="' + ERA_BADGES[q.era] + '" alt="" class="era-chip-img">' : '';
+      var html = '<div class="quiz-question-card" style="display:flex;gap:16px;align-items:flex-start;">';
+      if (q.imgs && q.imgs.length) html += cardImgsHtml(q.imgs.slice(0,1));
+      html += '<div style="flex:1;min-width:0;">'
         + '<div class="quiz-q-header">'
         + '<span class="quiz-q-number">Q' + (state.total + 1) + '</span>'
-        + '<span class="era-badge" data-era="' + esc(q.era) + '">' + esc(eraName) + '</span>'
+        + '<span class="era-badge" data-era="' + esc(q.era) + '">' + badgeImg + esc(eraName) + '</span>'
         + '</div>'
         + '<h3 class="quiz-q-title">' + esc(q.title) + '</h3>'
         + '<p class="quiz-q-text">' + esc(q.question) + '</p>'
-        + '</div>';
+        + '</div></div>';
       $('questionArea').innerHTML = html;
 
       // Choices
@@ -376,7 +388,7 @@ import ToolLayout from '../../layouts/ToolLayout.astro';
 
       html += '<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:18px;">';
       html += '<button class="quiz-next-btn" id="nextBtn" style="margin-top:0;">次の問題へ &#x2192;</button>';
-      html += '<a href="' + reportUrl(q.id, q.title, 'ページ: 一問一答（択一）\n時代: ' + q.era) + '" target="_blank" rel="noopener noreferrer" class="quiz-report-btn">&#x1F6A9; 間違いを報告</a>';
+      html += '<a href="' + contactUrl(q.title || q.word || '') + '" class="quiz-report-btn">&#x1F6A9; 間違いを報告</a>';
       html += '</div></div>';
       $('feedbackArea').innerHTML = html;
       $('feedbackArea').style.display = '';
@@ -407,14 +419,17 @@ import ToolLayout from '../../layouts/ToolLayout.astro';
         html += '<span class="feedback-tag feedback-tag--correct">&#x2713; 正解</span>';
       } else {
         html += '<span class="feedback-tag feedback-tag--wrong">&#x2717; 不正解</span>';
-        html += '<span style="font-size:0.9rem;color:#fff;font-weight:600;">正解: ' + esc(q.word) + '</span>';
       }
       html += '</div>';
 
-      // Reading
-      if (q.reading) {
-        html += '<p style="margin:8px 0 0;font-size:0.82rem;color:rgba(255,255,255,0.5);">読み: ' + esc(q.reading) + '</p>';
-      }
+      // Term card with image
+      html += '<div class="quiz-term-card">';
+      if (q.img) html += '<img src="' + cardImgUrl(q.id) + '" alt="' + esc(q.word) + '" class="quiz-card-img" loading="lazy">';
+      html += '<div class="quiz-term-card-body">';
+      html += '<span class="quiz-term-card-word">' + esc(q.word) + '</span>';
+      if (q.reading) html += '<span class="quiz-term-card-reading">(' + esc(q.reading) + ')</span>';
+      html += '<p class="quiz-term-card-summary">' + esc(q.summary) + '</p>';
+      html += '</div></div>';
 
       // Detail
       if (q.detail) {
@@ -458,7 +473,7 @@ import ToolLayout from '../../layouts/ToolLayout.astro';
 
       html += '<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:18px;">';
       html += '<button class="quiz-next-btn" id="nextBtn" style="margin-top:0;">次の問題へ &#x2192;</button>';
-      html += '<a href="' + reportUrl(q.id, q.word, 'ページ: 一問一答（用語）\n時代: ' + q.era) + '" target="_blank" rel="noopener noreferrer" class="quiz-report-btn">&#x1F6A9; 間違いを報告</a>';
+      html += '<a href="' + contactUrl(q.title || q.word || '') + '" class="quiz-report-btn">&#x1F6A9; 間違いを報告</a>';
       html += '</div></div>';
       $('feedbackArea').innerHTML = html;
       $('feedbackArea').style.display = '';

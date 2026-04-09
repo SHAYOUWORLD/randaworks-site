@@ -2,13 +2,13 @@
 import ToolLayout from '../../layouts/ToolLayout.astro';
 ---
 <ToolLayout
-  title="日本史因果クイズ 350問 | 歴史シナリオ型・無料"
+  title="日本史 因果クイズ | 飛鳥〜幕末の歴史シナリオ350問・無料"
   description="「もしあなたがこの時代にいたら？」歴史的場面を追体験しながら因果関係を学ぶシナリオ型クイズ。飛鳥〜幕末まで全350問、解説・重要事実付き。"
   canonical="https://www.randaworks.com/nihonshi-inga-quiz/"
   ogImage="https://www.randaworks.com/assets/img/games/inga/demo-cards/combo_nobunaga.jpg"
   pageType="inga_quiz"
   source="inga_quiz"
-  tag="シナリオ型・350問"
+  tag="飛鳥〜幕末"
   heading="日本史 因果クイズ"
   breadcrumbs={[
     { href: '/history-tools/', label: 'ツール集' },
@@ -58,6 +58,25 @@ import ToolLayout from '../../layouts/ToolLayout.astro';
     function esc(s) {
       var d = document.createElement('div'); d.textContent = s || ''; return d.innerHTML;
     }
+    function cardImgUrl(termId) {
+      return '/assets/img/cards/' + termId + '.webp';
+    }
+    function cardImgsHtml(imgs) {
+      if (!imgs || !imgs.length) return '';
+      return imgs.map(function(tid) {
+        return '<img src="' + cardImgUrl(tid) + '" alt="" class="quiz-card-img" loading="lazy">';
+      }).join('');
+    }
+    var ERA_BADGES = {
+      asuka_nara: '/assets/img/badges/P02_asuka.jpg',
+      heian: '/assets/img/badges/P03_heian.jpg',
+      kamakura: '/assets/img/badges/P04_kamakura.jpg',
+      muromachi: '/assets/img/badges/P05_muromachi.jpg',
+      sengoku: '/assets/img/badges/P06_sengoku.jpg',
+      azuchi: '/assets/img/badges/P06_sengoku.jpg',
+      edo: '/assets/img/badges/P07_edo.jpg',
+      bakumatsu: '/assets/img/badges/P08_bakumatsu.jpg',
+    };
     function shuffle(a) {
       for (var i = a.length - 1; i > 0; i--) {
         var j = Math.floor(Math.random() * (i + 1));
@@ -82,10 +101,8 @@ import ToolLayout from '../../layouts/ToolLayout.astro';
       return 'https://ja.wikipedia.org/wiki/' + encodeURIComponent(keyword);
     }
 
-    function reportUrl(id, title, detail) {
-      var t = encodeURIComponent('[クイズ報告] ' + title + ' (' + id + ')');
-      var b = encodeURIComponent('## 報告内容\n\n- 問題ID: `' + id + '`\n- 問題名: ' + title + '\n\n### どこが間違っていますか？\n\n（ここに記入してください）\n\n---\n' + (detail || ''));
-      return 'https://github.com/SHAYOUWORLD/randaworks-site/issues/new?title=' + t + '&body=' + b + '&labels=quiz-report';
+    function contactUrl(title) {
+      return '/contact/?category=' + encodeURIComponent('不具合報告') + '&source=quiz&message=' + encodeURIComponent('【' + title + '】の内容について\n\n');
     }
 
     // ── Wikipedia API ──
@@ -221,14 +238,17 @@ import ToolLayout from '../../layouts/ToolLayout.astro';
       var eraName = era ? era.name : q.era;
 
       // Question card
-      var html = '<div class="quiz-question-card">'
+      var badgeImg = ERA_BADGES[q.era] ? '<img src="' + ERA_BADGES[q.era] + '" alt="" class="era-chip-img">' : '';
+      var html = '<div class="quiz-question-card" style="display:flex;gap:16px;align-items:flex-start;">';
+      if (q.imgs && q.imgs.length) html += cardImgsHtml(q.imgs.slice(0,1));
+      html += '<div style="flex:1;min-width:0;">'
         + '<div class="quiz-q-header">'
         + '<span class="quiz-q-number">Q' + (state.total + 1) + '</span>'
-        + '<span class="era-badge" data-era="' + esc(q.era) + '">' + esc(eraName) + '</span>'
+        + '<span class="era-badge" data-era="' + esc(q.era) + '">' + badgeImg + esc(eraName) + '</span>'
         + '</div>'
         + '<h3 class="quiz-q-title">' + esc(q.title) + '</h3>'
         + '<p class="quiz-q-text">' + esc(q.scenario) + '</p>'
-        + '</div>';
+        + '</div></div>';
       $('questionArea').innerHTML = html;
 
       // Choices
@@ -332,7 +352,7 @@ import ToolLayout from '../../layouts/ToolLayout.astro';
       // Next + Report buttons
       html += '<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:18px;">';
       html += '<button class="quiz-next-btn" id="nextBtn" style="margin-top:0;">次の問題へ &#x2192;</button>';
-      html += '<a href="' + reportUrl(q.id, q.title, 'ページ: 因果クイズ\n時代: ' + q.era) + '" target="_blank" rel="noopener noreferrer" class="quiz-report-btn">&#x1F6A9; 間違いを報告</a>';
+      html += '<a href="' + contactUrl(q.title) + '" class="quiz-report-btn">&#x1F6A9; 間違いを報告</a>';
       html += '</div>';
       html += '</div>';
 
