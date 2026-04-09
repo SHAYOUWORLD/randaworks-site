@@ -1,5 +1,37 @@
 ---
 import ToolLayout from '../../../layouts/ToolLayout.astro';
+
+const faqItems = [
+  {
+    question: 'この祝日チェッカーで何ができますか？',
+    answer: '年と国コードを選ぶだけで、その年の祝日一覧と3連休以上の候補をまとめて確認できます。旅行日程、営業日確認、記事ネタ探しの下調べ向けです。',
+  },
+  {
+    question: '日本以外の国も調べられますか？',
+    answer: 'はい。日本、アメリカ、イギリス、ドイツ、フランスなど複数の国に対応しています。国ごとに祝日制度が異なるため、結果の件数や連休候補も変わります。',
+  },
+  {
+    question: '3連休以上はどうやって判定していますか？',
+    answer: '祝日と土日が連続して3日以上続く期間を候補として表示しています。平日に休暇を足した実際の大型連休ではなく、祝日データベース上で連続する日だけを集計しています。',
+  },
+  {
+    question: '検索しても結果が出ないときは？',
+    answer: '対象年が範囲外、または外部API側で一時的な取得失敗が起きている可能性があります。年を変えるか、少し時間を置いて再度試してください。',
+  }
+];
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqItems.map((item) => ({
+    '@type': 'Question',
+    name: item.question,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: item.answer,
+    },
+  })),
+};
 ---
 <ToolLayout
   title="祝日・連休チェッカー | 年と国で祝日一覧を検索"
@@ -18,6 +50,10 @@ import ToolLayout from '../../../layouts/ToolLayout.astro';
   gamePitch="連休にじっくり遊べる日本史デッキ構築ローグライク。ブラウザで体験版もプレイ可能。"
   steamContext="日本史因果クロニクル — 連休にぴったりのカードゲーム"
 >
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+  </Fragment>
+
   <div class="tool-workspace" id="holiday-tool">
     <div class="tool-input-row">
       <label>
@@ -37,6 +73,49 @@ import ToolLayout from '../../../layouts/ToolLayout.astro';
       <span class="tool-output-label">年と国を選んで検索してください。</span>
     </div>
   </div>
+
+  <section class="tool-workspace tool-rich-section">
+    <h2>このツールでできること</h2>
+    <div class="tool-rich-grid">
+      <div class="tool-data-card">
+        <strong>祝日一覧をすぐ確認</strong>
+        <span>年と国を選ぶだけで、その年の祝日を日付順に一覧表示します。</span>
+      </div>
+      <div class="tool-data-card">
+        <strong>3連休以上を抽出</strong>
+        <span>祝日と土日が連続する期間をまとめて出すので、旅行や休暇計画に向いています。</span>
+      </div>
+      <div class="tool-data-card">
+        <strong>国ごとの差を比較</strong>
+        <span>日本と海外の祝日制度の違いをざっくり見比べたいときにも使えます。</span>
+      </div>
+      <div class="tool-data-card">
+        <strong>軽くてすぐ終わる</strong>
+        <span>入力項目は年と国だけなので、検索流入でもすぐ使い切れる構成です。</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="tool-workspace tool-rich-section">
+    <h2>使い方</h2>
+    <ol class="tool-rich-list">
+      <li>年を入力し、調べたい国を選びます。</li>
+      <li>「検索」を押すと、祝日数、最初の祝日、3連休以上の件数が表示されます。</li>
+      <li>下段の祝日一覧を見れば、個別の日付と祝日名をそのまま確認できます。</li>
+    </ol>
+  </section>
+
+  <section class="tool-workspace tool-rich-section">
+    <h2>よくある質問</h2>
+    <div class="tool-faq-list">
+      {faqItems.map((item) => (
+        <details class="tool-faq-item">
+          <summary>{item.question}</summary>
+          <p>{item.answer}</p>
+        </details>
+      ))}
+    </div>
+  </section>
 
   <script is:inline>
   (function () {
