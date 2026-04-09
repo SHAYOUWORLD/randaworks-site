@@ -1,0 +1,148 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Nav from '../../components/Nav.astro';
+import Footer from '../../components/Footer.astro';
+
+const entries = await getCollection('journal', ({ data }) => !data.draft);
+const sorted = entries.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+const categoryLabels: Record<string, string> = {
+  'devlog': '開発ログ',
+  'game-design': 'ゲーム設計',
+  'research': 'リサーチ',
+  'ai': 'AI活用',
+  'guides': 'ガイド',
+};
+
+const formatDate = (date: Date) =>
+  `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日`;
+
+const navLinks = [
+  { href: '/tools/deckgames/', label: 'デッキ図鑑' },
+  { href: '/games/inga/?src=nav', label: 'ゲームを見る' },
+];
+---
+<BaseLayout
+  title="記事一覧 | RandaWorks"
+  description="ゲーミフィケーション研究とデッキ構築ビルダー研究の記事一覧。"
+  canonical="https://www.randaworks.com/journal/"
+  pageType="journal"
+>
+  <div class="container journal-page-container">
+    <Nav links={navLinks} />
+
+    <main id="main-content">
+      <nav aria-label="パンくずリスト">
+        <ul class="breadcrumb">
+          <li><a href="/">ホーム</a></li>
+          <li class="breadcrumb-separator" aria-hidden="true">›</li>
+          <li class="breadcrumb-current" aria-current="page">記事一覧</li>
+        </ul>
+      </nav>
+
+      <div class="journal-shell">
+        <header class="journal-page-header">
+          <h1 class="journal-index-title">記事一覧</h1>
+          <p class="journal-page-lead">ゲーミフィケーション研究とデッキ構築ビルダー研究の記事。</p>
+        </header>
+
+        {sorted.length === 0 ? (
+          <p>記事はまだありません。</p>
+        ) : (
+          <div class="journal-article-list">
+            {sorted.map((entry) => {
+              const parts = entry.id.split('/');
+              const cat = parts[0];
+              const slug = parts.slice(1).join('/');
+              const url = `/journal/${cat}/${slug}/`;
+              const catLabel = categoryLabels[entry.data.category] || entry.data.category;
+              return (
+                <a href={url} class="journal-article-card">
+                  <div class="journal-article-card-meta">
+                    <span class="journal-article-card-category">{catLabel}</span>
+                    <time datetime={entry.data.pubDate.toISOString().split('T')[0]}>
+                      {formatDate(entry.data.pubDate)}
+                    </time>
+                  </div>
+                  <h2 class="journal-article-card-title">{entry.data.title}</h2>
+                  <p class="journal-article-card-desc">{entry.data.description}</p>
+                </a>
+              );
+            })}
+          </div>
+        )}
+      </div>
+    </main>
+
+    <Footer source="journal" />
+  </div>
+</BaseLayout>
+
+<style is:inline>
+  .journal-index-title {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--text-heading);
+    margin: 0;
+  }
+
+  .journal-article-list {
+    display: grid;
+    gap: 1px;
+    margin-top: 8px;
+  }
+
+  .journal-article-card {
+    display: block;
+    padding: 24px 0;
+    border-bottom: 1px solid rgba(231, 229, 228, 0.08);
+    text-decoration: none;
+    color: inherit;
+    transition: background 0.15s;
+  }
+
+  .journal-article-card:first-child {
+    padding-top: 16px;
+  }
+
+  .journal-article-card:hover {
+    background: rgba(231, 229, 228, 0.03);
+  }
+
+  .journal-article-card-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 6px;
+    font-size: 0.82rem;
+    color: var(--text-muted);
+  }
+
+  .journal-article-card-category {
+    font-weight: 600;
+    color: var(--accent-gold);
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .journal-article-card-title {
+    margin: 0 0 6px;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--text-heading);
+    line-height: 1.45;
+  }
+
+  .journal-article-card:hover .journal-article-card-title {
+    color: var(--accent-gold);
+  }
+
+  .journal-article-card-desc {
+    margin: 0;
+    font-size: 0.92rem;
+    color: var(--text-muted);
+    line-height: 1.7;
+  }
+</style>
