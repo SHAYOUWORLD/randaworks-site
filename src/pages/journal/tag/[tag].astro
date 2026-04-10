@@ -1,0 +1,205 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Nav from '../../../components/Nav.astro';
+import Footer from '../../../components/Footer.astro';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('journal', ({ data }) => !data.draft);
+  const tagMap = new Map<string, typeof entries>();
+  for (const entry of entries) {
+    for (const tag of entry.data.tags) {
+      if (!tagMap.has(tag)) tagMap.set(tag, []);
+      tagMap.get(tag)!.push(entry);
+    }
+  }
+  return [...tagMap.entries()].map(([tag, posts]) => ({
+    params: { tag },
+    props: {
+      tag,
+      posts: posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()),
+    },
+  }));
+}
+
+const { tag, posts } = Astro.props;
+
+const categoryLabels: Record<string, string> = {
+  'devlog': '開発ログ',
+  'game-design': 'ゲーム設計',
+  'research': 'リサーチ',
+  'ai': 'AI活用',
+  'guides': 'ガイド',
+};
+
+const formatDate = (date: Date) =>
+  `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日`;
+
+const navLinks = [
+  { href: '/journal/', label: '記事一覧' },
+  { href: '/tools/deckgames/', label: 'デッキ図鑑' },
+  { href: '/games/inga/?src=nav', label: 'ゲームを見る' },
+];
+---
+<BaseLayout
+  title={`#${tag} の記事一覧 | RandaWorks`}
+  description={`「${tag}」タグの記事一覧。`}
+  canonical={`https://www.randaworks.com/journal/tag/${encodeURIComponent(tag)}/`}
+  pageType="journal"
+>
+  <div class="container journal-page-container">
+    <Nav links={navLinks} />
+
+    <main id="main-content">
+      <nav aria-label="パンくずリスト">
+        <ul class="breadcrumb">
+          <li><a href="/">ホーム</a></li>
+          <li class="breadcrumb-separator" aria-hidden="true">›</li>
+          <li><a href="/journal/">記事一覧</a></li>
+          <li class="breadcrumb-separator" aria-hidden="true">›</li>
+          <li class="breadcrumb-current" aria-current="page">#{tag}</li>
+        </ul>
+      </nav>
+
+      <div class="journal-shell">
+        <header class="journal-page-header">
+          <h1 class="journal-tag-page-title">#{tag}</h1>
+          <p class="journal-page-lead">{posts.length}件の記事</p>
+        </header>
+
+        <div class="journal-article-list">
+          {posts.map((entry) => {
+            const parts = entry.id.split('/');
+            const cat = parts[0];
+            const slug = parts.slice(1).join('/');
+            const url = `/journal/${cat}/${slug}/`;
+            const catLabel = categoryLabels[entry.data.category] || entry.data.category;
+            return (
+              <a href={url} class="journal-article-card">
+                {entry.data.heroImage && (
+                  <img
+                    class="journal-article-card-thumb"
+                    src={entry.data.heroImage}
+                    alt=""
+                    loading="lazy"
+                    width="120"
+                    height="80"
+                  />
+                )}
+                <div class="journal-article-card-body">
+                  <div class="journal-article-card-meta">
+                    <span class="journal-article-card-category">{catLabel}</span>
+                    <time datetime={entry.data.pubDate.toISOString().split('T')[0]}>
+                      {formatDate(entry.data.pubDate)}
+                    </time>
+                  </div>
+                  <h2 class="journal-article-card-title">{entry.data.title}</h2>
+                  <p class="journal-article-card-desc">{entry.data.description}</p>
+                </div>
+              </a>
+            );
+          })}
+        </div>
+      </div>
+    </main>
+
+    <Footer source="journal" />
+  </div>
+</BaseLayout>
+
+<style is:inline>
+  .journal-tag-page-title {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--accent-gold);
+    margin: 0;
+  }
+
+  .journal-article-list {
+    display: grid;
+    gap: 1px;
+    margin-top: 8px;
+  }
+
+  .journal-article-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    padding: 24px 0;
+    border-bottom: 1px solid rgba(231, 229, 228, 0.08);
+    text-decoration: none;
+    color: inherit;
+    transition: background 0.15s;
+  }
+
+  .journal-article-card:first-child {
+    padding-top: 16px;
+  }
+
+  .journal-article-card:hover {
+    background: rgba(231, 229, 228, 0.03);
+  }
+
+  .journal-article-card-body {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .journal-article-card-thumb {
+    width: 120px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 4px;
+    flex-shrink: 0;
+    margin-top: 4px;
+    opacity: 0.85;
+    transition: opacity 0.15s;
+  }
+
+  .journal-article-card:hover .journal-article-card-thumb {
+    opacity: 1;
+  }
+
+  .journal-article-card-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 6px;
+    font-size: 0.82rem;
+    color: var(--text-muted);
+  }
+
+  .journal-article-card-category {
+    font-weight: 600;
+    color: var(--accent-gold);
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .journal-article-card-title {
+    margin: 0 0 6px;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--text-heading);
+    line-height: 1.45;
+  }
+
+  .journal-article-card:hover .journal-article-card-title {
+    color: var(--accent-gold);
+  }
+
+  .journal-article-card-desc {
+    margin: 0;
+    font-size: 0.92rem;
+    color: var(--text-muted);
+    line-height: 1.7;
+  }
+
+  @media (max-width: 600px) {
+    .journal-article-card-thumb {
+      width: 80px;
+      height: 56px;
+    }
+  }
+</style>

@@ -17,7 +17,7 @@ export async function getStaticPaths() {
 }
 
 const { entry } = Astro.props;
-const { Content } = await render(entry);
+const { Content, headings } = await render(entry);
 
 // Get raw body text for reading time estimate
 const rawContent = entry.body || '';
@@ -31,6 +31,7 @@ const rawContent = entry.body || '';
   tags={entry.data.tags}
   heroImage={entry.data.heroImage}
   rawContent={rawContent}
+  headings={headings}
 >
   <Content />
 </JournalLayout>
