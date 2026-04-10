@@ -173,6 +173,8 @@
           button.disabled = false;
           button.textContent = "新しい問題を出す";
         }
+        var qEl = $("historyQuizQuestion");
+        if (qEl) qEl.scrollIntoView({ behavior: "smooth", block: "start" });
       });
 
     track("history_quiz_generate", {

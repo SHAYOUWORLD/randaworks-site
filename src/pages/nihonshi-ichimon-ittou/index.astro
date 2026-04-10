@@ -275,6 +275,7 @@ import ToolLayout from '../../layouts/ToolLayout.astro';
 
       $('feedbackArea').style.display = 'none';
       $('feedbackArea').innerHTML = '';
+      $('scoreBar').scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
     function renderTermQuestion() {
@@ -329,6 +330,7 @@ import ToolLayout from '../../layouts/ToolLayout.astro';
       $('hintsArea').innerHTML = '';
       $('feedbackArea').style.display = 'none';
       $('feedbackArea').innerHTML = '';
+      $('scoreBar').scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
     // ── Answer ──
