@@ -55,10 +55,10 @@
       <p class="muted">Send bug reports, feedback, requests, or media inquiries here.<br />If you prefer email, contact <a href="mailto:contact@randaworks.com">contact@randaworks.com</a>.</p>
       <form class="form" id="contactForm" method="POST" action="https://formsubmit.co/contact@randaworks.com" accept-charset="UTF-8">
         <input type="hidden" name="_subject" value="[RandaWorks] Contact">
-        <input type="hidden" name="_captcha" value="false">
+        <input type="hidden" name="_captcha" value="true">
         <input type="hidden" name="_next" value="https://www.randaworks.com/en/contact/thanks.html">
         <input type="hidden" name="_template" value="table">
-        <input type="text" name="_honey" style="display:none">
+        <input type="text" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true" style="display:none">
         <div class="field">
           <label for="category">Category <span class="muted">(Required)</span></label>
           <select id="category" name="category" required style="width:100%; padding:12px 16px; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.08); border-radius:8px; color:#f0f2f5; font-family:var(--font-base); font-size:1rem;">
@@ -74,8 +74,9 @@
         <div class="field"><label for="email">Email <span class="muted">(Optional)</span></label><input id="email" name="email" type="email" autocomplete="email" maxlength="254" /></div>
         <div class="field"><label for="message">Message <span class="muted">(Required)</span></label><textarea id="message" name="message" required rows="7" maxlength="5000"></textarea></div>
         <p class="muted" style="font-size:0.85rem;">As a small indie team, we may not be able to reply to every message. Responses may take time.</p>
-        <p class="muted">By sending this form, you agree to the <a href="../privacy/">Privacy Policy</a>.</p>
+        <p class="muted" style="font-size:0.85rem;">Spam protection may show a CAPTCHA challenge before the form is accepted.</p>
         <div class="form-actions"><button class="cta" id="submitBtn" type="submit">Send</button><span class="muted" id="sendingNote" hidden>Sending...</span></div>
+        <noscript><p class="muted">If JavaScript is disabled, FormSubmit.co may display a CAPTCHA or its completion page after submission.</p></noscript>
       </form>
     </main>
     <footer class="footer">
@@ -131,4 +132,3 @@
   </script>
 </body>
 </html>
-

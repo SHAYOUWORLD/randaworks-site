@@ -100,12 +100,12 @@
       >
         <!-- FormSubmit.co 設定 -->
         <input type="hidden" name="_subject" value="[RandaWorks] お問い合わせ">
-        <input type="hidden" name="_captcha" value="false">
+        <input type="hidden" name="_captcha" value="true">
         <input type="hidden" name="_next" value="https://www.randaworks.com/contact/thanks.html">
         <input type="hidden" name="_template" value="table">
 
         <!-- Honeypot: ボット対策 -->
-        <input type="text" name="_honey" style="display:none">
+        <input type="text" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true" style="display:none">
 
         <div class="field">
           <label for="category">お問い合わせ種別 <span class="muted">(必須)</span></label>
@@ -140,8 +140,8 @@
           ※個人開発のため、すべてのお問い合わせに返信できない場合があります。返信までお時間をいただく場合があります。
         </p>
 
-        <p class="muted">
-          送信により、<a href="../privacy/">プライバシーポリシー</a>に同意したものとみなします。
+        <p class="muted" style="font-size: 0.85rem;">
+          ※スパム対策のため、送信時に CAPTCHA 認証が表示される場合があります。
         </p>
 
         <div class="form-actions">
@@ -151,7 +151,7 @@
 
         <noscript>
           <p class="muted">
-            ※JavaScriptが無効な場合、送信後はFormSubmit.coの完了画面が表示されます。
+            ※JavaScriptが無効な場合、送信時に FormSubmit.co の CAPTCHA または完了画面が表示されます。
           </p>
         </noscript>
       </form>
