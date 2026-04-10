@@ -4,3 +4,66 @@
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: camera=(), microphone=(), geolocation=()
   Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://static.cloudflareinsights.com https://storage.googleapis.com https://www.clarity.ms; img-src 'self' https://i.ytimg.com https://storage.googleapis.com https://upload.wikimedia.org https://*.wikimedia.org https://deckofcardsapi.com data: blob:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://randaworks-analytics-945977546061.asia-northeast1.run.app https://storage.googleapis.com https://ja.wikipedia.org https://*.wikipedia.org https://kanjiapi.dev https://deckofcardsapi.com https://opentdb.com https://query.wikidata.org https://api.open-meteo.com https://archive-api.open-meteo.com https://geocoding-api.open-meteo.com https://jlp.yahooapis.jp https://www.clarity.ms https://*.clarity.ms; frame-src 'self' https://www.youtube.com https://www.youtube-nocookie.com https://store.steampowered.com; media-src 'self' https://storage.googleapis.com
+
+/assets/img/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/assets/css/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/assets/js/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/assets/fonts/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# hreflang — Japanese pages
+/
+  Link: <https://www.randaworks.com/>; rel="alternate"; hreflang="ja", <https://www.randaworks.com/en/>; rel="alternate"; hreflang="en", <https://www.randaworks.com/>; rel="alternate"; hreflang="x-default"
+/about/
+  Link: <https://www.randaworks.com/about/>; rel="alternate"; hreflang="ja", <https://www.randaworks.com/en/about/>; rel="alternate"; hreflang="en"
+/games/
+  Link: <https://www.randaworks.com/games/>; rel="alternate"; hreflang="ja", <https://www.randaworks.com/en/games/>; rel="alternate"; hreflang="en"
+/games/inga/
+  Link: <https://www.randaworks.com/games/inga/>; rel="alternate"; hreflang="ja", <https://www.randaworks.com/en/games/inga/>; rel="alternate"; hreflang="en"
+/games/inga/support/
+  Link: <https://www.randaworks.com/games/inga/support/>; rel="alternate"; hreflang="ja", <https://www.randaworks.com/en/games/inga/support/>; rel="alternate"; hreflang="en"
+/games/inga/privacy/
+  Link: <https://www.randaworks.com/games/inga/privacy/>; rel="alternate"; hreflang="ja", <https://www.randaworks.com/en/games/inga/privacy/>; rel="alternate"; hreflang="en"
+/videos/
+  Link: <https://www.randaworks.com/videos/>; rel="alternate"; hreflang="ja", <https://www.randaworks.com/en/videos/>; rel="alternate"; hreflang="en"
+/contact/
+  Link: <https://www.randaworks.com/contact/>; rel="alternate"; hreflang="ja", <https://www.randaworks.com/en/contact/>; rel="alternate"; hreflang="en"
+/support/
+  Link: <https://www.randaworks.com/support/>; rel="alternate"; hreflang="ja", <https://www.randaworks.com/en/support/>; rel="alternate"; hreflang="en"
+/privacy/
+  Link: <https://www.randaworks.com/privacy/>; rel="alternate"; hreflang="ja", <https://www.randaworks.com/en/privacy/>; rel="alternate"; hreflang="en"
+/terms/
+  Link: <https://www.randaworks.com/terms/>; rel="alternate"; hreflang="ja", <https://www.randaworks.com/en/terms/>; rel="alternate"; hreflang="en"
+
+# hreflang — English pages
+/en/
+  Link: <https://www.randaworks.com/>; rel="alternate"; hreflang="ja", <https://www.randaworks.com/en/>; rel="alternate"; hreflang="en", <https://www.randaworks.com/>; rel="alternate"; hreflang="x-default"
+/en/about/
+  Link: <https://www.randaworks.com/about/>; rel="alternate"; hreflang="ja", <https://www.randaworks.com/en/about/>; rel="alternate"; hreflang="en"
+/en/games/
+  Link: <https://www.randaworks.com/games/>; rel="alternate"; hreflang="ja", <https://www.randaworks.com/en/games/>; rel="alternate"; hreflang="en"
+/en/games/inga/
+  Link: <https://www.randaworks.com/games/inga/>; rel="alternate"; hreflang="ja", <https://www.randaworks.com/en/games/inga/>; rel="alternate"; hreflang="en"
+/en/games/inga/support/
+  Link: <https://www.randaworks.com/games/inga/support/>; rel="alternate"; hreflang="ja", <https://www.randaworks.com/en/games/inga/support/>; rel="alternate"; hreflang="en"
+/en/games/inga/privacy/
+  Link: <https://www.randaworks.com/games/inga/privacy/>; rel="alternate"; hreflang="ja", <https://www.randaworks.com/en/games/inga/privacy/>; rel="alternate"; hreflang="en"
+/en/videos/
+  Link: <https://www.randaworks.com/videos/>; rel="alternate"; hreflang="ja", <https://www.randaworks.com/en/videos/>; rel="alternate"; hreflang="en"
+/en/contact/
+  Link: <https://www.randaworks.com/contact/>; rel="alternate"; hreflang="ja", <https://www.randaworks.com/en/contact/>; rel="alternate"; hreflang="en"
+/en/support/
+  Link: <https://www.randaworks.com/support/>; rel="alternate"; hreflang="ja", <https://www.randaworks.com/en/support/>; rel="alternate"; hreflang="en"
+/en/privacy/
+  Link: <https://www.randaworks.com/privacy/>; rel="alternate"; hreflang="ja", <https://www.randaworks.com/en/privacy/>; rel="alternate"; hreflang="en"
+/en/terms/
+  Link: <https://www.randaworks.com/terms/>; rel="alternate"; hreflang="ja", <https://www.randaworks.com/en/terms/>; rel="alternate"; hreflang="en"
