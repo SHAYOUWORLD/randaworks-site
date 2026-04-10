@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-WNL49Q0CTT"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-WNL49Q0CTT');</script>
+  <script type="text/javascript">(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window,document,"clarity","script","w8awzqlkx4");</script>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <title>Real-Time Player Stats | Deck-Builder &amp; Roguelike CCU</title>
+  <meta name="description" content="Live concurrent player counts and review ratings for deck-building and roguelike games on Steam." />
+  <link rel="canonical" href="https://www.randaworks.com/en/tools/hltb/" />
+  <link rel="alternate" hreflang="ja" href="https://www.randaworks.com/tools/hltb/" />
+  <link rel="alternate" hreflang="en" href="https://www.randaworks.com/en/tools/hltb/" />
+  <link rel="alternate" hreflang="x-default" href="https://www.randaworks.com/tools/hltb/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Real-Time Player Stats | RandaWorks" />
+  <meta property="og:description" content="Live concurrent player counts and review ratings for deck-builder and roguelike games." />
+  <meta property="og:url" content="https://www.randaworks.com/en/tools/hltb/" />
+  <meta property="og:image" content="https://www.randaworks.com/assets/img/ogp/randaworks-ogp-home.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Real-Time Player Stats | RandaWorks" />
+  <meta name="twitter:description" content="Live concurrent player counts and review ratings for deck-builder and roguelike games." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Shippori+Mincho:wght@400;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Shippori+Mincho:wght@400;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet"></noscript>
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <link rel="stylesheet" href="/assets/css/history-tools.css">
+</head>
+<body data-page-type="hltb" class="hltb-page">
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <div class="container tool-page">
+    <nav class="nav">
+      <div class="brand"><a href="/en/"><picture>
+        <source srcset="/assets/img/randaworks_logo_text.webp" type="image/webp">
+        <img src="/assets/img/randaworks_logo_text.png" alt="RandaWorks" style="height: 28px; vertical-align: middle;">
+      </picture></a></div>
+      <div class="links">
+        <a href="/en/history-tools/">History Tools</a>
+        <a href="/en/games/inga/?src=nav">Game</a>
+        <a href="/en/about/">About</a>
+      </div>
+    </nav>
+
+    <main id="main-content">
+      <nav aria-label="Breadcrumb">
+        <ol class="breadcrumb">
+          <li><a href="/en/">Home</a></li>
+          <li class="breadcrumb-separator" aria-hidden="true">›</li>
+          <li><a href="/en/history-tools/">History Tools</a></li>
+          <li class="breadcrumb-separator" aria-hidden="true">›</li>
+          <li class="breadcrumb-current" aria-current="page">Player Stats</li>
+        </ol>
+      </nav>
+
+      <div class="tool-page-header">
+        <h1>Real-Time Player Stats</h1>
+        <span class="tool-page-tag">Live Data</span>
+      </div>
+      <p class="tool-page-desc">Concurrent players and review ratings for deck-builder and roguelike titles. Live from Steam.</p>
+
+      <div class="tool-workspace" id="hltb-tool">
+        <div style="overflow-x:auto;">
+          <table style="width:100%;border-collapse:collapse;font-size:0.88rem;font-family:'Space Grotesk','Noto Sans JP',sans-serif;" id="hltbTable">
+            <thead>
+              <tr style="border-bottom:1px solid rgba(255,255,255,0.1);">
+                <th style="text-align:center;padding:10px 8px;color:var(--tool-accent);font-size:0.72rem;letter-spacing:0.06em;text-transform:uppercase;font-weight:600;width:40px;">#</th>
+                <th style="text-align:left;padding:10px 8px;color:var(--tool-accent);font-size:0.72rem;letter-spacing:0.06em;text-transform:uppercase;font-weight:600;">Game</th>
+                <th style="text-align:right;padding:10px 8px;color:var(--tool-accent);font-size:0.72rem;letter-spacing:0.06em;text-transform:uppercase;font-weight:600;cursor:pointer;" data-sort="ccu">CCU ▼</th>
+                <th style="text-align:right;padding:10px 8px;color:var(--tool-accent);font-size:0.72rem;letter-spacing:0.06em;text-transform:uppercase;font-weight:600;cursor:pointer;" data-sort="positiveRate">Positive %</th>
+                <th style="text-align:left;padding:10px 8px;color:var(--tool-accent);font-size:0.72rem;letter-spacing:0.06em;text-transform:uppercase;font-weight:600;">Rating</th>
+                <th style="text-align:center;padding:10px 8px;color:var(--tool-accent);font-size:0.72rem;letter-spacing:0.06em;text-transform:uppercase;font-weight:600;">Steam</th>
+              </tr>
+            </thead>
+            <tbody id="hltbBody">
+              <tr><td colspan="6" style="padding:24px;text-align:center;color:var(--text-muted);">Loading data…</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="tool-output" style="margin-top:16px;">
+          <span class="tool-output-label">About the data</span>
+          <p style="margin:0;color:var(--text-muted);font-size:0.82rem;">Concurrent player counts fetched in real time from Steam. Data updates every few minutes.<span id="fetchTime" style="margin-left:8px;"></span></p>
+        </div>
+      </div>
+
+      <script>
+      (function () {
+        var GAMES = [
+          { appid: '646570', name: 'Slay the Spire' },
+          { appid: '1892930', name: 'Slay the Spire 2' },
+          { appid: '2379780', name: 'Balatro' },
+          { appid: '1145360', name: 'Hades' },
+          { appid: '1145350', name: 'Hades II' },
+          { appid: '1092790', name: 'Inscryption' },
+          { appid: '1102190', name: 'Monster Train' },
+          { appid: '601840', name: 'Griftlands' },
+          { appid: '998740', name: 'Ring of Pain' },
+          { appid: '1076200', name: 'Roguebook' },
+          { appid: '1385380', name: 'Across the Obelisk' },
+          { appid: '1188930', name: 'Chrono Ark' },
+          { appid: '1135810', name: 'Vault of the Void' }
+        ];
+        var FEATURED = { appid: '4403470', name: 'Inga Chronicle' };
+        var sort = { key: 'ccu', desc: true };
+        var cache = null;
+
+        function $(id) { return document.getElementById(id); }
+        function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+        function rColor(p) { return p >= 95 ? '#60b568' : p >= 90 ? '#8bc34a' : p >= 80 ? '#c7a666' : p > 0 ? '#e06666' : 'var(--text-muted)'; }
+        function isLocalHost(){return /^(dev\.randa|localhost|127\.0\.0\.1)$/i.test(window.location.hostname);}
+        function apiBase(){return isLocalHost()?'http://127.0.0.1:8787':window.location.origin;}
+        function apiUrl(path, params){
+          var url = new URL(path, apiBase());
+          if(params){Object.keys(params).forEach(function(key){if(params[key] != null && params[key] !== '') url.searchParams.set(key, params[key]);});}
+          return url.toString();
+        }
+
+        function render() {
+          if (!cache) return;
+          var tbody = $('hltbBody');
+          tbody.innerHTML = '';
+          var ftr = document.createElement('tr');
+          ftr.style.borderBottom = '2px solid rgba(199,166,102,0.3)';
+          ftr.style.background = 'linear-gradient(90deg, rgba(199,166,102,0.12) 0%, rgba(199,166,102,0.04) 100%)';
+          ftr.innerHTML =
+            '<td style="padding:10px 8px;text-align:center;"><span style="font-size:0.65rem;color:var(--tool-accent);letter-spacing:0.08em;text-transform:uppercase;">PR</span></td>' +
+            '<td style="padding:10px 8px;"><a href="https://store.steampowered.com/app/' + FEATURED.appid + '/?utm_source=randaworks&utm_medium=hltb_en&utm_campaign=featured" target="_blank" rel="noopener noreferrer" style="color:var(--tool-accent);font-weight:700;text-decoration:none;">' + esc(FEATURED.name) + '</a><span style="display:block;font-size:0.72rem;color:var(--text-muted);margin-top:2px;">Japanese history × deck-building roguelike</span></td>' +
+            '<td colspan="3" style="padding:10px 8px;color:var(--text-muted);text-align:center;font-size:0.82rem;">Wishlist now on Steam</td>' +
+            '<td style="text-align:center;padding:10px 8px;"><a href="https://store.steampowered.com/app/' + FEATURED.appid + '/?utm_source=randaworks&utm_medium=hltb_en&utm_campaign=featured" target="_blank" rel="noopener noreferrer" style="color:var(--tool-accent);font-weight:600;">Steam</a></td>';
+          tbody.appendChild(ftr);
+
+          var list = cache.slice().sort(function (a, b) {
+            var va = a[sort.key] || 0, vb = b[sort.key] || 0;
+            return sort.desc ? vb - va : va - vb;
+          });
+          for (var i = 0; i < list.length; i++) {
+            var g = list[i];
+            var tr = document.createElement('tr');
+            tr.style.borderBottom = '1px solid rgba(255,255,255,0.04)';
+            tr.innerHTML =
+              '<td style="padding:8px;text-align:center;color:var(--text-muted);">' + (i + 1) + '</td>' +
+              '<td style="padding:8px;">' + esc(g.name) + '</td>' +
+              '<td style="text-align:right;padding:8px;font-weight:600;color:' + (g.ccu > 1000 ? '#60b568' : g.ccu > 100 ? '#8bc34a' : 'var(--text-muted)') + ';">' + (g.ccu > 0 ? g.ccu.toLocaleString() : '—') + '</td>' +
+              '<td style="text-align:right;padding:8px;color:' + rColor(g.positiveRate) + ';">' + (g.positiveRate > 0 ? g.positiveRate + '%' : '—') + '</td>' +
+              '<td style="padding:8px;color:var(--text-muted);font-size:0.82rem;">' + esc(g.reviewDesc || '—') + '</td>' +
+              '<td style="text-align:center;padding:8px;"><a href="https://store.steampowered.com/app/' + esc(g.appid) + '/" target="_blank" rel="noopener noreferrer">Steam</a></td>';
+            tbody.appendChild(tr);
+          }
+          updateHeaders();
+        }
+
+        function updateHeaders() {
+          var ths = document.querySelectorAll('#hltbTable th[data-sort]');
+          for (var i = 0; i < ths.length; i++) {
+            var th = ths[i];
+            var label = th.getAttribute('data-label') || th.textContent.replace(/[\s▲▼]+$/g, '').trim();
+            th.setAttribute('data-label', label);
+            th.textContent = th.getAttribute('data-sort') === sort.key ? label + (sort.desc ? ' ▼' : ' ▲') : label;
+          }
+        }
+
+        async function init() {
+          var ths = document.querySelectorAll('#hltbTable th[data-sort]');
+          for (var i = 0; i < ths.length; i++) {
+            (function (th) {
+              th.addEventListener('click', function () {
+                var key = th.getAttribute('data-sort');
+                if (sort.key === key) { sort.desc = !sort.desc; } else { sort.key = key; sort.desc = true; }
+                render();
+              });
+            })(ths[i]);
+          }
+          try {
+            var appids = [];
+            for (var j = 0; j < GAMES.length; j++) appids.push(GAMES[j].appid);
+            var r = await fetch(apiUrl('/api/steam/stats/', { appids: appids.join(',') }));
+            var d = await r.json();
+            if (d.error) throw new Error(d.error);
+            cache = [];
+            for (var k = 0; k < GAMES.length; k++) {
+              var g = d.games[GAMES[k].appid];
+              if (g) { g.appid = GAMES[k].appid; g.name = GAMES[k].name; cache.push(g); }
+            }
+            render();
+            if (d.fetchedAt) $('fetchTime').textContent = 'Fetched: ' + new Date(d.fetchedAt).toLocaleString();
+          } catch (e) {
+            $('hltbBody').innerHTML = '<tr><td colspan="6" style="padding:24px;text-align:center;color:#e0b366;">This tool is temporarily unavailable. It will resume when the API is restored.</td></tr>';
+          }
+        }
+
+        document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', init, { once: true }) : init();
+      })();
+      </script>
+
+      <div class="tool-footer-section">
+        <div class="tool-related-grid">
+          <div class="tool-related-card">
+            <h3>More tools</h3>
+            <div class="tool-related-links">
+              <a href="/en/history-tools/">All tools</a>
+              <a href="/en/tools/steamstats/">Market data</a>
+              <a href="/en/tools/deckgames/">Deck catalog</a>
+            </div>
+          </div>
+          <div class="tool-related-card">
+            <h3>Try the game</h3>
+            <p style="color:var(--text-muted);font-size:0.85rem;margin:0 0 12px;">Compare Inga Chronicle against these titles — a Japanese history deck-building roguelike.</p>
+            <div class="tool-related-links">
+              <a href="/en/games/inga/?src=hltb_en_game">Details</a>
+              <a href="/en/games/inga/play/?src=hltb_en_play">Play demo</a>
+            </div>
+          </div>
+        </div>
+        <div class="tool-related-card" id="steam" style="margin-top:16px;">
+          <span class="tool-output-label">Deck-building roguelike in the comparison table</span>
+          <div class="steam-widget-shell">
+            <iframe src="https://store.steampowered.com/widget/4403470/?utm_source=randaworks&utm_medium=hltb_en&utm_campaign=widget" title="Inga Chronicle Steam Store Widget" loading="lazy"></iframe>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <nav class="footer-nav" aria-label="Footer navigation">
+        <a href="/en/about/">About</a>
+        <a href="/en/history-tools/">History Tools</a>
+        <a href="/en/privacy/">Privacy</a>
+        <a href="/en/terms/">Terms</a>
+        <a href="/en/contact/">Contact</a>
+      </nav>
+      <div class="footer-links">
+        <a class="footer-link-social" href="https://x.com/RandaWorksJP" target="_blank" rel="noopener noreferrer" aria-label="X"><svg class="footer-link-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1227" aria-hidden="true" focusable="false"><path d="M714.163 519.284 1160.89 0h-105.83L667.137 450.887 357.328 0H0l468.492 681.821L0 1226.37h105.866l409.588-476.152 327.218 476.152H1200L714.137 519.284h.026ZM569.165 687.828l-47.468-67.909L144.011 79.694h162.604l304.22 434.658 47.468 67.909 396.807 566.942H892.505L569.165 687.828Z"/></svg><span>X</span></a>
+        <a class="footer-link-social" href="https://www.youtube.com/@RandaWorks" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><svg class="footer-link-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31.9 31.9 0 0 0 0 12a31.9 31.9 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31.9 31.9 0 0 0 24 12a31.9 31.9 0 0 0-.5-5.8ZM9.6 15.6V8.4l6.2 3.6Z"/></svg><span>YouTube</span></a>
+        <a class="footer-link-social" href="https://store.steampowered.com/app/4403470" target="_blank" rel="noopener noreferrer" aria-label="Steam"><svg class="footer-link-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 259" aria-hidden="true" focusable="false"><path d="M127.779 0C57.895 0 1.307 55.39.052 124.908l68.961 28.5a36.077 36.077 0 0 1 20.378-6.27l30.462-44.145v-.617c0-26.513 21.569-48.084 48.083-48.084 26.516 0 48.085 21.572 48.085 48.084 0 26.515-21.569 48.085-48.085 48.085h-1.104l-43.474 31.02c0 .403.022.8.022 1.197 0 19.882-16.163 36.046-36.048 36.046-17.806 0-32.595-12.953-35.476-29.932L2.472 166.516C18.233 218.149 67.215 256 127.779 256c70.716 0 128.043-57.326 128.043-128.001C255.822 57.326 198.495 0 127.779 0z"/></svg><span>Steam</span></a>
+      </div>
+      <div>&copy; 2026 RandaWorks</div>
+    </footer>
+  </div>
+  <script src="/assets/js/analytics-config.js"></script>
+  <script src="/assets/js/analytics.js"></script>
+</body>
+</html>
