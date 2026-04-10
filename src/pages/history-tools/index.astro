@@ -30,12 +30,12 @@ const historyTools = [
     track: 'inga_chain',
   },
   {
-    kicker: '日本史クイズジェネレーター',
-    title: '日本史クイズをランダム出題',
-    desc: 'Wikipedia の公開概要をもとに、飛鳥から明治までの人物・出来事クイズをその場で生成します。',
-    href: '/nihonshi-quiz/',
-    label: 'クイズページへ',
-    track: 'quiz',
+    kicker: '日本史 因果クイズ',
+    title: '因果関係から歴史を読み解く',
+    desc: '出来事の原因と結果を問う四択クイズ。Wikipedia連携で解説も充実。飛鳥から幕末まで時代別に出題できます。',
+    href: '/nihonshi-inga-quiz/',
+    label: '因果クイズへ',
+    track: 'inga_quiz',
   },
   {
     kicker: '年号・元号カリキュレーター',
@@ -166,7 +166,7 @@ const navLinks = [
   { href: '/nihonshi-inga-quiz/', label: '因果クイズ' },
   { href: '/nihonshi-ichimon-ittou/', label: '一問一答' },
   { href: '/nihonshi-inga-chain/', label: '因果チェーン' },
-  { href: '/nihonshi-quiz/', label: 'クイズ' },
+  { href: '/nihonshi-inga-quiz/', label: '因果クイズ' },
   { href: '/wareki-converter/', label: '元号変換' },
   { href: '/games/inga/?src=history_tools_hub_nav', label: 'ゲームを見る' },
 ];
@@ -194,7 +194,7 @@ const toolCount = allTools.length;
       <p class="tool-page-desc">日本史の学習・調べものに使えるページを中心にまとめています。下段には関連する便利ツールも分けて掲載しています。</p>
 
       <div class="history-tools-page-nav" style="margin-bottom:28px;">
-        <a class="tool-btn" href="/nihonshi-quiz/">日本史クイズ</a>
+        <a class="tool-btn" href="/nihonshi-inga-quiz/">日本史クイズ</a>
         <a class="tool-btn tool-btn-ghost" href="/wareki-converter/">元号変換</a>
         <a class="tool-btn tool-btn-ghost" href="/busho-profile-search/">武将検索</a>
         <a class="tool-btn tool-btn-ghost" href="https://store.steampowered.com/app/4403470/?utm_source=randaworks&utm_medium=history_tools_hub&utm_campaign=steam" target="_blank" rel="noopener noreferrer" data-track-event="wishlist_click" data-track-placement="history_tools_hub_steam">Steam</a>
