@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-WNL49Q0CTT"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-WNL49Q0CTT');</script>
+  <script type="text/javascript">(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window,document,"clarity","script","w8awzqlkx4");</script>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <title>Kanji Lookup Tool | Readings, Radicals, Strokes, Meanings</title>
+  <meta name="description" content="Free kanji lookup tool. Find readings (on/kun), meanings, stroke count, school grade, and JLPT level for any kanji character." />
+  <link rel="canonical" href="https://www.randaworks.com/en/tools/kanji/" />
+  <link rel="alternate" hreflang="ja" href="https://www.randaworks.com/tools/kanji/" />
+  <link rel="alternate" hreflang="en" href="https://www.randaworks.com/en/tools/kanji/" />
+  <link rel="alternate" hreflang="x-default" href="https://www.randaworks.com/tools/kanji/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Kanji Lookup Tool | RandaWorks" />
+  <meta property="og:description" content="Free kanji lookup: readings, meanings, stroke count, grade, JLPT level." />
+  <meta property="og:url" content="https://www.randaworks.com/en/tools/kanji/" />
+  <meta property="og:image" content="https://www.randaworks.com/assets/img/ogp/randaworks-ogp-home.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Kanji Lookup Tool | RandaWorks" />
+  <meta name="twitter:description" content="Free kanji lookup: readings, meanings, stroke count, grade, JLPT level." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Shippori+Mincho:wght@400;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Shippori+Mincho:wght@400;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet"></noscript>
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <link rel="stylesheet" href="/assets/css/history-tools.css">
+</head>
+<body data-page-type="kanji_search" class="kanji_search-page">
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <div class="container tool-page">
+    <nav class="nav">
+      <div class="brand"><a href="/en/"><picture>
+        <source srcset="/assets/img/randaworks_logo_text.webp" type="image/webp">
+        <img src="/assets/img/randaworks_logo_text.png" alt="RandaWorks" style="height: 28px; vertical-align: middle;">
+      </picture></a></div>
+      <div class="links">
+        <a href="/en/history-tools/">History Tools</a>
+        <a href="/en/games/inga/?src=nav">Game</a>
+        <a href="/en/about/">About</a>
+      </div>
+    </nav>
+
+    <main id="main-content">
+      <nav aria-label="Breadcrumb">
+        <ol class="breadcrumb">
+          <li><a href="/en/">Home</a></li>
+          <li class="breadcrumb-separator" aria-hidden="true">›</li>
+          <li><a href="/en/history-tools/">History Tools</a></li>
+          <li class="breadcrumb-separator" aria-hidden="true">›</li>
+          <li class="breadcrumb-current" aria-current="page">Kanji Lookup</li>
+        </ol>
+      </nav>
+
+      <div class="tool-page-header">
+        <h1>Kanji Lookup</h1>
+        <span class="tool-page-tag">Readings / Radicals / Strokes</span>
+      </div>
+
+      <div class="tool-workspace">
+        <div class="tool-input-row">
+          <label for="kanjiInput" style="flex:0 0 120px;">Kanji
+            <input id="kanjiInput" type="text" maxlength="1" placeholder="信" autocomplete="off" style="font-size:1.8rem;text-align:center;font-family:'Space Grotesk',sans-serif;">
+          </label>
+          <button class="tool-btn" type="button" id="kanjiSearchBtn">Search</button>
+        </div>
+        <div class="tool-chips" id="kanjiQuickSearch">
+          <button type="button" data-kanji="信">信</button>
+          <button type="button" data-kanji="長">長</button>
+          <button type="button" data-kanji="武">武</button>
+          <button type="button" data-kanji="将">将</button>
+          <button type="button" data-kanji="戦">戦</button>
+          <button type="button" data-kanji="城">城</button>
+          <button type="button" data-kanji="刀">刀</button>
+          <button type="button" data-kanji="龍">龍</button>
+        </div>
+        <div class="tool-output" id="kanjiResult" aria-live="polite">
+          <span class="tool-empty">Enter a kanji to search</span>
+        </div>
+      </div>
+
+      <script>
+      (function () {
+        var cache = {};
+        function $(id) { return document.getElementById(id); }
+        function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+        function track(n, p) { if (window.RandaAnalytics && window.RandaAnalytics.track) window.RandaAnalytics.track(n, p||{}); if (typeof gtag==='function') gtag('event',n,p||{}); }
+        function isLocalHost(){return /^(dev\.randa|localhost|127\.0\.0\.1)$/i.test(window.location.hostname);}
+        function apiBase(){return isLocalHost()?'http://127.0.0.1:8787':window.location.origin;}
+        function apiUrl(path, params){
+          var url = new URL(path, apiBase());
+          if(params){Object.keys(params).forEach(function(key){if(params[key])url.searchParams.set(key, params[key]);});}
+          return url.toString();
+        }
+
+        function search(ch) {
+          var r = $('kanjiResult');
+          if (!ch || !/[\u4e00-\u9fff\u3400-\u4dbf]/.test(ch)) { r.innerHTML = '<span class="tool-empty">Please enter a single kanji character</span>'; return; }
+          if (cache[ch]) { render(cache[ch]); return; }
+          r.innerHTML = '<span class="tool-output-label">Searching…</span>';
+          fetch(apiUrl('/api/kanji/', { ch: ch }), { headers: { 'Accept': 'application/json' } })
+            .then(function(r){if(!r.ok)throw 0;return r.json();})
+            .then(function(d){cache[ch]=d;render(d);track('kanji_search',{kanji:ch});})
+            .catch(function(){r.innerHTML='<span class="tool-empty">This tool is temporarily unavailable</span>';});
+        }
+
+        function render(d) {
+          var on = d.on_readings && d.on_readings.length ? d.on_readings.join(', ') : '—';
+          var kun = d.kun_readings && d.kun_readings.length ? d.kun_readings.join(', ') : '—';
+          var meanings = d.meanings && d.meanings.length ? d.meanings.join(', ') : '—';
+          var grade = d.grade ? 'Grade ' + d.grade : '—';
+          var jlpt = d.jlpt ? 'N' + d.jlpt : '—';
+          $('kanjiResult').innerHTML =
+            '<div style="display:grid;grid-template-columns:auto 1fr;gap:24px;align-items:start;">' +
+              '<div style="font-size:5rem;line-height:1;color:var(--tool-accent);font-family:\'Shippori Mincho\',serif;text-align:center;min-width:90px;">' + esc(d.kanji) + '</div>' +
+              '<div class="tool-data-grid">' +
+                '<div class="tool-data-card"><strong>On reading</strong><span>'+esc(on)+'</span></div>' +
+                '<div class="tool-data-card"><strong>Kun reading</strong><span>'+esc(kun)+'</span></div>' +
+                '<div class="tool-data-card"><strong>Meaning</strong><span>'+esc(meanings)+'</span></div>' +
+                '<div class="tool-data-card"><strong>Strokes</strong><span>'+(d.stroke_count||'—')+'</span></div>' +
+                '<div class="tool-data-card"><strong>School grade</strong><span>'+esc(grade)+'</span></div>' +
+                '<div class="tool-data-card"><strong>JLPT</strong><span>'+esc(jlpt)+'</span></div>' +
+              '</div>' +
+            '</div>';
+        }
+
+        function init() {
+          $('kanjiSearchBtn').addEventListener('click', function(){search($('kanjiInput').value.trim().charAt(0));});
+          $('kanjiInput').addEventListener('keydown', function(e){if(e.key==='Enter'){e.preventDefault();search(this.value.trim().charAt(0));}});
+          document.querySelectorAll('[data-kanji]').forEach(function(b){
+            b.addEventListener('click', function(){var k=b.getAttribute('data-kanji');$('kanjiInput').value=k;search(k);});
+          });
+        }
+        document.readyState==='loading'?document.addEventListener('DOMContentLoaded',init,{once:true}):init();
+      })();
+      </script>
+
+      <style>
+        @media (max-width:600px) {
+          .tool-input-row { align-items: stretch; }
+          .tool-input-row > label[for="kanjiInput"] { width: 100%; flex: 1 1 auto !important; }
+          .tool-input-row > label[for="kanjiInput"] input,
+          .tool-input-row > #kanjiSearchBtn { width: 100%; }
+          .tool-output > div { grid-template-columns: 1fr !important; }
+          .tool-output > div > div:first-child { font-size: 3.5rem !important; }
+        }
+      </style>
+
+      <div class="tool-footer-section">
+        <div class="tool-related-grid">
+          <div class="tool-related-card">
+            <h3>More tools</h3>
+            <div class="tool-related-links">
+              <a href="/en/history-tools/">All tools</a>
+              <a href="/en/wareki-converter/">Era converter</a>
+              <a href="/en/busho-profile-search/">Figure search</a>
+            </div>
+          </div>
+          <div class="tool-related-card">
+            <h3>Try the game</h3>
+            <p style="color:var(--text-muted);font-size:0.85rem;margin:0 0 12px;">Japanese history deck-building game featuring characters whose names use these kanji.</p>
+            <div class="tool-related-links">
+              <a href="/en/games/inga/?src=kanji_en_game">Details</a>
+              <a href="/en/games/inga/play/?src=kanji_en_play">Play demo</a>
+            </div>
+          </div>
+        </div>
+        <div class="tool-related-card" id="steam" style="margin-top:16px;">
+          <span class="tool-output-label">Inga Chronicle — decode Japanese history through cards</span>
+          <div class="steam-widget-shell">
+            <iframe src="https://store.steampowered.com/widget/4403470/?utm_source=randaworks&utm_medium=kanji_en&utm_campaign=widget" title="Inga Chronicle Steam Store Widget" loading="lazy"></iframe>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <nav class="footer-nav" aria-label="Footer navigation">
+        <a href="/en/about/">About</a>
+        <a href="/en/history-tools/">History Tools</a>
+        <a href="/en/privacy/">Privacy</a>
+        <a href="/en/terms/">Terms</a>
+        <a href="/en/contact/">Contact</a>
+      </nav>
+      <div class="footer-links">
+        <a class="footer-link-social" href="https://x.com/RandaWorksJP" target="_blank" rel="noopener noreferrer" aria-label="X"><svg class="footer-link-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1227" aria-hidden="true" focusable="false"><path d="M714.163 519.284 1160.89 0h-105.83L667.137 450.887 357.328 0H0l468.492 681.821L0 1226.37h105.866l409.588-476.152 327.218 476.152H1200L714.137 519.284h.026ZM569.165 687.828l-47.468-67.909L144.011 79.694h162.604l304.22 434.658 47.468 67.909 396.807 566.942H892.505L569.165 687.828Z"/></svg><span>X</span></a>
+        <a class="footer-link-social" href="https://www.youtube.com/@RandaWorks" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><svg class="footer-link-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31.9 31.9 0 0 0 0 12a31.9 31.9 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31.9 31.9 0 0 0 24 12a31.9 31.9 0 0 0-.5-5.8ZM9.6 15.6V8.4l6.2 3.6Z"/></svg><span>YouTube</span></a>
+        <a class="footer-link-social" href="https://store.steampowered.com/app/4403470" target="_blank" rel="noopener noreferrer" aria-label="Steam"><svg class="footer-link-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 259" aria-hidden="true" focusable="false"><path d="M127.779 0C57.895 0 1.307 55.39.052 124.908l68.961 28.5a36.077 36.077 0 0 1 20.378-6.27l30.462-44.145v-.617c0-26.513 21.569-48.084 48.083-48.084 26.516 0 48.085 21.572 48.085 48.084 0 26.515-21.569 48.085-48.085 48.085h-1.104l-43.474 31.02c0 .403.022.8.022 1.197 0 19.882-16.163 36.046-36.048 36.046-17.806 0-32.595-12.953-35.476-29.932L2.472 166.516C18.233 218.149 67.215 256 127.779 256c70.716 0 128.043-57.326 128.043-128.001C255.822 57.326 198.495 0 127.779 0z"/></svg><span>Steam</span></a>
+      </div>
+      <div>&copy; 2026 RandaWorks</div>
+    </footer>
+  </div>
+  <script src="/assets/js/analytics-config.js"></script>
+  <script src="/assets/js/analytics.js"></script>
+</body>
+</html>
