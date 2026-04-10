@@ -1,0 +1,446 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Nav from '../../components/Nav.astro';
+import Footer from '../../components/Footer.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+
+const navLinks = [
+  { href: '/games/inga/?src=nav', label: 'ゲームを見る' },
+  { href: '/journal/', label: '記事一覧' },
+  { href: '/history-tools/', label: 'ツール集' },
+];
+
+const schema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "AboutPage",
+      "name": "About | RandaWorks",
+      "url": "https://www.randaworks.com/about/",
+      "description": "RandaWorksは、歴史の因果関係をゲームメカニクスに変換するインディーゲームスタジオです。",
+      "inLanguage": "ja",
+      "mainEntity": { "@id": "https://www.randaworks.com/#organization" }
+    },
+    {
+      "@type": "Organization",
+      "@id": "https://www.randaworks.com/#organization",
+      "name": "RandaWorks",
+      "url": "https://www.randaworks.com/",
+      "logo": "https://www.randaworks.com/assets/img/randaworks_logo_full.png",
+      "sameAs": [
+        "https://x.com/RandaWorksJP",
+        "https://www.youtube.com/@RandaWorks"
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "ホーム", "item": "https://www.randaworks.com/" },
+        { "@type": "ListItem", "position": 2, "name": "About" }
+      ]
+    }
+  ]
+};
+---
+<BaseLayout
+  title="About | RandaWorks — 歴史の因果をゲームにするインディースタジオ"
+  description="RandaWorksは、歴史の因果関係をゲームの戦略に変えるインディーゲームスタジオです。主力タイトル「日本史因果クロニクル」を開発中。"
+  canonical="https://www.randaworks.com/about/"
+  pageType="about"
+>
+  <Fragment slot="head">
+    <link rel="alternate" hreflang="ja" href="https://www.randaworks.com/about/" />
+    <link rel="alternate" hreflang="en" href="https://www.randaworks.com/en/about/" />
+    <link rel="alternate" hreflang="x-default" href="https://www.randaworks.com/about/" />
+    <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+  </Fragment>
+
+  <div class="container">
+    <Nav links={navLinks} />
+
+    <main id="main-content">
+      <Breadcrumb items={[{ label: 'About' }]} />
+
+      <!-- Hero -->
+      <section class="about-hero">
+        <picture>
+          <source srcset="/assets/img/games/inga/demo-cards/poster_steam_store_pv_v1_1.webp" type="image/webp">
+          <img
+            src="/assets/img/games/inga/demo-cards/poster_steam_store_pv_v1_1.jpg"
+            alt=""
+            class="about-hero-bg"
+            loading="eager"
+          >
+        </picture>
+        <div class="about-hero-overlay"></div>
+        <div class="about-hero-content">
+          <p class="section-kicker">About</p>
+          <h1>歴史の因果を、ゲームにする。</h1>
+          <p class="about-hero-sub">インディーゲームスタジオ RandaWorks</p>
+        </div>
+      </section>
+
+      <!-- What we do -->
+      <section class="about-section">
+        <p class="about-intro">「なぜ関ヶ原の戦いが起きたのか」を知っているプレイヤーは、知らないプレイヤーより強い。</p>
+        <p class="about-body">RandaWorksは、そういうゲームをつくっているインディースタジオです。歴史の因果関係がそのままゲームの戦略になる。遊んでいるうちに、歴史の構造が自然と頭に入っている——「面白いから遊んでたら、いつの間にか分かっていた」という体験を設計しています。</p>
+      </section>
+
+      <!-- Game showcase -->
+      <section class="about-section about-game">
+        <div class="about-game-grid">
+          <div class="about-game-visual">
+            <picture>
+              <source srcset="/assets/img/games/inga/demo-cards/combo_nobunaga.webp" type="image/webp">
+              <img
+                src="/assets/img/games/inga/demo-cards/combo_nobunaga.jpg"
+                alt="日本史因果クロニクル — 因果コンボ画面"
+                class="about-game-img"
+                loading="lazy"
+              >
+            </picture>
+          </div>
+          <div class="about-game-text">
+            <picture>
+              <source srcset="/assets/img/games/inga/title_logo.webp" type="image/webp">
+              <img
+                src="/assets/img/games/inga/title_logo.png"
+                alt="日本史因果クロニクル"
+                class="about-game-logo"
+                loading="lazy"
+              >
+            </picture>
+            <p>史実の因果でコンボを組んで戦う、日本史デッキ構築ローグライク。桶狭間の戦いから本能寺の変へ——歴史の連鎖が、そのまま勝ち筋になります。</p>
+            <p class="about-game-status">ブラウザ体験版を公開中。Steam版を開発中。</p>
+            <div class="about-game-actions">
+              <a class="cta" href="/games/inga/?src=about#play" data-track-event="play_cta_click" data-track-placement="about_game" data-track-label="about game play">体験版を遊ぶ</a>
+              <a class="cta cta-ghost" href="/games/inga/?src=about" data-track-event="cta_click" data-track-placement="about_game_detail" data-track-label="about game detail">作品ページを見る</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Screenshot strip -->
+      <div class="about-ss-strip">
+        <picture>
+          <source srcset="/assets/img/games/inga/ss_01.webp" type="image/webp">
+          <img src="/assets/img/games/inga/ss_01.png" alt="ゲームプレイ画面" loading="lazy">
+        </picture>
+        <picture>
+          <source srcset="/assets/img/games/inga/ss_03.webp" type="image/webp">
+          <img src="/assets/img/games/inga/ss_03.png" alt="デッキ構築画面" loading="lazy">
+        </picture>
+        <picture>
+          <source srcset="/assets/img/games/inga/ss_05.webp" type="image/webp">
+          <img src="/assets/img/games/inga/ss_05.png" alt="バトル画面" loading="lazy">
+        </picture>
+      </div>
+
+      <!-- Design principles -->
+      <section class="about-section about-principles-section">
+        <h2>つくるときに大事にしていること</h2>
+
+        <div class="about-principles">
+          <div class="about-principle">
+            <h3>理解が勝ち筋になる</h3>
+            <p>暗記では勝てません。因果関係を理解したプレイヤーが有利になるように設計しています。「なぜそうなったか」が分かれば、次の一手が見えてくる。</p>
+          </div>
+          <div class="about-principle">
+            <h3>学びは遊びに溶かす</h3>
+            <p>「教える」ゲームではなく、遊んでいたら自然と分かっているゲーム。気づきはプレイヤー自身のものです。</p>
+          </div>
+          <div class="about-principle">
+            <h3>小さく作って、鋭く磨く</h3>
+            <p>少人数のスタジオだからこそ、体験の核を深く掘り下げます。体験版を公開し、フィードバックを受けながら磨いています。</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- CTA -->
+      <section class="card cta-band" aria-labelledby="about-cta-title">
+        <h2 id="about-cta-title">気になったら、まずは触ってみてください。</h2>
+        <p>ブラウザからすぐに遊べます。PCでのプレイを推奨しています。</p>
+        <div class="cta-band-actions">
+          <a class="cta" href="/games/inga/?src=about_cta#play" data-track-event="play_cta_click" data-track-placement="about_cta_play" data-track-label="about cta play">体験版を遊ぶ</a>
+          <a class="cta cta-ghost" href="/games/inga/?src=about_cta" data-track-event="cta_click" data-track-placement="about_cta_games" data-track-label="about cta games">ゲームページを見る</a>
+          <a class="cta cta-ghost" href="/journal/" data-track-event="cta_click" data-track-placement="about_cta_journal" data-track-label="about cta journal">記事を読む</a>
+        </div>
+      </section>
+
+    </main>
+
+    <Footer source="about" />
+  </div>
+</BaseLayout>
+
+<style is:inline>
+  /* Hero */
+  .about-hero {
+    position: relative;
+    border-radius: 20px;
+    overflow: hidden;
+    margin-bottom: 30px;
+    min-height: 380px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .about-hero-bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 40%;
+  }
+
+  .about-hero-overlay {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(to bottom, rgba(5, 5, 5, 0.4) 0%, rgba(5, 5, 5, 0.7) 60%, rgba(5, 5, 5, 0.92) 100%),
+      radial-gradient(ellipse at center bottom, rgba(199, 166, 102, 0.1), transparent 60%);
+  }
+
+  .about-hero-content {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    padding: 80px 24px 60px;
+  }
+
+  .about-hero-content h1 {
+    font-family: var(--font-serif);
+    font-size: 2.4rem;
+    font-weight: 700;
+    line-height: 1.4;
+    letter-spacing: -0.02em;
+    margin: 0 0 16px;
+    color: #fff;
+  }
+
+  .about-hero-sub {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    letter-spacing: 0.08em;
+  }
+
+  /* Sections */
+  .about-section {
+    padding: 48px 0;
+    border-bottom: 1px solid var(--card-border);
+  }
+
+  .about-section:last-of-type {
+    border-bottom: none;
+  }
+
+  .about-intro {
+    font-family: var(--font-serif);
+    font-size: 1.3rem;
+    font-weight: 700;
+    line-height: 1.7;
+    color: var(--text-main);
+    margin: 0 0 20px;
+  }
+
+  .about-body {
+    font-size: 0.95rem;
+    line-height: 1.9;
+    color: var(--text-muted);
+    max-width: 680px;
+    margin: 0;
+  }
+
+  /* Game showcase */
+  .about-game-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    align-items: center;
+  }
+
+  .about-game-visual {
+    position: relative;
+  }
+
+  .about-game-img {
+    width: 100%;
+    border-radius: 16px;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+  }
+
+  .about-game-logo {
+    width: 100%;
+    max-width: 320px;
+    margin-bottom: 20px;
+  }
+
+  .about-game-text p {
+    font-size: 0.95rem;
+    line-height: 1.8;
+    color: var(--text-muted);
+    margin: 0 0 12px;
+  }
+
+  .about-game-status {
+    font-size: 0.85rem !important;
+    color: var(--accent-gold) !important;
+    font-weight: 600;
+  }
+
+  .about-game-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 24px;
+    flex-wrap: wrap;
+  }
+
+  .about-game-actions .cta {
+    font-size: 0.9rem;
+    padding: 12px 24px;
+  }
+
+  /* Screenshot strip */
+  .about-ss-strip {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+
+  .about-ss-strip img {
+    width: 100%;
+    border-radius: 12px;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+  }
+
+  /* Principles */
+  .about-principles-section h2 {
+    font-family: var(--font-serif);
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-main);
+    margin: 0 0 40px;
+    display: inline-block;
+    border-bottom: 2px solid var(--accent-gold);
+    padding-bottom: 8px;
+  }
+
+  .about-principles {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .about-principle {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: 32px;
+    align-items: baseline;
+    padding: 28px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .about-principle:last-child {
+    border-bottom: none;
+  }
+
+  .about-principle h3 {
+    font-family: var(--font-serif);
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--accent-gold);
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  .about-principle p {
+    font-size: 0.95rem;
+    line-height: 1.8;
+    color: var(--text-muted);
+    margin: 0;
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .about-hero {
+      min-height: 300px;
+      border-radius: 16px;
+      margin-bottom: 20px;
+    }
+
+    .about-hero-content {
+      padding: 60px 20px 48px;
+    }
+
+    .about-hero-content h1 {
+      font-size: 1.7rem;
+    }
+
+    .about-section {
+      padding: 36px 0;
+    }
+
+    .about-intro {
+      font-size: 1.1rem;
+    }
+
+    .about-game-grid {
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+
+    .about-game-img {
+      aspect-ratio: 16 / 10;
+    }
+
+    .about-ss-strip {
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+
+    .about-principle {
+      grid-template-columns: 1fr;
+      gap: 8px;
+      padding: 20px 0;
+    }
+
+    .about-principles-section h2 {
+      font-size: 1.3rem;
+      margin-bottom: 24px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .about-hero {
+      min-height: 260px;
+      border-radius: 12px;
+    }
+
+    .about-hero-content {
+      padding: 48px 16px 36px;
+    }
+
+    .about-hero-content h1 {
+      font-size: 1.4rem;
+    }
+
+    .about-hero-sub {
+      font-size: 0.85rem;
+    }
+
+    .about-game-actions {
+      flex-direction: column;
+    }
+
+    .about-game-actions .cta {
+      width: 100%;
+      text-align: center;
+    }
+  }
+</style>
