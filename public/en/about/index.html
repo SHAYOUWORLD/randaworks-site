@@ -23,121 +23,496 @@
   <link rel="icon" href="/favicon.ico" sizes="any">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
   <link rel="manifest" href="/site.webmanifest">
-  <title>About | RandaWorks</title>
-  <meta name="description" content="RandaWorks is an indie studio building games where understanding, discovery, and strategy naturally become fun." />
+  <title>About | RandaWorks — An Indie Studio Turning History into Gameplay</title>
+  <meta name="description" content="RandaWorks is an indie game studio that turns historical cause-and-effect into game strategy. Currently developing Inga Chronicle, a Japanese history deck-building roguelike." />
   <link rel="canonical" href="https://www.randaworks.com/en/about/" />
   <link rel="alternate" hreflang="ja" href="https://www.randaworks.com/about/" />
   <link rel="alternate" hreflang="en" href="https://www.randaworks.com/en/about/" />
   <link rel="alternate" hreflang="x-default" href="https://www.randaworks.com/about/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="About | RandaWorks" />
+  <meta property="og:description" content="RandaWorks is an indie game studio that turns historical cause-and-effect into game strategy." />
+  <meta property="og:url" content="https://www.randaworks.com/en/about/" />
+  <meta property="og:image" content="https://www.randaworks.com/assets/img/ogp/randaworks-ogp-home.png" />
+  <meta property="og:site_name" content="RandaWorks" />
+  <meta property="og:locale" content="en_US" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@RandaWorksJP" />
+  <meta name="twitter:title" content="About | RandaWorks" />
+  <meta name="twitter:description" content="RandaWorks is an indie game studio that turns historical cause-and-effect into game strategy." />
+  <meta name="twitter:image" content="https://www.randaworks.com/assets/img/ogp/randaworks-ogp-home.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Shippori+Mincho:wght@400;700&display=swap">
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Shippori+Mincho:wght@400;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
-  <noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Shippori+Mincho:wght@400;700&display=swap" rel="stylesheet"></noscript>
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Shippori+Mincho:wght@400;700&family=Space+Grotesk:wght@400;500;600;700&display=swap">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Shippori+Mincho:wght@400;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Shippori+Mincho:wght@400;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet"></noscript>
   <link rel="stylesheet" href="../../assets/css/style.css">
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "AboutPage",
+          "name": "About | RandaWorks",
+          "url": "https://www.randaworks.com/en/about/",
+          "description": "RandaWorks is an indie game studio that turns historical cause-and-effect into game strategy.",
+          "inLanguage": "en",
+          "mainEntity": {
+            "@id": "https://www.randaworks.com/#organization"
+          }
+        },
+        {
+          "@type": "Organization",
+          "@id": "https://www.randaworks.com/#organization",
+          "name": "RandaWorks",
+          "url": "https://www.randaworks.com/",
+          "logo": "https://www.randaworks.com/assets/img/randaworks_logo_full.png",
+          "sameAs": [
+            "https://x.com/RandaWorksJP",
+            "https://www.youtube.com/@RandaWorks"
+          ]
+        },
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "Home",
+              "item": "https://www.randaworks.com/en/"
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "name": "About"
+            }
+          ]
+        }
+      ]
+    }
+  </script>
   <style>
-    .about-hero { text-align: center; padding: 48px 20px 36px; }
-    .about-hero h1 { font-family: var(--font-serif); font-size: 1.7rem; font-weight: 700; line-height: 1.6; margin-bottom: 20px; }
-    .about-lead { font-size: 1rem; line-height: 1.9; color: var(--text-muted); max-width: 720px; margin: 0 auto; }
-    .about-body { font-size: 0.95rem; line-height: 1.9; color: var(--text-muted); }
-    .about-body + .about-body { margin-top: 16px; }
-    .about-grid .pillar-card h3 { font-size: 0.95rem; margin-bottom: 8px; }
-    .about-grid .pillar-card p { font-size: 0.88rem; line-height: 1.8; color: var(--text-muted); margin: 0; }
-    .about-share-list { margin: 24px 0 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
-    .about-share-list li { position: relative; padding-left: 18px; font-size: 0.9rem; color: var(--text-muted); line-height: 1.7; }
-    .about-share-list li::before { content: ""; position: absolute; left: 0; top: 0.65em; width: 7px; height: 7px; border-radius: 999px; background: var(--accent-gold); }
-    .about-share-list strong { color: var(--text-main); }
+    /* Hero */
+    .about-hero {
+      position: relative;
+      border-radius: 20px;
+      overflow: hidden;
+      margin-bottom: 30px;
+      min-height: 380px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .about-hero-bg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 40%;
+    }
+
+    .about-hero-overlay {
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(to bottom, rgba(5, 5, 5, 0.4) 0%, rgba(5, 5, 5, 0.7) 60%, rgba(5, 5, 5, 0.92) 100%),
+        radial-gradient(ellipse at center bottom, rgba(199, 166, 102, 0.1), transparent 60%);
+    }
+
+    .about-hero-content {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 80px 24px 60px;
+    }
+
+    .about-hero-content h1 {
+      font-family: var(--font-serif);
+      font-size: 2.4rem;
+      font-weight: 700;
+      line-height: 1.4;
+      letter-spacing: -0.02em;
+      margin: 0 0 16px;
+      color: #fff;
+    }
+
+    .about-hero-sub {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      letter-spacing: 0.08em;
+    }
+
+    /* Sections */
+    .about-section {
+      padding: 48px 0;
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    .about-section:last-of-type {
+      border-bottom: none;
+    }
+
+    .about-intro {
+      font-family: var(--font-serif);
+      font-size: 1.3rem;
+      font-weight: 700;
+      line-height: 1.7;
+      color: var(--text-main);
+      margin: 0 0 20px;
+    }
+
+    .about-body {
+      font-size: 0.95rem;
+      line-height: 1.9;
+      color: var(--text-muted);
+      max-width: 680px;
+      margin: 0;
+    }
+
+    /* Game showcase */
+    .about-game-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      align-items: center;
+    }
+
+    .about-game-img {
+      width: 100%;
+      border-radius: 16px;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+    }
+
+    .about-game-logo {
+      width: 100%;
+      max-width: 320px;
+      margin-bottom: 20px;
+    }
+
+    .about-game-text p {
+      font-size: 0.95rem;
+      line-height: 1.8;
+      color: var(--text-muted);
+      margin: 0 0 12px;
+    }
+
+    .about-game-status {
+      font-size: 0.85rem !important;
+      color: var(--accent-gold) !important;
+      font-weight: 600;
+    }
+
+    .about-game-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 24px;
+      flex-wrap: wrap;
+    }
+
+    .about-game-actions .cta {
+      font-size: 0.9rem;
+      padding: 12px 24px;
+    }
+
+    /* Screenshot strip */
+    .about-ss-strip {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .about-ss-strip img {
+      width: 100%;
+      border-radius: 12px;
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
+    }
+
+    /* Principles */
+    .about-principles-section h2 {
+      font-family: var(--font-serif);
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin: 0 0 40px;
+      display: inline-block;
+      border-bottom: 2px solid var(--accent-gold);
+      padding-bottom: 8px;
+    }
+
+    .about-principles {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .about-principle {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      gap: 32px;
+      align-items: baseline;
+      padding: 28px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .about-principle:last-child {
+      border-bottom: none;
+    }
+
+    .about-principle h3 {
+      font-family: var(--font-serif);
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--accent-gold);
+      line-height: 1.5;
+      margin: 0;
+    }
+
+    .about-principle p {
+      font-size: 0.95rem;
+      line-height: 1.8;
+      color: var(--text-muted);
+      margin: 0;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .about-hero {
+        min-height: 300px;
+        border-radius: 16px;
+        margin-bottom: 20px;
+      }
+
+      .about-hero-content {
+        padding: 60px 20px 48px;
+      }
+
+      .about-hero-content h1 {
+        font-size: 1.7rem;
+      }
+
+      .about-section {
+        padding: 36px 0;
+      }
+
+      .about-intro {
+        font-size: 1.1rem;
+      }
+
+      .about-game-grid {
+        grid-template-columns: 1fr;
+        gap: 24px;
+      }
+
+      .about-game-img {
+        aspect-ratio: 16 / 10;
+      }
+
+      .about-ss-strip {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+
+      .about-principle {
+        grid-template-columns: 1fr;
+        gap: 8px;
+        padding: 20px 0;
+      }
+
+      .about-principles-section h2 {
+        font-size: 1.3rem;
+        margin-bottom: 24px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .about-hero {
+        min-height: 260px;
+        border-radius: 12px;
+      }
+
+      .about-hero-content {
+        padding: 48px 16px 36px;
+      }
+
+      .about-hero-content h1 {
+        font-size: 1.4rem;
+      }
+
+      .about-hero-sub {
+        font-size: 0.85rem;
+      }
+
+      .about-game-actions {
+        flex-direction: column;
+      }
+
+      .about-game-actions .cta {
+        width: 100%;
+        text-align: center;
+      }
+    }
   </style>
 </head>
 <body>
   <a class="skip-link" href="#main-content">Skip to main content</a>
   <div class="container">
     <nav class="nav">
-      <div class="brand"><a href="../"><picture>
+      <div class="brand"><a href="/en/"><picture>
         <source srcset="../../assets/img/randaworks_logo_text.webp" type="image/webp">
         <img src="../../assets/img/randaworks_logo_text.png" alt="RandaWorks" style="height: 28px; vertical-align: middle;">
       </picture></a></div>
       <div class="links">
-        <a href="/games/">Games</a>
-        <a href="/videos/">Videos</a>
-        
-        <a href="/faq/">FAQ</a>
-        
-        <a href="/contact/">Contact</a>
+        <a href="/en/games/inga/?src=nav">Game</a>
+        <a href="/history-tools/">History Tools</a>
+        <a href="/en/videos/">Videos</a>
       </div>
     </nav>
+
     <main id="main-content">
-      <ul class="breadcrumb">
-        <li><a href="../">Home</a></li>
-        <li class="breadcrumb-separator" aria-hidden="true">›</li>
-        <li class="breadcrumb-current" aria-current="page">About</li>
-      </ul>
-      <section class="card about-hero">
-        <p class="section-kicker">About</p>
-        <h1>You finish playing and realize you got smarter.</h1>
-        <p class="about-lead">RandaWorks is an indie studio building games where understanding and discovery are not homework, but part of the reward loop itself.</p>
-      </section>
-      <section class="card">
-        <p class="section-kicker">What We Make</p>
-        <h2>What RandaWorks works on</h2>
-        <div class="pillar-grid about-grid">
-          <article class="surface-panel pillar-card"><h3>Games</h3><p>We build game experiences where learning the structure of a system directly improves how you play it.</p></article>
-          <article class="surface-panel pillar-card"><h3>Playable demos</h3><p>We release browser and downloadable demos early so players can touch the core idea quickly.</p></article>
-          <article class="surface-panel pillar-card"><h3>Videos</h3><p>We publish PVs, introductions, and character-led video content around the project.</p></article>
-          <article class="surface-panel pillar-card"><h3>More formats later</h3><p>History is our first theme, not the limit of the studio. We want to keep exploring other forms too.</p></article>
+      <nav aria-label="Breadcrumb">
+        <ol class="breadcrumb">
+          <li><a href="/en/">Home</a></li>
+          <li class="breadcrumb-separator" aria-hidden="true">›</li>
+          <li class="breadcrumb-current" aria-current="page">About</li>
+        </ol>
+      </nav>
+
+      <!-- Hero -->
+      <section class="about-hero">
+        <picture>
+          <source srcset="../../assets/img/games/inga/demo-cards/poster_steam_store_pv_v1_1.webp" type="image/webp">
+          <img
+            src="../../assets/img/games/inga/demo-cards/poster_steam_store_pv_v1_1.jpg"
+            alt=""
+            class="about-hero-bg"
+            loading="eager"
+          >
+        </picture>
+        <div class="about-hero-overlay"></div>
+        <div class="about-hero-content">
+          <p class="section-kicker">About</p>
+          <h1>Turning Historical Cause&nbsp;and&nbsp;Effect into Gameplay.</h1>
+          <p class="about-hero-sub">RandaWorks — Indie Game Studio</p>
         </div>
       </section>
-      <section class="card">
-        <p class="section-kicker">Why</p>
-        <h2>Why this approach matters to us</h2>
-        <p class="about-body">We are not trying to make “educational games” in the usual sense. The goal is not to teach first and entertain second.</p>
-        <p class="about-body">Instead, we want to build experiences where the player feels the structure, notices a pattern, and suddenly understands why something works. That moment of understanding should be satisfying on its own.</p>
-        <p class="about-body">Japanese history is simply the first arena where that design philosophy becomes visible.</p>
+
+      <!-- What we do -->
+      <section class="about-section">
+        <p class="about-intro">A player who understands <em>why</em> the Battle of Sekigahara happened is stronger than one who doesn't.</p>
+        <p class="about-body">That's the kind of game RandaWorks builds. Historical cause-and-effect becomes your game strategy. Play long enough, and the structure of history starts making sense&mdash;not because you studied, but because you were having fun.</p>
       </section>
-      <section class="card">
-        <p class="section-kicker">How We Think</p>
-        <h2>Design principles</h2>
-        <div class="combo-grid about-grid">
-          <article class="surface-panel pillar-card"><h3>Understanding should be actionable</h3><p>Insight should lead to better decisions, stronger runs, and cleaner strategies.</p></article>
-          <article class="surface-panel pillar-card"><h3>Discovery should feel rewarding</h3><p>The player should feel a real payoff when the system clicks into place.</p></article>
-          <article class="surface-panel pillar-card"><h3>Teaching should be invisible</h3><p>The experience comes first. If learning happens, it should happen through play.</p></article>
-          <article class="surface-panel pillar-card"><h3>Keep the core sharp</h3><p>As a small team, we prefer strong fundamentals over feature sprawl.</p></article>
+
+      <!-- Game showcase -->
+      <section class="about-section about-game">
+        <div class="about-game-grid">
+          <div class="about-game-visual">
+            <picture>
+              <source srcset="../../assets/img/games/inga/demo-cards/combo_nobunaga.webp" type="image/webp">
+              <img
+                src="../../assets/img/games/inga/demo-cards/combo_nobunaga.jpg"
+                alt="Inga Chronicle — Causal combo gameplay"
+                class="about-game-img"
+                loading="lazy"
+              >
+            </picture>
+          </div>
+          <div class="about-game-text">
+            <picture>
+              <source srcset="../../assets/img/games/inga/title_logo.webp" type="image/webp">
+              <img
+                src="../../assets/img/games/inga/title_logo.png"
+                alt="Inga Chronicle"
+                class="about-game-logo"
+                loading="lazy"
+              >
+            </picture>
+            <p>A Japanese history deck-building roguelike where real historical causation powers your combos. From the Battle of Okehazama to the Honn&#333;-ji Incident&mdash;chains of history become your path to victory.</p>
+            <p class="about-game-status">Browser demo available now. Steam version in development.</p>
+            <div class="about-game-actions">
+              <a class="cta" href="/en/games/inga/?src=about#play" data-track-event="play_cta_click" data-track-placement="about_game_en" data-track-label="about game play en">Play the demo</a>
+              <a class="cta cta-ghost" href="/en/games/inga/?src=about" data-track-event="cta_click" data-track-placement="about_game_detail_en" data-track-label="about game detail en">Game page</a>
+            </div>
+          </div>
         </div>
       </section>
-      <section class="card">
-        <p class="section-kicker">What We Share</p>
-        <h2>What players can follow today</h2>
-        <ul class="about-share-list">
-          <li><strong>Game pages</strong> for the current title and public demo</li>
-          <li><strong>News posts</strong> for site updates and public announcements</li>
-          <li><strong>Videos</strong> for PVs and character-facing content</li>
-          <li><strong>Support pages</strong> for version notes and bug reporting paths</li>
-        </ul>
+
+      <!-- Screenshot strip -->
+      <div class="about-ss-strip">
+        <picture>
+          <source srcset="../../assets/img/games/inga/ss_01.webp" type="image/webp">
+          <img src="../../assets/img/games/inga/ss_01.png" alt="Gameplay screenshot" loading="lazy">
+        </picture>
+        <picture>
+          <source srcset="../../assets/img/games/inga/ss_03.webp" type="image/webp">
+          <img src="../../assets/img/games/inga/ss_03.png" alt="Deck building screenshot" loading="lazy">
+        </picture>
+        <picture>
+          <source srcset="../../assets/img/games/inga/ss_05.webp" type="image/webp">
+          <img src="../../assets/img/games/inga/ss_05.png" alt="Battle screenshot" loading="lazy">
+        </picture>
+      </div>
+
+      <!-- Design principles -->
+      <section class="about-section about-principles-section">
+        <h2>What Guides Our Design</h2>
+
+        <div class="about-principles">
+          <div class="about-principle">
+            <h3>Understanding Wins&nbsp;Games</h3>
+            <p>Memorization won't get you far. We design so that players who grasp cause-and-effect have a real advantage. Understand the "why," and the next move becomes clear.</p>
+          </div>
+          <div class="about-principle">
+            <h3>Learning Dissolves into&nbsp;Play</h3>
+            <p>Not a game that teaches&mdash;a game where you just <em>get it</em> while playing. The insights belong to the player.</p>
+          </div>
+          <div class="about-principle">
+            <h3>Build Small, Polish&nbsp;Sharp</h3>
+            <p>As a small studio, we go deep on the core experience. We ship playable demos early and iterate on real feedback.</p>
+          </div>
+        </div>
       </section>
+
+      <!-- CTA -->
+      <section class="card cta-band" aria-labelledby="about-cta-title">
+        <h2 id="about-cta-title">Curious? Try it yourself.</h2>
+        <p>Play in your browser. Best experienced on PC.</p>
+        <div class="cta-band-actions">
+          <a class="cta" href="/en/games/inga/?src=about_cta#play" data-track-event="play_cta_click" data-track-placement="about_cta_play_en" data-track-label="about cta play en">Play the demo</a>
+          <a class="cta cta-ghost" href="/en/games/inga/?src=about_cta" data-track-event="cta_click" data-track-placement="about_cta_games_en" data-track-label="about cta games en">Game page</a>
+          <a class="cta cta-ghost" href="/en/videos/" data-track-event="cta_click" data-track-placement="about_cta_videos_en" data-track-label="about cta videos en">Watch videos</a>
+        </div>
+      </section>
+
     </main>
+
     <footer class="footer">
       <nav class="footer-nav" aria-label="Footer navigation">
-  <a href="/about/">About</a>
-  <a href="/privacy/">Privacy</a>
-  <a href="/terms/">Terms</a>
-  <a href="/faq/">FAQ</a>
-  
-  <a href="/contact/">Contact</a>
-</nav>
+        <a href="/en/about/">About</a>
+        <a href="/history-tools/">History Tools</a>
+        <a href="/en/privacy/">Privacy</a>
+        <a href="/en/terms/">Terms</a>
+        <a href="/en/contact/">Contact</a>
+      </nav>
       <div class="footer-links">
-  <a class="footer-link-social" href="https://x.com/RandaWorksJP" target="_blank" rel="noopener noreferrer" aria-label="Open the official RandaWorks X account in a new tab" data-track-event="social_click" data-track-placement="site_footer_x" data-track-label="site footer x">
-    <svg class="footer-link-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1227" aria-hidden="true" focusable="false"><path d="M714.163 519.284 1160.89 0h-105.83L667.137 450.887 357.328 0H0l468.492 681.821L0 1226.37h105.866l409.588-476.152 327.218 476.152H1200L714.137 519.284h.026ZM569.165 687.828l-47.468-67.909L144.011 79.694h162.604l304.22 434.658 47.468 67.909 396.807 566.942H892.505L569.165 687.828Z"/></svg>
-    <span>X</span>
-  </a>
-  <a class="footer-link-social" href="https://www.youtube.com/@RandaWorks" target="_blank" rel="noopener noreferrer" aria-label="Open the official RandaWorks YouTube channel in a new tab" data-track-event="social_click" data-track-placement="site_footer_youtube" data-track-label="site footer youtube">
-    <svg class="footer-link-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31.9 31.9 0 0 0 0 12a31.9 31.9 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31.9 31.9 0 0 0 24 12a31.9 31.9 0 0 0-.5-5.8ZM9.6 15.6V8.4l6.2 3.6Z"/></svg>
-    <span>YouTube</span>
-  </a>
-  <a class="footer-link-social" href="https://store.steampowered.com/app/4403470" target="_blank" rel="noopener noreferrer" aria-label="Open the Steam store page in a new tab" data-track-event="social_click" data-track-placement="site_footer_steam" data-track-label="site footer steam">
-    <svg class="footer-link-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 259" aria-hidden="true" focusable="false"><path d="M127.779 0C57.895 0 1.307 55.39.052 124.908l68.961 28.5a36.077 36.077 0 0 1 20.378-6.27l30.462-44.145v-.617c0-26.513 21.569-48.084 48.083-48.084 26.516 0 48.085 21.572 48.085 48.084 0 26.515-21.569 48.085-48.085 48.085h-1.104l-43.474 31.02c0 .403.022.8.022 1.197 0 19.882-16.163 36.046-36.048 36.046-17.806 0-32.595-12.953-35.476-29.932L2.472 166.516C18.233 218.149 67.215 256 127.779 256c70.716 0 128.043-57.326 128.043-128.001C255.822 57.326 198.495 0 127.779 0z"/></svg>
-    <span>Steam</span>
-  </a>
-</div>
+        <a class="footer-link-social" href="https://x.com/RandaWorksJP" target="_blank" rel="noopener noreferrer" aria-label="Open the official RandaWorks X account in a new tab" data-track-event="social_click" data-track-placement="site_footer_x" data-track-label="site footer x">
+          <svg class="footer-link-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1227" aria-hidden="true" focusable="false"><path d="M714.163 519.284 1160.89 0h-105.83L667.137 450.887 357.328 0H0l468.492 681.821L0 1226.37h105.866l409.588-476.152 327.218 476.152H1200L714.137 519.284h.026ZM569.165 687.828l-47.468-67.909L144.011 79.694h162.604l304.22 434.658 47.468 67.909 396.807 566.942H892.505L569.165 687.828Z"/></svg>
+          <span>X</span>
+        </a>
+        <a class="footer-link-social" href="https://www.youtube.com/@RandaWorks" target="_blank" rel="noopener noreferrer" aria-label="Open the official RandaWorks YouTube channel in a new tab" data-track-event="social_click" data-track-placement="site_footer_youtube" data-track-label="site footer youtube">
+          <svg class="footer-link-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31.9 31.9 0 0 0 0 12a31.9 31.9 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31.9 31.9 0 0 0 24 12a31.9 31.9 0 0 0-.5-5.8ZM9.6 15.6V8.4l6.2 3.6Z"/></svg>
+          <span>YouTube</span>
+        </a>
+        <a class="footer-link-social" href="https://store.steampowered.com/app/4403470" target="_blank" rel="noopener noreferrer" aria-label="Open the Steam store page in a new tab" data-track-event="social_click" data-track-placement="site_footer_steam" data-track-label="site footer steam">
+          <svg class="footer-link-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 259" aria-hidden="true" focusable="false"><path d="M127.779 0C57.895 0 1.307 55.39.052 124.908l68.961 28.5a36.077 36.077 0 0 1 20.378-6.27l30.462-44.145v-.617c0-26.513 21.569-48.084 48.083-48.084 26.516 0 48.085 21.572 48.085 48.084 0 26.515-21.569 48.085-48.085 48.085h-1.104l-43.474 31.02c0 .403.022.8.022 1.197 0 19.882-16.163 36.046-36.048 36.046-17.806 0-32.595-12.953-35.476-29.932L2.472 166.516C18.233 218.149 67.215 256 127.779 256c70.716 0 128.043-57.326 128.043-128.001C255.822 57.326 198.495 0 127.779 0z"/></svg>
+          <span>Steam</span>
+        </a>
+      </div>
       <div>&copy; 2026 RandaWorks</div>
     </footer>
   </div>
@@ -145,4 +520,3 @@
   <script src="../../assets/js/analytics.js"></script>
 </body>
 </html>
-
