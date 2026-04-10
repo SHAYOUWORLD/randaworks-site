@@ -1,0 +1,444 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-WNL49Q0CTT"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-WNL49Q0CTT');</script>
+  <script type="text/javascript">(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window,document,"clarity","script","w8awzqlkx4");</script>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <title>Character Counter | X/Twitter Weighted Count, Lines, URLs</title>
+  <meta name="description" content="Real-time character counter with X/Twitter weighted count, line count, URL count, UTF-8 bytes, and limit indicators for Instagram, LINE, SEO." />
+  <link rel="canonical" href="https://www.randaworks.com/en/tools/moji-counter/" />
+  <link rel="alternate" hreflang="ja" href="https://www.randaworks.com/tools/moji-counter/" />
+  <link rel="alternate" hreflang="en" href="https://www.randaworks.com/en/tools/moji-counter/" />
+  <link rel="alternate" hreflang="x-default" href="https://www.randaworks.com/tools/moji-counter/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Character Counter | RandaWorks" />
+  <meta property="og:description" content="Character counter with X weighted count, URLs, and limit indicators." />
+  <meta property="og:url" content="https://www.randaworks.com/en/tools/moji-counter/" />
+  <meta property="og:image" content="https://www.randaworks.com/assets/img/ogp/randaworks-ogp-home.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Character Counter | RandaWorks" />
+  <meta name="twitter:description" content="Character counter with X weighted count, URLs, and limit indicators." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Shippori+Mincho:wght@400;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Shippori+Mincho:wght@400;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet"></noscript>
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <link rel="stylesheet" href="/assets/css/history-tools.css">
+</head>
+<body data-page-type="char_counter" class="char_counter-page">
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <div class="container tool-page">
+    <nav class="nav">
+      <div class="brand"><a href="/en/"><picture>
+        <source srcset="/assets/img/randaworks_logo_text.webp" type="image/webp">
+        <img src="/assets/img/randaworks_logo_text.png" alt="RandaWorks" style="height: 28px; vertical-align: middle;">
+      </picture></a></div>
+      <div class="links">
+        <a href="/en/history-tools/">History Tools</a>
+        <a href="/en/games/inga/?src=nav">Game</a>
+        <a href="/en/about/">About</a>
+      </div>
+    </nav>
+
+    <main id="main-content">
+      <nav aria-label="Breadcrumb">
+        <ol class="breadcrumb">
+          <li><a href="/en/">Home</a></li>
+          <li class="breadcrumb-separator" aria-hidden="true">›</li>
+          <li><a href="/en/history-tools/">History Tools</a></li>
+          <li class="breadcrumb-separator" aria-hidden="true">›</li>
+          <li class="breadcrumb-current" aria-current="page">Character Counter</li>
+        </ol>
+      </nav>
+
+      <div class="tool-page-header">
+        <h1>Character Counter</h1>
+        <span class="tool-page-tag">X/Twitter Ready</span>
+      </div>
+      <p class="tool-page-desc">Beyond simple character counts — includes X weighted count, line count, URLs, UTF-8 bytes, and platform limit indicators.</p>
+
+      <div class="tool-workspace">
+        <div class="tool-output counter-note" style="min-height:auto;margin-bottom:14px;">
+          <span class="tool-output-label">What it does</span>
+          <p>Real-time character count, no-whitespace count, lines, paragraphs, URLs, UTF-8 bytes, and reading time.</p>
+          <p>X (Twitter) uses weighted count: URLs count as 23 chars, CJK/emoji as 2 chars each. Reply-mode strips leading mentions.</p>
+        </div>
+
+        <div class="tool-chips" id="counterExamples">
+          <button type="button" data-text="The rain in Spain falls mainly on the plain.">Short text</button>
+          <button type="button" data-text="Just released a new browser demo. Let us know what you think! https://www.randaworks.com/en/games/inga/">Tweet with URL</button>
+          <button type="button" data-text="@user1 @user2 Thanks for the feedback! We've published the update notes.">Reply-style</button>
+        </div>
+
+        <div style="margin-bottom: 14px;">
+          <label for="counterInput" style="display:block; margin-bottom: 6px; color: var(--text-muted); font-size: 0.92rem;">Enter text</label>
+          <textarea id="counterInput" rows="10" placeholder="Paste or type your text here" style="width:100%;min-height:220px;padding:14px;border-radius:12px;border:1px solid rgba(255,255,255,0.12);background:rgba(255,255,255,0.04);color:#fff;font:inherit;resize:vertical;"></textarea>
+        </div>
+
+        <div class="counter-controls">
+          <label class="counter-check">
+            <input id="xReplyMode" type="checkbox" />
+            <span>Calculate as X reply</span>
+          </label>
+          <label class="counter-custom-limit">
+            <span>Custom limit</span>
+            <input id="customLimit" type="number" min="1" step="1" value="1000" />
+          </label>
+          <button class="tool-btn tool-btn-ghost" type="button" id="counterClearBtn">Clear</button>
+          <button class="tool-btn tool-btn-ghost" type="button" id="counterCopyBtn">Copy text</button>
+        </div>
+
+        <section class="counter-grid" id="counterPrimary">
+          <article class="counter-card counter-card-emphasis">
+            <span class="tool-output-label">Character count</span>
+            <strong id="countGraphemes">0</strong>
+            <span>Visible characters</span>
+          </article>
+          <article class="counter-card counter-card-emphasis">
+            <span class="tool-output-label">X weighted count</span>
+            <strong id="countXWeighted">0</strong>
+            <span id="countXState">Standard tweet (280)</span>
+          </article>
+          <article class="counter-card">
+            <span class="tool-output-label">No whitespace</span>
+            <strong id="countNoSpaces">0</strong>
+            <span>Excludes spaces and line breaks</span>
+          </article>
+          <article class="counter-card">
+            <span class="tool-output-label">Lines</span>
+            <strong id="countLines">0</strong>
+            <span>Line break units</span>
+          </article>
+          <article class="counter-card">
+            <span class="tool-output-label">Paragraphs</span>
+            <strong id="countParagraphs">0</strong>
+            <span>Split by blank lines</span>
+          </article>
+          <article class="counter-card">
+            <span class="tool-output-label">URLs</span>
+            <strong id="countUrls">0</strong>
+            <span id="countUrlReserved">X reserves 0 chars</span>
+          </article>
+          <article class="counter-card">
+            <span class="tool-output-label">Words</span>
+            <strong id="countWords">0</strong>
+            <span>Word count</span>
+          </article>
+          <article class="counter-card">
+            <span class="tool-output-label">UTF-8 bytes</span>
+            <strong id="countBytes">0</strong>
+            <span>For API and storage size</span>
+          </article>
+          <article class="counter-card">
+            <span class="tool-output-label">Reading time</span>
+            <strong id="countReading">0s</strong>
+            <span>JP 500c/min, EN 200w/min</span>
+          </article>
+        </section>
+
+        <section class="counter-grid counter-grid-limits">
+          <article class="counter-card limit-card">
+            <span class="tool-output-label">X Standard</span>
+            <strong id="limitXStandard">280 left</strong>
+            <span>Weighted count</span>
+          </article>
+          <article class="counter-card limit-card">
+            <span class="tool-output-label">X Long</span>
+            <strong id="limitXLong">4000 left</strong>
+            <span>Long-form limit</span>
+          </article>
+          <article class="counter-card limit-card">
+            <span class="tool-output-label">Instagram</span>
+            <strong id="limitInstagram">2200 left</strong>
+            <span>Caption limit</span>
+          </article>
+          <article class="counter-card limit-card">
+            <span class="tool-output-label">LINE</span>
+            <strong id="limitLine">500 left</strong>
+            <span>Message guideline</span>
+          </article>
+          <article class="counter-card limit-card">
+            <span class="tool-output-label">Meta Description</span>
+            <strong id="limitMeta">160 left</strong>
+            <span>SEO guideline</span>
+          </article>
+          <article class="counter-card limit-card">
+            <span class="tool-output-label">Custom limit</span>
+            <strong id="limitCustom">1000 left</strong>
+            <span>Set your own</span>
+          </article>
+        </section>
+      </div>
+
+      <div class="tool-rich-section">
+        <section class="tool-output" style="min-height:auto;">
+          <h2>How to use</h2>
+          <ol class="tool-rich-list">
+            <li>Paste your text — character counts and URL stats update in real time.</li>
+            <li>For X posts, watch the "X weighted count" and "X Standard" remaining.</li>
+            <li>For replies, enable "Calculate as X reply" to strip leading mentions.</li>
+          </ol>
+        </section>
+      </div>
+
+      <script type="module">
+        let twitterTextPromise = null;
+        const URL_LENGTH = 23;
+        const LIMITS = { xStandard: 280, xLong: 4000, instagram: 2200, line: 500, meta: 160 };
+
+        const encoder = new TextEncoder();
+        const graphemeSegmenter = typeof Intl !== 'undefined' && Intl.Segmenter
+          ? new Intl.Segmenter('en', { granularity: 'grapheme' }) : null;
+        const wordSegmenter = typeof Intl !== 'undefined' && Intl.Segmenter
+          ? new Intl.Segmenter('en', { granularity: 'word' }) : null;
+
+        function $(id) { return document.getElementById(id); }
+
+        function track(name, payload) {
+          if (window.RandaAnalytics && typeof window.RandaAnalytics.track === 'function') {
+            window.RandaAnalytics.track(name, payload || {});
+          }
+          if (typeof gtag === 'function') { gtag('event', name, payload || {}); }
+        }
+
+        function getTwitterText() {
+          if (!twitterTextPromise) {
+            twitterTextPromise = import('https://cdn.jsdelivr.net/npm/twitter-text@3.1.0/+esm').catch(() => null);
+          }
+          return twitterTextPromise;
+        }
+
+        function getGraphemes(text) {
+          if (!text) return [];
+          if (graphemeSegmenter) { return Array.from(graphemeSegmenter.segment(text), (item) => item.segment); }
+          return Array.from(text);
+        }
+
+        function countWords(text) {
+          if (!text.trim()) return 0;
+          if (wordSegmenter) { return Array.from(wordSegmenter.segment(text)).filter((item) => item.isWordLike).length; }
+          const matches = text.trim().match(/[^\s]+/g);
+          return matches ? matches.length : 0;
+        }
+
+        function findUrls(text) {
+          const matches = text.match(/https?:\/\/[^\s]+|www\.[^\s]+/gi);
+          return matches || [];
+        }
+
+        function isEmoji(grapheme) { return /\p{Extended_Pictographic}/u.test(grapheme); }
+        function isWideXChar(grapheme) { return /[\p{Script=Han}\p{Script=Hiragana}\p{Script=Katakana}\p{Script=Hangul}]/u.test(grapheme); }
+
+        function stripReplyMentions(text) { return text.replace(/^(?:\s*@[\w_]{1,15})+\s*/u, ''); }
+
+        function fallbackXCount(text, replyMode) {
+          let source = text.normalize('NFC');
+          if (replyMode) source = stripReplyMentions(source);
+
+          const urlRegex = /https?:\/\/[^\s]+|www\.[^\s]+/gi;
+          let weighted = 0;
+          let cursor = 0;
+          let match;
+
+          while ((match = urlRegex.exec(source)) !== null) {
+            const before = source.slice(cursor, match.index);
+            getGraphemes(before).forEach((grapheme) => {
+              weighted += (isEmoji(grapheme) || isWideXChar(grapheme)) ? 2 : 1;
+            });
+            weighted += URL_LENGTH;
+            cursor = match.index + match[0].length;
+          }
+
+          const tail = source.slice(cursor);
+          getGraphemes(tail).forEach((grapheme) => {
+            weighted += (isEmoji(grapheme) || isWideXChar(grapheme)) ? 2 : 1;
+          });
+
+          return { weightedLength: weighted, valid: weighted <= LIMITS.xStandard };
+        }
+
+        async function getXMetrics(text, replyMode) {
+          const lib = await getTwitterText();
+          const source = replyMode ? stripReplyMentions(text) : text;
+          const parseTweet = lib && (lib.parseTweet || (lib.default && lib.default.parseTweet));
+          if (typeof parseTweet === 'function') return parseTweet(source);
+          return fallbackXCount(source, false);
+        }
+
+        function formatRemaining(limit, current) {
+          const remaining = limit - current;
+          return remaining.toLocaleString() + ' left';
+        }
+
+        function formatReadingTime(text, words) {
+          const latinWords = words;
+          const japaneseChars = (text.match(/[\p{Script=Han}\p{Script=Hiragana}\p{Script=Katakana}]/gu) || []).length;
+          const seconds = Math.ceil((japaneseChars / 500 + latinWords / 200) * 60);
+          if (seconds <= 0) return '0s';
+          if (seconds < 60) return seconds + 's';
+          const min = Math.floor(seconds / 60);
+          const sec = seconds % 60;
+          return sec ? min + 'm ' + sec + 's' : min + 'm';
+        }
+
+        function updateCounterCard(id, value) {
+          const el = $(id);
+          if (el) el.textContent = value;
+        }
+
+        function updateLimitCard(id, current, limit) {
+          const el = $(id);
+          if (!el) return;
+          el.textContent = formatRemaining(limit, current);
+          el.classList.toggle('over-limit', current > limit);
+        }
+
+        async function recalc() {
+          const text = $('counterInput').value || '';
+          const replyMode = $('xReplyMode').checked;
+          const customLimit = Math.max(1, Number($('customLimit').value || 1000));
+
+          const graphemes = getGraphemes(text);
+          const noSpaces = getGraphemes(text.replace(/\s/gu, ''));
+          const lines = text ? text.split(/\r\n|\r|\n/).length : 0;
+          const paragraphs = text.trim() ? text.trim().split(/\n\s*\n/).length : 0;
+          const urls = findUrls(text);
+          const words = countWords(text);
+          const bytes = encoder.encode(text).length;
+          const xResult = await getXMetrics(text, replyMode);
+          const xWeighted = Number(xResult && xResult.weightedLength ? xResult.weightedLength : 0);
+
+          updateCounterCard('countGraphemes', graphemes.length.toLocaleString());
+          updateCounterCard('countNoSpaces', noSpaces.length.toLocaleString());
+          updateCounterCard('countLines', lines.toLocaleString());
+          updateCounterCard('countParagraphs', paragraphs.toLocaleString());
+          updateCounterCard('countUrls', urls.length.toLocaleString());
+          updateCounterCard('countWords', words.toLocaleString());
+          updateCounterCard('countBytes', bytes.toLocaleString());
+          updateCounterCard('countXWeighted', xWeighted.toLocaleString());
+          updateCounterCard('countReading', formatReadingTime(text, words));
+          updateCounterCard('countXState', replyMode ? 'Leading mentions stripped' : 'Standard tweet (280)');
+          updateCounterCard('countUrlReserved', 'X reserves ' + (urls.length * URL_LENGTH).toLocaleString() + ' chars');
+
+          updateLimitCard('limitXStandard', xWeighted, LIMITS.xStandard);
+          updateLimitCard('limitXLong', xWeighted, LIMITS.xLong);
+          updateLimitCard('limitInstagram', graphemes.length, LIMITS.instagram);
+          updateLimitCard('limitLine', graphemes.length, LIMITS.line);
+          updateLimitCard('limitMeta', graphemes.length, LIMITS.meta);
+          updateLimitCard('limitCustom', graphemes.length, customLimit);
+        }
+
+        function init() {
+          const input = $('counterInput');
+          const clearBtn = $('counterClearBtn');
+          const copyBtn = $('counterCopyBtn');
+          const replyMode = $('xReplyMode');
+          const customLimit = $('customLimit');
+          const chips = document.querySelectorAll('[data-text]');
+
+          input.addEventListener('input', recalc);
+          replyMode.addEventListener('change', recalc);
+          customLimit.addEventListener('input', recalc);
+
+          clearBtn.addEventListener('click', () => {
+            input.value = '';
+            recalc();
+          });
+
+          copyBtn.addEventListener('click', async () => {
+            if (!input.value) return;
+            await navigator.clipboard.writeText(input.value);
+          });
+
+          chips.forEach((chip) => {
+            chip.addEventListener('click', () => {
+              input.value = chip.getAttribute('data-text') || '';
+              recalc();
+            });
+          });
+
+          recalc();
+          input.addEventListener('blur', () => {
+            if (input.value.trim()) { track('moji_counter_use', { length: input.value.length }); }
+          });
+        }
+
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', init, { once: true });
+        } else {
+          init();
+        }
+      </script>
+
+      <style>
+        .counter-note p { margin: 0; color: var(--text-muted); font-size: 0.88rem; line-height: 1.7; }
+        .counter-note { display: grid; gap: 6px; }
+        .counter-controls { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; margin-bottom: 16px; }
+        .counter-check, .counter-custom-limit { display: inline-flex; gap: 8px; align-items: center; color: var(--text-muted); font-size: 0.9rem; }
+        .counter-custom-limit input { width: 100px; padding: 8px 10px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.04); color: #fff; font: inherit; }
+        .counter-grid { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); }
+        .counter-grid + .counter-grid { margin-top: 14px; }
+        .counter-card { display: grid; gap: 8px; padding: 16px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.03); }
+        .counter-card strong { color: #fff; font-size: clamp(1.5rem, 3vw, 2rem); line-height: 1.1; }
+        .counter-card span:last-child { color: var(--text-muted); font-size: 0.85rem; line-height: 1.6; }
+        .counter-card-emphasis { background: linear-gradient(180deg, rgba(87,164,212,0.16), rgba(255,255,255,0.03)); border-color: rgba(87,164,212,0.26); }
+        .limit-card strong { font-size: 1.2rem; }
+        .over-limit { color: #ff8f8f; }
+      </style>
+
+      <div class="tool-footer-section">
+        <div class="tool-related-grid">
+          <div class="tool-related-card">
+            <h3>More tools</h3>
+            <div class="tool-related-links">
+              <a href="/en/history-tools/">All tools</a>
+              <a href="/en/tools/holidays/">Holiday checker</a>
+              <a href="/en/tools/weather/">Past weather</a>
+            </div>
+          </div>
+          <div class="tool-related-card">
+            <h3>Try the game</h3>
+            <p style="color:var(--text-muted);font-size:0.85rem;margin:0 0 12px;">Writing a post about our Japanese history deck-building game? Use this counter to polish your copy.</p>
+            <div class="tool-related-links">
+              <a href="/en/games/inga/?src=moji_counter_en_game">Details</a>
+              <a href="/en/games/inga/play/?src=moji_counter_en_play">Play demo</a>
+            </div>
+          </div>
+        </div>
+        <div class="tool-related-card" id="steam" style="margin-top:16px;">
+          <span class="tool-output-label">Inga Chronicle — Japanese history card-chain roguelike</span>
+          <div class="steam-widget-shell">
+            <iframe src="https://store.steampowered.com/widget/4403470/?utm_source=randaworks&utm_medium=moji_counter_en&utm_campaign=widget" title="Inga Chronicle Steam Store Widget" loading="lazy"></iframe>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <nav class="footer-nav" aria-label="Footer navigation">
+        <a href="/en/about/">About</a>
+        <a href="/en/history-tools/">History Tools</a>
+        <a href="/en/privacy/">Privacy</a>
+        <a href="/en/terms/">Terms</a>
+        <a href="/en/contact/">Contact</a>
+      </nav>
+      <div class="footer-links">
+        <a class="footer-link-social" href="https://x.com/RandaWorksJP" target="_blank" rel="noopener noreferrer" aria-label="X"><svg class="footer-link-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1227" aria-hidden="true" focusable="false"><path d="M714.163 519.284 1160.89 0h-105.83L667.137 450.887 357.328 0H0l468.492 681.821L0 1226.37h105.866l409.588-476.152 327.218 476.152H1200L714.137 519.284h.026ZM569.165 687.828l-47.468-67.909L144.011 79.694h162.604l304.22 434.658 47.468 67.909 396.807 566.942H892.505L569.165 687.828Z"/></svg><span>X</span></a>
+        <a class="footer-link-social" href="https://www.youtube.com/@RandaWorks" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><svg class="footer-link-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31.9 31.9 0 0 0 0 12a31.9 31.9 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31.9 31.9 0 0 0 24 12a31.9 31.9 0 0 0-.5-5.8ZM9.6 15.6V8.4l6.2 3.6Z"/></svg><span>YouTube</span></a>
+        <a class="footer-link-social" href="https://store.steampowered.com/app/4403470" target="_blank" rel="noopener noreferrer" aria-label="Steam"><svg class="footer-link-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 259" aria-hidden="true" focusable="false"><path d="M127.779 0C57.895 0 1.307 55.39.052 124.908l68.961 28.5a36.077 36.077 0 0 1 20.378-6.27l30.462-44.145v-.617c0-26.513 21.569-48.084 48.083-48.084 26.516 0 48.085 21.572 48.085 48.084 0 26.515-21.569 48.085-48.085 48.085h-1.104l-43.474 31.02c0 .403.022.8.022 1.197 0 19.882-16.163 36.046-36.048 36.046-17.806 0-32.595-12.953-35.476-29.932L2.472 166.516C18.233 218.149 67.215 256 127.779 256c70.716 0 128.043-57.326 128.043-128.001C255.822 57.326 198.495 0 127.779 0z"/></svg><span>Steam</span></a>
+      </div>
+      <div>&copy; 2026 RandaWorks</div>
+    </footer>
+  </div>
+  <script src="/assets/js/analytics-config.js"></script>
+  <script src="/assets/js/analytics.js"></script>
+</body>
+</html>

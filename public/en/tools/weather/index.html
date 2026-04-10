@@ -1,0 +1,319 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-WNL49Q0CTT"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-WNL49Q0CTT');</script>
+  <script type="text/javascript">(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window,document,"clarity","script","w8awzqlkx4");</script>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <title>Past Weather Lookup | Historical Weather by Date and City</title>
+  <meta name="description" content="Look up historical weather data from 1940 to today. Search by date and city to find temperature, precipitation, and wind." />
+  <link rel="canonical" href="https://www.randaworks.com/en/tools/weather/" />
+  <link rel="alternate" hreflang="ja" href="https://www.randaworks.com/tools/weather/" />
+  <link rel="alternate" hreflang="en" href="https://www.randaworks.com/en/tools/weather/" />
+  <link rel="alternate" hreflang="x-default" href="https://www.randaworks.com/tools/weather/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Past Weather Lookup | RandaWorks" />
+  <meta property="og:description" content="Historical weather data search from 1940 to today." />
+  <meta property="og:url" content="https://www.randaworks.com/en/tools/weather/" />
+  <meta property="og:image" content="https://www.randaworks.com/assets/img/ogp/randaworks-ogp-home.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Past Weather Lookup | RandaWorks" />
+  <meta name="twitter:description" content="Historical weather data search from 1940 to today." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Shippori+Mincho:wght@400;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Shippori+Mincho:wght@400;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet"></noscript>
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <link rel="stylesheet" href="/assets/css/history-tools.css">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "inLanguage": "en",
+    "mainEntity": [
+      { "@type": "Question", "name": "What does this tool show?", "acceptedAnswer": { "@type": "Answer", "text": "Historical daily weather for a specified date and city: maximum temperature, minimum temperature, precipitation, and maximum wind speed." } },
+      { "@type": "Question", "name": "How far back can I search?", "acceptedAnswer": { "@type": "Answer", "text": "Data is available from 1940 onwards. Very recent dates may not be available due to archive API delays." } },
+      { "@type": "Question", "name": "What cities are available?", "acceptedAnswer": { "@type": "Answer", "text": "Major Japanese cities via dropdown: Tokyo, Osaka, Nagoya, Fukuoka, Sapporo, Sendai, Hiroshima, Kyoto, Niigata, and Naha." } },
+      { "@type": "Question", "name": "Why no data for some dates?", "acceptedAnswer": { "@type": "Answer", "text": "The external archive API may have missing data for certain dates, or the date may be out of range. Try a different date." } }
+    ]
+  }
+  </script>
+</head>
+<body data-page-type="past_weather" class="past_weather-page">
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <div class="container tool-page">
+    <nav class="nav">
+      <div class="brand"><a href="/en/"><picture>
+        <source srcset="/assets/img/randaworks_logo_text.webp" type="image/webp">
+        <img src="/assets/img/randaworks_logo_text.png" alt="RandaWorks" style="height: 28px; vertical-align: middle;">
+      </picture></a></div>
+      <div class="links">
+        <a href="/en/history-tools/">History Tools</a>
+        <a href="/en/games/inga/?src=nav">Game</a>
+        <a href="/en/about/">About</a>
+      </div>
+    </nav>
+
+    <main id="main-content">
+      <nav aria-label="Breadcrumb">
+        <ol class="breadcrumb">
+          <li><a href="/en/">Home</a></li>
+          <li class="breadcrumb-separator" aria-hidden="true">›</li>
+          <li><a href="/en/history-tools/">History Tools</a></li>
+          <li class="breadcrumb-separator" aria-hidden="true">›</li>
+          <li class="breadcrumb-current" aria-current="page">Past Weather</li>
+        </ol>
+      </nav>
+
+      <div class="tool-page-header">
+        <h1>Past Weather Lookup</h1>
+        <span class="tool-page-tag">1940 — Present</span>
+      </div>
+      <p class="tool-page-desc">Select a date and city to look up historical weather data. Perfect for revisiting the weather on a birthday or any special day.</p>
+
+      <div class="tool-workspace" id="weather-tool">
+        <div class="tool-input-row">
+          <label>Date <input type="date" id="dateInput" min="1940-01-01" /></label>
+          <label>City <select id="citySelect"></select></label>
+          <button type="button" class="tool-btn" id="searchBtn">Search</button>
+        </div>
+        <div class="tool-chips" id="presetChips"></div>
+        <div class="tool-output" id="weatherResult" aria-live="polite" style="min-height: 120px;">
+          <span class="tool-output-label">Select a date and city, then click Search.</span>
+        </div>
+      </div>
+
+      <section class="tool-workspace tool-rich-section">
+        <h2>What you can do</h2>
+        <div class="tool-rich-grid">
+          <div class="tool-data-card"><strong>Check historical temperatures</strong><span>Compare max and min temperatures to see how hot or cold a particular day was.</span></div>
+          <div class="tool-data-card"><strong>Precipitation and wind</strong><span>See rainfall and wind speed, not just sunny or rainy.</span></div>
+          <div class="tool-data-card"><strong>Birthdays and events</strong><span>Perfect for checking weather on memorable dates like birthdays or historical events.</span></div>
+          <div class="tool-data-card"><strong>Major city presets</strong><span>Quick access to Tokyo, Osaka, and other major Japanese cities.</span></div>
+        </div>
+      </section>
+
+      <section class="tool-workspace tool-rich-section">
+        <h2>How to use</h2>
+        <ol class="tool-rich-list">
+          <li>Pick a date and select a city from the dropdown.</li>
+          <li>Click "Search" to see the weather data in card format.</li>
+          <li>Try a preset first, then explore any date you like.</li>
+        </ol>
+      </section>
+
+      <section class="tool-workspace tool-rich-section">
+        <h2>FAQ</h2>
+        <div class="tool-faq-list">
+          <details class="tool-faq-item"><summary>What does this tool show?</summary><p>Historical daily weather for a specified date and city: maximum temperature, minimum temperature, precipitation, and maximum wind speed.</p></details>
+          <details class="tool-faq-item"><summary>How far back can I search?</summary><p>Data is available from 1940 onwards. Very recent dates may not be available due to archive API delays.</p></details>
+          <details class="tool-faq-item"><summary>What cities are available?</summary><p>Major Japanese cities via dropdown: Tokyo, Osaka, Nagoya, Fukuoka, Sapporo, Sendai, Hiroshima, Kyoto, Niigata, and Naha.</p></details>
+          <details class="tool-faq-item"><summary>Why no data for some dates?</summary><p>The external archive API may have missing data for certain dates, or the date may be out of range. Try a different date.</p></details>
+        </div>
+      </section>
+
+      <script>
+      (function () {
+        var CITIES = [
+          { name: 'Tokyo', lat: 35.6762, lon: 139.6503 },
+          { name: 'Osaka', lat: 34.6937, lon: 135.5023 },
+          { name: 'Nagoya', lat: 35.1815, lon: 136.9066 },
+          { name: 'Fukuoka', lat: 33.5904, lon: 130.4017 },
+          { name: 'Sapporo', lat: 43.0618, lon: 141.3545 },
+          { name: 'Sendai', lat: 38.2682, lon: 140.8694 },
+          { name: 'Hiroshima', lat: 34.3853, lon: 132.4553 },
+          { name: 'Kyoto', lat: 35.0116, lon: 135.7681 },
+          { name: 'Niigata', lat: 37.9026, lon: 139.0236 },
+          { name: 'Naha', lat: 26.3344, lon: 127.7810 }
+        ];
+
+        var PRESETS = [
+          { label: 'Tokyo Tower opening', date: '1958-12-23', city: 'Tokyo' },
+          { label: 'Tokyo 1964 Olympics opening', date: '1964-10-10', city: 'Tokyo' },
+          { label: 'Expo 70 Osaka opening', date: '1970-03-15', city: 'Osaka' },
+          { label: 'First day of Heisei era', date: '1989-01-08', city: 'Tokyo' },
+          { label: 'First day of Reiwa era', date: '2019-05-01', city: 'Tokyo' }
+        ];
+
+        function $(id) { return document.getElementById(id); }
+        function escapeHtml(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+        function isLocalHost() { return /^(dev\.randa|localhost|127\.0\.0\.1)$/i.test(window.location.hostname); }
+        function apiBase() { return isLocalHost() ? 'http://127.0.0.1:8787' : window.location.origin; }
+        function apiUrl(path, params) {
+          var url = new URL(path, apiBase());
+          if (params) { Object.keys(params).forEach(function (key) { if (params[key] != null && params[key] !== '') url.searchParams.set(key, params[key]); }); }
+          return url.toString();
+        }
+        function track(name, payload) {
+          if (window.RandaAnalytics && typeof window.RandaAnalytics.track === 'function') window.RandaAnalytics.track(name, payload || {});
+          if (typeof gtag === 'function') gtag('event', name, payload || {});
+        }
+        function findCity(name) {
+          for (var i = 0; i < CITIES.length; i++) { if (CITIES[i].name === name) return CITIES[i]; }
+          return CITIES[0];
+        }
+        function formatDate(dateStr) {
+          var parts = dateStr.split('-');
+          var months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+          return months[Number(parts[1])-1] + ' ' + Number(parts[2]) + ', ' + parts[0];
+        }
+        function weatherIcon(tMax, precip) {
+          if (precip > 10) return '🌧️';
+          if (precip > 0.5) return '🌦️';
+          if (tMax >= 30) return '☀️';
+          if (tMax <= 5) return '❄️';
+          return '⛅';
+        }
+
+        function doSearch(dateStr, cityName) {
+          var result = $('weatherResult');
+          var city = findCity(cityName);
+          result.innerHTML = '<span class="tool-output-label">Fetching weather for ' + escapeHtml(formatDate(dateStr)) + ' (' + escapeHtml(city.name) + ')…</span>';
+
+          fetch(apiUrl('/api/weather/archive/', { lat: city.lat, lon: city.lon, date: dateStr }))
+            .then(function (r) { if (!r.ok) throw new Error('fetch failed'); return r.json(); })
+            .then(function (data) { renderWeather(dateStr, city, data.daily || {}); })
+            .catch(function () {
+              result.innerHTML = '<span class="tool-output-label">This tool is temporarily unavailable. Please try again later.</span>';
+            });
+
+          track('weather_search', { date: dateStr, city: cityName });
+        }
+
+        function renderWeather(dateStr, city, daily) {
+          var result = $('weatherResult');
+          var tMax = daily.temperature_2m_max ? daily.temperature_2m_max[0] : null;
+          var tMin = daily.temperature_2m_min ? daily.temperature_2m_min[0] : null;
+          var precip = daily.precipitation_sum ? daily.precipitation_sum[0] : null;
+          var wind = daily.windspeed_10m_max ? daily.windspeed_10m_max[0] : null;
+
+          if (tMax === null && tMin === null) {
+            result.innerHTML = '<span class="tool-output-label">No data available for this date. Try another date.</span>';
+            return;
+          }
+
+          var icon = weatherIcon(tMax, precip);
+          var html = '<div class="weather-header">' +
+            '<span class="weather-icon">' + icon + '</span>' +
+            '<div><h3>' + escapeHtml(formatDate(dateStr)) + ' — ' + escapeHtml(city.name) + '</h3></div>' +
+            '</div>' +
+            '<div class="tool-data-grid">';
+
+          if (tMax !== null) html += '<div class="tool-data-card"><strong>Max temp</strong><span>' + tMax + ' °C</span></div>';
+          if (tMin !== null) html += '<div class="tool-data-card"><strong>Min temp</strong><span>' + tMin + ' °C</span></div>';
+          if (precip !== null) html += '<div class="tool-data-card"><strong>Precipitation</strong><span>' + precip + ' mm</span></div>';
+          if (wind !== null) html += '<div class="tool-data-card"><strong>Max wind</strong><span>' + wind + ' km/h</span></div>';
+
+          html += '</div>';
+          result.innerHTML = html;
+        }
+
+        function init() {
+          var select = $('citySelect');
+          CITIES.forEach(function (c) {
+            var opt = document.createElement('option');
+            opt.value = c.name;
+            opt.textContent = c.name;
+            select.appendChild(opt);
+          });
+
+          var dateInput = $('dateInput');
+          var yesterday = new Date();
+          yesterday.setDate(yesterday.getDate() - 2);
+          dateInput.max = yesterday.toISOString().split('T')[0];
+
+          var chips = $('presetChips');
+          PRESETS.forEach(function (p) {
+            var btn = document.createElement('button');
+            btn.type = 'button';
+            btn.textContent = p.label;
+            btn.addEventListener('click', function () {
+              dateInput.value = p.date;
+              select.value = p.city;
+              doSearch(p.date, p.city);
+            });
+            chips.appendChild(btn);
+          });
+
+          $('searchBtn').addEventListener('click', function () {
+            var date = dateInput.value;
+            var city = select.value;
+            if (!date) {
+              $('weatherResult').innerHTML = '<span class="tool-output-label">Please enter a date.</span>';
+              return;
+            }
+            doSearch(date, city);
+          });
+
+          dateInput.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter') { $('searchBtn').click(); }
+          });
+        }
+
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', init, { once: true });
+        } else {
+          init();
+        }
+      })();
+      </script>
+
+      <style>
+        .weather-header { display: flex; align-items: center; gap: 14px; margin-bottom: 18px; }
+        .weather-icon { font-size: 2.2rem; line-height: 1; }
+      </style>
+
+      <div class="tool-footer-section">
+        <div class="tool-related-grid">
+          <div class="tool-related-card">
+            <h3>More tools</h3>
+            <div class="tool-related-links">
+              <a href="/en/history-tools/">All tools</a>
+              <a href="/en/tools/holidays/">Holiday checker</a>
+              <a href="/en/wareki-converter/">Era converter</a>
+            </div>
+          </div>
+          <div class="tool-related-card">
+            <h3>Try the game</h3>
+            <p style="color:var(--text-muted);font-size:0.85rem;margin:0 0 12px;">Weather shaped real battles — our game reflects that. Dramatic historical events as card-chain strategy.</p>
+            <div class="tool-related-links">
+              <a href="/en/games/inga/?src=weather_en_game">Details</a>
+              <a href="/en/games/inga/play/?src=weather_en_play">Play demo</a>
+            </div>
+          </div>
+        </div>
+        <div class="tool-related-card" id="steam" style="margin-top:16px;">
+          <span class="tool-output-label">Inga Chronicle — Japanese history deck-building card game</span>
+          <div class="steam-widget-shell">
+            <iframe src="https://store.steampowered.com/widget/4403470/?utm_source=randaworks&utm_medium=weather_en&utm_campaign=widget" title="Inga Chronicle Steam Store Widget" loading="lazy"></iframe>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <nav class="footer-nav" aria-label="Footer navigation">
+        <a href="/en/about/">About</a>
+        <a href="/en/history-tools/">History Tools</a>
+        <a href="/en/privacy/">Privacy</a>
+        <a href="/en/terms/">Terms</a>
+        <a href="/en/contact/">Contact</a>
+      </nav>
+      <div class="footer-links">
+        <a class="footer-link-social" href="https://x.com/RandaWorksJP" target="_blank" rel="noopener noreferrer" aria-label="X"><svg class="footer-link-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1227" aria-hidden="true" focusable="false"><path d="M714.163 519.284 1160.89 0h-105.83L667.137 450.887 357.328 0H0l468.492 681.821L0 1226.37h105.866l409.588-476.152 327.218 476.152H1200L714.137 519.284h.026ZM569.165 687.828l-47.468-67.909L144.011 79.694h162.604l304.22 434.658 47.468 67.909 396.807 566.942H892.505L569.165 687.828Z"/></svg><span>X</span></a>
+        <a class="footer-link-social" href="https://www.youtube.com/@RandaWorks" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><svg class="footer-link-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31.9 31.9 0 0 0 0 12a31.9 31.9 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31.9 31.9 0 0 0 24 12a31.9 31.9 0 0 0-.5-5.8ZM9.6 15.6V8.4l6.2 3.6Z"/></svg><span>YouTube</span></a>
+        <a class="footer-link-social" href="https://store.steampowered.com/app/4403470" target="_blank" rel="noopener noreferrer" aria-label="Steam"><svg class="footer-link-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 259" aria-hidden="true" focusable="false"><path d="M127.779 0C57.895 0 1.307 55.39.052 124.908l68.961 28.5a36.077 36.077 0 0 1 20.378-6.27l30.462-44.145v-.617c0-26.513 21.569-48.084 48.083-48.084 26.516 0 48.085 21.572 48.085 48.084 0 26.515-21.569 48.085-48.085 48.085h-1.104l-43.474 31.02c0 .403.022.8.022 1.197 0 19.882-16.163 36.046-36.048 36.046-17.806 0-32.595-12.953-35.476-29.932L2.472 166.516C18.233 218.149 67.215 256 127.779 256c70.716 0 128.043-57.326 128.043-128.001C255.822 57.326 198.495 0 127.779 0z"/></svg><span>Steam</span></a>
+      </div>
+      <div>&copy; 2026 RandaWorks</div>
+    </footer>
+  </div>
+  <script src="/assets/js/analytics-config.js"></script>
+  <script src="/assets/js/analytics.js"></script>
+</body>
+</html>

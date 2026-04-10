@@ -1,0 +1,292 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-WNL49Q0CTT"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-WNL49Q0CTT');</script>
+  <script type="text/javascript">(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window,document,"clarity","script","w8awzqlkx4");</script>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <title>Japanese Historical Figure Search | Samurai, Emperors &amp; More</title>
+  <meta name="description" content="Search Japanese historical figures like Oda Nobunaga, Tokugawa Ieyasu, and Sakamoto Ry&#333;ma. Powered by Wikipedia summaries." />
+  <link rel="canonical" href="https://www.randaworks.com/en/busho-profile-search/" />
+  <link rel="alternate" hreflang="ja" href="https://www.randaworks.com/busho-profile-search/" />
+  <link rel="alternate" hreflang="en" href="https://www.randaworks.com/en/busho-profile-search/" />
+  <link rel="alternate" hreflang="x-default" href="https://www.randaworks.com/busho-profile-search/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Japanese Historical Figure Search | RandaWorks" />
+  <meta property="og:description" content="Search samurai, emperors, and other Japanese historical figures." />
+  <meta property="og:url" content="https://www.randaworks.com/en/busho-profile-search/" />
+  <meta property="og:image" content="https://www.randaworks.com/assets/img/ogp/randaworks-ogp-home.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Japanese Historical Figure Search | RandaWorks" />
+  <meta name="twitter:description" content="Search samurai, emperors, and other Japanese historical figures." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Shippori+Mincho:wght@400;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Shippori+Mincho:wght@400;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet"></noscript>
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <link rel="stylesheet" href="/assets/css/history-tools.css">
+</head>
+<body data-page-type="busho_profile_search" class="busho_profile_search-page">
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <div class="container tool-page">
+    <nav class="nav">
+      <div class="brand"><a href="/en/"><picture>
+        <source srcset="/assets/img/randaworks_logo_text.webp" type="image/webp">
+        <img src="/assets/img/randaworks_logo_text.png" alt="RandaWorks" style="height: 28px; vertical-align: middle;">
+      </picture></a></div>
+      <div class="links">
+        <a href="/en/history-tools/">History Tools</a>
+        <a href="/en/games/inga/?src=nav">Game</a>
+        <a href="/en/about/">About</a>
+      </div>
+    </nav>
+
+    <main id="main-content">
+      <nav aria-label="Breadcrumb">
+        <ol class="breadcrumb">
+          <li><a href="/en/">Home</a></li>
+          <li class="breadcrumb-separator" aria-hidden="true">›</li>
+          <li><a href="/en/history-tools/">History Tools</a></li>
+          <li class="breadcrumb-separator" aria-hidden="true">›</li>
+          <li class="breadcrumb-current" aria-current="page">Figure Search</li>
+        </ol>
+      </nav>
+
+      <div class="tool-page-header">
+        <h1>Japanese Historical Figure Search</h1>
+        <span class="tool-page-tag">Cross-figure lookup</span>
+      </div>
+      <p class="tool-page-desc">Search Japanese historical figures via Wikipedia. Data comes from English Wikipedia.</p>
+
+      <div class="tool-workspace">
+        <form id="profileSearchForm">
+          <div class="profile-search-row">
+            <input id="profileSearchInput" name="profileSearchInput" type="search" placeholder="Oda Nobunaga, Tokugawa Ieyasu, Murasaki Shikibu…">
+            <button class="tool-btn" type="submit">Search</button>
+          </div>
+        </form>
+        <div class="tool-chips">
+          <button type="button" data-profile-query="Oda Nobunaga">Oda Nobunaga</button>
+          <button type="button" data-profile-query="Tokugawa Ieyasu">Tokugawa Ieyasu</button>
+          <button type="button" data-profile-query="Sakamoto Ryoma">Sakamoto Ry&#333;ma</button>
+          <button type="button" data-profile-query="Saigo Takamori">Saig&#333; Takamori</button>
+          <button type="button" data-profile-query="Minamoto no Yoritomo">Minamoto no Yoritomo</button>
+          <button type="button" data-profile-query="Murasaki Shikibu">Murasaki Shikibu</button>
+        </div>
+        <div class="profile-layout">
+          <div class="tool-surface profile-result-list" id="profileResults" aria-live="polite"></div>
+          <div class="tool-result-panel" id="profileDetail"></div>
+        </div>
+      </div>
+
+      <script>
+      (function () {
+        var summaryCache = {};
+
+        function $(id) { return document.getElementById(id); }
+        function esc(v) { return String(v).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
+        function track(n, p) { if (window.RandaAnalytics && window.RandaAnalytics.track) window.RandaAnalytics.track(n, p||{}); if (typeof gtag==='function') gtag('event',n,p||{}); }
+
+        function summarize(text) {
+          if (!text) return '';
+          var normalized = text.replace(/\s+/g, ' ').trim();
+          if (normalized.length <= 160) return normalized;
+          return normalized.slice(0, 160) + '…';
+        }
+        function truncate(text, limit) {
+          if (!text) return '';
+          var normalized = text.replace(/\s+/g, ' ').trim();
+          if (normalized.length <= limit) return normalized;
+          return normalized.slice(0, limit) + '…';
+        }
+
+        function fetchJson(url) {
+          return fetch(url, { headers: { 'Accept': 'application/json' } }).then(function (r) {
+            if (!r.ok) throw new Error('failed');
+            return r.json();
+          });
+        }
+
+        function fetchSummary(title) {
+          if (summaryCache[title]) return Promise.resolve(summaryCache[title]);
+          return fetchJson('https://en.wikipedia.org/api/rest_v1/page/summary/' + encodeURIComponent(title)).then(function (data) {
+            if (data.type === 'disambiguation') throw new Error('disambiguation');
+            summaryCache[title] = data;
+            return data;
+          });
+        }
+
+        function scoreSearchResult(query, item) {
+          var score = 0;
+          var q = query.toLowerCase();
+          var t = (item.title || '').toLowerCase();
+          if (t === q) score += 100;
+          if (t.indexOf(q) === 0) score += 40;
+          if (t.indexOf('(') === -1) score += 10;
+          return score;
+        }
+
+        function renderDetail(item) {
+          var detail = $('profileDetail');
+          if (!detail) return;
+          var image = item.thumbnail && item.thumbnail.source
+            ? '<img class="profile-detail-thumb" src="' + esc(item.thumbnail.source) + '" alt="' + esc(item.title) + '" loading="lazy">'
+            : '';
+          var link = item.content_urls && item.content_urls.desktop && item.content_urls.desktop.page
+            ? item.content_urls.desktop.page
+            : 'https://en.wikipedia.org/wiki/' + encodeURIComponent(item.title);
+          var extractText = truncate(item.extract || '', 320) || 'No summary available.';
+
+          detail.innerHTML =
+            '<div class="profile-detail-card">' +
+              image +
+              '<div>' +
+                '<p class="tool-note">Wikipedia summary</p>' +
+                '<h3>' + esc(item.title) + '</h3>' +
+                '<p>' + esc(item.description || '') + '</p>' +
+                '<p class="profile-detail-extract">' + esc(extractText) + '</p>' +
+                '<p><a href="' + esc(link) + '" target="_blank" rel="noopener noreferrer" data-track-event="cta_click" data-track-placement="profile_en_wiki">Read more on Wikipedia</a></p>' +
+              '</div>' +
+            '</div>';
+
+          track('history_profile_view', { title: item.title });
+        }
+
+        function renderResults(query, items) {
+          var list = $('profileResults');
+          if (!list) return;
+          list.innerHTML = '';
+
+          if (!items.length) {
+            list.innerHTML = '<p>No matching profiles found. Try a different name.</p>';
+            $('profileDetail').innerHTML = '';
+            return;
+          }
+
+          items.forEach(function (item, index) {
+            var button = document.createElement('button');
+            button.type = 'button';
+            button.className = 'profile-result';
+            button.innerHTML =
+              '<strong>' + esc(item.title) + '</strong>' +
+              '<span>' + esc(summarize(item.description || item.extract || 'Wikipedia summary')) + '</span>';
+            button.addEventListener('click', function () { renderDetail(item); });
+            list.appendChild(button);
+            if (index === 0) renderDetail(item);
+          });
+
+          track('history_profile_search', { query: query, result_count: items.length });
+        }
+
+        function runSearch(query) {
+          var trimmed = (query || '').trim();
+          var results = $('profileResults');
+          var detail = $('profileDetail');
+
+          if (!trimmed) {
+            if (results) results.innerHTML = '<p>Enter a name to search.</p>';
+            if (detail) detail.innerHTML = '';
+            return;
+          }
+
+          if (results) results.innerHTML = '<p>Searching…</p>';
+          if (detail) detail.innerHTML = '';
+
+          fetchJson('https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=' + encodeURIComponent(trimmed) + '&srlimit=6&utf8=1&format=json&origin=*')
+            .then(function (data) {
+              var searchResults = data && data.query && data.query.search ? data.query.search.slice() : [];
+              searchResults.sort(function (left, right) {
+                return scoreSearchResult(trimmed, right) - scoreSearchResult(trimmed, left);
+              });
+              var titles = searchResults.map(function (item) { return item.title; }).filter(function (title, index, items) {
+                return items.indexOf(title) === index;
+              }).slice(0, 5);
+
+              return Promise.all(titles.map(function (title) {
+                return fetchSummary(title).catch(function () { return null; });
+              }));
+            })
+            .then(function (items) {
+              renderResults(trimmed, items.filter(function (item) { return !!item; }));
+            })
+            .catch(function () {
+              if (results) results.innerHTML = '<p>This tool is temporarily unavailable. Please try again later.</p>';
+            });
+        }
+
+        function init() {
+          var form = $('profileSearchForm');
+          if (form) {
+            form.addEventListener('submit', function (e) {
+              e.preventDefault();
+              runSearch($('profileSearchInput').value);
+            });
+          }
+          document.querySelectorAll('[data-profile-query]').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+              var q = btn.getAttribute('data-profile-query') || '';
+              $('profileSearchInput').value = q;
+              runSearch(q);
+            });
+          });
+          runSearch('Oda Nobunaga');
+        }
+
+        document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', init, { once: true }) : init();
+      })();
+      </script>
+
+      <div class="tool-footer-section">
+        <div class="tool-related-grid">
+          <div class="tool-related-card">
+            <h3>More tools</h3>
+            <div class="tool-related-links">
+              <a href="/en/history-tools/">All tools</a>
+              <a href="/en/wareki-converter/">Era converter</a>
+              <a href="/en/tools/kanji/">Kanji lookup</a>
+            </div>
+          </div>
+          <div class="tool-related-card">
+            <h3>Try the game</h3>
+            <p style="color:var(--text-muted);font-size:0.85rem;margin:0 0 12px;">The samurai you search here appear as cards in our Japanese history deck-building game.</p>
+            <div class="tool-related-links">
+              <a href="/en/games/inga/?src=busho_profile_en_game">Details</a>
+              <a href="/en/games/inga/play/?src=busho_profile_en_play">Play demo</a>
+            </div>
+          </div>
+        </div>
+        <div class="tool-related-card" id="steam" style="margin-top:16px;">
+          <span class="tool-output-label">Inga Chronicle — deck-building roguelike featuring samurai</span>
+          <div class="steam-widget-shell">
+            <iframe src="https://store.steampowered.com/widget/4403470/?utm_source=randaworks&utm_medium=busho_profile_en&utm_campaign=widget" title="Inga Chronicle Steam Store Widget" loading="lazy"></iframe>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <nav class="footer-nav" aria-label="Footer navigation">
+        <a href="/en/about/">About</a>
+        <a href="/en/history-tools/">History Tools</a>
+        <a href="/en/privacy/">Privacy</a>
+        <a href="/en/terms/">Terms</a>
+        <a href="/en/contact/">Contact</a>
+      </nav>
+      <div class="footer-links">
+        <a class="footer-link-social" href="https://x.com/RandaWorksJP" target="_blank" rel="noopener noreferrer" aria-label="X"><svg class="footer-link-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1227" aria-hidden="true" focusable="false"><path d="M714.163 519.284 1160.89 0h-105.83L667.137 450.887 357.328 0H0l468.492 681.821L0 1226.37h105.866l409.588-476.152 327.218 476.152H1200L714.137 519.284h.026ZM569.165 687.828l-47.468-67.909L144.011 79.694h162.604l304.22 434.658 47.468 67.909 396.807 566.942H892.505L569.165 687.828Z"/></svg><span>X</span></a>
+        <a class="footer-link-social" href="https://www.youtube.com/@RandaWorks" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><svg class="footer-link-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31.9 31.9 0 0 0 0 12a31.9 31.9 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31.9 31.9 0 0 0 24 12a31.9 31.9 0 0 0-.5-5.8ZM9.6 15.6V8.4l6.2 3.6Z"/></svg><span>YouTube</span></a>
+        <a class="footer-link-social" href="https://store.steampowered.com/app/4403470" target="_blank" rel="noopener noreferrer" aria-label="Steam"><svg class="footer-link-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 259" aria-hidden="true" focusable="false"><path d="M127.779 0C57.895 0 1.307 55.39.052 124.908l68.961 28.5a36.077 36.077 0 0 1 20.378-6.27l30.462-44.145v-.617c0-26.513 21.569-48.084 48.083-48.084 26.516 0 48.085 21.572 48.085 48.084 0 26.515-21.569 48.085-48.085 48.085h-1.104l-43.474 31.02c0 .403.022.8.022 1.197 0 19.882-16.163 36.046-36.048 36.046-17.806 0-32.595-12.953-35.476-29.932L2.472 166.516C18.233 218.149 67.215 256 127.779 256c70.716 0 128.043-57.326 128.043-128.001C255.822 57.326 198.495 0 127.779 0z"/></svg><span>Steam</span></a>
+      </div>
+      <div>&copy; 2026 RandaWorks</div>
+    </footer>
+  </div>
+  <script src="/assets/js/analytics-config.js"></script>
+  <script src="/assets/js/analytics.js"></script>
+</body>
+</html>

@@ -1,0 +1,311 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-WNL49Q0CTT"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-WNL49Q0CTT');</script>
+  <script type="text/javascript">(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window,document,"clarity","script","w8awzqlkx4");</script>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <title>Holiday &amp; Long Weekend Checker | Search by Year and Country</title>
+  <meta name="description" content="Look up public holidays and long weekends for Japan, US, UK, Germany, and more. Simple lookup by year and country." />
+  <link rel="canonical" href="https://www.randaworks.com/en/tools/holidays/" />
+  <link rel="alternate" hreflang="ja" href="https://www.randaworks.com/tools/holidays/" />
+  <link rel="alternate" hreflang="en" href="https://www.randaworks.com/en/tools/holidays/" />
+  <link rel="alternate" hreflang="x-default" href="https://www.randaworks.com/tools/holidays/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Holiday &amp; Long Weekend Checker | RandaWorks" />
+  <meta property="og:description" content="Look up public holidays and long weekends by year and country." />
+  <meta property="og:url" content="https://www.randaworks.com/en/tools/holidays/" />
+  <meta property="og:image" content="https://www.randaworks.com/assets/img/ogp/randaworks-ogp-home.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Holiday &amp; Long Weekend Checker | RandaWorks" />
+  <meta name="twitter:description" content="Look up public holidays and long weekends by year and country." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Shippori+Mincho:wght@400;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Shippori+Mincho:wght@400;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet"></noscript>
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <link rel="stylesheet" href="/assets/css/history-tools.css">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "inLanguage": "en",
+    "mainEntity": [
+      { "@type": "Question", "name": "What can the holiday checker do?", "acceptedAnswer": { "@type": "Answer", "text": "Select a year and country to see public holidays and long weekends (3+ consecutive days). Useful for travel planning, business days, and content research." } },
+      { "@type": "Question", "name": "Which countries are supported?", "acceptedAnswer": { "@type": "Answer", "text": "Japan, US, UK, Germany, France, Italy, Spain, Canada, Australia, and South Korea. Holiday systems differ by country, so results vary." } },
+      { "@type": "Question", "name": "How are long weekends calculated?", "acceptedAnswer": { "@type": "Answer", "text": "Consecutive periods of 3 or more days combining holidays and weekends. Does not account for paid time off." } },
+      { "@type": "Question", "name": "What if no results appear?", "acceptedAnswer": { "@type": "Answer", "text": "The year may be out of range or the external API may be temporarily unavailable. Try a different year or try again later." } }
+    ]
+  }
+  </script>
+</head>
+<body data-page-type="holiday_checker" class="holiday_checker-page">
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <div class="container tool-page">
+    <nav class="nav">
+      <div class="brand"><a href="/en/"><picture>
+        <source srcset="/assets/img/randaworks_logo_text.webp" type="image/webp">
+        <img src="/assets/img/randaworks_logo_text.png" alt="RandaWorks" style="height: 28px; vertical-align: middle;">
+      </picture></a></div>
+      <div class="links">
+        <a href="/en/history-tools/">History Tools</a>
+        <a href="/en/games/inga/?src=nav">Game</a>
+        <a href="/en/about/">About</a>
+      </div>
+    </nav>
+
+    <main id="main-content">
+      <nav aria-label="Breadcrumb">
+        <ol class="breadcrumb">
+          <li><a href="/en/">Home</a></li>
+          <li class="breadcrumb-separator" aria-hidden="true">›</li>
+          <li><a href="/en/history-tools/">History Tools</a></li>
+          <li class="breadcrumb-separator" aria-hidden="true">›</li>
+          <li class="breadcrumb-current" aria-current="page">Holiday Checker</li>
+        </ol>
+      </nav>
+
+      <div class="tool-page-header">
+        <h1>Holiday &amp; Long Weekend Checker</h1>
+        <span class="tool-page-tag">Multi-country</span>
+      </div>
+      <p class="tool-page-desc">Select a year and country to see public holidays and long weekends. Useful for travel planning and business day checks.</p>
+
+      <div class="tool-workspace" id="holiday-tool">
+        <div class="tool-input-row">
+          <label>Year <input id="holidayYear" type="number" min="1900" max="2100" value="2026"></label>
+          <label>Country <select id="holidayCountry"></select></label>
+          <button type="button" class="tool-btn" id="holidaySearchBtn">Search</button>
+        </div>
+        <div class="tool-chips" id="holidayChips"></div>
+        <div class="tool-output" id="holidayResult" aria-live="polite">
+          <span class="tool-output-label">Select a year and country, then click Search.</span>
+        </div>
+      </div>
+
+      <section class="tool-workspace tool-rich-section">
+        <h2>What you can do</h2>
+        <div class="tool-rich-grid">
+          <div class="tool-data-card"><strong>Quick holiday lookup</strong><span>Select a year and country to see all public holidays for that year, sorted by date.</span></div>
+          <div class="tool-data-card"><strong>Long weekend finder</strong><span>Detects 3+ day consecutive periods combining holidays and weekends. Great for trip planning.</span></div>
+          <div class="tool-data-card"><strong>Country comparison</strong><span>Compare holiday systems across Japan, US, UK, and other countries.</span></div>
+          <div class="tool-data-card"><strong>Fast and simple</strong><span>Just year and country — minimal input, quick results.</span></div>
+        </div>
+      </section>
+
+      <section class="tool-workspace tool-rich-section">
+        <h2>How to use</h2>
+        <ol class="tool-rich-list">
+          <li>Enter a year and select a country.</li>
+          <li>Click "Search" to see holiday counts, the first holiday, and long weekend candidates.</li>
+          <li>The holiday list below shows individual dates and holiday names.</li>
+        </ol>
+      </section>
+
+      <section class="tool-workspace tool-rich-section">
+        <h2>FAQ</h2>
+        <div class="tool-faq-list">
+          <details class="tool-faq-item"><summary>What can the holiday checker do?</summary><p>Select a year and country to see public holidays and long weekends (3+ consecutive days). Useful for travel planning, business days, and content research.</p></details>
+          <details class="tool-faq-item"><summary>Which countries are supported?</summary><p>Japan, US, UK, Germany, France, Italy, Spain, Canada, Australia, and South Korea. Holiday systems differ by country, so results vary.</p></details>
+          <details class="tool-faq-item"><summary>How are long weekends calculated?</summary><p>We detect consecutive periods of 3 or more days combining holidays and weekends. Does not account for additional paid time off.</p></details>
+          <details class="tool-faq-item"><summary>What if no results appear?</summary><p>The year may be out of range or the external API may be temporarily unavailable. Try a different year or try again later.</p></details>
+        </div>
+      </section>
+
+      <script>
+      (function () {
+        var COUNTRIES = [
+          { code: 'JP', label: 'Japan' },
+          { code: 'US', label: 'United States' },
+          { code: 'GB', label: 'United Kingdom' },
+          { code: 'DE', label: 'Germany' },
+          { code: 'FR', label: 'France' },
+          { code: 'IT', label: 'Italy' },
+          { code: 'ES', label: 'Spain' },
+          { code: 'CA', label: 'Canada' },
+          { code: 'AU', label: 'Australia' },
+          { code: 'KR', label: 'South Korea' }
+        ];
+
+        function $(id) { return document.getElementById(id); }
+        function escapeHtml(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+        function isLocalHost(){return /^(dev\.randa|localhost|127\.0\.0\.1)$/i.test(window.location.hostname);}
+        function apiBase(){return isLocalHost()?'http://127.0.0.1:8787':window.location.origin;}
+        function apiUrl(path, params){
+          var url = new URL(path, apiBase());
+          if(params){Object.keys(params).forEach(function(key){if(params[key] != null && params[key] !== '') url.searchParams.set(key, params[key]);});}
+          return url.toString();
+        }
+        function track(name, payload) {
+          if (window.RandaAnalytics && typeof window.RandaAnalytics.track === 'function') window.RandaAnalytics.track(name, payload || {});
+          if (typeof gtag === 'function') gtag('event', name, payload || {});
+        }
+        function getCountryLabel(code) {
+          for (var i = 0; i < COUNTRIES.length; i++) { if (COUNTRIES[i].code === code) return COUNTRIES[i].label; }
+          return code;
+        }
+        function formatDate(dateStr) {
+          var parts = String(dateStr).split('-');
+          var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+          return months[Number(parts[1])-1] + ' ' + Number(parts[2]) + ', ' + parts[0];
+        }
+        function renderHolidayCards(holidays) {
+          if (!holidays.length) return '<p class="holiday-empty">No holiday data available.</p>';
+          return '<div class="holiday-list">' + holidays.map(function (item) {
+            return '<div class="tool-data-card">' +
+              '<strong>' + escapeHtml(formatDate(item.date)) + '</strong>' +
+              '<span>' + escapeHtml(item.localName || item.name || 'Holiday') + '</span>' +
+              (item.name && item.localName !== item.name ? '<span>Local name: ' + escapeHtml(item.localName || '') + '</span>' : '') +
+            '</div>';
+          }).join('') + '</div>';
+        }
+        function renderLongWeekends(spans) {
+          if (!spans.length) return '<p class="holiday-empty">No long weekends (3+ days) found.</p>';
+          return '<div class="holiday-list">' + spans.map(function (span) {
+            return '<div class="tool-data-card">' +
+              '<strong>' + escapeHtml(formatDate(span.startDate)) + ' — ' + escapeHtml(formatDate(span.endDate)) + '</strong>' +
+              '<span>' + span.dayCount + ' days</span>' +
+              '<span>Includes ' + span.holidayCount + ' holiday(s).</span>' +
+            '</div>';
+          }).join('') + '</div>';
+        }
+        function renderResult(payload) {
+          var holidays = payload.holidays || [];
+          var longWeekends = payload.longWeekends || [];
+          var result = $('holidayResult');
+          var countryName = getCountryLabel(payload.countryCode);
+          var firstHoliday = holidays.length ? formatDate(holidays[0].date) : '—';
+
+          result.innerHTML =
+            '<div class="holiday-shell">' +
+              '<div class="tool-data-grid">' +
+                '<div class="tool-data-card"><strong>' + escapeHtml(payload.year + ' / ' + countryName) + '</strong><span>Search results</span></div>' +
+                '<div class="tool-data-card"><strong>' + holidays.length + ' days</strong><span>Total holidays</span></div>' +
+                '<div class="tool-data-card"><strong>' + longWeekends.length + '</strong><span>Long weekends</span></div>' +
+                '<div class="tool-data-card"><strong>' + escapeHtml(firstHoliday) + '</strong><span>First holiday</span></div>' +
+              '</div>' +
+              '<div class="holiday-sections">' +
+                '<section><p class="tool-note">Long weekends (3+ days)</p>' + renderLongWeekends(longWeekends) + '</section>' +
+                '<section><p class="tool-note">All holidays</p>' + renderHolidayCards(holidays) + '</section>' +
+              '</div>' +
+            '</div>';
+        }
+        function runSearch(year, country, options) {
+          var shouldTrack = !options || options.track !== false;
+          var result = $('holidayResult');
+          result.innerHTML = '<span class="tool-output-label">Fetching holiday data…</span>';
+
+          fetch(apiUrl('/api/holidays/', { year: year, country: country }), { headers: { 'Accept': 'application/json' } })
+            .then(function (r) { if (!r.ok) throw new Error('fetch failed'); return r.json(); })
+            .then(function (data) {
+              renderResult(data);
+              if (shouldTrack) track('holiday_search', { year: year, country: country });
+            })
+            .catch(function () {
+              result.innerHTML = '<span class="tool-output-label">This tool is temporarily unavailable. Please try again later.</span>';
+            });
+        }
+        function init() {
+          var yearInput = $('holidayYear');
+          var countrySelect = $('holidayCountry');
+          var searchBtn = $('holidaySearchBtn');
+          var chips = $('holidayChips');
+          var currentYear = new Date().getFullYear();
+          yearInput.value = currentYear;
+
+          COUNTRIES.forEach(function (country) {
+            var option = document.createElement('option');
+            option.value = country.code;
+            option.textContent = country.label;
+            if (country.code === 'US') option.selected = true;
+            countrySelect.appendChild(option);
+          });
+
+          [
+            { label: 'This year US', year: currentYear, country: 'US' },
+            { label: 'Next year US', year: currentYear + 1, country: 'US' },
+            { label: 'This year Japan', year: currentYear, country: 'JP' },
+            { label: 'This year UK', year: currentYear, country: 'GB' }
+          ].forEach(function (preset) {
+            var button = document.createElement('button');
+            button.type = 'button';
+            button.textContent = preset.label;
+            button.addEventListener('click', function () {
+              yearInput.value = preset.year;
+              countrySelect.value = preset.country;
+              runSearch(preset.year, preset.country);
+            });
+            chips.appendChild(button);
+          });
+
+          searchBtn.addEventListener('click', function () {
+            var year = parseInt(yearInput.value, 10);
+            var country = countrySelect.value;
+            if (year) runSearch(year, country);
+          });
+
+          runSearch(currentYear, 'US', { track: false });
+        }
+        document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', init, { once: true }) : init();
+      })();
+      </script>
+
+      <style>
+        .holiday-shell, .holiday-sections, .holiday-list { display: grid; gap: 14px; }
+        .holiday-empty { margin: 0; color: var(--text-muted); font-size: 0.92rem; }
+      </style>
+
+      <div class="tool-footer-section">
+        <div class="tool-related-grid">
+          <div class="tool-related-card">
+            <h3>More tools</h3>
+            <div class="tool-related-links">
+              <a href="/en/history-tools/">All tools</a>
+              <a href="/en/tools/weather/">Past weather</a>
+              <a href="/en/tools/moji-counter/">Character counter</a>
+            </div>
+          </div>
+          <div class="tool-related-card">
+            <h3>Try the game</h3>
+            <p style="color:var(--text-muted);font-size:0.85rem;margin:0 0 12px;">Long weekend? Settle in with our Japanese history deck-building roguelike. Browser demo available.</p>
+            <div class="tool-related-links">
+              <a href="/en/games/inga/?src=holidays_en_game">Details</a>
+              <a href="/en/games/inga/play/?src=holidays_en_play">Play demo</a>
+            </div>
+          </div>
+        </div>
+        <div class="tool-related-card" id="steam" style="margin-top:16px;">
+          <span class="tool-output-label">Inga Chronicle — perfect for long weekend sessions</span>
+          <div class="steam-widget-shell">
+            <iframe src="https://store.steampowered.com/widget/4403470/?utm_source=randaworks&utm_medium=holidays_en&utm_campaign=widget" title="Inga Chronicle Steam Store Widget" loading="lazy"></iframe>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <nav class="footer-nav" aria-label="Footer navigation">
+        <a href="/en/about/">About</a>
+        <a href="/en/history-tools/">History Tools</a>
+        <a href="/en/privacy/">Privacy</a>
+        <a href="/en/terms/">Terms</a>
+        <a href="/en/contact/">Contact</a>
+      </nav>
+      <div class="footer-links">
+        <a class="footer-link-social" href="https://x.com/RandaWorksJP" target="_blank" rel="noopener noreferrer" aria-label="X"><svg class="footer-link-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1227" aria-hidden="true" focusable="false"><path d="M714.163 519.284 1160.89 0h-105.83L667.137 450.887 357.328 0H0l468.492 681.821L0 1226.37h105.866l409.588-476.152 327.218 476.152H1200L714.137 519.284h.026ZM569.165 687.828l-47.468-67.909L144.011 79.694h162.604l304.22 434.658 47.468 67.909 396.807 566.942H892.505L569.165 687.828Z"/></svg><span>X</span></a>
+        <a class="footer-link-social" href="https://www.youtube.com/@RandaWorks" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><svg class="footer-link-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31.9 31.9 0 0 0 0 12a31.9 31.9 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31.9 31.9 0 0 0 24 12a31.9 31.9 0 0 0-.5-5.8ZM9.6 15.6V8.4l6.2 3.6Z"/></svg><span>YouTube</span></a>
+        <a class="footer-link-social" href="https://store.steampowered.com/app/4403470" target="_blank" rel="noopener noreferrer" aria-label="Steam"><svg class="footer-link-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 259" aria-hidden="true" focusable="false"><path d="M127.779 0C57.895 0 1.307 55.39.052 124.908l68.961 28.5a36.077 36.077 0 0 1 20.378-6.27l30.462-44.145v-.617c0-26.513 21.569-48.084 48.083-48.084 26.516 0 48.085 21.572 48.085 48.084 0 26.515-21.569 48.085-48.085 48.085h-1.104l-43.474 31.02c0 .403.022.8.022 1.197 0 19.882-16.163 36.046-36.048 36.046-17.806 0-32.595-12.953-35.476-29.932L2.472 166.516C18.233 218.149 67.215 256 127.779 256c70.716 0 128.043-57.326 128.043-128.001C255.822 57.326 198.495 0 127.779 0z"/></svg><span>Steam</span></a>
+      </div>
+      <div>&copy; 2026 RandaWorks</div>
+    </footer>
+  </div>
+  <script src="/assets/js/analytics-config.js"></script>
+  <script src="/assets/js/analytics.js"></script>
+</body>
+</html>

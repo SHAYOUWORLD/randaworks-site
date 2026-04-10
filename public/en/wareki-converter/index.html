@@ -1,0 +1,325 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-WNL49Q0CTT"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-WNL49Q0CTT');</script>
+  <script type="text/javascript">(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window,document,"clarity","script","w8awzqlkx4");</script>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <title>Japanese Era Converter | Meiji, Taish&#333;, Sh&#333;wa, Heisei, Reiwa</title>
+  <meta name="description" content="Free Japanese era name converter. Convert between Western years and Japanese era years (Meiji, Taish&#333;, Sh&#333;wa, Heisei, Reiwa)." />
+  <link rel="canonical" href="https://www.randaworks.com/en/wareki-converter/" />
+  <link rel="alternate" hreflang="ja" href="https://www.randaworks.com/wareki-converter/" />
+  <link rel="alternate" hreflang="en" href="https://www.randaworks.com/en/wareki-converter/" />
+  <link rel="alternate" hreflang="x-default" href="https://www.randaworks.com/wareki-converter/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Japanese Era Converter | RandaWorks" />
+  <meta property="og:description" content="Convert between Western years and Japanese era years." />
+  <meta property="og:url" content="https://www.randaworks.com/en/wareki-converter/" />
+  <meta property="og:image" content="https://www.randaworks.com/assets/img/ogp/randaworks-ogp-home.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Japanese Era Converter | RandaWorks" />
+  <meta name="twitter:description" content="Convert between Western years and Japanese era years." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Shippori+Mincho:wght@400;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Shippori+Mincho:wght@400;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet"></noscript>
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <link rel="stylesheet" href="/assets/css/history-tools.css">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "inLanguage": "en",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What can this Japanese era converter do?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Convert between Western years and Japanese era years (Meiji, Taish\u014d, Sh\u014dwa, Heisei, Reiwa) in both directions." }
+      },
+      {
+        "@type": "Question",
+        "name": "Does it handle year 1 (gannen)?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes. Year 1 (gannen) is treated as year 1. For example, Reiwa 1 = 2019, Heisei 1 = 1989." }
+      },
+      {
+        "@type": "Question",
+        "name": "What time periods are supported?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Meiji era (1868) onwards. Older eras and lunar calendar conversions are not supported." }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I use it for official documents?",
+        "acceptedAnswer": { "@type": "Answer", "text": "This is for quick reference only. For important paperwork, please verify with official sources." }
+      }
+    ]
+  }
+  </script>
+</head>
+<body data-page-type="wareki_converter" class="wareki_converter-page">
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <div class="container tool-page">
+    <nav class="nav">
+      <div class="brand"><a href="/en/"><picture>
+        <source srcset="/assets/img/randaworks_logo_text.webp" type="image/webp">
+        <img src="/assets/img/randaworks_logo_text.png" alt="RandaWorks" style="height: 28px; vertical-align: middle;">
+      </picture></a></div>
+      <div class="links">
+        <a href="/en/history-tools/">History Tools</a>
+        <a href="/en/games/inga/?src=nav">Game</a>
+        <a href="/en/about/">About</a>
+      </div>
+    </nav>
+
+    <main id="main-content">
+      <nav aria-label="Breadcrumb">
+        <ol class="breadcrumb">
+          <li><a href="/en/">Home</a></li>
+          <li class="breadcrumb-separator" aria-hidden="true">›</li>
+          <li><a href="/en/history-tools/">History Tools</a></li>
+          <li class="breadcrumb-separator" aria-hidden="true">›</li>
+          <li class="breadcrumb-current" aria-current="page">Era Converter</li>
+        </ol>
+      </nav>
+
+      <div class="tool-page-header">
+        <h1>Japanese Era Converter</h1>
+        <span class="tool-page-tag">Meiji onwards</span>
+      </div>
+
+      <div class="tool-workspace">
+        <div class="calculator-grid">
+          <div class="calc-panel">
+            <span class="calc-panel-label">Western year → Japanese era</span>
+            <form class="calc-form" id="gregorianForm">
+              <label for="gregorianYear">Western year
+                <input id="gregorianYear" name="gregorianYear" type="number" min="1868" max="9999" placeholder="2026" value="2026">
+              </label>
+              <button class="tool-btn" type="submit">Convert</button>
+            </form>
+            <div class="calc-result-list" id="gregorianResult" aria-live="polite"></div>
+          </div>
+          <div class="calc-panel">
+            <span class="calc-panel-label">Japanese era → Western year</span>
+            <form class="calc-form" id="eraForm">
+              <label for="eraName">Era
+                <select id="eraName" name="eraName">
+                  <option value="reiwa">Reiwa (令和)</option>
+                  <option value="heisei">Heisei (平成)</option>
+                  <option value="showa">Sh&#333;wa (昭和)</option>
+                  <option value="taisho">Taish&#333; (大正)</option>
+                  <option value="meiji">Meiji (明治)</option>
+                </select>
+              </label>
+              <label for="eraYear">Year
+                <input id="eraYear" name="eraYear" type="number" min="1" placeholder="8" value="8">
+              </label>
+              <button class="tool-btn" type="submit">Convert</button>
+            </form>
+            <div class="calc-result-list" id="eraResult" aria-live="polite"></div>
+          </div>
+        </div>
+      </div>
+
+      <section class="tool-workspace tool-rich-section">
+        <h2>What you can do</h2>
+        <div class="tool-rich-grid">
+          <div class="tool-data-card">
+            <strong>Western to Japanese era</strong>
+            <span>Enter a Western year and instantly see the matching Japanese era year.</span>
+          </div>
+          <div class="tool-data-card">
+            <strong>Japanese era to Western</strong>
+            <span>Convert Reiwa, Heisei, Sh&#333;wa, Taish&#333;, and Meiji years back to Western years.</span>
+          </div>
+          <div class="tool-data-card">
+            <strong>Quick document reference</strong>
+            <span>Handy for filling out resumes and forms that require Japanese era notation.</span>
+          </div>
+          <div class="tool-data-card">
+            <strong>Learning Japanese history</strong>
+            <span>Useful when studying modern Japanese history and needing to correlate both calendar systems.</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="tool-workspace tool-rich-section">
+        <h2>How to use</h2>
+        <ol class="tool-rich-list">
+          <li>Use the left panel to convert from Western year. Use the right panel to convert from Japanese era.</li>
+          <li>Enter a year and click "Convert" to see the result immediately.</li>
+          <li>Change the value and click again to convert multiple years in sequence.</li>
+        </ol>
+      </section>
+
+      <section class="tool-workspace tool-rich-section">
+        <h2>FAQ</h2>
+        <div class="tool-faq-list">
+          <details class="tool-faq-item">
+            <summary>What can this Japanese era converter do?</summary>
+            <p>Convert between Western years and Japanese era years (Meiji, Taish&#333;, Sh&#333;wa, Heisei, Reiwa) in both directions.</p>
+          </details>
+          <details class="tool-faq-item">
+            <summary>Does it handle year 1 (gannen)?</summary>
+            <p>Yes. Year 1 (gannen, 元年) is treated as year 1. For example, Reiwa 1 = 2019, Heisei 1 = 1989.</p>
+          </details>
+          <details class="tool-faq-item">
+            <summary>What time periods are supported?</summary>
+            <p>This tool supports Meiji era (1868) onwards. Older eras and lunar calendar conversions are not included.</p>
+          </details>
+          <details class="tool-faq-item">
+            <summary>Can I use it for official documents?</summary>
+            <p>This is suitable for quick reference only. For important paperwork such as legal applications, please verify with official sources.</p>
+          </details>
+        </div>
+      </section>
+
+      <script>
+      (function () {
+        var eras = [
+          { key: "reiwa", label: "Reiwa", labelJa: "令和", start: 2019, end: null, startedOn: "2019-05-01" },
+          { key: "heisei", label: "Heisei", labelJa: "平成", start: 1989, end: 2019, startedOn: "1989-01-08", endedOn: "2019-04-30" },
+          { key: "showa", label: "Sh\u014dwa", labelJa: "昭和", start: 1926, end: 1989, startedOn: "1926-12-25", endedOn: "1989-01-07" },
+          { key: "taisho", label: "Taish\u014d", labelJa: "大正", start: 1912, end: 1926, startedOn: "1912-07-30", endedOn: "1926-12-24" },
+          { key: "meiji", label: "Meiji", labelJa: "明治", start: 1868, end: 1912, startedOn: "1868-09-08", endedOn: "1912-07-29" }
+        ];
+
+        function $(id) { return document.getElementById(id); }
+        function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+        function track(name, payload) {
+          if (window.RandaAnalytics && typeof window.RandaAnalytics.track === 'function') window.RandaAnalytics.track(name, payload || {});
+          if (typeof gtag === 'function') gtag('event', name, payload || {});
+        }
+
+        function convertGregorian(year) {
+          return eras.filter(function (era) {
+            return year >= era.start && (era.end === null || year <= era.end);
+          }).map(function (era) {
+            return {
+              label: era.label,
+              labelJa: era.labelJa,
+              year: year - era.start + 1,
+              transition: year === era.start || (era.end !== null && year === era.end)
+            };
+          });
+        }
+
+        function renderGregorian(event) {
+          event.preventDefault();
+          var input = $('gregorianYear');
+          var result = $('gregorianResult');
+          var year = parseInt(input && input.value, 10);
+
+          if (!year || year < 1868 || year > 9999) {
+            result.innerHTML = "<p>Please enter a Western year from 1868 or later.</p>";
+            return;
+          }
+
+          var matches = convertGregorian(year);
+          if (!matches.length) {
+            result.innerHTML = "<p>Only Meiji era (1868) and later are supported.</p>";
+            return;
+          }
+
+          result.innerHTML = matches.map(function (m) {
+            var yearLabel = m.year === 1 ? 'Year 1 (gannen)' : 'Year ' + m.year;
+            var note = m.transition ? 'This year marks a transition between eras. The exact era depends on the month and day.' : 'Year-level conversion result.';
+            return '<div class="calc-result-card"><strong>' + year + ' → ' + esc(m.label) + ' (' + esc(m.labelJa) + ') ' + yearLabel + '</strong><span>' + note + '</span></div>';
+          }).join('');
+
+          track('history_era_convert', { direction: 'gregorian_to_era', source_year: year });
+        }
+
+        function renderEra(event) {
+          event.preventDefault();
+          var eraSelect = $('eraName');
+          var yearInput = $('eraYear');
+          var result = $('eraResult');
+          var selectedEra = eras.filter(function (era) { return era.key === (eraSelect ? eraSelect.value : ''); })[0];
+          var eraYear = parseInt(yearInput && yearInput.value, 10);
+
+          if (!selectedEra || !eraYear || eraYear < 1) {
+            result.innerHTML = "<p>Please enter a valid era and year.</p>";
+            return;
+          }
+
+          var gregorianYear = selectedEra.start + eraYear - 1;
+          if (selectedEra.end !== null && gregorianYear > selectedEra.end) {
+            result.innerHTML = "<p>" + esc(selectedEra.label) + " does not extend to year " + eraYear + ".</p>";
+            return;
+          }
+
+          var yearLabel = eraYear === 1 ? 'Year 1 (gannen)' : 'Year ' + eraYear;
+          result.innerHTML =
+            '<div class="calc-result-card">' +
+              '<strong>' + esc(selectedEra.label) + ' (' + esc(selectedEra.labelJa) + ') ' + yearLabel + ' → ' + gregorianYear + '</strong>' +
+              '<span>For transition-day precision, check the exact month and day. Era started on ' + esc(selectedEra.startedOn) + '.</span>' +
+            '</div>';
+
+          track('history_era_convert', { direction: 'era_to_gregorian', era_name: selectedEra.label, era_year: eraYear, result_year: gregorianYear });
+        }
+
+        function init() {
+          var gregorianForm = $('gregorianForm');
+          var eraForm = $('eraForm');
+          if (gregorianForm) gregorianForm.addEventListener('submit', renderGregorian);
+          if (eraForm) eraForm.addEventListener('submit', renderEra);
+        }
+
+        document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', init, { once: true }) : init();
+      })();
+      </script>
+
+      <div class="tool-footer-section">
+        <div class="tool-related-grid">
+          <div class="tool-related-card">
+            <h3>More tools</h3>
+            <div class="tool-related-links">
+              <a href="/en/history-tools/">All tools</a>
+              <a href="/en/busho-profile-search/">Figure search</a>
+              <a href="/en/tools/kanji/">Kanji lookup</a>
+            </div>
+          </div>
+          <div class="tool-related-card">
+            <h3>Try the game</h3>
+            <p style="color:var(--text-muted);font-size:0.85rem;margin:0 0 12px;">The samurai you looked up appear as cards in our Japanese history deck-building game.</p>
+            <div class="tool-related-links">
+              <a href="/en/games/inga/?src=wareki_converter_en_game">Details</a>
+              <a href="/en/games/inga/play/?src=wareki_converter_en_play">Play demo</a>
+            </div>
+          </div>
+        </div>
+        <div class="tool-related-card" id="steam" style="margin-top:16px;">
+          <span class="tool-output-label">Inga Chronicle — deck-building roguelike through Japanese history</span>
+          <div class="steam-widget-shell">
+            <iframe src="https://store.steampowered.com/widget/4403470/?utm_source=randaworks&utm_medium=wareki_converter_en&utm_campaign=widget" title="Inga Chronicle Steam Store Widget" loading="lazy"></iframe>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <nav class="footer-nav" aria-label="Footer navigation">
+        <a href="/en/about/">About</a>
+        <a href="/en/history-tools/">History Tools</a>
+        <a href="/en/privacy/">Privacy</a>
+        <a href="/en/terms/">Terms</a>
+        <a href="/en/contact/">Contact</a>
+      </nav>
+      <div class="footer-links">
+        <a class="footer-link-social" href="https://x.com/RandaWorksJP" target="_blank" rel="noopener noreferrer" aria-label="X"><svg class="footer-link-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1227" aria-hidden="true" focusable="false"><path d="M714.163 519.284 1160.89 0h-105.83L667.137 450.887 357.328 0H0l468.492 681.821L0 1226.37h105.866l409.588-476.152 327.218 476.152H1200L714.137 519.284h.026ZM569.165 687.828l-47.468-67.909L144.011 79.694h162.604l304.22 434.658 47.468 67.909 396.807 566.942H892.505L569.165 687.828Z"/></svg><span>X</span></a>
+        <a class="footer-link-social" href="https://www.youtube.com/@RandaWorks" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><svg class="footer-link-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31.9 31.9 0 0 0 0 12a31.9 31.9 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31.9 31.9 0 0 0 24 12a31.9 31.9 0 0 0-.5-5.8ZM9.6 15.6V8.4l6.2 3.6Z"/></svg><span>YouTube</span></a>
+        <a class="footer-link-social" href="https://store.steampowered.com/app/4403470" target="_blank" rel="noopener noreferrer" aria-label="Steam"><svg class="footer-link-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 259" aria-hidden="true" focusable="false"><path d="M127.779 0C57.895 0 1.307 55.39.052 124.908l68.961 28.5a36.077 36.077 0 0 1 20.378-6.27l30.462-44.145v-.617c0-26.513 21.569-48.084 48.083-48.084 26.516 0 48.085 21.572 48.085 48.084 0 26.515-21.569 48.085-48.085 48.085h-1.104l-43.474 31.02c0 .403.022.8.022 1.197 0 19.882-16.163 36.046-36.048 36.046-17.806 0-32.595-12.953-35.476-29.932L2.472 166.516C18.233 218.149 67.215 256 127.779 256c70.716 0 128.043-57.326 128.043-128.001C255.822 57.326 198.495 0 127.779 0z"/></svg><span>Steam</span></a>
+      </div>
+      <div>&copy; 2026 RandaWorks</div>
+    </footer>
+  </div>
+  <script src="/assets/js/analytics-config.js"></script>
+  <script src="/assets/js/analytics.js"></script>
+</body>
+</html>
