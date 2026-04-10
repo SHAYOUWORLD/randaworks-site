@@ -32,6 +32,12 @@ drafts/
 # Internal docs (strategy, planning - not for public repo)
 docs/
 
+# Playwright CLI logs
+.playwright-cli/
+
+# Backup files
+*.bak
+
 # Temporary files
 .tmp/
 output/
