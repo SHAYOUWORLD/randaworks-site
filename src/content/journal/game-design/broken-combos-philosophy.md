@@ -9,6 +9,7 @@ tags:
   - Slay the Spire
   - Balatro
   - コンボ
+heroImage: /assets/img/journal/broken-combos.png
 draft: false
 ---
 

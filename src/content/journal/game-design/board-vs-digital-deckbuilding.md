@@ -9,6 +9,7 @@ tags:
   - ゲームデザイン
   - Dominion
   - Slay the Spire
+heroImage: /assets/img/journal/board-vs-digital.png
 draft: false
 ---
 

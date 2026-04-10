@@ -8,6 +8,7 @@ tags:
   - Steam
   - 市場分析
   - インディーゲーム
+heroImage: /assets/img/journal/market-analysis.png
 draft: false
 ---
 

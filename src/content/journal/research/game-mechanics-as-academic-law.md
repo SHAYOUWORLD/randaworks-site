@@ -8,6 +8,7 @@ tags:
   - KSP
   - DragonBox
   - Civilization
+heroImage: /assets/img/journal/game-mechanics-law.png
 draft: false
 ---
 
