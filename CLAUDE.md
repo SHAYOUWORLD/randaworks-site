@@ -2,12 +2,12 @@
 
 ## Cloudflare Workers デプロイ設定（重要・変更禁止）
 
-本番ドメイン（www.randaworks.com）は **Yohei9727@gmail.com** のCloudflareアカウントに紐づいている。
+本番ドメイン（www.randaworks.com）は本番用Cloudflareアカウントに紐づいている。
 
-- `wrangler.toml` の `account_id` → `fc21195d3622d1be9b3490c237c0b427` **変更禁止**
-- `.env` の `CLOUDFLARE_API_TOKEN` → Yohei9727アカウントのトークン **変更禁止**
+- `wrangler.toml` の `account_id` → **変更禁止**（値は wrangler.toml を参照）
+- `.env` の `CLOUDFLARE_API_TOKEN` → 本番アカウントのトークン **変更禁止**
 
-過去に別アカウント（ysh.base@gmail.com / `d981e97c...`）にデプロイしていた時期があり、本番に反映されない障害が発生した。絶対にaccount_idやトークンを差し替えないこと。
+過去に別アカウントにデプロイしていた時期があり、本番に反映されない障害が発生した。絶対にaccount_idやトークンを差し替えないこと。
 
 ### デプロイコマンド
 

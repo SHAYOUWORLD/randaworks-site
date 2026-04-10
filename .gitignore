@@ -35,6 +35,9 @@ docs/
 # Playwright CLI logs
 .playwright-cli/
 
+# Backup files
+*.bak
+
 # Temporary files
 .tmp/
 output/
