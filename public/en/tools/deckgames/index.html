@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-WNL49Q0CTT"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-WNL49Q0CTT');
+  </script>
+  <script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "w8awzqlkx4");
+  </script>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <title>Deck-Building Game Catalog | Digital &amp; Board Game Comparison</title>
+  <meta name="description" content="Compare deck-building roguelikes and board games side by side. Live Steam data for digital titles, BGG ratings for board games." />
+  <link rel="canonical" href="https://www.randaworks.com/en/tools/deckgames/" />
+  <link rel="alternate" hreflang="ja" href="https://www.randaworks.com/tools/deckgames/" />
+  <link rel="alternate" hreflang="en" href="https://www.randaworks.com/en/tools/deckgames/" />
+  <link rel="alternate" hreflang="x-default" href="https://www.randaworks.com/tools/deckgames/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Deck-Building Game Catalog | RandaWorks" />
+  <meta property="og:description" content="Compare deck-building roguelikes and board games side by side. Live Steam data." />
+  <meta property="og:url" content="https://www.randaworks.com/en/tools/deckgames/" />
+  <meta property="og:image" content="https://www.randaworks.com/assets/img/ogp/randaworks-ogp-home.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Deck-Building Game Catalog | RandaWorks" />
+  <meta name="twitter:description" content="Compare deck-building roguelikes and board games side by side. Live Steam data." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Shippori+Mincho:wght@400;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Shippori+Mincho:wght@400;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet"></noscript>
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <link rel="stylesheet" href="/assets/css/history-tools.css">
+</head>
+<body data-page-type="deckgames" class="deckgames-page">
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <div class="container tool-page">
+    <nav class="nav">
+      <div class="brand"><a href="/en/"><picture>
+        <source srcset="/assets/img/randaworks_logo_text.webp" type="image/webp">
+        <img src="/assets/img/randaworks_logo_text.png" alt="RandaWorks" style="height: 28px; vertical-align: middle;">
+      </picture></a></div>
+      <div class="links">
+        <a href="/en/history-tools/">History Tools</a>
+        <a href="/en/games/inga/?src=nav">Game</a>
+        <a href="/en/about/">About</a>
+      </div>
+    </nav>
+
+    <main id="main-content">
+      <nav aria-label="Breadcrumb">
+        <ol class="breadcrumb">
+          <li><a href="/en/">Home</a></li>
+          <li class="breadcrumb-separator" aria-hidden="true">›</li>
+          <li><a href="/en/history-tools/">History Tools</a></li>
+          <li class="breadcrumb-separator" aria-hidden="true">›</li>
+          <li class="breadcrumb-current" aria-current="page">Deck-Building Catalog</li>
+        </ol>
+      </nav>
+
+      <div class="tool-page-header">
+        <h1>Deck-Building Game Catalog</h1>
+        <span class="tool-page-tag">Digital + Board</span>
+      </div>
+      <p class="tool-page-desc">Curated list of deck-building titles across digital and board games. Steam data is live.</p>
+
+      <div class="tool-workspace">
+        <h2>Digital Games</h2>
+        <div class="tool-data-card" style="border-color: rgba(199,166,102,0.4);">
+          <strong style="color: var(--accent-gold);">Inga Chronicle (日本史因果クロニクル)</strong>
+          <span>A deck-building roguelike where Japanese historical causation powers your card chains. By RandaWorks.</span>
+          <a href="https://store.steampowered.com/app/4403470/" target="_blank" rel="noopener noreferrer" data-track-event="steam_click" data-track-placement="deckgames_en_featured">View on Steam</a>
+        </div>
+        <div style="display:grid;gap:10px;margin-top:14px;" id="digitalList">
+          <div style="padding:16px;text-align:center;color:var(--text-muted);">Loading data…</div>
+        </div>
+      </div>
+
+      <div class="tool-workspace" style="margin-top:20px;">
+        <h2>Board Games</h2>
+        <div style="display:grid;gap:10px;" id="boardList"></div>
+      </div>
+
+      <script>
+      (function () {
+        var DIGITAL = [
+          { appid: '646570', name: 'Slay the Spire', desc: 'The gold standard of deck-building roguelikes. 3 characters × card synergies.' },
+          { appid: '1892930', name: 'Slay the Spire 2', desc: 'The sequel. New mechanics and characters.' },
+          { appid: '2379780', name: 'Balatro', desc: 'Poker × roguelike. Joker combinations are key.' },
+          { appid: '1092790', name: 'Inscryption', desc: 'Card game × horror × meta-narrative.' },
+          { appid: '1102190', name: 'Monster Train', desc: 'Tower defense × deck-building. Multi-floor combat.' },
+          { appid: '601840', name: 'Griftlands', desc: 'Dual-deck system for negotiation and combat.' },
+          { appid: '1188930', name: 'Chrono Ark', desc: 'Party-based deck-building RPG.' },
+          { appid: '1385380', name: 'Across the Obelisk', desc: 'Co-op deck-building RPG. 4-player party.' },
+          { appid: '1135810', name: 'Vault of the Void', desc: 'Purge-focused strategic deck-building.' },
+          { appid: '998740', name: 'Ring of Pain', desc: 'Dungeon ring × card selection.' }
+        ];
+
+        var BOARD = [
+          { name: 'Dominion', year: '2008', bggRating: '7.6', bggId: '36218', desc: 'The original deck-building game.' },
+          { name: 'Star Realms', year: '2014', bggRating: '7.5', bggId: '147020', desc: '2-player competitive deck-builder. Space theme.' },
+          { name: 'Clank!', year: '2016', bggRating: '7.6', bggId: '201808', desc: 'Board exploration × deck-building. Escape the dragon.' },
+          { name: "Aeon's End", year: '2016', bggRating: '7.9', bggId: '191189', desc: 'Co-op deck-builder. Unique no-shuffle rule.' },
+          { name: 'Legendary: Marvel', year: '2012', bggRating: '7.3', bggId: '129437', desc: 'Marvel heroes cooperative deck-builder.' },
+          { name: 'Undaunted: Normandy', year: '2019', bggRating: '7.6', bggId: '268864', desc: 'WWII tactics × deck-building.' },
+          { name: 'Shards of Infinity', year: '2018', bggRating: '7.4', bggId: '244884', desc: 'Mastery system competitive deck-builder.' },
+          { name: 'Fort', year: '2020', bggRating: '7.1', bggId: '296912', desc: 'Kids building forts theme. Deck-building + follow.' }
+        ];
+
+        function $(id) { return document.getElementById(id); }
+        function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+        function rColor(p) { return p >= 95 ? '#60b568' : p >= 90 ? '#8bc34a' : p >= 80 ? '#c7a666' : p > 0 ? '#e06666' : 'var(--text-muted)'; }
+        function isLocalHost(){return /^(dev\.randa|localhost|127\.0\.0\.1)$/i.test(window.location.hostname);}
+        function apiBase(){return isLocalHost()?'http://127.0.0.1:8787':window.location.origin;}
+        function apiUrl(path, params){
+          var url = new URL(path, apiBase());
+          if(params){Object.keys(params).forEach(function(key){if(params[key] != null && params[key] !== '') url.searchParams.set(key, params[key]);});}
+          return url.toString();
+        }
+
+        function renderDigital(apiData) {
+          var dl = $('digitalList');
+          dl.innerHTML = '';
+          var sorted = DIGITAL.slice().sort(function (a, b) {
+            var ga = apiData[a.appid], gb = apiData[b.appid];
+            var ra = ga ? ga.totalReviews : 0, rb = gb ? gb.totalReviews : 0;
+            return rb - ra;
+          });
+          for (var i = 0; i < sorted.length; i++) {
+            var item = sorted[i];
+            var g = apiData[item.appid];
+            var stats = '';
+            if (g && g.totalReviews > 0) {
+              stats = ' <span style="color:' + rColor(g.positiveRate) + ';font-size:0.78rem;font-weight:400;">' + esc(g.reviewDesc || '') + '</span>' +
+                '<span style="color:var(--text-muted);font-size:0.78rem;font-weight:400;margin-left:6px;">(' + g.totalReviews.toLocaleString() + ' reviews)</span>';
+            }
+            dl.innerHTML += '<div class="tool-data-card"><strong>' + esc(item.name) + stats + '</strong><span>' + esc(item.desc) + '</span><a href="https://store.steampowered.com/app/' + esc(item.appid) + '/" target="_blank" rel="noopener noreferrer">Steam</a></div>';
+          }
+        }
+
+        function renderBoard() {
+          var bl = $('boardList');
+          for (var i = 0; i < BOARD.length; i++) {
+            var g = BOARD[i];
+            bl.innerHTML += '<div class="tool-data-card"><strong>' + esc(g.name) + ' <span style="color:var(--text-muted);font-weight:400;font-size:0.82rem;">(' + g.year + ' / BGG ' + g.bggRating + ')</span></strong><span>' + esc(g.desc) + '</span><a href="https://boardgamegeek.com/boardgame/' + esc(g.bggId) + '" target="_blank" rel="noopener noreferrer">BGG</a></div>';
+          }
+        }
+
+        async function init() {
+          renderBoard();
+          try {
+            var appids = [];
+            for (var i = 0; i < DIGITAL.length; i++) appids.push(DIGITAL[i].appid);
+            var r = await fetch(apiUrl('/api/steam/stats/', { appids: appids.join(',') }));
+            var d = await r.json();
+            if (d.error) throw new Error(d.error);
+            renderDigital(d.games || {});
+          } catch (e) {
+            $('digitalList').innerHTML = '<div style="padding:16px;text-align:center;color:#e0b366;">This tool is temporarily unavailable. It will resume when the API is restored.</div>';
+          }
+        }
+
+        document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', init, { once: true }) : init();
+      })();
+      </script>
+
+      <div class="tool-footer-section">
+        <div class="tool-related-grid">
+          <div class="tool-related-card">
+            <h3>More tools</h3>
+            <div class="tool-related-links">
+              <a href="/en/history-tools/">All tools</a>
+              <a href="/en/tools/steamstats/">Market data</a>
+              <a href="/en/tools/hltb/">Player stats</a>
+            </div>
+          </div>
+          <div class="tool-related-card">
+            <h3>Try the game</h3>
+            <p style="color:var(--text-muted);font-size:0.85rem;margin:0 0 12px;">Experience deck-building as a Japanese history card-chain roguelike.</p>
+            <div class="tool-related-links">
+              <a href="/en/games/inga/?src=deckgames_en_game" data-track-event="cta_click" data-track-placement="deckgames_en_game">Details</a>
+              <a href="/en/games/inga/play/?src=deckgames_en_play" data-track-event="cta_click" data-track-placement="deckgames_en_play">Play demo</a>
+            </div>
+          </div>
+        </div>
+        <div class="tool-related-card" id="steam" style="margin-top:16px;">
+          <span class="tool-output-label">A deck-building roguelike set in Japanese history</span>
+          <div class="steam-widget-shell">
+            <iframe src="https://store.steampowered.com/widget/4403470/?utm_source=randaworks&utm_medium=deckgames_en&utm_campaign=widget" title="Inga Chronicle Steam Store Widget" loading="lazy"></iframe>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <nav class="footer-nav" aria-label="Footer navigation">
+        <a href="/en/about/">About</a>
+        <a href="/en/history-tools/">History Tools</a>
+        <a href="/en/privacy/">Privacy</a>
+        <a href="/en/terms/">Terms</a>
+        <a href="/en/contact/">Contact</a>
+      </nav>
+      <div class="footer-links">
+        <a class="footer-link-social" href="https://x.com/RandaWorksJP" target="_blank" rel="noopener noreferrer" aria-label="X"><svg class="footer-link-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1227" aria-hidden="true" focusable="false"><path d="M714.163 519.284 1160.89 0h-105.83L667.137 450.887 357.328 0H0l468.492 681.821L0 1226.37h105.866l409.588-476.152 327.218 476.152H1200L714.137 519.284h.026ZM569.165 687.828l-47.468-67.909L144.011 79.694h162.604l304.22 434.658 47.468 67.909 396.807 566.942H892.505L569.165 687.828Z"/></svg><span>X</span></a>
+        <a class="footer-link-social" href="https://www.youtube.com/@RandaWorks" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><svg class="footer-link-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31.9 31.9 0 0 0 0 12a31.9 31.9 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31.9 31.9 0 0 0 24 12a31.9 31.9 0 0 0-.5-5.8ZM9.6 15.6V8.4l6.2 3.6Z"/></svg><span>YouTube</span></a>
+        <a class="footer-link-social" href="https://store.steampowered.com/app/4403470" target="_blank" rel="noopener noreferrer" aria-label="Steam"><svg class="footer-link-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 259" aria-hidden="true" focusable="false"><path d="M127.779 0C57.895 0 1.307 55.39.052 124.908l68.961 28.5a36.077 36.077 0 0 1 20.378-6.27l30.462-44.145v-.617c0-26.513 21.569-48.084 48.083-48.084 26.516 0 48.085 21.572 48.085 48.084 0 26.515-21.569 48.085-48.085 48.085h-1.104l-43.474 31.02c0 .403.022.8.022 1.197 0 19.882-16.163 36.046-36.048 36.046-17.806 0-32.595-12.953-35.476-29.932L2.472 166.516C18.233 218.149 67.215 256 127.779 256c70.716 0 128.043-57.326 128.043-128.001C255.822 57.326 198.495 0 127.779 0z"/></svg><span>Steam</span></a>
+      </div>
+      <div>&copy; 2026 RandaWorks</div>
+    </footer>
+  </div>
+  <script src="/assets/js/analytics-config.js"></script>
+  <script src="/assets/js/analytics.js"></script>
+</body>
+</html>
