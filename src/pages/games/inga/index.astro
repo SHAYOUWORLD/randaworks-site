@@ -161,6 +161,7 @@ const ingaNavLinks = [
         margin-right: auto;
       }
       .inga-combo-feature h2 {
+        display: block;
         color: #fff;
         text-shadow: 0 2px 12px rgba(0, 0, 0, 0.6);
       }
@@ -192,7 +193,7 @@ const ingaNavLinks = [
   <script is:inline>document.body.dataset.playSessionScope = "true";</script>
 
   <div class="container">
-    <Nav links={ingaNavLinks} />
+    <Nav links={ingaNavLinks} enHref="/en/games/inga/" />
 
     <main id="main-content">
       <Breadcrumb items={[

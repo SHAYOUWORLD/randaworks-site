@@ -15,6 +15,8 @@ const categoryLabels: Record<string, string> = {
   'guides': 'ガイド',
 };
 
+const usedCategories = [...new Set(sorted.map(e => e.data.category))];
+
 const formatDate = (date: Date) =>
   `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日`;
 
@@ -30,7 +32,7 @@ const navLinks = [
   pageType="journal"
 >
   <div class="container journal-page-container">
-    <Nav links={navLinks} />
+    <Nav links={navLinks} enHref="/en/journal/" />
 
     <main id="main-content">
       <nav aria-label="パンくずリスト">
@@ -47,6 +49,15 @@ const navLinks = [
           <p class="journal-page-lead">ゲーミフィケーション研究とデッキ構築ビルダー研究の記事。</p>
         </header>
 
+        <div class="journal-filter" role="group" aria-label="カテゴリフィルター">
+          <button class="journal-filter-btn active" data-category="all">すべて</button>
+          {usedCategories.map((cat) => (
+            <button class="journal-filter-btn" data-category={cat}>
+              {categoryLabels[cat] || cat}
+            </button>
+          ))}
+        </div>
+
         {sorted.length === 0 ? (
           <p>記事はまだありません。</p>
         ) : (
@@ -58,15 +69,27 @@ const navLinks = [
               const url = `/journal/${cat}/${slug}/`;
               const catLabel = categoryLabels[entry.data.category] || entry.data.category;
               return (
-                <a href={url} class="journal-article-card">
-                  <div class="journal-article-card-meta">
-                    <span class="journal-article-card-category">{catLabel}</span>
-                    <time datetime={entry.data.pubDate.toISOString().split('T')[0]}>
-                      {formatDate(entry.data.pubDate)}
-                    </time>
+                <a href={url} class="journal-article-card" data-category={entry.data.category}>
+                  {entry.data.heroImage && (
+                    <img
+                      class="journal-article-card-thumb"
+                      src={entry.data.heroImage}
+                      alt=""
+                      loading="lazy"
+                      width="120"
+                      height="80"
+                    />
+                  )}
+                  <div class="journal-article-card-body">
+                    <div class="journal-article-card-meta">
+                      <span class="journal-article-card-category">{catLabel}</span>
+                      <time datetime={entry.data.pubDate.toISOString().split('T')[0]}>
+                        {formatDate(entry.data.pubDate)}
+                      </time>
+                    </div>
+                    <h2 class="journal-article-card-title">{entry.data.title}</h2>
+                    <p class="journal-article-card-desc">{entry.data.description}</p>
                   </div>
-                  <h2 class="journal-article-card-title">{entry.data.title}</h2>
-                  <p class="journal-article-card-desc">{entry.data.description}</p>
                 </a>
               );
             })}
@@ -79,12 +102,57 @@ const navLinks = [
   </div>
 </BaseLayout>
 
+<script is:inline>
+  document.querySelectorAll('.journal-filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const cat = btn.dataset.category;
+      document.querySelectorAll('.journal-filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      document.querySelectorAll('.journal-article-card').forEach(card => {
+        card.style.display = (cat === 'all' || card.dataset.category === cat) ? '' : 'none';
+      });
+    });
+  });
+</script>
+
 <style is:inline>
   .journal-index-title {
     font-size: 1.6rem;
     font-weight: 700;
     color: var(--text-heading);
     margin: 0;
+  }
+
+  .journal-filter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 16px;
+    margin-bottom: 8px;
+  }
+
+  .journal-filter-btn {
+    background: transparent;
+    border: 1px solid rgba(231, 229, 228, 0.12);
+    color: var(--text-muted);
+    font-size: 0.82rem;
+    padding: 5px 14px;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: inherit;
+  }
+
+  .journal-filter-btn:hover {
+    border-color: var(--accent-gold);
+    color: var(--accent-gold);
+  }
+
+  .journal-filter-btn.active {
+    background: var(--accent-gold);
+    color: var(--bg-dark, #1c1917);
+    border-color: var(--accent-gold);
+    font-weight: 600;
   }
 
   .journal-article-list {
@@ -94,7 +162,9 @@ const navLinks = [
   }
 
   .journal-article-card {
-    display: block;
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
     padding: 24px 0;
     border-bottom: 1px solid rgba(231, 229, 228, 0.08);
     text-decoration: none;
@@ -108,6 +178,26 @@ const navLinks = [
 
   .journal-article-card:hover {
     background: rgba(231, 229, 228, 0.03);
+  }
+
+  .journal-article-card-body {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .journal-article-card-thumb {
+    width: 120px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 4px;
+    flex-shrink: 0;
+    margin-top: 4px;
+    opacity: 0.85;
+    transition: opacity 0.15s;
+  }
+
+  .journal-article-card:hover .journal-article-card-thumb {
+    opacity: 1;
   }
 
   .journal-article-card-meta {
@@ -144,5 +234,12 @@ const navLinks = [
     font-size: 0.92rem;
     color: var(--text-muted);
     line-height: 1.7;
+  }
+
+  @media (max-width: 600px) {
+    .journal-article-card-thumb {
+      width: 80px;
+      height: 56px;
+    }
   }
 </style>

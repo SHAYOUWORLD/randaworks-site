@@ -1,6 +1,7 @@
 ---
 interface Props {
   links?: { href: string; label: string }[];
+  enHref?: string;
 }
 
 const defaultLinks = [
@@ -10,7 +11,7 @@ const defaultLinks = [
   { href: '/games/inga/?src=nav', label: 'ゲームを見る' },
 ];
 
-const { links = defaultLinks } = Astro.props;
+const { links = defaultLinks, enHref } = Astro.props;
 ---
 <header class="nav">
   <div class="brand"><a href="/"><picture>
@@ -19,5 +20,18 @@ const { links = defaultLinks } = Astro.props;
   </picture></a></div>
   <div class="links">
     {links.map(link => <a href={link.href}>{link.label}</a>)}
+    {enHref && (
+      <a
+        href={enHref}
+        class="lang-switch-link"
+        hreflang="en"
+        lang="en"
+        aria-label="Switch to English"
+        data-track-event="lang_switch"
+        data-track-placement="nav_lang_switch"
+        data-track-label="nav en"
+      >EN</a>
+    )}
   </div>
 </header>
+
