@@ -268,7 +268,7 @@ import ToolLayout from '../../layouts/ToolLayout.astro';
       $('hintsArea').style.display = 'none';
       $('hintsArea').innerHTML = '';
 
-      $('scoreBar').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      window.scrollTo({ top: $('scoreBar').offsetTop, behavior: 'smooth' });
     }
 
     // ── Answer ──
