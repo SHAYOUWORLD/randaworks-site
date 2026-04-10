@@ -1151,6 +1151,7 @@ a.history-tools-link-card:hover { text-shadow: none; }
   aspect-ratio: 1;
 }
 .wiki-card-body { min-width: 0; }
+.wiki-card > :only-child { grid-column: 1 / -1; }
 .wiki-card-title {
   font-family: "Space Grotesk", "Noto Sans JP", sans-serif;
   font-size: 0.95rem; font-weight: 600; color: #fff;
