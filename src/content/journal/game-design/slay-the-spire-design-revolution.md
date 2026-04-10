@@ -8,6 +8,7 @@ tags:
   - Slay the Spire
   - ゲームデザイン
   - ローグライク
+heroImage: /assets/img/journal/slay-the-spire.png
 draft: false
 ---
 

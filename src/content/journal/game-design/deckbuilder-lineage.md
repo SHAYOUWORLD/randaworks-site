@@ -9,6 +9,7 @@ tags:
   - Dominion
   - Slay the Spire
   - Balatro
+heroImage: /assets/img/journal/deckbuilder-lineage.png
 draft: false
 ---
 

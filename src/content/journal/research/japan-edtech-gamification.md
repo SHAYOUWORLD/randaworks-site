@@ -9,6 +9,7 @@ tags:
   - Qubena
   - Monoxer
   - EdTech
+heroImage: /assets/img/journal/japan-edtech.png
 draft: false
 ---
 

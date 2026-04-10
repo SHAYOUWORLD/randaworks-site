@@ -8,6 +8,7 @@ tags:
   - Duolingo
   - Kahoot
   - 教育
+heroImage: /assets/img/journal/duolingo-kahoot.png
 draft: false
 ---
 

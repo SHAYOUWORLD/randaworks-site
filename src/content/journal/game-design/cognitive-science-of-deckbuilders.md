@@ -8,6 +8,7 @@ tags:
   - フロー
   - ゲームデザイン
   - デッキ構築
+heroImage: /assets/img/journal/cognitive-science.png
 draft: false
 ---
 

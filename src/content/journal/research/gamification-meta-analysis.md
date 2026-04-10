@@ -7,6 +7,7 @@ tags:
   - ゲーミフィケーション
   - 教育
   - メタ分析
+heroImage: /assets/img/journal/gamification-meta-analysis.png
 draft: false
 ---
 

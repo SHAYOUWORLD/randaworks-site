@@ -8,6 +8,7 @@ tags:
   - ゲーミフィケーション
   - 教育
   - 探究学習
+heroImage: /assets/img/journal/minecraft-education.png
 draft: false
 ---
 
