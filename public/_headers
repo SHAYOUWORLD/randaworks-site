@@ -20,6 +20,9 @@
 /assets/fonts/*
   Cache-Control: public, max-age=31536000, immutable
 
+/games/inga/play/build/*
+  Cache-Control: public, max-age=604800
+
 # hreflang — Japanese pages
 /
   Link: <https://www.randaworks.com/>; rel="alternate"; hreflang="ja", <https://www.randaworks.com/en/>; rel="alternate"; hreflang="en", <https://www.randaworks.com/>; rel="alternate"; hreflang="x-default"
