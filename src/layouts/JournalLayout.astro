@@ -5,6 +5,12 @@ import Footer from '../components/Footer.astro';
 import ArticleSchema from '../components/ArticleSchema.astro';
 import { getReadingTime } from '../utils/reading-time.ts';
 
+interface Heading {
+  depth: number;
+  slug: string;
+  text: string;
+}
+
 interface Props {
   title: string;
   description: string;
@@ -14,6 +20,7 @@ interface Props {
   tags: string[];
   heroImage?: string;
   rawContent: string;
+  headings?: Heading[];
 }
 
 const {
@@ -25,7 +32,11 @@ const {
   tags,
   heroImage,
   rawContent,
+  headings = [],
 } = Astro.props;
+
+// TOC: h2 only
+const tocItems = headings.filter((h) => h.depth === 2);
 
 const categoryLabels: Record<string, string> = {
   'devlog': '開発ログ',
@@ -93,27 +104,49 @@ const navLinks = [
       </nav>
 
       <article class="journal-article">
-        <header class="journal-article-header">
-          <div class="journal-article-meta-row">
-            <span class="journal-article-category">{categoryLabel}</span>
-            <span class="journal-article-meta-separator" aria-hidden="true">&bull;</span>
-            <time class="journal-article-meta" datetime={formatDateISO(pubDate)}>{formatDate(pubDate)}</time>
-            {updatedDate && (
-              <span class="journal-article-meta">（更新: {formatDate(updatedDate)}）</span>
-            )}
-            <span class="journal-article-meta-separator" aria-hidden="true">&bull;</span>
-            <span class="journal-article-meta">{readingTime}で読める</span>
+        {heroImage ? (
+          <div class="journal-hero" style={`background-image: url(${heroImage})`}>
+            <div class="journal-hero-overlay">
+              <span class="journal-hero-category">{categoryLabel}</span>
+              <h1 class="journal-hero-title">{title}</h1>
+              <div class="journal-hero-meta">
+                <time datetime={formatDateISO(pubDate)}>{formatDate(pubDate)}</time>
+                <span aria-hidden="true">&bull;</span>
+                <span>{readingTime}で読める</span>
+              </div>
+            </div>
           </div>
-          <h1>{title}</h1>
-          <p class="journal-article-lead">{description}</p>
-        </header>
+        ) : (
+          <header class="journal-article-header">
+            <div class="journal-article-meta-row">
+              <span class="journal-article-category">{categoryLabel}</span>
+              <span class="journal-article-meta-separator" aria-hidden="true">&bull;</span>
+              <time class="journal-article-meta" datetime={formatDateISO(pubDate)}>{formatDate(pubDate)}</time>
+              <span class="journal-article-meta-separator" aria-hidden="true">&bull;</span>
+              <span class="journal-article-meta">{readingTime}で読める</span>
+            </div>
+            <h1>{title}</h1>
+            <p class="journal-article-lead">{description}</p>
+          </header>
+        )}
 
         {tags.length > 0 && (
           <div class="journal-tags">
             {tags.map((tag) => (
-              <span class="journal-tag">#{tag}</span>
+              <a href={`/journal/tag/${encodeURIComponent(tag)}/`} class="journal-tag">#{tag}</a>
             ))}
           </div>
+        )}
+
+        {tocItems.length >= 3 && (
+          <nav class="journal-toc" aria-label="目次">
+            <p class="journal-toc-title">目次</p>
+            <ol class="journal-toc-list">
+              {tocItems.map((h) => (
+                <li><a href={`#${h.slug}`}>{h.text}</a></li>
+              ))}
+            </ol>
+          </nav>
         )}
 
         <div class="journal-article-body">
@@ -145,5 +178,114 @@ const navLinks = [
     border: 1px solid rgba(231, 229, 228, 0.08);
     border-radius: 3px;
     padding: 2px 9px;
+    text-decoration: none;
+    transition: border-color 0.15s, color 0.15s;
+  }
+
+  .journal-tag:hover {
+    color: var(--accent-gold);
+    border-color: var(--accent-gold);
+  }
+
+  .journal-toc {
+    margin: 0 0 40px;
+    padding: 20px 24px;
+    background: rgba(231, 229, 228, 0.03);
+    border: 1px solid rgba(231, 229, 228, 0.08);
+    border-left: 3px solid var(--accent-gold);
+    border-radius: 4px;
+  }
+
+  .journal-toc-title {
+    margin: 0 0 12px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--accent-gold);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .journal-toc-list {
+    margin: 0;
+    padding-left: 24px;
+    list-style: decimal;
+  }
+
+  .journal-toc-list li {
+    margin: 6px 0;
+    color: var(--text-muted);
+    font-size: 0.92rem;
+  }
+
+  .journal-toc-list li::marker {
+    color: rgba(231, 229, 228, 0.3);
+  }
+
+  .journal-toc-list a {
+    color: var(--text-body, #e7e5e4);
+    text-decoration: none;
+    transition: color 0.15s;
+  }
+
+  .journal-toc-list a:hover {
+    color: var(--accent-gold);
+  }
+
+  .journal-hero {
+    position: relative;
+    background-size: cover;
+    background-position: center;
+    border-radius: 6px;
+    overflow: hidden;
+    margin-bottom: 32px;
+    aspect-ratio: 16 / 7;
+  }
+
+  .journal-hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(28, 25, 23, 0.95) 0%, rgba(28, 25, 23, 0.6) 50%, rgba(28, 25, 23, 0.25) 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 32px;
+  }
+
+  .journal-hero-category {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--accent-gold);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 8px;
+  }
+
+  .journal-hero-title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #f5f5f4;
+    line-height: 1.35;
+    margin: 0 0 12px;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  }
+
+  .journal-hero-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.82rem;
+    color: rgba(245, 245, 244, 0.7);
+  }
+
+  @media (max-width: 768px) {
+    .journal-hero {
+      aspect-ratio: 16 / 9;
+    }
+    .journal-hero-overlay {
+      padding: 20px;
+    }
+    .journal-hero-title {
+      font-size: 1.3rem;
+    }
   }
 </style>
