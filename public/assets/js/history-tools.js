@@ -174,7 +174,7 @@
           button.textContent = "新しい問題を出す";
         }
         var qEl = $("historyQuizQuestion");
-        if (qEl) qEl.scrollIntoView({ behavior: "smooth", block: "start" });
+        if (qEl) window.scrollTo({ top: qEl.offsetTop, behavior: "smooth" });
       });
 
     track("history_quiz_generate", {

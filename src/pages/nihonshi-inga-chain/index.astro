@@ -174,7 +174,7 @@ import ToolLayout from '../../layouts/ToolLayout.astro';
       state.answered = false;
       $('progressCount').textContent = Math.min(state.total + 1, state.pool.length) + ' / ' + state.pool.length;
       renderQuiz();
-      $('scoreBar').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      window.scrollTo({ top: $('scoreBar').offsetTop, behavior: 'smooth' });
     }
 
     function renderQuiz() {
