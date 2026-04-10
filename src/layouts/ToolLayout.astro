@@ -26,6 +26,7 @@ interface Props {
   navLinks?: { href: string; label: string }[];
   gamePitch?: string;
   steamContext?: string;
+  enHref?: string;
 }
 
 const {
@@ -43,13 +44,14 @@ const {
   navLinks,
   gamePitch,
   steamContext,
+  enHref,
 } = Astro.props;
 ---
 <BaseLayout title={title} description={description} canonical={canonical} ogImage={ogImage} pageType={pageType}>
   <link rel="stylesheet" href="/assets/css/history-tools.css" slot="head" />
   <slot name="head" slot="head" />
   <div class="container tool-page">
-    <Nav links={navLinks} />
+    <Nav links={navLinks} enHref={enHref} />
 
     <main id="main-content">
       <Breadcrumb items={breadcrumbs} />
