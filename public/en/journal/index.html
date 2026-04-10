@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-WNL49Q0CTT"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-WNL49Q0CTT');
+  </script>
+  <script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "w8awzqlkx4");
+  </script>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <title>Journal | RandaWorks</title>
+  <meta name="description" content="Articles on gamification research, deck-building game design, and game development insights from RandaWorks. Currently available in Japanese." />
+  <link rel="canonical" href="https://www.randaworks.com/en/journal/" />
+  <link rel="alternate" hreflang="ja" href="https://www.randaworks.com/journal/" />
+  <link rel="alternate" hreflang="en" href="https://www.randaworks.com/en/journal/" />
+  <link rel="alternate" hreflang="x-default" href="https://www.randaworks.com/journal/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Journal | RandaWorks" />
+  <meta property="og:description" content="Articles on gamification research, deck-building game design, and game development insights." />
+  <meta property="og:url" content="https://www.randaworks.com/en/journal/" />
+  <meta property="og:image" content="https://www.randaworks.com/assets/img/ogp/randaworks-ogp-home.png" />
+  <meta property="og:site_name" content="RandaWorks" />
+  <meta property="og:locale" content="en_US" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Journal | RandaWorks" />
+  <meta name="twitter:description" content="Articles on gamification research, deck-building game design, and game development insights." />
+  <meta name="twitter:image" content="https://www.randaworks.com/assets/img/ogp/randaworks-ogp-home.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Shippori+Mincho:wght@400;700&family=Space+Grotesk:wght@400;500;600;700&display=swap">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Shippori+Mincho:wght@400;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Shippori+Mincho:wght@400;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet"></noscript>
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "CollectionPage",
+          "name": "Journal | RandaWorks",
+          "url": "https://www.randaworks.com/en/journal/",
+          "description": "Articles on gamification research, deck-building game design, and game development insights.",
+          "inLanguage": "en"
+        },
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.randaworks.com/en/" },
+            { "@type": "ListItem", "position": 2, "name": "Journal" }
+          ]
+        }
+      ]
+    }
+  </script>
+  <style>
+    .journal-index-title {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin: 0;
+    }
+    .journal-page-lead {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      margin: 8px 0 0;
+    }
+    .journal-lang-banner {
+      background: rgba(199, 166, 102, 0.08);
+      border: 1px solid rgba(199, 166, 102, 0.18);
+      border-radius: 12px;
+      padding: 16px 20px;
+      margin: 24px 0;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+    }
+    .journal-lang-banner strong {
+      color: var(--accent-gold);
+    }
+    .journal-article-list {
+      display: grid;
+      gap: 1px;
+      margin-top: 8px;
+    }
+    .journal-article-card {
+      display: block;
+      padding: 24px 0;
+      border-bottom: 1px solid rgba(231, 229, 228, 0.08);
+      text-decoration: none;
+      color: inherit;
+      transition: background 0.15s;
+    }
+    .journal-article-card:first-child { padding-top: 16px; }
+    .journal-article-card:hover { background: rgba(231, 229, 228, 0.03); }
+    .journal-article-card-meta {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 6px;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+    .journal-article-card-category {
+      font-weight: 600;
+      color: var(--accent-gold);
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .journal-article-card-title {
+      margin: 0 0 6px;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text-main);
+      line-height: 1.45;
+    }
+    .journal-article-card:hover .journal-article-card-title { color: var(--accent-gold); }
+    .journal-article-card-desc {
+      margin: 0;
+      font-size: 0.92rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <div class="container">
+    <nav class="nav">
+      <div class="brand"><a href="/en/"><picture>
+        <source srcset="/assets/img/randaworks_logo_text.webp" type="image/webp">
+        <img src="/assets/img/randaworks_logo_text.png" alt="RandaWorks" style="height: 28px; vertical-align: middle;">
+      </picture></a></div>
+      <div class="links">
+        <a href="/en/games/inga/?src=nav">Game</a>
+        <a href="/en/about/">About</a>
+        <a href="/en/contact/">Contact</a>
+      </div>
+    </nav>
+
+    <main id="main-content">
+      <nav aria-label="Breadcrumb">
+        <ol class="breadcrumb">
+          <li><a href="/en/">Home</a></li>
+          <li class="breadcrumb-separator" aria-hidden="true">›</li>
+          <li class="breadcrumb-current" aria-current="page">Journal</li>
+        </ol>
+      </nav>
+
+      <header style="margin-bottom:8px;">
+        <h1 class="journal-index-title">Journal</h1>
+        <p class="journal-page-lead">Articles on gamification research and deck-building game design.</p>
+      </header>
+
+      <div class="journal-lang-banner">
+        <strong>Note:</strong> Articles are currently available in Japanese only. Titles and summaries below are translated for reference. Click through to read the original.
+      </div>
+
+      <div class="journal-article-list">
+
+        <a href="/journal/game-design/deckbuilder-market-steam-data/" class="journal-article-card">
+          <div class="journal-article-card-meta">
+            <span class="journal-article-card-category">Game Design</span>
+            <time>2026-03-22</time>
+          </div>
+          <h2 class="journal-article-card-title">Deck-Builder Market Analysis: What Steam Data Tells Us</h2>
+          <p class="journal-article-card-desc">A data-driven look at the deck-building game market on Steam. Review counts, ratings, and what the numbers mean for indie developers.</p>
+        </a>
+
+        <a href="/journal/game-design/slay-the-spire-design-revolution/" class="journal-article-card">
+          <div class="journal-article-card-meta">
+            <span class="journal-article-card-category">Game Design</span>
+            <time>2026-03-21</time>
+          </div>
+          <h2 class="journal-article-card-title">How Slay the Spire Redefined the Deck-Builder Genre</h2>
+          <p class="journal-article-card-desc">Breaking down the design innovations that made Slay the Spire a genre-defining title and what other developers can learn from it.</p>
+        </a>
+
+        <a href="/journal/game-design/cognitive-science-of-deckbuilders/" class="journal-article-card">
+          <div class="journal-article-card-meta">
+            <span class="journal-article-card-category">Game Design</span>
+            <time>2026-03-20</time>
+          </div>
+          <h2 class="journal-article-card-title">The Cognitive Science Behind Deck-Building Games</h2>
+          <p class="journal-article-card-desc">Why deck-builders are inherently good at teaching. Exploring the cognitive science of learning through card mechanics.</p>
+        </a>
+
+        <a href="/journal/game-design/deckbuilder-lineage/" class="journal-article-card">
+          <div class="journal-article-card-meta">
+            <span class="journal-article-card-category">Game Design</span>
+            <time>2026-03-19</time>
+          </div>
+          <h2 class="journal-article-card-title">The Lineage of Deck-Building Games: From Dominion to Today</h2>
+          <p class="journal-article-card-desc">Tracing the evolution of deck-building mechanics from board games to digital roguelikes.</p>
+        </a>
+
+        <a href="/journal/game-design/board-vs-digital-deckbuilding/" class="journal-article-card">
+          <div class="journal-article-card-meta">
+            <span class="journal-article-card-category">Game Design</span>
+            <time>2026-03-18</time>
+          </div>
+          <h2 class="journal-article-card-title">Board vs. Digital: How Deck-Building Translates Across Formats</h2>
+          <p class="journal-article-card-desc">Comparing deck-building mechanics in physical board games versus digital implementations. What changes, and what stays the same?</p>
+        </a>
+
+        <a href="/journal/game-design/broken-combos-philosophy/" class="journal-article-card">
+          <div class="journal-article-card-meta">
+            <span class="journal-article-card-category">Game Design</span>
+            <time>2026-03-17</time>
+          </div>
+          <h2 class="journal-article-card-title">The Philosophy of "Broken" Combos in Game Design</h2>
+          <p class="journal-article-card-desc">When overpowered combos are a feature, not a bug. Why intentionally powerful synergies can make games more fun.</p>
+        </a>
+
+        <a href="/journal/research/gamification-meta-analysis/" class="journal-article-card">
+          <div class="journal-article-card-meta">
+            <span class="journal-article-card-category">Research</span>
+            <time>2026-03-16</time>
+          </div>
+          <h2 class="journal-article-card-title">Gamification Meta-Analysis: What Actually Works?</h2>
+          <p class="journal-article-card-desc">Reviewing academic meta-analyses on gamification effectiveness. Separating hype from evidence.</p>
+        </a>
+
+        <a href="/journal/research/duolingo-kahoot-gamification/" class="journal-article-card">
+          <div class="journal-article-card-meta">
+            <span class="journal-article-card-category">Research</span>
+            <time>2026-03-15</time>
+          </div>
+          <h2 class="journal-article-card-title">Duolingo and Kahoot: Gamification in Practice</h2>
+          <p class="journal-article-card-desc">How two of the most successful edtech products use gamification. Lessons and limitations.</p>
+        </a>
+
+        <a href="/journal/research/game-mechanics-as-academic-law/" class="journal-article-card">
+          <div class="journal-article-card-meta">
+            <span class="journal-article-card-category">Research</span>
+            <time>2026-03-14</time>
+          </div>
+          <h2 class="journal-article-card-title">Game Mechanics as Academic Law: When Rules Model Reality</h2>
+          <p class="journal-article-card-desc">Exploring how game mechanics can encode real-world principles, making abstract knowledge tangible through play.</p>
+        </a>
+
+        <a href="/journal/research/japan-edtech-gamification/" class="journal-article-card">
+          <div class="journal-article-card-meta">
+            <span class="journal-article-card-category">Research</span>
+            <time>2026-03-13</time>
+          </div>
+          <h2 class="journal-article-card-title">EdTech and Gamification in Japan: Current Landscape</h2>
+          <p class="journal-article-card-desc">An overview of gamification adoption in Japanese education technology, from schools to consumer apps.</p>
+        </a>
+
+        <a href="/journal/research/minecraft-education-inquiry-learning/" class="journal-article-card">
+          <div class="journal-article-card-meta">
+            <span class="journal-article-card-category">Research</span>
+            <time>2026-03-12</time>
+          </div>
+          <h2 class="journal-article-card-title">Minecraft Education and Inquiry-Based Learning</h2>
+          <p class="journal-article-card-desc">How Minecraft Education Edition enables inquiry-based learning, and what it reveals about games as educational tools.</p>
+        </a>
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <nav class="footer-nav" aria-label="Footer navigation">
+        <a href="/en/about/">About</a>
+        <a href="/en/history-tools/">History Tools</a>
+        <a href="/en/privacy/">Privacy</a>
+        <a href="/en/terms/">Terms</a>
+        <a href="/en/contact/">Contact</a>
+      </nav>
+      <div class="footer-links">
+        <a class="footer-link-social" href="https://x.com/RandaWorksJP" target="_blank" rel="noopener noreferrer" aria-label="Open the official RandaWorks X account in a new tab"><svg class="footer-link-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1227" aria-hidden="true" focusable="false"><path d="M714.163 519.284 1160.89 0h-105.83L667.137 450.887 357.328 0H0l468.492 681.821L0 1226.37h105.866l409.588-476.152 327.218 476.152H1200L714.137 519.284h.026ZM569.165 687.828l-47.468-67.909L144.011 79.694h162.604l304.22 434.658 47.468 67.909 396.807 566.942H892.505L569.165 687.828Z"/></svg><span>X</span></a>
+        <a class="footer-link-social" href="https://www.youtube.com/@RandaWorks" target="_blank" rel="noopener noreferrer" aria-label="Open the official RandaWorks YouTube channel in a new tab"><svg class="footer-link-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31.9 31.9 0 0 0 0 12a31.9 31.9 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31.9 31.9 0 0 0 24 12a31.9 31.9 0 0 0-.5-5.8ZM9.6 15.6V8.4l6.2 3.6Z"/></svg><span>YouTube</span></a>
+        <a class="footer-link-social" href="https://store.steampowered.com/app/4403470" target="_blank" rel="noopener noreferrer" aria-label="Open the Steam store page in a new tab"><svg class="footer-link-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 259" aria-hidden="true" focusable="false"><path d="M127.779 0C57.895 0 1.307 55.39.052 124.908l68.961 28.5a36.077 36.077 0 0 1 20.378-6.27l30.462-44.145v-.617c0-26.513 21.569-48.084 48.083-48.084 26.516 0 48.085 21.572 48.085 48.084 0 26.515-21.569 48.085-48.085 48.085h-1.104l-43.474 31.02c0 .403.022.8.022 1.197 0 19.882-16.163 36.046-36.048 36.046-17.806 0-32.595-12.953-35.476-29.932L2.472 166.516C18.233 218.149 67.215 256 127.779 256c70.716 0 128.043-57.326 128.043-128.001C255.822 57.326 198.495 0 127.779 0z"/></svg><span>Steam</span></a>
+      </div>
+      <div>&copy; 2026 RandaWorks</div>
+    </footer>
+  </div>
+  <script src="/assets/js/analytics-config.js"></script>
+  <script src="/assets/js/analytics.js"></script>
+</body>
+</html>
